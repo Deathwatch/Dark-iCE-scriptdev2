@@ -43,6 +43,8 @@ struct MANGOS_DLL_DECL instance_sunwell_plateau : public ScriptedInstance
     uint64 m_uiKilJaedenControllerGUID;
     uint64 m_uiAnveenaGUID;
     uint64 m_uiKalecgosGUID;
+	uint64 m_uiMuruPortalTargetGUID;
+	uint64 m_uiMadrigosaGUID;
 
     // GameObjects
     uint64 m_uiForceFieldGUID;                                      // Kalecgos Encounter
@@ -59,6 +61,9 @@ struct MANGOS_DLL_DECL instance_sunwell_plateau : public ScriptedInstance
     // Misc
     uint32 m_uiSpectralRealmTimer;
     std::list<uint64> SpectralRealmList;
+
+	uint8 m_uiPortalTargetCount;
+	uint64 m_uiShadowPortalGUID[10];
 
     void Initialize()
     {
@@ -77,6 +82,8 @@ struct MANGOS_DLL_DECL instance_sunwell_plateau : public ScriptedInstance
         m_uiKilJaedenControllerGUID     = 0;
         m_uiAnveenaGUID                 = 0;
         m_uiKalecgosGUID                = 0;
+		m_uiMuruPortalTargetGUID		= 0;
+		m_uiMadrigosaGUID				= 0;
 
         // GameObjects
         m_uiForceFieldGUID              = 0;
@@ -92,6 +99,11 @@ struct MANGOS_DLL_DECL instance_sunwell_plateau : public ScriptedInstance
 
         // Misc
         m_uiSpectralRealmTimer = 5000;
+		
+		m_uiPortalTargetCount = 0;
+
+		for(int i=0;i<10;i++)
+			m_uiShadowPortalGUID[i]=0;
     }
 
     bool IsEncounterInProgress() const
@@ -119,6 +131,8 @@ struct MANGOS_DLL_DECL instance_sunwell_plateau : public ScriptedInstance
             case 25608: m_uiKilJaedenControllerGUID = pCreature->GetGUID(); break;
             case 26046: m_uiAnveenaGUID             = pCreature->GetGUID(); break;
             case 25319: m_uiKalecgosGUID            = pCreature->GetGUID(); break;
+			case 25770: m_uiShadowPortalGUID[m_uiPortalTargetCount++] = pCreature->GetGUID(); break;
+			case 24895: m_uiMadrigosaGUID			= pCreature->GetGUID(); break;
         }
     }
 
@@ -201,6 +215,8 @@ struct MANGOS_DLL_DECL instance_sunwell_plateau : public ScriptedInstance
             case DATA_ANVEENA:              return m_uiAnveenaGUID;
             case DATA_KALECGOS:             return m_uiKalecgosGUID;
             case DATA_GO_FORCEFIELD:        return m_uiForceFieldGUID;
+			case DATA_SHADOW_PORTAL:		return m_uiShadowPortalGUID[rand()%10];
+			case DATA_MADRIGOSA:			return m_uiMadrigosaGUID;
         }
         return 0;
     }
@@ -233,15 +249,18 @@ struct MANGOS_DLL_DECL instance_sunwell_plateau : public ScriptedInstance
             case TYPE_EREDAR_TWINS:
                 m_auiEncounter[3] = uiData;
                 if (uiData == DONE)
-                {
-                    DoUseDoorOrButton(m_uiDoorTheSecondGateGUID);
-                    DoUseDoorOrButton(m_uiDoorRaid_Gate_07GUID);
-                }
+                    //instance only open up to felmyst
+                    //DoUseDoorOrButton(m_uiDoorTheSecondGateGUID);
                 break;
             case TYPE_MURU:
                 m_auiEncounter[4] = uiData;
-                if (uiData == DONE)
-                    DoUseDoorOrButton(m_uiDoorRaid_Gate_08GUID);
+				if (uiData == IN_PROGRESS)
+					DoUseDoorOrButton(m_uiDoorRaid_Gate_07GUID);
+				else if (uiData == DONE)
+				{
+					DoUseDoorOrButton(m_uiDoorRaid_Gate_07GUID);
+					DoUseDoorOrButton(m_uiDoorRaid_Gate_08GUID);
+				}
                 break;
             case TYPE_KILJAEDEN: m_auiEncounter[5] = uiData; break;
             case DATA_SET_SPECTRAL_CHECK:  m_uiSpectralRealmTimer = uiData; break;
@@ -332,7 +351,7 @@ struct MANGOS_DLL_DECL instance_sunwell_plateau : public ScriptedInstance
     void Update(uint32 uiDiff)
     {
         // Only check for Spectral Realm if Kalecgos Encounter is running
-		if (m_auiEncounter[0] == IN_PROGRESS)
+		//if (m_auiEncounter[0] == IN_PROGRESS)
         {
             if (m_uiSpectralRealmTimer <= uiDiff)
             {
@@ -373,11 +392,153 @@ InstanceData* GetInstanceData_instance_sunwell_plateau(Map* pMap)
     return new instance_sunwell_plateau(pMap);
 }
 
+struct MANGOS_DLL_DECL mob_sunblade_scoutAI : public ScriptedAI
+{
+    mob_sunblade_scoutAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        Reset();
+    }
+
+    ScriptedInstance* m_pInstance;
+
+    int j;
+    Creature *nearby[3];
+    bool gatherOthersWhenAggro;
+
+    void Reset() { }
+
+    void AddBuddyToList(Creature *c)
+    {
+        if (c==m_creature)
+            return;
+        for (int i=0; i<3; ++i)
+        {
+            if (nearby[i] == c)
+                return;
+            if (!nearby[i])
+            {
+                nearby[i] = c;
+                return;
+            }
+        }
+    }
+
+    void AddDeceiverNear(Unit *nears)
+    {
+        std::list<Creature*> assistList;
+        switch (j)
+        {
+            case 0:
+                GetCreatureListWithEntryInGrid(assistList,m_creature,25507,40.0f);
+                break;
+            case 1:
+                GetCreatureListWithEntryInGrid(assistList,m_creature,25363,40.0f);
+                break;
+            case 2:
+                GetCreatureListWithEntryInGrid(assistList,m_creature,25369,40.0f);
+                break;
+            case 3:
+                GetCreatureListWithEntryInGrid(assistList,m_creature,25371,40.0f);
+                break;
+            case 4:
+                GetCreatureListWithEntryInGrid(assistList,m_creature,25370,40.0f);
+                break;
+            case 5:
+                GetCreatureListWithEntryInGrid(assistList,m_creature,25367,40.0f);
+                break;
+            case 6:
+                GetCreatureListWithEntryInGrid(assistList,m_creature,25368,40.0f);
+                break;
+            case 7:
+                GetCreatureListWithEntryInGrid(assistList,m_creature,26101,40.0f);
+                break;
+            case 8:
+                GetCreatureListWithEntryInGrid(assistList,m_creature,25867,40.0f);
+                break;
+            default:
+                break;
+        }
+
+        if (assistList.empty())
+            return;
+
+        for(std::list<Creature*>::iterator iter = assistList.begin(); iter != assistList.end(); ++iter)
+           AddBuddyToList((*iter));
+    }
+
+    void GiveBuddyMyList(Creature *c)
+    {
+        mob_sunblade_scoutAI *cai = (mob_sunblade_scoutAI *)(c->AI());
+        for (int i=0; i<3; ++i)
+            if (nearby[i] && nearby[i]!=c)
+                cai->AddBuddyToList(nearby[i]);
+        cai->AddBuddyToList(m_creature);
+    }
+
+    void CallBuddiesToAttack(Unit *who)
+    {
+        for (int i=0; i<3; ++i)
+        {
+            Creature *c = nearby[i];
+            if (c)
+            {
+                if (c->GetPositionZ() - 10 < m_creature->GetPositionZ())
+                {
+                    if (!c->isInCombat())
+                    {
+                        c->SetNoCallAssistance(true);
+                        if (c->AI())
+                        {
+                            c->AI()->AttackStart(who);
+                            c->GetMotionMaster()->MoveChase(m_creature->getVictim(), 0, 0);
+                        }
+                            
+                    }
+                }
+            }
+        }
+	} 
+
+    void Aggro(Unit* who)
+    {
+        m_creature->MonsterYell("Kommt mir zu Hilfe!", 0, 0); 
+        
+        for(j=0; j < 10; ++j)
+        {
+            nearby[0] = nearby[1] = nearby[2] = NULL;
+	        AddDeceiverNear(m_creature);
+            for (int bli = 0; bli < 3; ++bli)
+            {
+                if (!nearby[bli])
+                    break;
+                AddDeceiverNear(nearby[bli]);
+                ((mob_sunblade_scoutAI *)nearby[bli]->AI())->gatherOthersWhenAggro = false;
+	        }
+	        for (int i=0; i<3; ++i)
+                if (nearby[i])
+                    GiveBuddyMyList(nearby[i]);
+
+            CallBuddiesToAttack(who);
+        } 
+    }
+};
+
+CreatureAI* GetAI_mob_sunblade_scout(Creature* pCreature)
+{
+    return new mob_sunblade_scoutAI(pCreature);
+}
+
 void AddSC_instance_sunwell_plateau()
 {
     Script *newscript;
     newscript = new Script;
     newscript->Name = "instance_sunwell_plateau";
     newscript->GetInstanceData = &GetInstanceData_instance_sunwell_plateau;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "mob_sunblade_scout";
+    newscript->GetAI = &GetAI_mob_sunblade_scout;
     newscript->RegisterSelf();
 }

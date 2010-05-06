@@ -240,9 +240,6 @@ struct MANGOS_DLL_DECL boss_kalecgosAI : public ScriptedAI
 
         if (id)
         {
-            if (m_pInstance)
-                m_pInstance->SetData(TYPE_KALECGOS, DONE);
-
             m_creature->SetVisibility(VISIBILITY_OFF);
             m_creature->DealDamage(m_creature, m_creature->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
         }
@@ -277,7 +274,11 @@ struct MANGOS_DLL_DECL boss_kalecgosAI : public ScriptedAI
                 m_creature->GetMotionMaster()->MoveIdle();
             }
             else
+            {
+                if (m_pInstance)
+                    m_pInstance->SetData(TYPE_KALECGOS, DONE);
                 BeginOutro();
+            }
         }
 		//let kalecgos exit the arena on outro
         if (m_uiExitTimer)
@@ -344,7 +345,6 @@ struct MANGOS_DLL_DECL boss_kalecgosAI : public ScriptedAI
 				m_bHasSpectralTarget = false;
 				m_creature->CastSpell(m_creature, SPELL_SPECTRAL_BLAST_DUMMY, false);
 				m_uiSpectralBlastTimer = 30000;
-				m_creature->MonsterYell("spectral blast timer aktiviert",LANG_UNIVERSAL,0);
 			}
         }
         else m_uiSpectralBlastTimer -= diff;
@@ -373,13 +373,15 @@ struct MANGOS_DLL_DECL boss_sathrovarrAI : public ScriptedAI
 
     void Reset()
     {
-        // FIXME: Timers
         CorruptingStrikeTimer = 5000;
         CurseOfBoundlessAgonyTimer = 15000;
         ShadowBoltVolleyTimer = 10000;
 
         m_bBanished = false;
         m_bEnraged  = false;
+        
+        //summon kalecgos_human
+        m_creature->SummonCreature(24891,1702.3f,938.f,-74.55f,4.93f,TEMPSUMMON_CORPSE_DESPAWN,10000);
 
         //m_creature->CastSpell(m_creature, SPELL_SPECTRAL_INVIS, true);	//buggy		
     }
@@ -392,8 +394,8 @@ struct MANGOS_DLL_DECL boss_sathrovarrAI : public ScriptedAI
 
         if (Unit* pKalec = Unit::GetUnit(*m_creature, m_pInstance->GetData64(DATA_KALECGOS_HUMAN)))
         {
-            m_creature->AddThreat(pKalec, 5000000.0f);
-            pKalec->AddThreat(m_creature, 10000000.0f);
+            m_creature->AddThreat(pKalec, 500000.0f);
+            pKalec->AddThreat(m_creature, 500000.0f);
         }
     }
 
@@ -510,7 +512,7 @@ struct MANGOS_DLL_DECL boss_kalecgos_humanoidAI : public ScriptedAI
         HasYelled20Percent = false;
 
 		if(m_pInstance)
-			m_pInstance->SetData(TYPE_KALECGOS, 0);
+            m_pInstance->SetData(TYPE_KALECGOS, NOT_STARTED);
 
         //m_creature->CastSpell(m_creature, SPELL_SPECTRAL_INVIS, true);	//buggy
     }

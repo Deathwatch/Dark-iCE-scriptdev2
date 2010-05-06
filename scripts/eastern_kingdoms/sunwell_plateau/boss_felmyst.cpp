@@ -119,6 +119,18 @@ float WESTNORTH[]	=	{1486.18f,693.72f,60.07f,4.87f};
 float WESTSOUTH[]	=	{1414.79f,656.45f,60.07f,5.13f};
 float WESTMID[]		=	{1453.55f,673.67f,60.07f,4.97f};
 
+/*
+Felmyst way in fog of corruption phase
+
+			WESTNORTH - - - EASTNORTH 
+		  /                           \
+WESTSTART - WESTMID   - - -   EASTMID - EASTSTART
+		  \                           /
+		    WESTSOUTH - - - EASTSOUTH 
+
+starting from weststart, choosing random track (norh/mid/south) to eaststart (2x) and back (1x)
+*/
+
 //Felmyst
 struct MANGOS_DLL_DECL boss_felmystAI : public ScriptedAI
 {
@@ -197,8 +209,6 @@ struct MANGOS_DLL_DECL boss_felmystAI : public ScriptedAI
         m_bIsFogOfCorruption    = false;
 
         //Event Resets
-        m_creature->SetVisibility(VISIBILITY_OFF);
-        m_creature->setFaction(35); 
 		m_creature->SetSplineFlags(SPLINEFLAG_FLYING);
 		if(m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
 			m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -208,9 +218,6 @@ struct MANGOS_DLL_DECL boss_felmystAI : public ScriptedAI
 
         if(!m_creature->HasAura(SPELL_SUNWELLRADIANCE_AURA))
 			DoCast(m_creature, SPELL_SUNWELLRADIANCE_AURA);
-
-		if(Creature* pMadrigosa = m_pInstance->instance->GetCreature(54812))
-			pMadrigosa->SetVisibility(VISIBILITY_ON);
     }
  
     void Aggro(Unit *who)
@@ -221,6 +228,9 @@ struct MANGOS_DLL_DECL boss_felmystAI : public ScriptedAI
  
         if (m_pInstance)
             m_pInstance->SetData(TYPE_FELMYST, IN_PROGRESS);
+
+        if(Creature* pBrutallus = m_pInstance->instance->GetCreature(m_pInstance->GetData64(DATA_BRUTALLUS)))
+            pBrutallus->SetVisibility(VISIBILITY_OFF);
     }
  
     void KilledUnit(Unit* victim)
@@ -249,18 +259,6 @@ struct MANGOS_DLL_DECL boss_felmystAI : public ScriptedAI
  
     void UpdateAI(const uint32 diff)
     {
-
-		
-		if(m_creature->GetVisibility()==VISIBILITY_OFF && m_pInstance && m_pInstance->GetData(TYPE_BRUTALLUS) == DONE && m_pInstance->GetData(TYPE_FELMYST) == NOT_STARTED)
-        {
-			//make Madrigosa invisible when Felmyst appears
-			if(Creature* pMadrigosa = m_pInstance->instance->GetCreature(54812))
-				pMadrigosa->SetVisibility(VISIBILITY_OFF);		
-			//get visible&hostile when Brutallus dead
-            m_creature->SetVisibility(VISIBILITY_ON);
-            m_creature->setFaction(14);
-        }
-
 		if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
@@ -295,7 +293,7 @@ struct MANGOS_DLL_DECL boss_felmystAI : public ScriptedAI
 				m_bFog						= false;
 				m_bNextCycle				= false;
 
-				m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+				
 
 				return;
             }else m_uiFlyPhaseTimer -= diff;
@@ -356,14 +354,20 @@ struct MANGOS_DLL_DECL boss_felmystAI : public ScriptedAI
 			}else m_uiLandPhaseTimer -= diff;
 
 			//start demonic vapor
-			if(m_uiDemonicVaporTimer < diff && m_uiMaxBreathCount < 2)
+			if(m_uiDemonicVaporTimer < diff && m_uiMaxBreathCount <= 2)
 			{
-                DoCast(m_creature, SPELL_DEMONIC_VAPOR);
+                m_bDemonicVapor = true;
 
-                if (++m_uiMaxBreathCount == 2)
+				if (m_uiMaxBreathCount < 2)
+					DoCast(m_creature, SPELL_DEMONIC_VAPOR);
+
+                if (m_uiMaxBreathCount++ == 2)
                 {
+                    m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    m_bDemonicVapor      = false;
                     m_bIsFogOfCorruption = true;
 					m_bToStartPos		 = true;
+                    m_creature->GetMotionMaster()->Clear();
                 }
                 else
 				    m_uiDemonicVaporTimer=12000;
@@ -371,16 +375,20 @@ struct MANGOS_DLL_DECL boss_felmystAI : public ScriptedAI
 			else
                 m_uiDemonicVaporTimer -=diff;
 
+            if(m_bDemonicVapor)
+            {
+                m_creature->StopMoving();
+            }
+
             // fog of corruption phase
 			if(m_bIsFogOfCorruption)
             {
 				if(m_bToStartPos) // move felmyst to fog of corruption start position
 				{
 					++m_uiCycle;
-					//m_creature->MonsterYell("Going to Start Position",LANG_UNIVERSAL,0);
 					m_bToStartPos = false;
 					// go to Line Start Position
-					m_uiOnStartPosTimer = 8000;
+					m_uiOnStartPosTimer = 7000;
 					m_bToLineStartPos = true;
 					switch(m_uiCycle)
 					{
@@ -388,15 +396,14 @@ struct MANGOS_DLL_DECL boss_felmystAI : public ScriptedAI
 						case 1:	m_creature->GetMotionMaster()->MovePoint(0,WESTSTART[0],WESTSTART[1],WESTSTART[2]);break;
 						case 2: m_creature->GetMotionMaster()->MovePoint(0,EASTSTART[0],EASTSTART[1],EASTSTART[2]);break;
 						case 3: m_creature->GetMotionMaster()->MovePoint(0,WESTSTART[0],WESTSTART[1],WESTSTART[2]);break;
-						case 4:  m_bIsFogOfCorruption = false; m_bToLineStartPos = false;break;
-					}//m_uiLandPhaseTimer = 100;
+						case 4: m_bIsFogOfCorruption = false; m_bToLineStartPos = false;break;
+					}
 				}
 	
 				// felmyst should be on start position now.
 				if(m_bToLineStartPos)
 					if(m_uiOnStartPosTimer < diff) 
 					{
-						//m_creature->MonsterYell("DEBUG Going to Line Start Position",LANG_UNIVERSAL,0);
 						m_creature->GetMotionMaster()->Clear();
 						//go to random Line startposition
 
@@ -429,6 +436,7 @@ struct MANGOS_DLL_DECL boss_felmystAI : public ScriptedAI
 					{
 						m_creature->GetMotionMaster()->Clear();
 						m_creature->SetSpeedRate(MOVE_FLIGHT,4.0,true);
+						m_creature->SetSpeedRate(MOVE_RUN,4.0,true);
 						if(m_uiCycle==1||m_uiCycle==3)
 							switch(m_uiLine)
 							{
@@ -457,7 +465,7 @@ struct MANGOS_DLL_DECL boss_felmystAI : public ScriptedAI
 					if(m_uiNextCycleTimer < diff)
 					{
 						m_creature->SetSpeedRate(MOVE_FLIGHT,1.0,true);
-						//m_creature->MonsterYell("DEBUG Next Cycle Timer",LANG_UNIVERSAL,0);
+						m_creature->SetSpeedRate(MOVE_RUN,1.0,true);
 						m_bNextCycle = false;
 						//next cycle
 						m_bToStartPos = true;
@@ -468,7 +476,6 @@ struct MANGOS_DLL_DECL boss_felmystAI : public ScriptedAI
 					{
 						if(m_uiLine==NORTH)
 						{
-							//m_creature->MonsterYell("north",LANG_UNIVERSAL,0);
 							// north breath
 							if(m_uiCycle==1||m_uiCycle==3)
 								switch(m_uiFogCount)	
@@ -500,7 +507,6 @@ struct MANGOS_DLL_DECL boss_felmystAI : public ScriptedAI
 						}
 						else if(m_uiLine==MIDDLE)
 						{
-							//m_creature->MonsterYell("middle",LANG_UNIVERSAL,0);
 							// middle breath
 							if(m_uiCycle==1||m_uiCycle==3)
 								switch(m_uiFogCount)
@@ -528,7 +534,6 @@ struct MANGOS_DLL_DECL boss_felmystAI : public ScriptedAI
 						}
 						else if(m_uiLine=SOUTH)
 						{
-							//m_creature->MonsterYell("south",LANG_UNIVERSAL,0);
 							// south breath
 							if(m_uiCycle==1||m_uiCycle==3)
 								switch(m_uiFogCount)
@@ -699,12 +704,14 @@ struct MANGOS_DLL_DECL mob_felmyst_vapor_trailAI : public ScriptedAI
 
     int32 m_summonTimer;
     int32 m_createSummonTimer;
+    int32 m_liveTimer;
 
     void Reset()
     {
         // some delay for the obligatoric spawn to give a chance to flee from the sceletons
         m_createSummonTimer = 4000;
         m_summonTimer = 1000;
+        m_liveTimer = 25000;
     }
 
     // CreatureNullAI
@@ -718,8 +725,9 @@ struct MANGOS_DLL_DECL mob_felmyst_vapor_trailAI : public ScriptedAI
         if ( !m_summonTimer && m_creature->IsHostileTo(pWho) && m_creature->IsWithinDistInMap(pWho, 3))
         {
             // 50% chance - to make not spawn to much as there are many of this mobs in a trail
-            if(!urand(0,1))
-                DoCast(pWho, SPELL_SUMMON_DEATH, true);
+            if(!urand(0,2))
+                m_creature->SummonCreature(25268,m_creature->GetPositionX(),m_creature->GetPositionY(),m_creature->GetPositionZ(),m_creature->GetOrientation(),TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT,10000);
+                //DoCast(pWho, SPELL_SUMMON_DEATH, true);
             m_summonTimer = 1000;
         }
     }
@@ -732,8 +740,9 @@ struct MANGOS_DLL_DECL mob_felmyst_vapor_trailAI : public ScriptedAI
             m_createSummonTimer -= diff;
             if (m_createSummonTimer <= 0)
             {
-                 DoCast(m_creature, SPELL_SUMMON_DEATH, true);
-                 m_createSummonTimer = 0;
+                m_creature->SummonCreature(25268,m_creature->GetPositionX(),m_creature->GetPositionY(),m_creature->GetPositionZ(),m_creature->GetOrientation(),TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT,10000);
+                //DoCast(m_creature, SPELL_SUMMON_DEATH, true);
+                m_createSummonTimer = 0;
             }
         }
 
@@ -744,6 +753,12 @@ struct MANGOS_DLL_DECL mob_felmyst_vapor_trailAI : public ScriptedAI
             if (m_summonTimer <= 0)
                 m_summonTimer = 0;
         }
+
+        //despawn after 25 seconds
+        if(m_liveTimer < diff)
+        {
+            m_creature->ForcedDespawn();
+        } else m_liveTimer -= diff;
     }
 };
  

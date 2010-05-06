@@ -30,6 +30,7 @@ npc_tiare
 EndContentData */
 
 #include "precompiled.h"
+#include "follower_ai.h"
 
 /*######
 ## npc_fizzcrank_fullthrottle
@@ -253,9 +254,144 @@ bool GossipSelect_npc_tiare(Player* pPlayer, Creature* pCreature, uint32 uiSende
     return true;
 }
 
+//FIXME: saving Player & GO like this is not a good way
+GameObject *pTrap = 0;
+Player *pPlyr = 0;
+
+enum
+{
+    NPC_TRAPPER =       25835,
+    SPELL_TRAPPED =     46104,
+};
+
+bool GOHello_go_caribou_trap(Player* pPlayer, GameObject* pGo)
+{
+    pTrap = pGo;
+    pPlyr = pPlayer;
+    pPlayer->SummonCreature(NPC_TRAPPER,pGo->GetPositionX()+rand()%7,pGo->GetPositionY()+rand()%7,pGo->GetPositionZ(),0,TEMPSUMMON_DEAD_DESPAWN,0);
+    return false;
+}
+
+struct MANGOS_DLL_DECL npc_nesingwary_trapperAI : public ScriptedAI
+{
+    npc_nesingwary_trapperAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset (); }
+
+    uint32 m_uiTimer;
+
+    void Reset()
+    {
+        m_uiTimer = 2500;
+        if(pTrap)
+            m_creature->GetMotionMaster()->MovePoint(0,pTrap->GetPositionX(),pTrap->GetPositionY(),pTrap->GetPositionZ());
+        pTrap = 0;
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+        if(m_uiTimer < diff)
+        {
+            if(pPlyr)
+                pPlyr->CastSpell(m_creature,SPELL_TRAPPED,true);
+            pPlyr = 0;
+        } else m_uiTimer -= diff;
+    }
+};
+
+CreatureAI* GetAI_npc_nesingwary_trapper(Creature* pCreature)
+{
+    return new npc_nesingwary_trapperAI(pCreature);
+}
+
+enum
+{
+    QUEST_KHUNOK_WILL_KNOW      = 11878,
+    NPC_KHUNOK                  = 25862,
+    NPC_CALF                    = 25861,
+};
+
+struct MANGOS_DLL_DECL npc_orphaned_calfAI : public FollowerAI
+{
+    npc_orphaned_calfAI(Creature* pCreature) : FollowerAI(pCreature) 
+    {         
+        if (pCreature->GetOwner() && pCreature->GetOwner()->GetTypeId() == TYPEID_PLAYER)
+        {
+            StartFollow((Player*)pCreature->GetOwner());
+            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            
+        }
+        Reset();}
+
+    uint32 m_uiTimer;
+
+    void Reset() { m_uiTimer = 900000; }
+
+    void UpdateAI(const uint32 diff)
+    {
+        // despawn after 15 minutes
+        if(m_uiTimer < diff)
+            m_creature->ForcedDespawn();
+        else m_uiTimer -= diff;
+    }
+
+    void JustDied()
+    {
+        Player *pPlayer = (Player*)m_creature->GetOwner();
+        if(pPlayer)
+            pPlayer->SendQuestFailed(QUEST_KHUNOK_WILL_KNOW);
+    }
+};
+
+CreatureAI* GetAI_npc_orphaned_calf(Creature* pCreature)
+{
+    return new npc_orphaned_calfAI(pCreature);
+}
+
+#define GOSSIP_ITEM_RELEASE     "[Give the the orphaned calf to Khu'nok]"
+
+bool GossipHello_npc_orphaned_calf(Player* pPlayer, Creature* pCreature)
+{
+     if (pPlayer->GetQuestStatus(QUEST_KHUNOK_WILL_KNOW) == QUEST_STATUS_INCOMPLETE)
+         if (GetClosestCreatureWithEntry(pCreature, NPC_KHUNOK, INTERACTION_DISTANCE+5))
+         {
+             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_RELEASE, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+         }
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_orphaned_calf(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF+1)
+    {
+        pPlayer->CLOSE_GOSSIP_MENU();
+
+        pPlayer->AreaExploredOrEventHappens(QUEST_KHUNOK_WILL_KNOW);
+        pCreature->ForcedDespawn();
+    }
+
+    return true;
+}
+
 void AddSC_borean_tundra()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_orphaned_calf";
+    newscript->GetAI = &GetAI_npc_orphaned_calf;
+    newscript->pGossipHello = &GossipHello_npc_orphaned_calf;
+    newscript->pGossipSelect = &GossipSelect_npc_orphaned_calf;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_nesingwary_trapper";
+    newscript->GetAI = GetAI_npc_nesingwary_trapper;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_caribou_trap";
+    newscript->pGOHello = &GOHello_go_caribou_trap;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_fizzcrank_fullthrottle";

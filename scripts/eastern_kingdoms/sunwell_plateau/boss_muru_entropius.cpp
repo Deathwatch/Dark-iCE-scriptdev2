@@ -27,15 +27,23 @@ EndScriptData */
 enum spells // Boss spells
 {
     ENRAGE                      = 26662,
-    SPELL_NEGATIVE              = 46285, //negative energy
-    SPELL_NEGATIVEENERGY        = 46008, //negative energy
-    SPELL_NEGATIVEENERGY_CHAIN  = 46289, //negative energy
+    SPELL_NEGATIVE              = 46285, //negative energy -> deals damage
+    SPELL_NEGATIVEENERGY        = 46008, //negative energy -> black beams
+    SPELL_NEGATIVEENERGY_CHAIN  = 46289, //negative energy -> 
 
-    AURA_SINGULARITY            = 46228, //black hole passive
-    AURA_SUNWELL_RADIANCE       = 45769,
+    AURA_SINGULARITY            = 46228, //black hole passive  visual effect
+    AURA_SUNWELL_RADIANCE       = 45769, 
 
-    DARKNESS                    = 45996, // darkness
-    ENTROPIUS_EFFECT            = 46223, // entropius cosmetic spawn
+    DARKNESS                    = 45996, // darkness 
+    ENTROPIUS_EFFECT            = 46223, // entropius cosmetic spawn 
+
+	SUMMON_VOID_SENTINEL		= 45988, // visual effect & summon void sentinel
+	SUMMON_VOID_SENTINEL_IMAGE	= 45989, // summon void sentine - summoning visual effect
+	SUMMON_VOID_SENTINEL_SUMMON	= 45978, // 
+	SUMMON_VOID_SENTINEL_PORTAL	= 45977, // portal visual effect 
+	
+	//45976
+
 
     //Dark Fiend
     DARK_FIEND_AURA             = 45934, // summon dark fiend
@@ -51,12 +59,12 @@ enum spells // Boss spells
 
 enum summons
 {
-    ID_SWB                      = 25799, // ok
-    ID_SWM                      = 25798, // ok ?
-    ID_DARK_FIEND               = 25744, // ok
-    ID_VOID_SENTINEL            = 25772, // ok
-    ID_SINGULARITY              = 25855, // visual effect ?
-    ID_SPAWN                    = 25824, // ok
+    ID_SWFuryMage	            = 25799, // shadowsword fury mage
+    ID_SWBerserker              = 25798, // shadowsword berserker
+    ID_DARK_FIEND               = 25744, // dark fiend
+    ID_VOID_SENTINEL            = 25772, // void sentinel
+    ID_SINGULARITY              = 25855, // visual effect
+    ID_SPAWN                    = 25824, // void spawn
 };
 
 //Boss sounds
@@ -73,15 +81,19 @@ float Trash[6][2] =
         {1781.502f,659.254f},
         {1781.502f,659.254f},
 };
-
-float ShadowPortalSpawn[5][3] =
+// Dark Fiend spawn coordinates
+float DarkFiendSpawn[8][2] =
 {
-        {1797.644f,613.744f,0.56290f},
-        {1822.956f,646.437f,4.40262f},
-        {1794.275f,626.539f,6.23522f},
-        {1809.726f,646.494f,5.01348f},     
-        {1798.854f,638.952f,5.62435f}
+	{1825.39f,620.36f},
+	{1827.11f,628.24f},
+	{1821.82f,636.50f},
+	{1812.42f,637.12f},
+	{1805.03f,632.02f},
+	{1804.04f,623.09f},
+	{1809.85f,615.46f},
+	{1818.69f,614.17f},
 };
+float DarkFiendSpawnZ = 69.7f;
  
 // m'uru 
 struct MANGOS_DLL_DECL boss_muruAI : public ScriptedAI
@@ -107,8 +119,12 @@ struct MANGOS_DLL_DECL boss_muruAI : public ScriptedAI
     uint32 DarknessTimer;
     uint32 EnrageTimer;
     uint32 DarkFiendTimer;
+	uint32 VoidSentinelTimer;
 
     bool Darkness;
+	bool VoidSentinel;
+
+	Unit* pPortalTarget;
     
     void Reset()
     {
@@ -119,13 +135,17 @@ struct MANGOS_DLL_DECL boss_muruAI : public ScriptedAI
 
         NegativeEnergyTimer = 1000;
         SummonTrashTimer = 10000;
-        SummonVoidTimer = 30000;
-        DarknessTimer = 45000;
+        SummonVoidTimer = 30000; 
+        DarknessTimer = 45000; 
         EnrageTimer = 600000;
         Phase1 = true;
         Darkness = false;
+		VoidSentinel = false;
 
         m_creature->SetVisibility(VISIBILITY_ON);
+
+		if(pInstance)
+			pInstance->SetData(TYPE_MURU,NOT_STARTED);
    
         if(m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
             m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -139,8 +159,16 @@ struct MANGOS_DLL_DECL boss_muruAI : public ScriptedAI
         m_creature->StopMoving();
         m_creature->GetMotionMaster()->Clear();
         m_creature->GetMotionMaster()->MoveIdle();
+		if(pInstance)
+			pInstance->SetData(TYPE_MURU,IN_PROGRESS);
     }  
     void KilledUnit(Unit *Victim) {}
+
+	void JustDied(Unit* Killer)
+    {
+        if(pInstance)
+			pInstance->SetData(TYPE_MURU, DONE);
+    }
     
     void UpdateAI(const uint32 diff)
     {       
@@ -172,32 +200,32 @@ struct MANGOS_DLL_DECL boss_muruAI : public ScriptedAI
                 SingularityTimer = 50000;
                 Phase1 = false;
             }
-/*
-			//100%
-            if(NegativeEnergyTimer < diff)
-            {	//choose 4-5 targets
-				for(uint8 i=rand()%2; i<5; ++i)
-                {
-                    if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                        m_creature->CastSpell(target, SPELL_NEGATIVE, false);
-                }
-                NegativeEnergyTimer = 1000;
-            }else NegativeEnergyTimer -= diff;*/
 
-            //Spawns Shadow portals and then one Void Sentinel
+			
+           //Spawns Shadow portal and Void Sentinel -> working
             if(SummonVoidTimer < diff)
             {
-                //Shadow Portals not implemented yet :X
-                uint8 x = rand()%5;
-                //Creature* VoidSentinel = m_creature->SummonCreature(ID_VOID_SENTINEL, ShadowPortalSpawn[x][0], ShadowPortalSpawn[x][1], m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
-                //if(VoidSentinel) 
-                    //VoidSentinel->AI()->AttackStart(m_creature->getVictim());
-				DoCast(m_creature->getVictim(),46177);
-                
-                SummonVoidTimer = 30000;
+				//m_creature->MonsterYell("try open portal",LANG_UNIVERSAL,0);
+				if(pPortalTarget = Unit::GetUnit(*m_creature,pInstance->GetData64(DATA_SHADOW_PORTAL)))
+				{
+					//pPortalTarget->MonsterYell("portal opened",LANG_UNIVERSAL,0);
+					pPortalTarget->CastSpell(pPortalTarget,SUMMON_VOID_SENTINEL_PORTAL,false);
+					VoidSentinel = true;
+					VoidSentinelTimer = 3000;
+				} 
+				//else m_creature->MonsterYell("failed",LANG_UNIVERSAL,0);
+                SummonVoidTimer = 30000; 
             }else SummonVoidTimer -= diff;
+
+			if(VoidSentinel)
+				if(VoidSentinelTimer < diff)
+				{
+					if(pPortalTarget)
+						pPortalTarget->CastSpell(pPortalTarget,SUMMON_VOID_SENTINEL,true);
+					VoidSentinel = false;
+				} else VoidSentinelTimer -= diff;
             
-            /*//Summon 6 humanoids every 1min (1mage & 2berserkers)
+             //Summon 6 humanoids every 1min (1mage & 2berserkers) -> working
             if(SummonTrashTimer < diff)
             {
                     for(uint8 i = 0; i < 6; i++)
@@ -205,9 +233,9 @@ struct MANGOS_DLL_DECL boss_muruAI : public ScriptedAI
                         uint32 ID;
 
                         if((i == 1) | (i == 2))
-                            ID = ID_SWB;
+							ID = ID_SWFuryMage;
                         else
-                            ID = ID_SWM;
+							ID = ID_SWBerserker;
 
                         Creature* sTrash = m_creature->SummonCreature(ID, Trash[i][0], Trash[i][1], m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
                         
@@ -216,7 +244,38 @@ struct MANGOS_DLL_DECL boss_muruAI : public ScriptedAI
                                 sTrash->AI()->AttackStart(sTarget);
                     }
                     SummonTrashTimer = 60000;
-            }else SummonTrashTimer -= diff;*/
+            }else SummonTrashTimer -= diff;
+
+			//negative energy on 4-5 targets every second -> working
+            if(NegativeEnergyTimer < diff)
+            {	//choose 4-5 targets
+				for(uint8 i=rand()%2; i<5; ++i)
+                {
+                    if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                        m_creature->CastSpell(target, SPELL_NEGATIVE, false);
+                }
+                NegativeEnergyTimer = 1000;
+            }else NegativeEnergyTimer -= diff;
+
+		//Cast Darkness
+        if(DarknessTimer < diff)
+        {
+            m_creature->CastSpell(m_creature, DARKNESS, true);
+
+            Darkness = true;
+            DarkFiendTimer = 5000;
+            DarknessTimer = 45000;
+        }else DarknessTimer -= diff;
+
+		if(Darkness)
+			if(DarkFiendTimer < diff)
+			{
+				// summon 8 dark fiends
+				for(int i=0;i<8;i++)
+					m_creature->SummonCreature(ID_DARK_FIEND,DarkFiendSpawn[i][0],DarkFiendSpawn[i][1],DarkFiendSpawnZ,0,TEMPSUMMON_TIMED_DESPAWN,60000);
+					Darkness = false;
+			} else DarkFiendTimer -= diff;
+
         }
         else // else Entropius phase
         {
@@ -245,10 +304,10 @@ struct MANGOS_DLL_DECL boss_muruAI : public ScriptedAI
             {
                 if(Unit* sTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
                 {
+					//m_creature->MonsterYell("Singularity!",LANG_UNIVERSAL,0);
                     Creature* Singularity = m_creature->SummonCreature(ID_SINGULARITY, sTarget->GetPositionX(), sTarget->GetPositionY(), sTarget->GetPositionZ(), m_creature->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 20000);
                     if(Singularity)
                         Singularity->AI()->AttackStart(sTarget);
-
                 }
                 SingularityTimer = 50000;
             }else SingularityTimer -= diff; 
@@ -256,18 +315,7 @@ struct MANGOS_DLL_DECL boss_muruAI : public ScriptedAI
             DoMeleeAttackIfReady();
         }
 
-        /*//Cast Darkness
-        if(DarknessTimer < diff)
-        {
-            m_fDarkPosX = m_creature->GetPositionX();
-            m_fDarkPosY = m_creature->GetPositionY();
-            // Creature* Darkness = m_creature->SummonCreature(25879, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 15000);
-            m_creature->CastSpell(m_creature, DARKNESS, true);
 
-            Darkness = true;
-            DarkFiendTimer = 3000;
-            DarknessTimer = 45000;
-        }else DarknessTimer -= diff;
 
         if(DarkFiendTimer < diff && Darkness)
         {
@@ -287,12 +335,11 @@ struct MANGOS_DLL_DECL boss_muruAI : public ScriptedAI
             }
             Darkness = false;
             DarkFiendTimer = 45000;
-        }else DarkFiendTimer -= diff;*/
+        }else DarkFiendTimer -= diff;
     }
 };
  
-/* --- Dark Fiend AI --- */
- 
+// dark fiend
 struct MANGOS_DLL_DECL dark_fiendAI : public ScriptedAI
 {
     dark_fiendAI(Creature *c) : ScriptedAI(c) 
@@ -321,10 +368,11 @@ struct MANGOS_DLL_DECL dark_fiendAI : public ScriptedAI
     {
         if (Reached == false)
         {
-            if (spell->Id == SPELL_DISPELL)
-                Reached  = true;
-            if (spell->Id == SPELL_PURGE)
-                Reached  = true;
+            if (spell->Id == SPELL_DISPELL||spell->Id == SPELL_PURGE)
+			{
+				Reached  = true;
+				m_creature->DealDamage(m_creature,m_creature->GetHealth(),NULL,DIRECT_DAMAGE,SPELL_SCHOOL_MASK_NORMAL,NULL,false);
+			}
         }
     }
 
@@ -337,26 +385,16 @@ struct MANGOS_DLL_DECL dark_fiendAI : public ScriptedAI
         if( m_creature->isAttackReady() && !m_creature->IsNonMeleeSpellCasted(false))
         {
             //If we are within range melee the target
-            /*
-            if (!get data Explosion == Done)
-            */
             if(!Reached)
                 if(m_creature->IsWithinDistInMap(m_creature->getVictim(), ATTACK_DISTANCE))
                 {
-                    m_creature->SetVisibility(VISIBILITY_OFF);
-					if(pInstance && pInstance->GetData(TYPE_MURU) == NOT_STARTED)
-                    {
                         m_creature->CastSpell(m_creature->getVictim(), DARK_FIEND_DEBUFF, true);
-                        m_creature->AttackerStateUpdate(m_creature->getVictim());
-                        pInstance->SetData(TYPE_MURU, DONE);
-                        Reached = true;
-                    }
-                    // set data explosion done
+						Reached = true;
+                        m_creature->DealDamage(m_creature,m_creature->GetHealth(),NULL,DIRECT_DAMAGE,SPELL_SCHOOL_MASK_NORMAL,NULL,false);   
                 }
         }
     }
-};
- 
+}; 
 struct MANGOS_DLL_DECL mob_voidsentinelAI : public ScriptedAI
 {
     mob_voidsentinelAI(Creature *c) : ScriptedAI(c) { Reset(); }
@@ -376,10 +414,9 @@ struct MANGOS_DLL_DECL mob_voidsentinelAI : public ScriptedAI
     {
         for(uint8 i=0; i<8; ++i)
         {
-            Creature* sTrash = m_creature->SummonCreature(ID_SPAWN, m_creature->GetPositionX()+rand()%2, m_creature->GetPositionY()+rand()%2, m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
-            if(Unit* sTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                if(sTrash)
-                    sTrash->AI()->AttackStart(sTarget);
+			// void spawn AI handled by EventAI
+            if(Creature* voidSpawn = m_creature->SummonCreature(ID_SPAWN, m_creature->GetPositionX()+rand()%2, m_creature->GetPositionY()+rand()%2, m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000))
+				voidSpawn->getVictim();
         }
     }
     void KilledUnit(Unit *Victim) {}
@@ -390,11 +427,13 @@ struct MANGOS_DLL_DECL mob_voidsentinelAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
                 return;
         
+		//shadow pulse
         if(AuraTimer < diff)
         {
             DoCast(m_creature, VOID_AURA);
             AuraTimer = 3000;
         }else AuraTimer -=diff;
+
 
         if(BlastTimer < diff)
         {
@@ -406,6 +445,7 @@ struct MANGOS_DLL_DECL mob_voidsentinelAI : public ScriptedAI
 
     }
 };
+
 
 struct MANGOS_DLL_DECL mob_singularityAI : public ScriptedAI
 {

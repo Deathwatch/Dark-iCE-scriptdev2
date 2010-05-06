@@ -663,7 +663,6 @@ void AddScripts()
     AddSC_boss_akilzon();                                   //zulaman
     AddSC_boss_halazzi();
     AddSC_boss_janalai();
-    AddSC_boss_malacrass();
     AddSC_boss_nalorakk();
     AddSC_instance_zulaman();
     AddSC_zulaman();

@@ -21,6 +21,18 @@ extern void AddSC_custom_npc_titlemaster();
 extern void AddSC_custom_npc_tokenvendor();
 extern void AddSC_custom_script_training_dummy();
 
+//guards
+extern void AddSC_ancient_of_war();
+extern void AddSC_archbishop_benedictus();
+extern void AddSC_g_marcus_jonathan();
+extern void AddSC_high_fire_mage();
+extern void AddSC_high_sorcerer_andromath();
+extern void AddSC_highlord_bolvar_fordragon();
+extern void AddSC_city_officer();
+extern void AddSC_overlord_saurfang();
+extern void AddSC_thrall();
+
+
 //examples
 extern void AddSC_example_creature();
 extern void AddSC_example_escort();

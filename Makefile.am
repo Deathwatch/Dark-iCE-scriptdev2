@@ -38,6 +38,8 @@ base/simple_ai.cpp \
 base/simple_ai.h \
 include/precompiled.cpp \
 include/precompiled.h \
+include/sc_boss_spell_worker.cpp \
+include/sc_boss_spell_worker.h \
 include/sc_creature.cpp \
 include/sc_creature.h \
 include/sc_gossip.h \
@@ -119,6 +121,7 @@ scripts/eastern_kingdoms/blackwing_lair/boss_razorgore.cpp \
 scripts/eastern_kingdoms/blackwing_lair/boss_vaelastrasz.cpp \
 scripts/eastern_kingdoms/blackwing_lair/boss_victor_nefarius.cpp \
 scripts/eastern_kingdoms/blackwing_lair/instance_blackwing_lair.cpp \
+scripts/eastern_kingdoms/blackwing_lair/blackwing_lair.h \
 scripts/eastern_kingdoms/deadmines/deadmines.cpp \
 scripts/eastern_kingdoms/deadmines/deadmines.h \
 scripts/eastern_kingdoms/deadmines/instance_deadmines.cpp \

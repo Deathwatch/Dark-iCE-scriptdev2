@@ -83,8 +83,6 @@ struct MANGOS_DLL_DECL boss_anubarak_trialAI : public ScriptedAI
         intro = true;
         m_creature->SetRespawnDelay(DAY);
         pTarget = NULL;
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
     }
 
 
@@ -98,6 +96,8 @@ struct MANGOS_DLL_DECL boss_anubarak_trialAI : public ScriptedAI
         if (!intro) return;
         DoScriptText(-1713554,m_creature);
         intro = false;
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         m_creature->SetInCombatWithZone();
     }
 
@@ -149,7 +149,7 @@ struct MANGOS_DLL_DECL boss_anubarak_trialAI : public ScriptedAI
                     break;}
             case 2: {
                     if (bsw->timedQuery(SPELL_SPIKE_CALL, uiDiff)) {
-                         pTarget = bsw->SelectUnit();
+                         pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0);
 //                         bsw->doCast(SPELL_SPIKE_CALL);
 //                         This summon not supported in database. Temporary override.
                          Unit* spike = bsw->doSummon(NPC_SPIKE,TEMPSUMMON_TIMED_DESPAWN,60000);

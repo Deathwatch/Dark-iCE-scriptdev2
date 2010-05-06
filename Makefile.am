@@ -71,6 +71,11 @@ scripts/guards/highlord_bolvar_fordragon.cpp \
 scripts/guards/officers.cpp \
 scripts/guards/overlord_saurfang.cpp \
 scripts/guards/thrall.cpp \
+scripts/battlegrounds/alterac_valley/boss_balinda.cpp \
+scripts/battlegrounds/alterac_valley/boss_drekthar.cpp \
+scripts/battlegrounds/alterac_valley/boss_galvangar.cpp \
+scripts/battlegrounds/alterac_valley/boss_vanndar.cpp \
+
 
 scripts/eastern_kingdoms/alterac_mountains.cpp \
 scripts/eastern_kingdoms/arathi_highlands.cpp \

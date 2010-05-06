@@ -407,6 +407,7 @@ extern void AddSC_instance_icecrown_spire();                // Spire
 extern void AddSC_icecrown_spire();
 extern void AddSC_icecrown_teleporter();
 extern void AddSC_boss_lord_marrowgar();
+extern void AddSC_boss_the_lich_king();
 extern void AddSC_boss_lady_deathwhisper();
 extern void AddSC_boss_deathbringer_saurfang();
 extern void AddSC_boss_rotface();

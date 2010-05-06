@@ -75,8 +75,6 @@ scripts/battlegrounds/alterac_valley/boss_balinda.cpp \
 scripts/battlegrounds/alterac_valley/boss_drekthar.cpp \
 scripts/battlegrounds/alterac_valley/boss_galvangar.cpp \
 scripts/battlegrounds/alterac_valley/boss_vanndar.cpp \
-
-
 scripts/eastern_kingdoms/alterac_mountains.cpp \
 scripts/eastern_kingdoms/arathi_highlands.cpp \
 scripts/eastern_kingdoms/blasted_lands.cpp \
@@ -483,7 +481,6 @@ scripts/northrend/vault_of_archavon/boss_archavon.cpp \
 scripts/northrend/vault_of_archavon/boss_emalon.cpp \
 scripts/northrend/vault_of_archavon/boss_koralon.cpp \
 scripts/northrend/vault_of_archavon/boss_toravon.cpp \
-
 scripts/northrend/vault_of_archavon/instance_vault_of_archavon.cpp \
 scripts/northrend/vault_of_archavon/vault_of_archavon.h \
 scripts/northrend/violet_hold/boss_cyanigosa.cpp \

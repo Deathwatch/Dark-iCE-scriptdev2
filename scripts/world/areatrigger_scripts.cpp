@@ -37,9 +37,37 @@ at_orgrimmar_auction_house
 at_orgrimmar_barber_shop
 at_warsong_farms
 at_stormwright_shelf            5108
+at_childrens_week_spot          3546,3547,3548,3552,3549,3550
 EndContentData */
 
 #include "precompiled.h"
+
+uint32 TriggerQuestOrphan[6][3] =
+{
+    {3546, 1479, 14305},   // The Bough of the Eternals
+    {3547, 1800, 14444},   // Lordaeron Throne Room 
+    {3548, 1558, 14305},   // The Stonewrought Dam
+    {3549, 911, 14444},    // Gateway to the Frontier
+    {3550, 910, 14444},    // Down at the Docks
+    {3552, 1687, 14305}    // Spooky Lighthouse
+};
+
+bool AreaTrigger_at_childrens_week_spot(Player* pPlayer, AreaTriggerEntry* pAt)
+{
+   for (uint8 i = 0; i < 6; ++i)
+   {
+       if (pAt->id == TriggerQuestOrphan[i][0] &&
+           pPlayer->GetQuestStatus(TriggerQuestOrphan[i][1]) == QUEST_STATUS_INCOMPLETE &&
+           pPlayer->GetMiniPet() && pPlayer->GetMiniPet()->GetEntry() == TriggerQuestOrphan[i][2])
+       {
+           pPlayer->AreaExploredOrEventHappens(TriggerQuestOrphan[i][1]);
+           return true;
+       }
+    }
+    return false;
+}
+
+
 
 /*######
 ## Quest 13315/13351
@@ -263,6 +291,9 @@ bool AreaTrigger_at_orgrimmar_barber_shop(Player* pPlayer, AreaTriggerEntry *pAt
 void AddSC_areatrigger_scripts()
 {
     Script *newscript;
+    newscript->Name = "at_childrens_week_spot";
+    newscript->pAreaTrigger = &AreaTrigger_at_childrens_week_spot;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "at_aldurthar_gate";

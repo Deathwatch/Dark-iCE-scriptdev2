@@ -15,183 +15,189 @@
  */
 
 /* ScriptData
-SDName: Instance_Nexus
-SD%Complete: 95%
+SDName: instance_nexus
+SD%Complete: 75%
 SDComment:
-SDCategory: The Nexus, The Nexus
+SDCategory: The Nexus
 EndScriptData */
 
 #include "precompiled.h"
 #include "nexus.h"
 
-#define NUMBER_OF_ENCOUNTERS      4
+bool GOHello_go_containment_sphere(Player* pPlayer, GameObject* pGo)
+{
+    ScriptedInstance* pInstance = (ScriptedInstance*)pGo->GetInstanceData();
+
+    if (!pInstance)
+        return false;
+
+    switch(pGo->GetEntry())
+    {
+        case GO_CONTAINMENT_SPHERE_TELESTRA: pInstance->SetData(TYPE_TELESTRA, SPECIAL); break;
+        case GO_CONTAINMENT_SPHERE_ANOMALUS: pInstance->SetData(TYPE_ANOMALUS, SPECIAL); break;
+        case GO_CONTAINMENT_SPHERE_ORMOROK:  pInstance->SetData(TYPE_ORMOROK, SPECIAL);  break;
+    }
+
+    pGo->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+    return false;
+}
 
 struct MANGOS_DLL_DECL instance_nexus : public ScriptedInstance
 {
-    instance_nexus(Map *pMap) : ScriptedInstance(pMap) { Initialize(); }
+    instance_nexus(Map* pMap) : ScriptedInstance(pMap) {Initialize();};
 
-    uint32 m_auiEncounter[NUMBER_OF_ENCOUNTERS];
-
-    uint64 Anomalus;
-    uint64 Keristrasza;
-
-    uint64 AnomalusContainmentSphere;
-    uint64 OrmoroksContainmentSphere;
-    uint64 TelestrasContainmentSphere;
-
+    uint32 m_auiEncounter[MAX_ENCOUNTER];
     std::string strInstData;
+
+    uint64 m_uiAnomalusGUID;
+    uint64 m_uiKeristrazaGUID;
+
+    uint64 m_uiTelestrasContainmentSphereGUID;
+    uint64 m_uiAnomalusContainmentSphereGUID;
+    uint64 m_uiOrmoroksContainmentSphereGUID;
 
     void Initialize()
     {
         memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
 
-        Anomalus = 0;
+        m_uiAnomalusGUID = 0;
+        m_uiKeristrazaGUID = 0;
+
+        m_uiTelestrasContainmentSphereGUID = 0;
+        m_uiAnomalusContainmentSphereGUID = 0;
+        m_uiOrmoroksContainmentSphereGUID = 0;
     }
 
-    void OnCreatureCreate(Creature *pCreature)
+    bool IsEncounterInProgress() const
     {
-        Map::PlayerList const &players = instance->GetPlayers();
-        uint32 TeamInInstance = 0;
+        for(uint8 i = 0; i < MAX_ENCOUNTER; ++i)
+        {
+            if (m_auiEncounter[i] == IN_PROGRESS)
+                return true;
+        }
 
-        if (!players.isEmpty())
-        {
-            if (Player* pPlayer = players.begin()->getSource())
-                TeamInInstance = pPlayer->GetTeam();
-        }
-        switch (pCreature->GetEntry())
-        {
-            case 26763:
-                Anomalus = pCreature->GetGUID();
-                break;
-            case 26723:
-                Keristrasza = pCreature->GetGUID();
-                break;
-            // Alliance npcs are spawned by default, if you are alliance, you will fight against horde npcs.
-            case 26800:
-            {
-                pCreature->setFaction(16);
-                if (TeamInInstance == ALLIANCE)
-                    pCreature->UpdateEntry(26799, HORDE);
-                break;
-            }
-            case 26802:
-            {
-                pCreature->setFaction(16);
-                if (TeamInInstance == ALLIANCE)
-                    pCreature->UpdateEntry(26801, HORDE);
-                break;
-            }
-            case 26805:
-            {
-                pCreature->setFaction(16);
-                if (TeamInInstance == ALLIANCE)
-                    pCreature->UpdateEntry(26803, HORDE);
-                break;
-            }
-            case 27949:
-            {
-                pCreature->setFaction(16);
-                if (TeamInInstance == ALLIANCE)
-                    pCreature->UpdateEntry(27947, HORDE);
-                break;
-            }
-            case 26796:
-            {
-                pCreature->setFaction(16);
-                if (TeamInInstance == ALLIANCE)
-                    pCreature->UpdateEntry(26798, HORDE);
-                break;
-            }
-        }
+        return false;
     }
 
-    void OnObjectCreate(GameObject *pGo)
+    void OnObjectCreate(GameObject* pGo)
     {
-        switch (pGo->GetEntry())
+        switch(pGo->GetEntry())
         {
-            case 188527:
-            {
-                AnomalusContainmentSphere = pGo->GetGUID();
-                if (m_auiEncounter[1] == DONE)
-                    pGo->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
-                break;
-            }
-            case 188528:
-            {
-                OrmoroksContainmentSphere = pGo->GetGUID();
-                if (m_auiEncounter[2] == DONE)
-                    pGo->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
-                break;
-            }
-            case 188526:
-            {
-                TelestrasContainmentSphere = pGo->GetGUID();
+            case GO_CONTAINMENT_SPHERE_TELESTRA:
+                m_uiTelestrasContainmentSphereGUID = pGo->GetGUID();
                 if (m_auiEncounter[0] == DONE)
                     pGo->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
                 break;
-            }
+            case GO_CONTAINMENT_SPHERE_ANOMALUS:
+                m_uiAnomalusContainmentSphereGUID = pGo->GetGUID();
+                if (m_auiEncounter[1] == DONE)
+                    pGo->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+                break;
+            case GO_CONTAINMENT_SPHERE_ORMOROK:
+                m_uiOrmoroksContainmentSphereGUID = pGo->GetGUID();
+                if (m_auiEncounter[2] == DONE)
+                    pGo->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+                break;
         }
     }
 
-    uint32 GetData(uint32 identifier)
+    void OnCreatureCreate(Creature* pCreature)
     {
-        switch(identifier)
+        switch(pCreature->GetEntry())
         {
-            case DATA_MAGUS_TELESTRA_EVENT: return m_auiEncounter[0];
-            case DATA_ANOMALUS_EVENT:       return m_auiEncounter[1];
-            case DATA_ORMOROK_EVENT:        return m_auiEncounter[2];
-            case DATA_KERISTRASZA_EVENT:    return m_auiEncounter[3];
+            case NPC_ANOMALUS:
+                m_uiAnomalusGUID = pCreature->GetGUID();
+                break;
+            case NPC_KERISTRASZA:
+                m_uiKeristrazaGUID = pCreature->GetGUID();
+                break;
         }
+    }
+
+    uint64 GetData64(uint32 uiType)
+    {
+        switch(uiType)
+        {
+            case NPC_ANOMALUS:
+                return m_uiAnomalusGUID;
+        }
+
         return 0;
     }
 
-    void SetData(uint32 identifier, uint32 data)
+    uint32 GetData(uint32 uiType)
     {
-        switch (identifier)
+        switch(uiType)
         {
-            case DATA_MAGUS_TELESTRA_EVENT:
-            {
-                if (data == DONE)
+            case TYPE_TELESTRA:
+                return m_auiEncounter[0];
+            case TYPE_ANOMALUS:
+                return m_auiEncounter[1];
+            case TYPE_ORMOROK:
+                return m_auiEncounter[2];
+            case TYPE_KERISTRASZA:
+                return m_auiEncounter[3];
+        }
+
+        return 0;
+    }
+
+    void SetData(uint32 uiType, uint32 uiData)
+    {
+        debug_log("SD2: Instance Nexus: SetData received for type %u with data %u", uiType, uiData);
+
+        switch(uiType)
+        {
+            case TYPE_TELESTRA:
+                m_auiEncounter[0] = uiData;
+                if (uiData == DONE)
                 {
-                    GameObject *Sphere = instance->GetGameObject(TelestrasContainmentSphere);
-                    if (Sphere)
-                        Sphere->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+                    if (GameObject* pGo = instance->GetGameObject(m_uiTelestrasContainmentSphereGUID))
+                        pGo->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
                 }
-                m_auiEncounter[0] = data;
                 break;
-            }
-            case DATA_ANOMALUS_EVENT:
-            {
-                if (data == DONE)
+            case TYPE_ANOMALUS:
+                m_auiEncounter[1] = uiData;
+                if (uiData == DONE)
                 {
-                    if (GameObject *Sphere = instance->GetGameObject(AnomalusContainmentSphere))
-                        Sphere->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+                    if (GameObject* pGo = instance->GetGameObject(m_uiAnomalusContainmentSphereGUID))
+                        pGo->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
                 }
-                m_auiEncounter[1] = data;
                 break;
-            }
-            case DATA_ORMOROK_EVENT:
-            {
-                if (data == DONE)
+            case TYPE_ORMOROK:
+                m_auiEncounter[2] = uiData;
+                if (uiData == DONE)
                 {
-                    if (GameObject *Sphere = instance->GetGameObject(OrmoroksContainmentSphere))
-                        Sphere->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
+                    if (GameObject* pGo = instance->GetGameObject(m_uiOrmoroksContainmentSphereGUID))
+                        pGo->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
                 }
-                m_auiEncounter[2] = data;
                 break;
-            }
-            case DATA_KERISTRASZA_EVENT:
-                m_auiEncounter[3] = data;
+            case TYPE_KERISTRASZA:
+                m_auiEncounter[3] = uiData;
+                break;
+            default:
+                error_log("SD2: Instance Nexus: ERROR SetData = %u for type %u does not exist/not implemented.", uiType, uiData);
                 break;
         }
 
-        if (data == DONE)
+        if (m_auiEncounter[0] == SPECIAL && m_auiEncounter[1] == SPECIAL && m_auiEncounter[2] == SPECIAL)
+        {
+            // release Keristrasza from her prison here
+            m_auiEncounter[3] = SPECIAL;
+
+            if (Creature* pCreature = instance->GetCreature(m_uiKeristrazaGUID))
+            {
+                if (pCreature->isAlive())
+                    pCreature->RemoveAurasDueToSpell(SPELL_FROZEN_PRISON);
+            }
+        }
+
+        if (uiData == DONE)
         {
             OUT_SAVE_INST_DATA;
 
             std::ostringstream saveStream;
-            saveStream << m_auiEncounter[0] << " " << m_auiEncounter[1] << " " << m_auiEncounter[2] << " "
-                << m_auiEncounter[3];
+            saveStream << m_auiEncounter[0] << " " << m_auiEncounter[1] << " " << m_auiEncounter[2] << " " << m_auiEncounter[3];
 
             strInstData = saveStream.str();
 
@@ -200,25 +206,12 @@ struct MANGOS_DLL_DECL instance_nexus : public ScriptedInstance
         }
     }
 
-    uint64 GetData64(uint32 uiIdentifier)
+    const char* Save()
     {
-        switch(uiIdentifier)
-        {
-            case DATA_ANOMALUS:                 return Anomalus;
-            case DATA_KERISTRASZA:              return Keristrasza;
-            case ANOMALUS_CONTAINMET_SPHERE:    return AnomalusContainmentSphere;
-            case ORMOROKS_CONTAINMET_SPHERE:    return OrmoroksContainmentSphere;
-            case TELESTRAS_CONTAINMET_SPHERE:   return TelestrasContainmentSphere;
-        }
-        return 0;
+        return strInstData.c_str();
     }
 
-    std::string GetSaveData()
-    {
-        return strInstData;
-    }
-
-    void Load(const char *chrIn)
+    void Load(const char* chrIn)
     {
         if (!chrIn)
         {
@@ -231,25 +224,32 @@ struct MANGOS_DLL_DECL instance_nexus : public ScriptedInstance
         std::istringstream loadStream(chrIn);
         loadStream >> m_auiEncounter[0] >> m_auiEncounter[1] >> m_auiEncounter[2] >> m_auiEncounter[3];
 
-        for (uint8 i = 0; i < NUMBER_OF_ENCOUNTERS; ++i)
+        for(uint8 i = 0; i < MAX_ENCOUNTER; ++i)
+        {
             if (m_auiEncounter[i] == IN_PROGRESS)
                 m_auiEncounter[i] = NOT_STARTED;
+        }
 
         OUT_LOAD_INST_DATA_COMPLETE;
     }
 };
 
-InstanceData *GetInstanceData_instance_nexus(Map *pMap)
+InstanceData* GetInstanceData_instance_nexus(Map* pMap)
 {
     return new instance_nexus(pMap);
 }
 
 void AddSC_instance_nexus()
 {
-    Script *newscript;
+    Script* newscript;
 
     newscript = new Script;
     newscript->Name = "instance_nexus";
     newscript->GetInstanceData = &GetInstanceData_instance_nexus;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_containment_sphere";
+    newscript->pGOHello = &GOHello_go_containment_sphere;
     newscript->RegisterSelf();
 }

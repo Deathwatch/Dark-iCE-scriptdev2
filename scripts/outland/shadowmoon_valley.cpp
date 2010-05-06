@@ -68,6 +68,8 @@ struct MANGOS_DLL_DECL mob_mature_netherwing_drakeAI : public ScriptedAI
     uint32 EatTimer;
     uint32 CastTimer;
 
+  float x,y,z;
+
     void Reset()
     {
         uiPlayerGUID = 0;
@@ -77,6 +79,10 @@ struct MANGOS_DLL_DECL mob_mature_netherwing_drakeAI : public ScriptedAI
 
         EatTimer = 5000;
         CastTimer = 5000;
+
+    x = 0.f;
+    y = 0.f;
+    z = 0.f;
     }
 
     void SpellHit(Unit* pCaster, SpellEntry const* pSpell)
@@ -88,6 +94,9 @@ struct MANGOS_DLL_DECL mob_mature_netherwing_drakeAI : public ScriptedAI
         {
             uiPlayerGUID = pCaster->GetGUID();
             bCanEat = true;
+      x = pCaster->GetPositionX();
+      y = pCaster->GetPositionY();
+      z = pCaster->GetPositionZ();
         }
     }
 
@@ -114,15 +123,13 @@ struct MANGOS_DLL_DECL mob_mature_netherwing_drakeAI : public ScriptedAI
                 {
                     if (Unit* pUnit = Unit::GetUnit(*m_creature, uiPlayerGUID))
                     {
-                        if (GameObject* pGo = pUnit->GetGameObject(SPELL_PLACE_CARCASS))
                         {
                             if (m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() == WAYPOINT_MOTION_TYPE)
                                 m_creature->GetMotionMaster()->MovementExpired();
 
                             m_creature->GetMotionMaster()->MoveIdle();
                             m_creature->StopMoving();
-
-                            m_creature->GetMotionMaster()->MovePoint(POINT_ID, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ());
+              m_creature->GetMotionMaster()->MovePoint(POINT_ID,x,y,z);      
                         }
                     }
                     bCanEat = false;
@@ -140,7 +147,18 @@ struct MANGOS_DLL_DECL mob_mature_netherwing_drakeAI : public ScriptedAI
                 }
             }
             else
+       {
                 EatTimer -= diff;
+        if(!bCanEat && bIsEating){
+          if(Unit* pUnit = Unit::GetUnit(*m_creature, uiPlayerGUID))
+          {
+            m_creature->Attack(pUnit,true);
+            m_creature->GetMotionMaster()->MoveChase(pUnit,0.f,0.f);
+            DoCastSpellIfCan(m_creature, SPELL_JUST_EATEN);
+            bIsEating = false;
+          }
+       }
+      }
 
             return;
         }

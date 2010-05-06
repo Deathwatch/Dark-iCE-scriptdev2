@@ -1,4 +1,4 @@
-/* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2006 - 2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -16,60 +16,69 @@
 
 /* ScriptData
 SDName: Boss_Archimonde
-SD%Complete: 85
-SDComment: Doomfires not completely offlike due to core limitations for random moving. Tyrande and second phase not fully implemented.
+SD%Complete: 95
+SDComment: Playable
 SDCategory: Caverns of Time, Mount Hyjal
 EndScriptData */
 
+/*
+DoomFire ? random movement or what?
+Ancient Whisp kicked out from code
+*/
+
 #include "precompiled.h"
-#include "hyjal.h"
+#include "def_hyjal.h"
 #include "SpellAuras.h"
 
 //text id -1534018 are the text used when previous events complete. Not part of this script.
-#define SAY_AGGRO                   -1534019
-#define SAY_DOOMFIRE1               -1534020
-#define SAY_DOOMFIRE2               -1534021
-#define SAY_AIR_BURST1              -1534022
-#define SAY_AIR_BURST2              -1534023
-#define SAY_SLAY1                   -1534024
-#define SAY_SLAY2                   -1534025
-#define SAY_SLAY3                   -1534026
-#define SAY_ENRAGE                  -1534027
-#define SAY_DEATH                   -1534028
-#define SAY_SOUL_CHARGE1            -1534029
-#define SAY_SOUL_CHARGE2            -1534030
+enum
+{
+		SAY_AGGRO                   = -1534019,
+		SAY_DOOMFIRE1               = -1534020,
+		SAY_DOOMFIRE2               = -1534021,
+		SAY_AIR_BURST1              = -1534022,
+		SAY_AIR_BURST2              = -1534023,
+		SAY_SLAY1                   = -1534024,
+		SAY_SLAY2                   = -1534025,
+		SAY_SLAY3                   = -1534026,
+		SAY_ENRAGE                  = -1534027,
+		SAY_DEATH                   = -1534028,
+		SAY_SOUL_CHARGE1            = -1534029,
+		SAY_SOUL_CHARGE2            = -1534030,
 
-#define SPELL_DENOUEMENT_WISP       32124
-#define SPELL_ANCIENT_SPARK         39349
-#define SPELL_PROTECTION_OF_ELUNE   38528
+		SPELL_DENOUEMENT_WISP      = 32124,
+		SPELL_ANCIENT_SPARK        = 39349,
+		SPELL_PROTECTION_OF_ELUNE  = 38528,
 
-#define SPELL_DRAIN_WORLD_TREE      39140
-#define SPELL_DRAIN_WORLD_TREE_2    39141
+		SPELL_DRAIN_WORLD_TREE     = 39140,
+		SPELL_DRAIN_WORLD_TREE_2   = 39141,
 
-#define SPELL_FINGER_OF_DEATH       31984
-#define SPELL_HAND_OF_DEATH         35354
-#define SPELL_AIR_BURST             32014
-#define SPELL_GRIP_OF_THE_LEGION    31972
-#define SPELL_DOOMFIRE_STRIKE       31903                   //summons two creatures
-#define SPELL_DOOMFIRE_SPAWN        32074
-#define SPELL_DOOMFIRE              31945
-#define SPELL_SOUL_CHARGE_YELLOW    32045
-#define SPELL_SOUL_CHARGE_GREEN     32051
-#define SPELL_SOUL_CHARGE_RED       32052
-#define SPELL_UNLEASH_SOUL_YELLOW   32054
-#define SPELL_UNLEASH_SOUL_GREEN    32057
-#define SPELL_UNLEASH_SOUL_RED      32053
-#define SPELL_FEAR                  31970
+		SPELL_FINGER_OF_DEATH      = 31984,
+		SPELL_HAND_OF_DEATH        = 35354,
+		SPELL_AIR_BURST            = 32014,
+		SPELL_GRIP_OF_THE_LEGION   = 31972,
+		SPELL_DOOMFIRE_STRIKE      = 31903,
+		SPELL_DOOMFIRE_SPAWN       = 32074,
+        SPELL_DOOMFIRE_DEV		   = 31944,
+		SPELL_DOOMFIRE             = 31945,
+		SPELL_SOUL_CHARGE_YELLOW   = 32045,
+		SPELL_SOUL_CHARGE_GREEN    = 32051,
+		SPELL_SOUL_CHARGE_RED      = 32052,
+		SPELL_UNLEASH_SOUL_YELLOW  = 32054,
+		SPELL_UNLEASH_SOUL_GREEN   = 32057,
+		SPELL_UNLEASH_SOUL_RED     = 32053,
+		SPELL_FEAR                 = 31970,
 
-#define CREATURE_ARCHIMONDE             17968
-#define CREATURE_DOOMFIRE               18095
-#define CREATURE_DOOMFIRE_SPIRIT        18104
-#define CREATURE_ANCIENT_WISP           17946
-#define CREATURE_CHANNEL_TARGET         22418
+		CREATURE_ARCHIMONDE            = 17968,
+		CREATURE_DOOMFIRE              = 18095,
+		CREATURE_DOOMFIRE_SPIRIT       = 18104,
+		CREATURE_ANCIENT_WISP          = 17946,
+		CREATURE_CHANNEL_TARGET        = 22418,
+};
 
-#define NORDRASSIL_X        5503.713f
-#define NORDRASSIL_Y       -3523.436f
-#define NORDRASSIL_Z        1608.781f
+#define NORDRASSIL_X        5503.713
+#define NORDRASSIL_Y       -3523.436
+#define NORDRASSIL_Z        1608.781
 
 struct mob_ancient_wispAI : public ScriptedAI
 {
@@ -87,25 +96,21 @@ struct mob_ancient_wispAI : public ScriptedAI
     void Reset()
     {
         CheckTimer = 1000;
-
         if (m_pInstance)
             ArchimondeGUID = m_pInstance->GetData64(DATA_ARCHIMONDE);
-
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
     }
-
     void DamageTaken(Unit* done_by, uint32 &damage) { damage = 0; }
-
     void UpdateAI(const uint32 diff)
     {
         if (CheckTimer < diff)
         {
             if (Unit* Archimonde = Unit::GetUnit((*m_creature), ArchimondeGUID))
             {
-                if (Archimonde->GetHealthPercent() < 2.0f || !Archimonde->isAlive())
-                    DoCastSpellIfCan(m_creature, SPELL_DENOUEMENT_WISP);
+                if ((((Archimonde->GetHealth()*100) / Archimonde->GetMaxHealth()) < 2) || !Archimonde->isAlive())
+                    DoCast(m_creature, SPELL_DENOUEMENT_WISP);
                 else
-                    DoCastSpellIfCan(Archimonde, SPELL_ANCIENT_SPARK);
+                    DoCast(Archimonde, SPELL_ANCIENT_SPARK);
             }
             CheckTimer = 1000;
         }else CheckTimer -= diff;
@@ -114,14 +119,48 @@ struct mob_ancient_wispAI : public ScriptedAI
 
 /* This script is merely a placeholder for the Doomfire that triggers Doomfire spell. It will
    MoveChase the Doomfire Spirit always, until despawn (AttackStart is called upon it's spawn) */
-struct MANGOS_DLL_DECL mob_doomfireAI : public ScriptedAI
+struct MANGOS_DLL_DECL mob_doomfireAI : public Scripted_NoMovementAI
 {
-    mob_doomfireAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
+    mob_doomfireAI(Creature* pCreature) : Scripted_NoMovementAI(pCreature)
+    {
+        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        Reset();
+    }
 
-    void Reset() { }
+    ScriptedInstance* m_pInstance;
+	uint32 FireTimer;
+	uint64 ArchimondeGUID;
 
+    void Reset() 
+	{ 
+		FireTimer = 1000;
+
+		if(m_pInstance)
+			ArchimondeGUID = m_pInstance->GetData64(DATA_ARCHIMONDE);
+	}
     void MoveInLineOfSight(Unit* who) { }
     void DamageTaken(Unit *done_by, uint32 &damage) { damage = 0; }
+	void UpdateAI(const uint32 diff)
+	{
+		if(FireTimer < diff)
+		{
+			Unit* Archimonde = Unit::GetUnit((*m_creature), ArchimondeGUID);
+
+			std::list<HostilReference *> t_list = Archimonde->getThreatManager().getThreatList();
+			for(std::list<HostilReference *>::iterator itr = t_list.begin(); itr!= t_list.end(); ++itr)
+			{
+				if(Unit *target = Unit::GetUnit(*m_creature, (*itr)->getUnitGuid()))
+					if(target && target->GetTypeId() == TYPEID_PLAYER)
+					{
+						if(m_creature->IsWithinDistInMap(target, 3))
+							target->CastSpell(target, SPELL_DOOMFIRE_DEV, true);
+						else if(target->HasAura(SPELL_DOOMFIRE_DEV))
+							target->RemoveAurasDueToSpell(SPELL_DOOMFIRE_DEV);
+					}
+			}
+			FireTimer = 3000;
+		}FireTimer -= diff;
+	}
 };
 
 /* This is the script for the Doomfire Spirit Mob. This mob simply follow players or
@@ -130,15 +169,16 @@ struct MANGOS_DLL_DECL mob_doomfire_targettingAI : public ScriptedAI
 {
     mob_doomfire_targettingAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
 
-    uint64 TargetGUID;
     uint32 ChangeTargetTimer;
+    uint32 m_uiDoomFireTimer;
+    uint64 TargetGUID;
 
     void Reset()
     {
-        TargetGUID = 0;
+        m_uiDoomFireTimer = 1000;
         ChangeTargetTimer = 5000;
+        TargetGUID = 0;
     }
-
     void MoveInLineOfSight(Unit* who)
     {
         //will update once TargetGUID is 0. In case noone actually moves(not likely) and this is 0
@@ -146,11 +186,25 @@ struct MANGOS_DLL_DECL mob_doomfire_targettingAI : public ScriptedAI
         if (!TargetGUID && who->GetTypeId() == TYPEID_PLAYER)
             TargetGUID = who->GetGUID();
     }
-
     void DamageTaken(Unit *done_by, uint32 &damage) { damage = 0; }
-
+    void JustSummoned(Creature* pSummoned)
+    {
+        pSummoned->setFaction(m_creature->getFaction());
+        pSummoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        pSummoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        pSummoned->CastSpell(pSummoned,SPELL_DOOMFIRE_SPAWN,false);
+        pSummoned->CastSpell(pSummoned,SPELL_DOOMFIRE,true,0,0,m_creature->GetGUID());
+    }
     void UpdateAI(const uint32 diff)
     {
+        if(m_uiDoomFireTimer < diff)
+        {
+            m_creature->SummonCreature(CREATURE_DOOMFIRE, 
+                m_creature->GetPositionX(),m_creature->GetPositionY(),m_creature->GetPositionZ(),0,
+                TEMPSUMMON_TIMED_DESPAWN, 20000);
+            m_uiDoomFireTimer = 1000;
+        }m_uiDoomFireTimer -= diff;
+
         if (ChangeTargetTimer < diff)
         {
             if (Unit *temp = Unit::GetUnit(*m_creature,TargetGUID))
@@ -161,10 +215,9 @@ struct MANGOS_DLL_DECL mob_doomfire_targettingAI : public ScriptedAI
             else
             {
                 float x,y,z = 0.0;
-                m_creature->GetRandomPoint(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 40, x, y, z);
+                m_creature->GetRandomPoint(m_creature->GetPositionX()+rand()%30, m_creature->GetPositionY()+rand()%30, m_creature->GetPositionZ(), 40, x, y, z);  
                 m_creature->GetMotionMaster()->MovePoint(0, x, y, z);
             }
-
             ChangeTargetTimer = 5000;
         }else ChangeTargetTimer -= diff;
     }
@@ -198,10 +251,10 @@ struct MANGOS_DLL_DECL boss_archimondeAI : public ScriptedAI
     uint32 DoomfireTimer;
     uint32 SoulChargeTimer;
     uint32 SoulChargeCount;
+    uint32 SoulChargeType;
     uint32 MeleeRangeCheckTimer;
     uint32 HandOfDeathTimer;
     uint32 SummonWispTimer;
-    uint32 WispCount;
     uint32 EnrageTimer;
     uint32 CheckDistanceTimer;
 
@@ -215,6 +268,9 @@ struct MANGOS_DLL_DECL boss_archimondeAI : public ScriptedAI
         if (m_pInstance)
             m_pInstance->SetData(TYPE_ARCHIMONDE, NOT_STARTED);
 
+        m_creature->SetVisibility(VISIBILITY_OFF);
+        m_creature->setFaction(35);
+
         DoomfireSpiritGUID = 0;
         WorldTreeGUID = 0;
 
@@ -225,9 +281,9 @@ struct MANGOS_DLL_DECL boss_archimondeAI : public ScriptedAI
         DoomfireTimer = 20000;
         SoulChargeTimer = urand(2000, 29000);
         SoulChargeCount = 0;
+        SoulChargeType = 0;
         MeleeRangeCheckTimer = 15000;
         HandOfDeathTimer = 2000;
-        WispCount = 0;                                      // When ~30 wisps are summoned, Archimonde dies
         EnrageTimer = 600000;                               // 10 minutes
         CheckDistanceTimer = 30000;                         // This checks if he's too close to the World Tree (75 yards from a point on the tree), if true then he will enrage
 
@@ -268,17 +324,17 @@ struct MANGOS_DLL_DECL boss_archimondeAI : public ScriptedAI
             case CLASS_PRIEST:
             case CLASS_PALADIN:
             case CLASS_WARLOCK:
-                victim->CastSpell(m_creature, SPELL_SOUL_CHARGE_RED, true);
+                SoulChargeType = SPELL_UNLEASH_SOUL_RED;
                 break;
             case CLASS_MAGE:
             case CLASS_ROGUE:
             case CLASS_WARRIOR:
-                victim->CastSpell(m_creature, SPELL_SOUL_CHARGE_YELLOW, true);
+                SoulChargeType = SPELL_UNLEASH_SOUL_YELLOW;
                 break;
             case CLASS_DRUID:
             case CLASS_SHAMAN:
             case CLASS_HUNTER:
-                victim->CastSpell(m_creature, SPELL_SOUL_CHARGE_GREEN, true);
+                SoulChargeType = SPELL_UNLEASH_SOUL_GREEN;
                 break;
         }
 
@@ -301,13 +357,13 @@ struct MANGOS_DLL_DECL boss_archimondeAI : public ScriptedAI
         if (victim && m_creature->IsWithinDistInMap(victim, m_creature->GetAttackDistance(victim)))
             return false;
 
-        ThreatList const& tList = m_creature->getThreatManager().getThreatList();
-        if (tList.empty())
+        std::list<HostilReference*>& m_threatlist = m_creature->getThreatManager().getThreatList();
+        if (m_threatlist.empty())
             return false;
 
         std::list<Unit*> targets;
-
-        for (ThreatList::const_iterator itr = tList.begin();itr != tList.end(); ++itr)
+        std::list<HostilReference*>::iterator itr = m_threatlist.begin();
+        for(; itr != m_threatlist.end(); ++itr)
         {
             Unit* pUnit = Unit::GetUnit((*m_creature), (*itr)->getUnitGuid());
             if (pUnit && pUnit->isAlive())
@@ -340,70 +396,17 @@ struct MANGOS_DLL_DECL boss_archimondeAI : public ScriptedAI
             pSummoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             pSummoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         }
-
-        if (pSummoned->GetEntry() == CREATURE_DOOMFIRE_SPIRIT)
-        {
-            DoomfireSpiritGUID = pSummoned->GetGUID();
         }
-
-        if (pSummoned->GetEntry() == CREATURE_DOOMFIRE)
-        {
-            pSummoned->CastSpell(pSummoned,SPELL_DOOMFIRE_SPAWN,false);
-            pSummoned->CastSpell(pSummoned,SPELL_DOOMFIRE,true,0,0,m_creature->GetGUID());
-
-            if (Unit* pDoomfireSpirit = Unit::GetUnit(*m_creature, DoomfireSpiritGUID))
-            {
-                pSummoned->GetMotionMaster()->MoveFollow(pDoomfireSpirit,0.0f,0.0f);
-                DoomfireSpiritGUID = 0;
-            }
-        }
-    }
-
-    //this is code doing close to what the summoning spell would do (spell 31903)
-    void SummonDoomfire(Unit* target)
-    {
-        m_creature->SummonCreature(CREATURE_DOOMFIRE_SPIRIT,
-            target->GetPositionX()+15.0,target->GetPositionY()+15.0,target->GetPositionZ(),0,
-            TEMPSUMMON_TIMED_DESPAWN, 27000);
-
-        m_creature->SummonCreature(CREATURE_DOOMFIRE,
-            target->GetPositionX()-15.0,target->GetPositionY()-15.0,target->GetPositionZ(),0,
-            TEMPSUMMON_TIMED_DESPAWN, 27000);
-    }
 
     void UnleashSoulCharge()
     {
         m_creature->InterruptNonMeleeSpells(false);
 
-        bool HasCast = false;
-        uint32 chargeSpell = 0;
-        uint32 unleashSpell = 0;
+        if(m_creature->getVictim())
+            DoCast(m_creature->getVictim(), SoulChargeType);
 
-        switch(urand(0, 2))
-        {
-            case 0:
-                chargeSpell = SPELL_SOUL_CHARGE_RED;
-                unleashSpell = SPELL_UNLEASH_SOUL_RED;
-                break;
-            case 1:
-                chargeSpell = SPELL_SOUL_CHARGE_YELLOW;
-                unleashSpell = SPELL_UNLEASH_SOUL_YELLOW;
-                break;
-            case 2:
-                chargeSpell = SPELL_SOUL_CHARGE_GREEN;
-                unleashSpell = SPELL_UNLEASH_SOUL_GREEN;
-                break;
-        }
 
-        if (m_creature->HasAura(chargeSpell, EFFECT_INDEX_0))
-        {
-            m_creature->RemoveSingleAuraFromStack(chargeSpell, EFFECT_INDEX_0);
-            DoCastSpellIfCan(m_creature->getVictim(), unleashSpell);
-            HasCast = true;
             --SoulChargeCount;
-        }
-
-        if (HasCast)
             SoulChargeTimer = urand(2000, 30000);
     }
 
@@ -411,26 +414,28 @@ struct MANGOS_DLL_DECL boss_archimondeAI : public ScriptedAI
     {
         if (!m_creature->isInCombat())
         {
+            /*
             if (m_pInstance)
             {
                 // Do not let the raid skip straight to Archimonde. Visible and hostile ONLY if Azagalor is finished.
-                if ((m_pInstance->GetData(TYPE_AZGALOR) < DONE) && ((m_creature->GetVisibility() != VISIBILITY_OFF) || (m_creature->getFaction() != 35)))
+                if ((m_pInstance->GetData(TYPE_AZGALOR) < DONE) && ((m_creature->GetVisibility() != VISIBILITY_OFF) ))
                 {
                     m_creature->SetVisibility(VISIBILITY_OFF);
                     m_creature->setFaction(35);
                 }
-                else if ((m_pInstance->GetData(TYPE_AZGALOR) >= DONE) && ((m_creature->GetVisibility() != VISIBILITY_ON) || (m_creature->getFaction() == 35)))
+                */
+            if(m_pInstance->GetData(TYPE_AZGALOR) == DONE)
                 {
                     m_creature->setFaction(1720);
                     m_creature->SetVisibility(VISIBILITY_ON);
                 }
-            }
+            //}
 
             if (DrainNordrassilTimer < diff)
             {
                 if (!IsChanneling)
                 {
-                    Creature *temp = m_creature->SummonCreature(CREATURE_CHANNEL_TARGET, NORDRASSIL_X, NORDRASSIL_Y, NORDRASSIL_Z, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 1200000);
+                    Creature *temp = m_creature->SummonCreature(CREATURE_CHANNEL_TARGET, NORDRASSIL_X, NORDRASSIL_Y, NORDRASSIL_Z, 0, TEMPSUMMON_TIMED_DESPAWN, 1200000);
 
                     if (temp)
                         WorldTreeGUID = temp->GetGUID();
@@ -439,7 +444,7 @@ struct MANGOS_DLL_DECL boss_archimondeAI : public ScriptedAI
                     {
                         Nordrassil->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                         Nordrassil->SetDisplayId(11686);
-                        DoCastSpellIfCan(Nordrassil, SPELL_DRAIN_WORLD_TREE);
+                        DoCast(Nordrassil, SPELL_DRAIN_WORLD_TREE);
                         IsChanneling = true;
                     }
                 }
@@ -452,17 +457,17 @@ struct MANGOS_DLL_DECL boss_archimondeAI : public ScriptedAI
             }else DrainNordrassilTimer -= diff;
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostilTarget() || !m_creature->getVictim())
             return;
 
-        if (m_creature->GetHealthPercent() < 10.0f && !BelowTenPercent && !Enraged)
+        if (((m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 10) && !BelowTenPercent && !Enraged)
             BelowTenPercent = true;
 
         if (!Enraged)
         {
             if (EnrageTimer < diff)
             {
-                if (m_creature->GetHealthPercent() > 10.0f)
+                if ((m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) > 10)
                 {
                     m_creature->GetMotionMaster()->Clear(false);
                     m_creature->GetMotionMaster()->MoveIdle();
@@ -499,33 +504,42 @@ struct MANGOS_DLL_DECL boss_archimondeAI : public ScriptedAI
                 m_creature->GetMotionMaster()->MoveIdle();
 
                 //all members of raid must get this buff
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_PROTECTION_OF_ELUNE);
+                if(m_creature->getVictim())
+                DoCast(m_creature->getVictim(), SPELL_PROTECTION_OF_ELUNE);
+
+                SummonWispTimer = 5000;
                 HasProtected = true;
-                Enraged = true;
+                //Enraged = true;
             }
 
             if (SummonWispTimer < diff)
             {
-                DoSpawnCreature(CREATURE_ANCIENT_WISP, rand()%40, rand()%40, 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
-                SummonWispTimer = 1500;
-                ++WispCount;
+                m_creature->SummonCreature(CREATURE_ANCIENT_WISP, m_creature->GetPositionX()-rand()%40, m_creature->GetPositionY()-rand()%40, m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+                SummonWispTimer = 1000;
             }else SummonWispTimer -= diff;
-
-            if (WispCount >= 30)
-                m_creature->DealDamage(m_creature, m_creature->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
         }
 
         if (Enraged)
         {
             if (HandOfDeathTimer < diff)
             {
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_HAND_OF_DEATH);
+                if(m_creature->getVictim())
+                DoCast(m_creature->getVictim(), SPELL_HAND_OF_DEATH);
                 HandOfDeathTimer = 2000;
             }else HandOfDeathTimer -= diff;
             return;                                         // Don't do anything after this point.
         }
 
-        if (SoulChargeCount)
+        if (HasProtected)
+            if (Unit* victim = m_creature->getVictim())
+            {
+                if (!victim->HasAura(SPELL_PROTECTION_OF_ELUNE))
+                    m_creature->CastSpell(m_creature->getVictim(), SPELL_PROTECTION_OF_ELUNE, false);
+                else
+                    return;
+            }
+
+        if (SoulChargeCount > 0)
         {
             if (SoulChargeTimer < diff)
                 UnleashSoulCharge();
@@ -534,9 +548,8 @@ struct MANGOS_DLL_DECL boss_archimondeAI : public ScriptedAI
 
         if (GripOfTheLegionTimer < diff)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                DoCastSpellIfCan(pTarget, SPELL_GRIP_OF_THE_LEGION);
-
+			if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+				DoCast(target, SPELL_GRIP_OF_THE_LEGION);
             GripOfTheLegionTimer = urand(5000, 25000);
         }else GripOfTheLegionTimer -= diff;
 
@@ -547,30 +560,36 @@ struct MANGOS_DLL_DECL boss_archimondeAI : public ScriptedAI
             else
                 DoScriptText(SAY_AIR_BURST2, m_creature);
 
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-            DoCastSpellIfCan(pTarget, SPELL_AIR_BURST);
+			if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 1))
+				DoCast(target, SPELL_AIR_BURST);
             AirBurstTimer = urand(25000, 40000);
         }else AirBurstTimer -= diff;
 
         if (FearTimer < diff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_FEAR);
+			if(m_creature->getVictim())
+            DoCast(m_creature->getVictim(), SPELL_FEAR);
             FearTimer = 42000;
         }else FearTimer -= diff;
 
         if (DoomfireTimer < diff)
         {
-            if (!urand(0, 1))
+            switch (urand(0, 1))
+            {
+                case 0:
                 DoScriptText(SAY_DOOMFIRE1, m_creature);
-            else
+                    m_creature->SummonCreature(CREATURE_DOOMFIRE_SPIRIT,
+                    m_creature->GetPositionX()+6.0,m_creature->GetPositionY()+6.0,m_creature->GetPositionZ(),0,
+                    TEMPSUMMON_TIMED_DESPAWN, 27000);
+                    break;
+
+                case 1:
                 DoScriptText(SAY_DOOMFIRE2, m_creature);
-
-            Unit *temp = SelectUnit(SELECT_TARGET_RANDOM, 1);
-            if (!temp)
-                temp = m_creature->getVictim();
-
-            //replace with spell cast 31903 once implicitTarget 73 implemented
-            SummonDoomfire(temp);
+                    m_creature->SummonCreature(CREATURE_DOOMFIRE_SPIRIT,
+                    m_creature->GetPositionX()-6.0,m_creature->GetPositionY()-6.0,m_creature->GetPositionZ(),0,
+                    TEMPSUMMON_TIMED_DESPAWN, 27000);
+                    break;
+            }
 
             //supposedly three doomfire can be up at the same time
             DoomfireTimer = 20000;
@@ -580,9 +599,8 @@ struct MANGOS_DLL_DECL boss_archimondeAI : public ScriptedAI
         {
             if (CanUseFingerOfDeath())
             {
-                if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                DoCastSpellIfCan(pTarget, SPELL_FINGER_OF_DEATH);
-
+				if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+					DoCast(target, SPELL_FINGER_OF_DEATH);
                 MeleeRangeCheckTimer = 1000;
             }
 

@@ -16,45 +16,43 @@
 
 /* ScriptData
 SDName: Boss_Keristrasza
-SD%Complete: 95%
-SDComment:
-SDCategory: The Nexus, The Nexus
+SD%Complete: 65%
+SDComment: timers tuning, add achievement
+SDCategory: Nexus
 EndScriptData */
 
 #include "precompiled.h"
 #include "nexus.h"
 
-enum eEnums
+enum
 {
-    CONTAINMENT_SPHERES                             = 3,
+    SAY_AGGRO                   = -1576016,
+    SAY_CRYSTAL_NOVA            = -1576017,
+    SAY_ENRAGE                  = -1576018,
+    SAY_KILL                    = -1576019,
+    SAY_DEATH                   = -1576020,
 
-	//Achievements
-    ACHIEVEMENT_INTENSE_COLD                        = 2036,
-	ACHIEVEMENT_NEXUS_N								= 478,
-	ACHIEVEMENT_NEXUS_H								= 490,
+    SPELL_INTENSE_COLD          = 48094,
 
-    //Spells
-    SPELL_FROZEN_PRISON                             = 47854,
-    SPELL_TAIL_SWEEP                                = 50155,
-    SPELL_CRYSTAL_CHAINS                            = 50997,
-    SPELL_ENRAGE                                    = 8599,
-    SPELL_CRYSTALFIRE_BREATH_N                      = 48096,
-    SPELL_CRYSTALFIRE_BREATH_H                      = 57091,
-    SPELL_CRYSTALIZE                                = 48179,
-    SPELL_INTENSE_COLD                              = 48094,
-    SPELL_INTENSE_COLD_TRIGGERED                    = 48095,
+    SPELL_CRYSTALFIRE_BREATH    = 48096,
+    SPELL_CRYSTALFIRE_BREATH_H  = 57091,
 
-    //Yell
-    SAY_AGGRO                                       = -1576040,
-    SAY_SLAY                                        = -1576041,
-    SAY_ENRAGE                                      = -1576042,
-    SAY_DEATH                                       = -1576043,
-    SAY_CRYSTAL_NOVA                                = -1576044
+    SPELL_CRYSTALLIZE           = 48179,
+
+    SPELL_CRYSTAL_CHAINS        = 50997,
+
+    SPELL_TAIL_SWEEP            = 50155,
+
+    SPELL_ENRAGE                = 8599
 };
+
+/*######
+## boss_keristrasza
+######*/
 
 struct MANGOS_DLL_DECL boss_keristraszaAI : public ScriptedAI
 {
-    boss_keristraszaAI(Creature *pCreature) : ScriptedAI(pCreature)
+    boss_keristraszaAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
@@ -62,194 +60,144 @@ struct MANGOS_DLL_DECL boss_keristraszaAI : public ScriptedAI
     }
 
     ScriptedInstance* m_pInstance;
-	bool m_bIsRegularMode;
+    bool m_bIsRegularMode;
 
-    uint32 CRYSTALFIRE_BREATH_Timer;
-    uint32 CRYSTAL_CHAINS_CRYSTALIZE_Timer;
-    uint32 TAIL_SWEEP_Timer;
-    bool Enrage;
+    uint32 uiCrystalChainTimer;
+    uint32 uiTailSweepTimer;
+    uint32 uiCrystalfireBreathTimer;
+    uint32 uiCrystallizeTimer;
 
-    uint64 ContainmentSphereGUIDs[CONTAINMENT_SPHERES];
-
-    uint32 CheckIntenseColdTimer;
-    bool MoreThanTwoIntenseCold; // needed for achievement: Intense Cold(2036)
+    bool m_bIsEnraged;
 
     void Reset()
     {
-        CRYSTALFIRE_BREATH_Timer = 14000;
-		CRYSTAL_CHAINS_CRYSTALIZE_Timer = m_bIsRegularMode ? 30000 : 11000;
-        TAIL_SWEEP_Timer = 5000;
-        Enrage = false;
+        uiCrystalChainTimer = 30000;
+        uiTailSweepTimer = urand(5000, 7500);
+        uiCrystalfireBreathTimer = urand(10000, 20000);
+        uiCrystallizeTimer = urand(20000, 30000);
 
-        CheckIntenseColdTimer = 2000;
-        MoreThanTwoIntenseCold = false;
+        m_bIsEnraged = false;
 
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
+        if (!m_pInstance)
+            return;
 
-        RemovePrison(CheckContainmentSpheres());
-
-        if (m_pInstance)
-            m_pInstance->SetData(DATA_KERISTRASZA_EVENT, NOT_STARTED);
+        if (m_creature->isAlive())
+        {   
+            if (m_pInstance->GetData(TYPE_KERISTRASZA) != SPECIAL)
+                m_creature->CastSpell(m_creature, SPELL_FROZEN_PRISON, true);
+        }
     }
 
-    void EnterCombat(Unit* who)
+    void Aggro(Unit* pWho)
     {
         DoScriptText(SAY_AGGRO, m_creature);
-        DoCast(m_creature->getVictim(), SPELL_INTENSE_COLD);
 
-        if (m_pInstance)
-            m_pInstance->SetData(DATA_KERISTRASZA_EVENT, IN_PROGRESS);
+        m_creature->CastSpell(m_creature, SPELL_INTENSE_COLD, true);
     }
 
-    void JustDied(Unit* killer)
+    void JustDied(Unit* pKiller)
     {
         DoScriptText(SAY_DEATH, m_creature);
 
-        if (!m_bIsRegularMode && !MoreThanTwoIntenseCold)
-        {
-            AchievementEntry const *AchievIntenseCold = GetAchievementStore()->LookupEntry(ACHIEVEMENT_INTENSE_COLD);
-            if (AchievIntenseCold)
-            {
-                Map* pMap = m_creature->GetMap();
-                if (pMap && pMap->IsDungeon())
-                {
-                    Map::PlayerList const &players = pMap->GetPlayers();
-                    for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                        itr->getSource()->CompletedAchievement(AchievIntenseCold);
-                }
-            }
-        }
-
-		// complete nexus achievements, not really blizzlike (should complete criterias)
-		// normal achievement on both difficulties
-		AchievementEntry const *AchievNexusNorm = GetAchievementStore()->LookupEntry(ACHIEVEMENT_NEXUS_N);
-		if (AchievNexusNorm)
-		{
-			Map* pMap = m_creature->GetMap();
-			if (pMap && pMap->IsDungeon())
-			{
-				Map::PlayerList const &players = pMap->GetPlayers();
-				for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-				itr->getSource()->CompletedAchievement(AchievNexusNorm);
-			}
-		}
-		if(!m_bIsRegularMode)
-		{
-			AchievementEntry const *AchievNexusHero = GetAchievementStore()->LookupEntry(ACHIEVEMENT_NEXUS_H);
-			if (AchievNexusHero)
-			{
-				Map* pMap = m_creature->GetMap();
-				if (pMap && pMap->IsDungeon())
-				{
-					Map::PlayerList const &players = pMap->GetPlayers();
-					for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-					itr->getSource()->CompletedAchievement(AchievNexusHero);
-				}
-			}
-		}
-
         if (m_pInstance)
-            m_pInstance->SetData(DATA_KERISTRASZA_EVENT, DONE);
+            m_pInstance->SetData(TYPE_KERISTRASZA, DONE);
     }
 
-    void KilledUnit(Unit *victim)
+    void KilledUnit(Unit* pVictim)
     {
-        DoScriptText(SAY_SLAY, m_creature);
+        if (urand(0, 1))
+            DoScriptText(SAY_KILL, m_creature);
     }
 
-    bool CheckContainmentSpheres(bool remove_prison = false)
-    {
-        if(!m_pInstance)
-            return false;
-
-        ContainmentSphereGUIDs[0] = m_pInstance->GetData64(ANOMALUS_CONTAINMET_SPHERE);
-        ContainmentSphereGUIDs[1] = m_pInstance->GetData64(ORMOROKS_CONTAINMET_SPHERE);
-        ContainmentSphereGUIDs[2] = m_pInstance->GetData64(TELESTRAS_CONTAINMET_SPHERE);
-
-        GameObject *ContainmentSpheres[CONTAINMENT_SPHERES];
-
-        for (uint8 i = 0; i < CONTAINMENT_SPHERES; ++i)
-        {
-            ContainmentSpheres[i] = m_pInstance->instance->GetGameObject(ContainmentSphereGUIDs[i]);
-            if (!ContainmentSpheres[i])
-                return false;
-            if (ContainmentSpheres[i]->GetGoState() != GO_STATE_ACTIVE)
-                return false;
-        }
-        if (remove_prison)
-            RemovePrison(true);
-        return true;
-    }
-
-    void RemovePrison(bool remove)
-    {
-        if (remove)
-        {
-            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
-            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-            if (m_creature->HasAura(SPELL_FROZEN_PRISON))
-                m_creature->RemoveAurasDueToSpell(SPELL_FROZEN_PRISON);
-        }
-        else
-        {
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE);
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-            DoCast(m_creature, SPELL_FROZEN_PRISON, false);
-        }
-    }
-
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 uiDiff)
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        if (CheckIntenseColdTimer < diff && !MoreThanTwoIntenseCold)
+        if (!m_bIsEnraged && m_creature->GetHealthPercent() < 25.0f)
         {
-            std::list<HostileReference*> ThreatList = m_creature->getThreatManager().getThreatList();
-            for (std::list<HostileReference*>::const_iterator itr = ThreatList.begin(); itr != ThreatList.end(); itr++)
+            if (!m_creature->IsNonMeleeSpellCasted(false))
             {
-                Unit *pTarget = Unit::GetUnit(*m_creature, (*itr)->getUnitGuid());
-                if (!pTarget || pTarget->GetTypeId() != TYPEID_PLAYER)
-                    continue;
-
-                Aura *AuraIntenseCold = pTarget->GetAura(SPELL_INTENSE_COLD_TRIGGERED, EFFECT_INDEX_0);
-                if (AuraIntenseCold && AuraIntenseCold->GetStackAmount() > 2)
-                {
-                    MoreThanTwoIntenseCold = true;
-                    break;
-                }
+                m_bIsEnraged = true;
+                DoScriptText(SAY_ENRAGE, m_creature);
+                DoCastSpellIfCan(m_creature, SPELL_ENRAGE);
             }
-            CheckIntenseColdTimer = 2000;
-        } else CheckIntenseColdTimer -= diff;
-
-        if (!Enrage && (m_creature->GetHealth() < m_creature->GetMaxHealth() * 0.25))
-        {
-            DoScriptText(SAY_ENRAGE, m_creature);
-            DoCast(m_creature, SPELL_ENRAGE);
-            Enrage = true;
         }
 
-        if (CRYSTALFIRE_BREATH_Timer <= diff)
+        if (uiCrystalChainTimer < uiDiff)
         {
-			DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_CRYSTALFIRE_BREATH_N : SPELL_CRYSTALFIRE_BREATH_H);
-            CRYSTALFIRE_BREATH_Timer = 14000;
-        } else CRYSTALFIRE_BREATH_Timer -=diff;
+            if (!m_creature->IsNonMeleeSpellCasted(false))
+            {
+                if (m_bIsRegularMode)
+                {
+                    if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1))
+                    {
+                        if (Player* pPlayer = pTarget->GetCharmerOrOwnerPlayerOrPlayerItself())
+                            DoCastSpellIfCan(pPlayer, SPELL_CRYSTAL_CHAINS);
 
-        if (TAIL_SWEEP_Timer <= diff)
-        {
-            DoCast(m_creature, SPELL_TAIL_SWEEP);
-            TAIL_SWEEP_Timer = 5000;
-        } else TAIL_SWEEP_Timer -=diff;
+                        uiCrystalChainTimer = 30000;
+                    }
+                }
+                else
+                {
+                    if (Unit* pSource = m_creature->getVictim())
+                    {
+                        uiCrystalChainTimer = 15000;
 
-        if (CRYSTAL_CHAINS_CRYSTALIZE_Timer <= diff)
+                        Player* pPlayer = pSource->GetCharmerOrOwnerPlayerOrPlayerItself();
+
+                        if (!pPlayer)
+                            return;
+
+                        if (Group* pGroup = pPlayer->GetGroup())
+                        {
+                            for(GroupReference* pRef = pGroup->GetFirstMember(); pRef != NULL; pRef = pRef->next())
+                            {
+                                if (Player* pMember = pRef->getSource())
+                                {
+                                    if (pMember->isAlive() && pMember->IsWithinDistInMap(m_creature, 50.0f))
+                                        m_creature->CastSpell(pMember, SPELL_CRYSTAL_CHAINS, true);
+                                }
+                            }
+                        }
+                        else
+                            m_creature->CastSpell(pPlayer, SPELL_CRYSTAL_CHAINS, false);
+                    }
+                }
+            }
+        }
+        else
+            uiCrystalChainTimer -= uiDiff;
+
+        if (uiTailSweepTimer < uiDiff)
         {
-            DoScriptText(SAY_CRYSTAL_NOVA, m_creature);
-            if (!m_bIsRegularMode)
-                DoCast(m_creature, SPELL_CRYSTALIZE);
-            else if (Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                DoCast(pTarget, SPELL_CRYSTAL_CHAINS);
-			CRYSTAL_CHAINS_CRYSTALIZE_Timer = m_bIsRegularMode ? 30000 : 11000;
-        } else CRYSTAL_CHAINS_CRYSTALIZE_Timer -= diff;
+            if (DoCastSpellIfCan(m_creature, SPELL_TAIL_SWEEP) == CAST_OK)
+                uiTailSweepTimer = urand(2500, 7500);
+        }
+        else
+            uiCrystalChainTimer -= uiDiff;
+
+        if (uiCrystalfireBreathTimer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_CRYSTALFIRE_BREATH : SPELL_CRYSTALFIRE_BREATH_H) == CAST_OK)
+                uiCrystalfireBreathTimer = urand(15000, 20000);
+        }
+        else
+            uiCrystalfireBreathTimer -= uiDiff;
+
+        if (!m_bIsRegularMode)
+        {
+            if (uiCrystallizeTimer < uiDiff)
+            {
+                if (DoCastSpellIfCan(m_creature, SPELL_CRYSTALLIZE) == CAST_OK)
+                {
+                    uiCrystallizeTimer = urand(15000, 25000);
+                    DoScriptText(SAY_CRYSTAL_NOVA, m_creature);
+                }
+            }
+            else
+                uiCrystallizeTimer -= uiDiff;
+        }
 
         DoMeleeAttackIfReady();
     }
@@ -257,23 +205,7 @@ struct MANGOS_DLL_DECL boss_keristraszaAI : public ScriptedAI
 
 CreatureAI* GetAI_boss_keristrasza(Creature* pCreature)
 {
-    return new boss_keristraszaAI (pCreature);
-}
-
-bool GOHello_containment_sphere(Player *pPlayer, GameObject *pGO)
-{
-    ScriptedInstance *pInstance = (ScriptedInstance *)pGO->GetInstanceData();
-
-    Creature *Keristrasza = Unit::GetCreature(*pGO, pInstance ? pInstance->GetData64(DATA_KERISTRASZA) : 0);
-    if (Keristrasza && Keristrasza->isAlive())
-    {
-        // maybe these are hacks :(
-        pGO->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1);
-        pGO->SetGoState(GO_STATE_ACTIVE);
-
-        CAST_AI(boss_keristraszaAI, Keristrasza->AI())->CheckContainmentSpheres(true);
-    }
-    return true;
+    return new boss_keristraszaAI(pCreature);
 }
 
 void AddSC_boss_keristrasza()
@@ -283,10 +215,5 @@ void AddSC_boss_keristrasza()
     newscript = new Script;
     newscript->Name = "boss_keristrasza";
     newscript->GetAI = &GetAI_boss_keristrasza;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_containment_sphere";
-    newscript->pGOHello = &GOHello_containment_sphere;
     newscript->RegisterSelf();
 }

@@ -424,62 +424,18 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
 
 		if (hardmode)
 		{
-			AchievementEntry const *AchievHeartbreak = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_HEARTBRAKER : ACHIEV_HEARTBRAKER_H);
-            if (AchievHeartbreak)
-            {
-                Map* pMap = m_creature->GetMap();
-                if (pMap && pMap->IsDungeon())
-                {
-                    Map::PlayerList const &players = pMap->GetPlayers();
-                    for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                        itr->getSource()->CompletedAchievement(AchievHeartbreak);
-                }
-            }
 		}
 
 		if (deconstruct)
 		{
-			AchievementEntry const *AchievDeconstruct = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_DECONSTRUCT : ACHIEV_DECONSTRUCT_H);
-            if (AchievDeconstruct)
-            {
-                Map* pMap = m_creature->GetMap();
-                if (pMap && pMap->IsDungeon())
-                {
-                    Map::PlayerList const &players = pMap->GetPlayers();
-                    for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                        itr->getSource()->CompletedAchievement(AchievDeconstruct);
-                }
-            }
 		}
 
 		if (nerf)
 		{
-			AchievementEntry const *AchievNerf = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_NERF : ACHIEV_NERF_H);
-            if (AchievNerf)
-            {
-                Map* pMap = m_creature->GetMap();
-                if (pMap && pMap->IsDungeon())
-                {
-                    Map::PlayerList const &players = pMap->GetPlayers();
-                    for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                        itr->getSource()->CompletedAchievement(AchievNerf);
-                }
-            }
 		}
 
 		if (nerfgravity)
 		{
-			AchievementEntry const *AchievNerfGravity = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_NERF_GRAVITY : ACHIEV_NERF_GRAVITY_H);
-            if (AchievNerfGravity)
-            {
-                Map* pMap = m_creature->GetMap();
-                if (pMap && pMap->IsDungeon())
-                {
-                    Map::PlayerList const &players = pMap->GetPlayers();
-                    for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                        itr->getSource()->CompletedAchievement(AchievNerfGravity);
-                }
-            }
 		}
     }
 

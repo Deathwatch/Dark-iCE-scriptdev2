@@ -195,36 +195,6 @@ struct MANGOS_DLL_DECL boss_ignisAI : public ScriptedAI
 
         DoScriptText(SAY_DEATH, m_creature);
         RespawnAdds();
-
-		if (stokin)
-		{
-			AchievementEntry const *AchievStokin = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_STOKIN : ACHIEV_STOKIN_H);
-            if (AchievStokin)
-            {
-                Map* pMap = m_creature->GetMap();
-                if (pMap && pMap->IsDungeon())
-                {
-                    Map::PlayerList const &players = pMap->GetPlayers();
-                    for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                        itr->getSource()->CompletedAchievement(AchievStokin);
-                }
-            }
-		}
-
-		if (shattered)
-		{
-			AchievementEntry const *AchievShattered = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_SHATTERED : ACHIEV_SHATTERED_H);
-            if (AchievShattered)
-            {
-                Map* pMap = m_creature->GetMap();
-                if (pMap && pMap->IsDungeon())
-                {
-                    Map::PlayerList const &players = pMap->GetPlayers();
-                    for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                        itr->getSource()->CompletedAchievement(AchievShattered);
-                }
-            }
-		}
     }
 
     void JustSummoned(Creature* pSummoned)

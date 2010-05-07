@@ -145,7 +145,7 @@ bool ItemUse_item_petrov_cluster_bombs(Player* pPlayer, Item* pItem, const Spell
 enum
 {
     SPELL_OFFER_JUNGLE_PUNCH = 51962
-}
+};
 
 bool ItemUse_item_jungle_punch_sample(Player* pPlayer, Item* pItem, const SpellCastTargets &pTargets)
 {

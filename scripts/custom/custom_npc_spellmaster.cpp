@@ -26,8 +26,20 @@ EndScriptData */
 #include "../../../../shared/Config/Config.h"
 #include "../../hn_config.h"
 
-#define MSG_COMBAT		"You are in combat!"
-#define MSG_LEARNED	    "Congratulations, you've learned all of your class spells!"
+#define MSG_COMBAT				"You are in combat!"
+#define MSG_LEARNED_SPELL	    "Congratulations, you've learned all of your class spells!"
+#define MSG_LEARNED_SKILL		"Congratulations, you've learned all your class weapon skills!"
+#define CLASS_WARRIOR 		 	1
+#define CLASS_PALADIN 		 	2
+#define CLASS_HUNTER 		 	3
+#define CLASS_ROGUE 		 	4
+#define CLASS_PRIEST 		 	5
+#define CLASS_DEATHKNIGHT 	 	6
+#define CLASS_SHAMAN 		 	7
+#define CLASS_MAGE 			 	8
+#define CLASS_WARLOCK 		 	9
+#define CLASS_DRUID 		 	11
+
 
 bool GossipHello_custom_npc_spellmaster(Player* pPlayer, Creature* pCreature)
 {
@@ -38,37 +50,39 @@ bool GossipHello_custom_npc_spellmaster(Player* pPlayer, Creature* pCreature)
 	if(pPlayer->getLevel() > (HNConfig.GetFloatDefault("SpellMaster.MinimumLevel",0)))
 	{
 		// Warrior Spells
-		if(pPlayer->getClass() == 1)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Warrior Spells"	 , GOSSIP_SENDER_MAIN, 1000);
+		if(pPlayer->getClass() == CLASS_WARRIOR)
+		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Warrior Spells"			, GOSSIP_SENDER_MAIN, 1000);
 		// Paladin Spells
-		if(pPlayer->getClass() == 2)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Paladin Spells"	 , GOSSIP_SENDER_MAIN, 2000);
+		if(pPlayer->getClass() == CLASS_PALADIN)
+		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Paladin Spells"			, GOSSIP_SENDER_MAIN, 2000);
 		// Hunter Spells
-		if(pPlayer->getClass() == 3)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Hunter Spells"	  , GOSSIP_SENDER_MAIN, 3000);
+		if(pPlayer->getClass() == CLASS_HUNTER)
+		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Hunter Spells"			, GOSSIP_SENDER_MAIN, 3000);
 		// Rogue Spells
-		if(pPlayer->getClass() == 4)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Rogue Spells"	   , GOSSIP_SENDER_MAIN, 4000);
+		if(pPlayer->getClass() == CLASS_ROGUE)
+		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Rogue Spells"			, GOSSIP_SENDER_MAIN, 4000);
 		// Priest Spells
-		if(pPlayer->getClass() == 5)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Priest Spells"	  , GOSSIP_SENDER_MAIN, 5000);
+		if(pPlayer->getClass() == CLASS_PRIEST)
+		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Priest Spells"			, GOSSIP_SENDER_MAIN, 5000);
 		// Death Knight Spells
-		if(pPlayer->getClass() == 6)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Death Knight Spells"    , GOSSIP_SENDER_MAIN, 6000);
+		if(pPlayer->getClass() == CLASS_DEATHKNIGHT)
+		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Death Knight Spells"	, GOSSIP_SENDER_MAIN, 6000);
 		// Shaman Spells
-		if(pPlayer->getClass() == 7)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Shaman Spells"	  , GOSSIP_SENDER_MAIN, 7000);
+		if(pPlayer->getClass() == CLASS_SHAMAN)
+		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Shaman Spells"			, GOSSIP_SENDER_MAIN, 7000);
 		// Mage Spells
-		if(pPlayer->getClass() == 8)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Mage Spells"	    , GOSSIP_SENDER_MAIN, 8000);
+		if(pPlayer->getClass() == CLASS_MAGE)
+		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Mage Spells"			, GOSSIP_SENDER_MAIN, 8000);
 		// Warlock Spells
-		if(pPlayer->getClass() == 9)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Warlock Spells"	 , GOSSIP_SENDER_MAIN, 9000);
+		if(pPlayer->getClass() == CLASS_WARLOCK)
+		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Warlock Spells"			, GOSSIP_SENDER_MAIN, 9000);
 		// Druid Spells
-		if(pPlayer->getClass() == 11)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Druid Spells"	   , GOSSIP_SENDER_MAIN, 10000);
-
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Not Interested"		   , GOSSIP_SENDER_MAIN, 11000);
+		if(pPlayer->getClass() == CLASS_DRUID)
+		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Druid Spells"			, GOSSIP_SENDER_MAIN, 10000);
+		// Weapon Skills
+		pPlayer->ADD_GOSSIP_ITEM( 2, "Learn My Class Weapon Skills"		, GOSSIP_SENDER_MAIN, 11000);
+		
+		pPlayer->ADD_GOSSIP_ITEM( 7, "Not Interested"					, GOSSIP_SENDER_MAIN, 12000);
 	}
 	else
 	{
@@ -137,9 +151,10 @@ case 1000: //Warrior Spells
 	pPlayer->learnSpell(47502, false);	// Thunder Clap [Rank 9]
 	pPlayer->learnSpell(34428, false);	// Victory Rush
 	pPlayer->learnSpell(1680, false);	// Whirlwind
+	pPlayer->learnSpell(750, false);	// Plate Mail
 	
 	pPlayer->CLOSE_GOSSIP_MENU();
-    pCreature->MonsterWhisper(MSG_LEARNED, pPlayer->GetGUID());
+    pCreature->MonsterWhisper(MSG_LEARNED_SPELL, pPlayer->GetGUID());
 
 break;
 
@@ -201,9 +216,10 @@ case 2000: //Paladin Spells
 	pPlayer->learnSpell(34767, false);	// Summon Charger Horde
     else if(pPlayer->getRace() == 1 || 3 || 11)
 	pPlayer->learnSpell(23214, false);	// Summon Charger Alliance
+	pPlayer->learnSpell(750, false); // Plate Mail
 	
 	pPlayer->CLOSE_GOSSIP_MENU();
-	pCreature->MonsterWhisper(MSG_LEARNED, pPlayer->GetGUID());
+	pCreature->MonsterWhisper(MSG_LEARNED_SPELL, pPlayer->GetGUID());
 	
 break;
 
@@ -263,9 +279,10 @@ case 3000: //Hunter Spells
 	pPlayer->learnSpell(19885, false);	// Track Hidden
 	pPlayer->learnSpell(19883, false);	// Track Humanoids
 	pPlayer->learnSpell(19884, false);	// Track Undead
+	pPlayer->learnSpell(8737, false);	// Mail
 	
 	pPlayer->CLOSE_GOSSIP_MENU();
-	pCreature->MonsterWhisper(MSG_LEARNED, pPlayer->GetGUID());
+	pCreature->MonsterWhisper(MSG_LEARNED_SPELL, pPlayer->GetGUID());
 	
 break;
 
@@ -304,208 +321,209 @@ case 4000: // Rogue Spells
 	pPlayer->learnSpell(26889, false);	// Vanish [Rank 3]
 	
 	pPlayer->CLOSE_GOSSIP_MENU();
-	pCreature->MonsterWhisper(MSG_LEARNED, pPlayer->GetGUID());
+	pCreature->MonsterWhisper(MSG_LEARNED_SPELL, pPlayer->GetGUID());
 	
 break;
 
 case 5000: // Priest Spells
-	pPlayer->learnSpell(552, false); // Abolish Disease
-	pPlayer->learnSpell(48120, false); // Binding Heal [Rank 3]
-	pPlayer->learnSpell(528, false); // Cure Disease
-	pPlayer->learnSpell(48300, false); // Devouring Plague [Rank 9]
-	pPlayer->learnSpell(988, false); // Dispel Magic [Rank 2]
-	pPlayer->learnSpell(64843, false); // Divine Hymn
-	pPlayer->learnSpell(48073, false); // Divine Spirit [Rank 6]
-	pPlayer->learnSpell(586, false); // Fade
-	pPlayer->learnSpell(6346, false); // Fear Ward
-	pPlayer->learnSpell(48071, false); // Flash Heal [Rank 11]
-	pPlayer->learnSpell(48063, false); // Greater Heal [Rank 9]
-	pPlayer->learnSpell(6064, false); // Heal [Rank 4]
-	pPlayer->learnSpell(48135, false); // Holy Fire [Rank 11]
-	pPlayer->learnSpell(48078, false); // Holy Nova [Rank 9]
-	pPlayer->learnSpell(64901, false); // Hymn of Hope
-	pPlayer->learnSpell(48168, false); // Inner Fire [Rank 9]
-	pPlayer->learnSpell(2053, false); // Lesser Heal [Rank 3]
-	pPlayer->learnSpell(1706, false); // Levitate
-	pPlayer->learnSpell(8129, false); // Mana Burn
-	pPlayer->learnSpell(32375, false); // Mass Dispel
-	pPlayer->learnSpell(48127, false); // Mind Blast [Rank 13]
-	pPlayer->learnSpell(605, false); // Mind Control
-	pPlayer->learnSpell(53023, false); // Mind Sear [Rank 2]
-	pPlayer->learnSpell(453, false); // Mind Soothe
-	pPlayer->learnSpell(10909, false); // Mind Vision [Rank 2]
-	pPlayer->learnSpell(48161, false); // Power Word: Fortitude [Rank 8]
-	pPlayer->learnSpell(48066, false); // Power Word: Shield [Rank 14]
-	pPlayer->learnSpell(48162, false); // Prayer of Fortitude [Rank 4]
-	pPlayer->learnSpell(48072, false); // Prayer of Healing [Rank 7]
-	pPlayer->learnSpell(48113, false); // Prayer of Mending [Rank 3]
-	pPlayer->learnSpell(48170, false); // Prayer of Shadow Protection [Rank 3]
-	pPlayer->learnSpell(48074, false); // Prayer of Spirit [Rank 3]
-	pPlayer->learnSpell(10890, false); // Psychic Scream [Rank 4]
-	pPlayer->learnSpell(48068, false); // Renew [Rank 14]
-	pPlayer->learnSpell(48171, false); // Resurrection [Rank 7]
-	pPlayer->learnSpell(10955, false); // Shackle Undead [Rank 3]
-	pPlayer->learnSpell(48169, false); // Shadow Protection [Rank 5]
-	pPlayer->learnSpell(48158, false); // Shadow Word: Death [Rank 4]
-	pPlayer->learnSpell(48125, false); // Shadow Word: Pain [Rank 12]
-	pPlayer->learnSpell(34433, false); // Shadowfiend
-	pPlayer->learnSpell(48123, false); // Smite [Rank 12]
+	pPlayer->learnSpell(552, false);	// Abolish Disease
+	pPlayer->learnSpell(48120, false);	// Binding Heal [Rank 3]
+	pPlayer->learnSpell(528, false);	// Cure Disease
+	pPlayer->learnSpell(48300, false);	// Devouring Plague [Rank 9]
+	pPlayer->learnSpell(988, false);	// Dispel Magic [Rank 2]
+	pPlayer->learnSpell(64843, false);	// Divine Hymn
+	pPlayer->learnSpell(48073, false);	// Divine Spirit [Rank 6]
+	pPlayer->learnSpell(586, false);	// Fade
+	pPlayer->learnSpell(6346, false);	// Fear Ward
+	pPlayer->learnSpell(48071, false);	// Flash Heal [Rank 11]
+	pPlayer->learnSpell(48063, false);	// Greater Heal [Rank 9]
+	pPlayer->learnSpell(6064, false);	// Heal [Rank 4]
+	pPlayer->learnSpell(48135, false);	// Holy Fire [Rank 11]
+	pPlayer->learnSpell(48078, false);	// Holy Nova [Rank 9]
+	pPlayer->learnSpell(64901, false);	// Hymn of Hope
+	pPlayer->learnSpell(48168, false);	// Inner Fire [Rank 9]
+	pPlayer->learnSpell(2053, false);	// Lesser Heal [Rank 3]
+	pPlayer->learnSpell(1706, false);	// Levitate
+	pPlayer->learnSpell(8129, false);	// Mana Burn
+	pPlayer->learnSpell(32375, false);	// Mass Dispel
+	pPlayer->learnSpell(48127, false);	// Mind Blast [Rank 13]
+	pPlayer->learnSpell(605, false);	// Mind Control
+	pPlayer->learnSpell(53023, false);	// Mind Sear [Rank 2]
+	pPlayer->learnSpell(453, false);	// Mind Soothe
+	pPlayer->learnSpell(10909, false);	// Mind Vision [Rank 2]
+	pPlayer->learnSpell(48161, false);	// Power Word: Fortitude [Rank 8]
+	pPlayer->learnSpell(48066, false);	// Power Word: Shield [Rank 14]
+	pPlayer->learnSpell(48162, false);	// Prayer of Fortitude [Rank 4]
+	pPlayer->learnSpell(48072, false);	// Prayer of Healing [Rank 7]
+	pPlayer->learnSpell(48113, false);	// Prayer of Mending [Rank 3]
+	pPlayer->learnSpell(48170, false);	// Prayer of Shadow Protection [Rank 3]
+	pPlayer->learnSpell(48074, false);	// Prayer of Spirit [Rank 3]
+	pPlayer->learnSpell(10890, false);	// Psychic Scream [Rank 4]
+	pPlayer->learnSpell(48068, false);	// Renew [Rank 14]
+	pPlayer->learnSpell(48171, false);	// Resurrection [Rank 7]
+	pPlayer->learnSpell(10955, false);	// Shackle Undead [Rank 3]
+	pPlayer->learnSpell(48169, false);	// Shadow Protection [Rank 5]
+	pPlayer->learnSpell(48158, false);	// Shadow Word: Death [Rank 4]
+	pPlayer->learnSpell(48125, false);	// Shadow Word: Pain [Rank 12]
+	pPlayer->learnSpell(34433, false);	// Shadowfiend
+	pPlayer->learnSpell(48123, false);	// Smite [Rank 12]
 	
 	pPlayer->CLOSE_GOSSIP_MENU();
-	pCreature->MonsterWhisper(MSG_LEARNED, pPlayer->GetGUID());
+	pCreature->MonsterWhisper(MSG_LEARNED_SPELL, pPlayer->GetGUID());
 	
 break;
 
 case 6000: // Death Knight Spells
-	pPlayer->learnSpell(48778, false); // Acherus Deathcharger
-	pPlayer->learnSpell(48707, false); // Anti-Magic Shell
-	pPlayer->learnSpell(42650, false); // Army of the Dead
-	pPlayer->learnSpell(49941, false); // Blood Boil [Rank 4]
-	pPlayer->learnSpell(49930, false); // Blood Strike [Rank 6]
-	pPlayer->learnSpell(45529, false); // Blood Tap
-	pPlayer->learnSpell(45524, false); // Chains of Ice
-	pPlayer->learnSpell(56222, false); // Dark Command
-	pPlayer->learnSpell(49938, false); // Death and Decay [Rank 4]
-	pPlayer->learnSpell(62904, false); // Death Coil [Rank 5]
-	pPlayer->learnSpell(50977, false); // Death Gate
-	pPlayer->learnSpell(48743, false); // Death Pact
-	pPlayer->learnSpell(49924, false); // Death Strike [Rank 5]
-	pPlayer->learnSpell(47568, false); // Empower Rune Weapon
-	pPlayer->learnSpell(48263, false); // Frost Presence
-	pPlayer->learnSpell(57623, false); // Horn of Winter [Rank 2]
-	pPlayer->learnSpell(48792, false); // Icebound Fortitude
-	pPlayer->learnSpell(49909, false); // Icy Touch [Rank 5]
-	pPlayer->learnSpell(47528, false); // Mind Freeze
-	pPlayer->learnSpell(51425, false); // Obliterate [Rank 4]
-	pPlayer->learnSpell(3714, false); // Path of Frost
-	pPlayer->learnSpell(50842, false); // Pestilence
-	pPlayer->learnSpell(49221, false); // Plague Strike [Rank 6]
-	pPlayer->learnSpell(61999, false); // Raise Ally
-	pPlayer->learnSpell(46584, false); // Raise Dead
-	pPlayer->learnSpell(56815, false); // Rune Strike
-	pPlayer->learnSpell(53428, false); // Runeforging
-	pPlayer->learnSpell(53341, false); // Rune of Cinderglacier
-	pPlayer->learnSpell(53331, false); // Rune of Lichbane
-	pPlayer->learnSpell(53343, false); // Rune of Razorice
-	pPlayer->learnSpell(54447, false); // Rune of Spellbreaking
-	pPlayer->learnSpell(53342, false); // Rune of Spellshattering
-	pPlayer->learnSpell(54446, false); // Rune of Swordbreaking
-	pPlayer->learnSpell(53323, false); // Rune of Swordshattering
-	pPlayer->learnSpell(53344, false); // Rune of the Fallen Crusader
-	pPlayer->learnSpell(62158, false); // Rune of the Stoneskin Gargoyle
-	pPlayer->learnSpell(47476, false); // Strangulate
-	pPlayer->learnSpell(48265, false); // Unholy Presence
+	pPlayer->learnSpell(48778, false);	// Acherus Deathcharger
+	pPlayer->learnSpell(48707, false);	// Anti-Magic Shell
+	pPlayer->learnSpell(42650, false);	// Army of the Dead
+	pPlayer->learnSpell(49941, false);	// Blood Boil [Rank 4]
+	pPlayer->learnSpell(49930, false);	// Blood Strike [Rank 6]
+	pPlayer->learnSpell(45529, false);	// Blood Tap
+	pPlayer->learnSpell(45524, false);	// Chains of Ice
+	pPlayer->learnSpell(56222, false);	// Dark Command
+	pPlayer->learnSpell(49938, false);	// Death and Decay [Rank 4]
+	pPlayer->learnSpell(62904, false);	// Death Coil [Rank 5]
+	pPlayer->learnSpell(50977, false);	// Death Gate
+	pPlayer->learnSpell(48743, false);	// Death Pact
+	pPlayer->learnSpell(49924, false);	// Death Strike [Rank 5]
+	pPlayer->learnSpell(47568, false);	// Empower Rune Weapon
+	pPlayer->learnSpell(48263, false);	// Frost Presence
+	pPlayer->learnSpell(57623, false);	// Horn of Winter [Rank 2]
+	pPlayer->learnSpell(48792, false);	// Icebound Fortitude
+	pPlayer->learnSpell(49909, false);	// Icy Touch [Rank 5]
+	pPlayer->learnSpell(47528, false);	// Mind Freeze
+	pPlayer->learnSpell(51425, false);	// Obliterate [Rank 4]
+	pPlayer->learnSpell(3714, false);	// Path of Frost
+	pPlayer->learnSpell(50842, false);	// Pestilence
+	pPlayer->learnSpell(49221, false);	// Plague Strike [Rank 6]
+	pPlayer->learnSpell(61999, false);	// Raise Ally
+	pPlayer->learnSpell(46584, false);	// Raise Dead
+	pPlayer->learnSpell(56815, false);	// Rune Strike
+	pPlayer->learnSpell(53428, false);	// Runeforging
+	pPlayer->learnSpell(53341, false);	// Rune of Cinderglacier
+	pPlayer->learnSpell(53331, false);	// Rune of Lichbane
+	pPlayer->learnSpell(53343, false);	// Rune of Razorice
+	pPlayer->learnSpell(54447, false);	// Rune of Spellbreaking
+	pPlayer->learnSpell(53342, false);	// Rune of Spellshattering
+	pPlayer->learnSpell(54446, false);	// Rune of Swordbreaking
+	pPlayer->learnSpell(53323, false);	// Rune of Swordshattering
+	pPlayer->learnSpell(53344, false);	// Rune of the Fallen Crusader
+	pPlayer->learnSpell(62158, false);	// Rune of the Stoneskin Gargoyle
+	pPlayer->learnSpell(47476, false);	// Strangulate
+	pPlayer->learnSpell(48265, false);	// Unholy Presence
 	
 	pPlayer->CLOSE_GOSSIP_MENU();
-	pCreature->MonsterWhisper(MSG_LEARNED, pPlayer->GetGUID());
+	pCreature->MonsterWhisper(MSG_LEARNED_SPELL, pPlayer->GetGUID());
 	
 break;
 
 case 7000: // Shaman Spells
-	pPlayer->learnSpell(49277, false); // Ancestral Spirit [Rank 7]	
-	pPlayer->learnSpell(556, false); // Astral Recall	
-	pPlayer->learnSpell(66843, false); // Call of the Ancestors
-	pPlayer->learnSpell(66842, false); // Call of the Elements
-	pPlayer->learnSpell(66844, false); // Call of the Spirits	
-	pPlayer->learnSpell(55459, false); // Chain Heal [Rank 7]
-	pPlayer->learnSpell(49271, false); // Chain Lightning [Rank 8]
-	pPlayer->learnSpell(8170, false); // Cleansing Totem
-	pPlayer->learnSpell(526, false); // Cure Toxins
-	pPlayer->learnSpell(2062, false); // Earth Elemental Totem
-	pPlayer->learnSpell(49231, false); // Earth Shock [Rank 10]
-	pPlayer->learnSpell(2484, false); // Earthbind Totem
-	pPlayer->learnSpell(51994, false); // Earthliving Weapon [Rank 6]
-	pPlayer->learnSpell(6196, false); // Far Sight
-	pPlayer->learnSpell(2894, false); // Fire Elemental Totem	
-	pPlayer->learnSpell(61657, false); // Fire Nova Totem [Rank 9]
-	pPlayer->learnSpell(58739, false); // Fire Resistance Totem [Rank 6]
-	pPlayer->learnSpell(49233, false); // Flame Shock [Rank 9]
-	pPlayer->learnSpell(58656, false); // Flametongue Totem [Rank 8]
-	pPlayer->learnSpell(58790, false); // Flametongue Weapon [Rank 10]
-	pPlayer->learnSpell(58745, false); // Frost Resistance Totem [Rank 6]
-	pPlayer->learnSpell(49236, false); // Frost Shock [Rank 7]
-	pPlayer->learnSpell(58796, false); // Frostbrand Weapon [Rank 9]
-	pPlayer->learnSpell(2645, false); // Ghost Wolf
-	pPlayer->learnSpell(8177, false); // Grounding Totem	
-	pPlayer->learnSpell(58757, false); // Healing Stream Totem [Rank 9]
-	pPlayer->learnSpell(49273, false); // Healing Wave [Rank 14]
-	pPlayer->learnSpell(51514, false); // Hex	
-	pPlayer->learnSpell(60043, false); // Lava Burst [Rank 2]
-	pPlayer->learnSpell(49276, false); // Lesser Healing Wave [Rank 9]	
-	pPlayer->learnSpell(49238, false); // Lightning Bolt [Rank 14]
-	pPlayer->learnSpell(49281, false); // Lightning Shield [Rank 11]
-	pPlayer->learnSpell(58734, false); // Magma Totem [Rank 7]
-	pPlayer->learnSpell(58774, false); // Mana Spring Totem [Rank 8]
-	pPlayer->learnSpell(58749, false); // Nature Resistance Totem [Rank 6]
-	pPlayer->learnSpell(8012, false); // Purge [Rank 2]
-	pPlayer->learnSpell(20608, false); // Reincarnation
-	pPlayer->learnSpell(10399, false); // Rockbiter Weapon [Rank 4]
-	pPlayer->learnSpell(58704, false); // Searing Totem [Rank 10]
-	pPlayer->learnSpell(6495, false); // Sentry Totem
-	pPlayer->learnSpell(58582, false); // Stoneclaw Totem [Rank 10]
-	pPlayer->learnSpell(58753, false); // Stoneskin Totem [Rank 10]
-	pPlayer->learnSpell(58643, false); // Strength of Earth Totem [Rank 8]
-	pPlayer->learnSpell(36936, false); // Totemic Recall
-	pPlayer->learnSpell(8143, false); // Tremor Totem
-	pPlayer->learnSpell(131, false); // Water Breathing
-	pPlayer->learnSpell(57960, false); // Water Shield [Rank 9]
-	pPlayer->learnSpell(546, false); // Water Walking
-	pPlayer->learnSpell(57994, false); // Wind Shear
-	pPlayer->learnSpell(8512, false); // Windfury Totem
-	pPlayer->learnSpell(58804, false); // Windfury Weapon [Rank 8]
+	pPlayer->learnSpell(49277, false);	// Ancestral Spirit [Rank 7]	
+	pPlayer->learnSpell(556, false);	// Astral Recall	
+	pPlayer->learnSpell(66843, false);	// Call of the Ancestors
+	pPlayer->learnSpell(66842, false);	// Call of the Elements
+	pPlayer->learnSpell(66844, false);	// Call of the Spirits	
+	pPlayer->learnSpell(55459, false);	// Chain Heal [Rank 7]
+	pPlayer->learnSpell(49271, false);	// Chain Lightning [Rank 8]
+	pPlayer->learnSpell(8170, false);	// Cleansing Totem
+	pPlayer->learnSpell(526, false);	// Cure Toxins
+	pPlayer->learnSpell(2062, false);	// Earth Elemental Totem
+	pPlayer->learnSpell(49231, false);	// Earth Shock [Rank 10]
+	pPlayer->learnSpell(2484, false);	// Earthbind Totem
+	pPlayer->learnSpell(51994, false);	// Earthliving Weapon [Rank 6]
+	pPlayer->learnSpell(6196, false);	// Far Sight
+	pPlayer->learnSpell(2894, false);	// Fire Elemental Totem	
+	pPlayer->learnSpell(61657, false);	// Fire Nova Totem [Rank 9]
+	pPlayer->learnSpell(58739, false);	// Fire Resistance Totem [Rank 6]
+	pPlayer->learnSpell(49233, false);	// Flame Shock [Rank 9]
+	pPlayer->learnSpell(58656, false);	// Flametongue Totem [Rank 8]
+	pPlayer->learnSpell(58790, false);	// Flametongue Weapon [Rank 10]
+	pPlayer->learnSpell(58745, false);	// Frost Resistance Totem [Rank 6]
+	pPlayer->learnSpell(49236, false);	// Frost Shock [Rank 7]
+	pPlayer->learnSpell(58796, false);	// Frostbrand Weapon [Rank 9]
+	pPlayer->learnSpell(2645, false);	// Ghost Wolf
+	pPlayer->learnSpell(8177, false);	// Grounding Totem	
+	pPlayer->learnSpell(58757, false);	// Healing Stream Totem [Rank 9]
+	pPlayer->learnSpell(49273, false);	// Healing Wave [Rank 14]
+	pPlayer->learnSpell(51514, false);	// Hex	
+	pPlayer->learnSpell(60043, false);	// Lava Burst [Rank 2]
+	pPlayer->learnSpell(49276, false);	// Lesser Healing Wave [Rank 9]	
+	pPlayer->learnSpell(49238, false);	// Lightning Bolt [Rank 14]
+	pPlayer->learnSpell(49281, false);	// Lightning Shield [Rank 11]
+	pPlayer->learnSpell(58734, false);	// Magma Totem [Rank 7]
+	pPlayer->learnSpell(58774, false);	// Mana Spring Totem [Rank 8]
+	pPlayer->learnSpell(58749, false);	// Nature Resistance Totem [Rank 6]
+	pPlayer->learnSpell(8012, false);	// Purge [Rank 2]
+	pPlayer->learnSpell(20608, false);	// Reincarnation
+	pPlayer->learnSpell(10399, false);	// Rockbiter Weapon [Rank 4]
+	pPlayer->learnSpell(58704, false);	// Searing Totem [Rank 10]
+	pPlayer->learnSpell(6495, false);	// Sentry Totem
+	pPlayer->learnSpell(58582, false);	// Stoneclaw Totem [Rank 10]
+	pPlayer->learnSpell(58753, false);	// Stoneskin Totem [Rank 10]
+	pPlayer->learnSpell(58643, false);	// Strength of Earth Totem [Rank 8]
+	pPlayer->learnSpell(36936, false);	// Totemic Recall
+	pPlayer->learnSpell(8143, false);	// Tremor Totem
+	pPlayer->learnSpell(131, false);	// Water Breathing
+	pPlayer->learnSpell(57960, false);	// Water Shield [Rank 9]
+	pPlayer->learnSpell(546, false);	// Water Walking
+	pPlayer->learnSpell(57994, false);	// Wind Shear
+	pPlayer->learnSpell(8512, false);	// Windfury Totem
+	pPlayer->learnSpell(58804, false);	// Windfury Weapon [Rank 8]
 	if(pPlayer->getRace() == 2 || 6 || 8) 
 	pPlayer->learnSpell(2825, false);	// Bloodlust
     else if(pPlayer->getRace() == 11)
 	pPlayer->learnSpell(32182, false);	// Heroism
+	pPlayer->learnSpell(8737, false);	// Mail
 	
 	pPlayer->CLOSE_GOSSIP_MENU();
-	pCreature->MonsterWhisper(MSG_LEARNED, pPlayer->GetGUID());
+	pCreature->MonsterWhisper(MSG_LEARNED_SPELL, pPlayer->GetGUID());
 	
 break;
 
 case 8000: // Mage Spells
-	pPlayer->learnSpell(43017, false); // Amplify Magic [Rank 7]
-	pPlayer->learnSpell(42897, false); // Arcane Blast [Rank 4]
-	pPlayer->learnSpell(43002, false); // Arcane Brilliance [Rank 3]
-	pPlayer->learnSpell(42921, false); // Arcane Explosion [Rank 10]
-	pPlayer->learnSpell(42995, false); // Arcane Intellect [Rank 7]
-	pPlayer->learnSpell(42846, false); // Arcane Missles [Rank 13]
-	pPlayer->learnSpell(1953, false); // Blink
-	pPlayer->learnSpell(42940, false); // Blizzard [Rank 9]
-	pPlayer->learnSpell(42931, false); // Cone of Cold [Rank 8]
-	pPlayer->learnSpell(33717, false); // Conjure Food [Rank 8]
-	pPlayer->learnSpell(42985, false); // Conjure Mana Gem [Rank 6]
-	pPlayer->learnSpell(42956, false); // Conjure Refreshment [Rank 2]
-	pPlayer->learnSpell(27090, false); // Conjure Water [Rank 9]
-	pPlayer->learnSpell(2139, false); // Counterspell
-	pPlayer->learnSpell(61316, false); // Dalaran Brilliance [Rank 3]
-	pPlayer->learnSpell(61024, false); // Dalaran Intellect [Rank 7]
-	pPlayer->learnSpell(43015, false); // Dampen Magic [Rank 7]
-	pPlayer->learnSpell(12051, false); // Evocation
-	pPlayer->learnSpell(42873, false); // Fire Blast [Rank 11]
-	pPlayer->learnSpell(43010, false); // Fire Ward [Rank 7]
-	pPlayer->learnSpell(42833, false); // Fireball [Rank 16]
-	pPlayer->learnSpell(42926, false); // Flamestrike [Rank 9]
-	pPlayer->learnSpell(7301, false); // Frost Armor [Rank 3]
-	pPlayer->learnSpell(42917, false); // Frost Nova [Rank 6]
-	pPlayer->learnSpell(43012, false); // Frost Ward [Rank 7]
-	pPlayer->learnSpell(42842, false); // Frostbolt [Rank 16]
-	pPlayer->learnSpell(47610, false); // Frostfire Bolt [Rank 2]
-	pPlayer->learnSpell(43008, false); // Ice Armor [Rank 6]
-	pPlayer->learnSpell(45438, false); // Ice Block
-	pPlayer->learnSpell(42914, false); // Ice Lance [Rank 3]
-	pPlayer->learnSpell(66, false); // Invisibility
-	pPlayer->learnSpell(43024, false); // Mage Armor [Rank 6]
-	pPlayer->learnSpell(43020, false); // Mana Shield [Rank 9]
-	pPlayer->learnSpell(55342, false); // Mirror Image
-	pPlayer->learnSpell(43046, false); // Molten Armor [Rank 3]
-	pPlayer->learnSpell(12826, false); // Polymorph [Rank 4]
-	pPlayer->learnSpell(61305, false); // Polymorph: Black Cat
-	pPlayer->learnSpell(28272, false); // Polymorph: Pig
-	pPlayer->learnSpell(61721, false); // Polymorph: Rabbit
-	pPlayer->learnSpell(61780, false); // Polymorph: Turkey
-	pPlayer->learnSpell(28271, false); // Polymorph: Turtle
-	pPlayer->learnSpell(53142, false); // Portal: Dalaran
+	pPlayer->learnSpell(43017, false);	// Amplify Magic [Rank 7]
+	pPlayer->learnSpell(42897, false);	// Arcane Blast [Rank 4]
+	pPlayer->learnSpell(43002, false);	// Arcane Brilliance [Rank 3]
+	pPlayer->learnSpell(42921, false);	// Arcane Explosion [Rank 10]
+	pPlayer->learnSpell(42995, false);	// Arcane Intellect [Rank 7]
+	pPlayer->learnSpell(42846, false);	// Arcane Missles [Rank 13]
+	pPlayer->learnSpell(1953, false);	// Blink
+	pPlayer->learnSpell(42940, false);	// Blizzard [Rank 9]
+	pPlayer->learnSpell(42931, false);	// Cone of Cold [Rank 8]
+	pPlayer->learnSpell(33717, false);	// Conjure Food [Rank 8]
+	pPlayer->learnSpell(42985, false);	// Conjure Mana Gem [Rank 6]
+	pPlayer->learnSpell(42956, false);	// Conjure Refreshment [Rank 2]
+	pPlayer->learnSpell(27090, false);	// Conjure Water [Rank 9]
+	pPlayer->learnSpell(2139, false);	// Counterspell
+	pPlayer->learnSpell(61316, false);	// Dalaran Brilliance [Rank 3]
+	pPlayer->learnSpell(61024, false);	// Dalaran Intellect [Rank 7]
+	pPlayer->learnSpell(43015, false);	// Dampen Magic [Rank 7]
+	pPlayer->learnSpell(12051, false);	// Evocation
+	pPlayer->learnSpell(42873, false);	// Fire Blast [Rank 11]
+	pPlayer->learnSpell(43010, false);	// Fire Ward [Rank 7]
+	pPlayer->learnSpell(42833, false);	// Fireball [Rank 16]
+	pPlayer->learnSpell(42926, false);	// Flamestrike [Rank 9]
+	pPlayer->learnSpell(7301, false);	// Frost Armor [Rank 3]
+	pPlayer->learnSpell(42917, false);	// Frost Nova [Rank 6]
+	pPlayer->learnSpell(43012, false);	// Frost Ward [Rank 7]
+	pPlayer->learnSpell(42842, false);	// Frostbolt [Rank 16]
+	pPlayer->learnSpell(47610, false);	// Frostfire Bolt [Rank 2]
+	pPlayer->learnSpell(43008, false);	// Ice Armor [Rank 6]
+	pPlayer->learnSpell(45438, false);	// Ice Block
+	pPlayer->learnSpell(42914, false);	// Ice Lance [Rank 3]
+	pPlayer->learnSpell(66, false);		// Invisibility
+	pPlayer->learnSpell(43024, false);	// Mage Armor [Rank 6]
+	pPlayer->learnSpell(43020, false);	// Mana Shield [Rank 9]
+	pPlayer->learnSpell(55342, false);	// Mirror Image
+	pPlayer->learnSpell(43046, false);	// Molten Armor [Rank 3]
+	pPlayer->learnSpell(12826, false);	// Polymorph [Rank 4]
+	pPlayer->learnSpell(61305, false);	// Polymorph: Black Cat
+	pPlayer->learnSpell(28272, false);	// Polymorph: Pig
+	pPlayer->learnSpell(61721, false);	// Polymorph: Rabbit
+	pPlayer->learnSpell(61780, false);	// Polymorph: Turkey
+	pPlayer->learnSpell(28271, false);	// Polymorph: Turtle
+	pPlayer->learnSpell(53142, false);	// Portal: Dalaran
 	if(pPlayer->getRace() == 1 || 3 || 4 || 7 || 11) 
 		pPlayer->learnSpell(11419, false), // Portal: Darnassus
 		pPlayer->learnSpell(32266, false), // Portal: Exodar
@@ -514,165 +532,216 @@ case 8000: // Mage Spells
 		pPlayer->learnSpell(11059, false), // Portal: Stormwind
 		pPlayer->learnSpell(49360, false); // Portal: Theramore
     else if(pPlayer->getRace() == 2 || 5 || 6 || 8 || 10)
-		pPlayer->learnSpell(11417, false), // Portal: Orgrimmar
-		pPlayer->learnSpell(35717, false), // Portal: Shattrath
-		pPlayer->learnSpell(32267, false), // Portal: Silvermoon
-		pPlayer->learnSpell(49361, false), // Portal: Stonard
-		pPlayer->learnSpell(11420, false), // Portal: Thunder Bluff
-		pPlayer->learnSpell(11418, false); // Portal: Undercity
+		pPlayer->learnSpell(11417, false),	// Portal: Orgrimmar
+		pPlayer->learnSpell(35717, false),	// Portal: Shattrath
+		pPlayer->learnSpell(32267, false),	// Portal: Silvermoon
+		pPlayer->learnSpell(49361, false),	// Portal: Stonard
+		pPlayer->learnSpell(11420, false),	// Portal: Thunder Bluff
+		pPlayer->learnSpell(11418, false);	// Portal: Undercity
 	if(pPlayer->getRace() == 1 || 3 || 4 || 7 || 11) 
-		pPlayer->learnSpell(3565, false), // Teleport: Darnassus
-		pPlayer->learnSpell(32271, false), // Teleport: Exodar
-		pPlayer->learnSpell(3562, false), // Teleport: Ironforge
-		pPlayer->learnSpell(33690, false), // Teleport: Shattrath
-		pPlayer->learnSpell(3561, false), // Teleport: Stormwind
-		pPlayer->learnSpell(49359, false); // Teleport: Theramore
+		pPlayer->learnSpell(3565, false),	// Teleport: Darnassus
+		pPlayer->learnSpell(32271, false),	// Teleport: Exodar
+		pPlayer->learnSpell(3562, false),	// Teleport: Ironforge
+		pPlayer->learnSpell(33690, false),	// Teleport: Shattrath
+		pPlayer->learnSpell(3561, false),	// Teleport: Stormwind
+		pPlayer->learnSpell(49359, false);	// Teleport: Theramore
     else if(pPlayer->getRace() == 2 || 5 || 6 || 8 || 10)
-		pPlayer->learnSpell(3567, false), // Teleport: Orgrimmar
-		pPlayer->learnSpell(35715, false), // Teleport: Shattrath
-		pPlayer->learnSpell(32272, false), // Teleport: Silvermoon
-		pPlayer->learnSpell(49358, false), // Teleport: Stonard
-		pPlayer->learnSpell(3566, false), // Teleport: Thunder Bluff
-		pPlayer->learnSpell(3563, false); // Teleport: Undercity
-	pPlayer->learnSpell(475, false); // Remove Curse
-	pPlayer->learnSpell(58659, false); // Ritual of Refreshment [Rank 2]
-	pPlayer->learnSpell(42859, false); // Scorch [Rank 11]
-	pPlayer->learnSpell(130, false); // Slow Fall
-	pPlayer->learnSpell(30449, false); // Spellsteal
-	pPlayer->learnSpell(53140, false); // Teleport: Dalaran	
+		pPlayer->learnSpell(3567, false),	// Teleport: Orgrimmar
+		pPlayer->learnSpell(35715, false),	// Teleport: Shattrath
+		pPlayer->learnSpell(32272, false),	// Teleport: Silvermoon
+		pPlayer->learnSpell(49358, false),	// Teleport: Stonard
+		pPlayer->learnSpell(3566, false),	// Teleport: Thunder Bluff
+		pPlayer->learnSpell(3563, false);	// Teleport: Undercity
+	pPlayer->learnSpell(475, false);	// Remove Curse
+	pPlayer->learnSpell(58659, false);	// Ritual of Refreshment [Rank 2]
+	pPlayer->learnSpell(42859, false);	// Scorch [Rank 11]
+	pPlayer->learnSpell(130, false);	// Slow Fall
+	pPlayer->learnSpell(30449, false);	// Spellsteal
+	pPlayer->learnSpell(53140, false);	// Teleport: Dalaran	
 	
 	pPlayer->CLOSE_GOSSIP_MENU();
-	pCreature->MonsterWhisper(MSG_LEARNED, pPlayer->GetGUID());
+	pCreature->MonsterWhisper(MSG_LEARNED_SPELL, pPlayer->GetGUID());
 	
 break;
 
 case 9000: // Warlock Spells
-	pPlayer->learnSpell(60220, false); // Create Firestone [Rank 7]
-	pPlayer->learnSpell(47884, false); // Create Soulstone [Rank 7]
-	pPlayer->learnSpell(47888, false); // Create Spellstone [Rank 6]
-	pPlayer->learnSpell(18647, false); // Banish [Rank 2]
-	pPlayer->learnSpell(47813, false); // Corruption [Rank 10]
-	pPlayer->learnSpell(47878, false); // Create Healthstone [Rank 8]
-	pPlayer->learnSpell(47864, false); // Curse of Agony [Rank 9]
-	pPlayer->learnSpell(11719, false); // Curse of Tongues [Rank 2]
-	pPlayer->learnSpell(47867, false); // Curse of Doom [Rank 3]
-	pPlayer->learnSpell(50511, false); // Curse of Weakness [Rank 9]
-	pPlayer->learnSpell(47865, false); // Curse of the Elements [Rank 5]
-	pPlayer->learnSpell(47860, false); // Death Coil [Rank 6]
-	pPlayer->learnSpell(47889, false); // Demon Armor [Rank 8]
-	pPlayer->learnSpell(696, false); // Demon Skin [Rank 2]
-	pPlayer->learnSpell(48018, false); // Demonic Circle: Summon
-	pPlayer->learnSpell(48020, false); // Demonic Circle: Teleport
-	pPlayer->learnSpell(132, false); // Detect Invisibility
-	pPlayer->learnSpell(47857, false); // Drain Life [Rank 9]
-	pPlayer->learnSpell(5138, false); // Drain Mana
-	pPlayer->learnSpell(47855, false); // Drain Soul [Rank 6]
-	pPlayer->learnSpell(23161, false); // Dreadsteed
-	pPlayer->learnSpell(61191, false); // Enslave Demon [Rank 4]
-	pPlayer->learnSpell(126, false); // Eye of Kilrogg
-	pPlayer->learnSpell(6215, false); // Fear [Rank 3]
-	pPlayer->learnSpell(47893, false); // Fel Armor [Rank 4]
-	pPlayer->learnSpell(5784, false); // Felsteed
-	pPlayer->learnSpell(47856, false); // Health Funnel [Rank 9]
-	pPlayer->learnSpell(47823, false); // Hellfire [Rank 5]
-	pPlayer->learnSpell(17928, false); // Howl of Terror [Rank 2]
-	pPlayer->learnSpell(47811, false); // Immolate [Rank 11]
-	pPlayer->learnSpell(47838, false); // Incinerate [Rank 4]
-	pPlayer->learnSpell(57946, false); // Life Tap [Rank 8]
-	pPlayer->learnSpell(47820, false); // Rain of Fire [Rank 7]
-	pPlayer->learnSpell(18540, false); // Ritual of Doom
-	pPlayer->learnSpell(58887, false); // Ritual of Souls [Rank 2]
-	pPlayer->learnSpell(698, false); // Ritual of Summoning
-	pPlayer->learnSpell(47815, false); // Searing Pain [Rank 10]
-	pPlayer->learnSpell(47836, false); // Seed of Corruption [Rank 3]
-	pPlayer->learnSpell(5500, false); // Sense Demons
-	pPlayer->learnSpell(47809, false); // Shadow Bolt [Rank 13]
-	pPlayer->learnSpell(47891, false); // Shadow Ward [Rank 6]
-	pPlayer->learnSpell(61290, false); // Shadowflame [Rank 2]
-	pPlayer->learnSpell(47825, false); // Soul Fire [Rank 6]
-	pPlayer->learnSpell(29858, false); // Soulshatter
-	pPlayer->learnSpell(691, false); // Summon Felhunter
-	pPlayer->learnSpell(688, false); // Summon Imp
-	pPlayer->learnSpell(712, false); // Summon Succubus
-	pPlayer->learnSpell(697, false); // Summon Voidwalker
-	pPlayer->learnSpell(5697, false); // Unending Breath
+	pPlayer->learnSpell(60220, false);	// Create Firestone [Rank 7]
+	pPlayer->learnSpell(47884, false);	// Create Soulstone [Rank 7]
+	pPlayer->learnSpell(47888, false);	// Create Spellstone [Rank 6]
+	pPlayer->learnSpell(18647, false);	// Banish [Rank 2]
+	pPlayer->learnSpell(47813, false);	// Corruption [Rank 10]
+	pPlayer->learnSpell(47878, false);	// Create Healthstone [Rank 8]
+	pPlayer->learnSpell(47864, false);	// Curse of Agony [Rank 9]
+	pPlayer->learnSpell(11719, false);	// Curse of Tongues [Rank 2]
+	pPlayer->learnSpell(47867, false);	// Curse of Doom [Rank 3]
+	pPlayer->learnSpell(50511, false);	// Curse of Weakness [Rank 9]
+	pPlayer->learnSpell(47865, false);	// Curse of the Elements [Rank 5]
+	pPlayer->learnSpell(47860, false);	// Death Coil [Rank 6]
+	pPlayer->learnSpell(47889, false);	// Demon Armor [Rank 8]
+	pPlayer->learnSpell(696, false);	// Demon Skin [Rank 2]
+	pPlayer->learnSpell(48018, false);	// Demonic Circle: Summon
+	pPlayer->learnSpell(48020, false);	// Demonic Circle: Teleport
+	pPlayer->learnSpell(132, false);	// Detect Invisibility
+	pPlayer->learnSpell(47857, false);	// Drain Life [Rank 9]
+	pPlayer->learnSpell(5138, false);	// Drain Mana
+	pPlayer->learnSpell(47855, false);	// Drain Soul [Rank 6]
+	pPlayer->learnSpell(23161, false);	// Dreadsteed
+	pPlayer->learnSpell(61191, false);	// Enslave Demon [Rank 4]
+	pPlayer->learnSpell(126, false);	// Eye of Kilrogg
+	pPlayer->learnSpell(6215, false);	// Fear [Rank 3]
+	pPlayer->learnSpell(47893, false);	// Fel Armor [Rank 4]
+	pPlayer->learnSpell(5784, false);	// Felsteed
+	pPlayer->learnSpell(47856, false);	// Health Funnel [Rank 9]
+	pPlayer->learnSpell(47823, false);	// Hellfire [Rank 5]
+	pPlayer->learnSpell(17928, false);	// Howl of Terror [Rank 2]
+	pPlayer->learnSpell(47811, false);	// Immolate [Rank 11]
+	pPlayer->learnSpell(47838, false);	// Incinerate [Rank 4]
+	pPlayer->learnSpell(57946, false);	// Life Tap [Rank 8]
+	pPlayer->learnSpell(47820, false);	// Rain of Fire [Rank 7]
+	pPlayer->learnSpell(18540, false);	// Ritual of Doom
+	pPlayer->learnSpell(58887, false);	// Ritual of Souls [Rank 2]
+	pPlayer->learnSpell(698, false);	// Ritual of Summoning
+	pPlayer->learnSpell(47815, false);	// Searing Pain [Rank 10]
+	pPlayer->learnSpell(47836, false);	// Seed of Corruption [Rank 3]
+	pPlayer->learnSpell(5500, false);	// Sense Demons
+	pPlayer->learnSpell(47809, false);	// Shadow Bolt [Rank 13]
+	pPlayer->learnSpell(47891, false);	// Shadow Ward [Rank 6]
+	pPlayer->learnSpell(61290, false);	// Shadowflame [Rank 2]
+	pPlayer->learnSpell(47825, false);	// Soul Fire [Rank 6]
+	pPlayer->learnSpell(29858, false);	// Soulshatter
+	pPlayer->learnSpell(691, false);	// Summon Felhunter
+	pPlayer->learnSpell(688, false);	// Summon Imp
+	pPlayer->learnSpell(712, false);	// Summon Succubus
+	pPlayer->learnSpell(697, false);	// Summon Voidwalker
+	pPlayer->learnSpell(5697, false);	// Unending Breath
 	
 	pPlayer->CLOSE_GOSSIP_MENU();
-	pCreature->MonsterWhisper(MSG_LEARNED, pPlayer->GetGUID());
+	pCreature->MonsterWhisper(MSG_LEARNED_SPELL, pPlayer->GetGUID());
 	
 break;
 
 case 10000: // Druid Spells
-	pPlayer->learnSpell(2893, false); // Abolish Poison
-	pPlayer->learnSpell(1066, false); // Aquatic Form
-	pPlayer->learnSpell(22812, false); // Barkskin
-	pPlayer->learnSpell(8983, false); // Bash [Rank 3]
-	pPlayer->learnSpell(768, false); // Cat Form
-	pPlayer->learnSpell(5209, false); // Challenging Roar	
-	pPlayer->learnSpell(48570, false); // Claw [Rank 8]
-	pPlayer->learnSpell(48575, false); // Cower [Rank 6]
-	pPlayer->learnSpell(8946, false); // Cure Poison
-	pPlayer->learnSpell(33786, false); // Cyclone
-	pPlayer->learnSpell(33357, false); // Dash [Rank 3]
-	pPlayer->learnSpell(48560, false); // Demoralizing Roar [Rank 8]
-	pPlayer->learnSpell(9634, false); // Dire Bear Form
-	pPlayer->learnSpell(5229, false); // Enrage
-	pPlayer->learnSpell(53308, false); // Entangling Roots [Rank 8]
-	pPlayer->learnSpell(770, false); // Faerie Fire
-	pPlayer->learnSpell(16857, false); // Faerie Fire (Feral)
-	pPlayer->learnSpell(20719, false); // Feline Grace 
-	pPlayer->learnSpell(16979, false); // Feral Charge - Bear
-	pPlayer->learnSpell(49376, false); // Feral Charge - Cat 
-	pPlayer->learnSpell(48577, false); // Ferocious Bite [Rank 8]
-	pPlayer->learnSpell(33943, false); // Flight Form
-	pPlayer->learnSpell(48470, false); // Gift of the Wild [Rank 4]
-	pPlayer->learnSpell(6795, false); // Growl 
-	pPlayer->learnSpell(22842, false); // Frenzied Regeneration [Rank 1]
-	pPlayer->learnSpell(48378, false); // Healing Touch [Rank 15]
-	pPlayer->learnSpell(48467, false); // Hurricane [Rank 5]
-	pPlayer->learnSpell(29166, false); // Innervate
-	pPlayer->learnSpell(48451, false); // Lifebloom [Rank 3]
-	pPlayer->learnSpell(48568, false); // Lacerate [Rank 3]
-	pPlayer->learnSpell(49802, false); // Maim [Rank 2]
-	pPlayer->learnSpell(48564, false); // Mangle (Bear, false); [Rank 5]
-	pPlayer->learnSpell(48566, false); // Mangle (Cat, false); [Rank 5]
-	pPlayer->learnSpell(48469, false); // Mark of the Wild [Rank 9]
-	pPlayer->learnSpell(48480, false); // Maul [Rank 10]
-	pPlayer->learnSpell(48463, false); // Moonfire [Rank 14]
-	pPlayer->learnSpell(53312, false); // Nature's Grasp [Rank 8]
-	pPlayer->learnSpell(50464, false); // Nourish [Rank 1]
-	pPlayer->learnSpell(49803, false); // Pounce [Rank 5]
-	pPlayer->learnSpell(9913, false); // Prowl [Rank 3]
-	pPlayer->learnSpell(48574, false); // Rake [Rank 7]
-	pPlayer->learnSpell(48579, false); // Ravage [Rank 7]
-	pPlayer->learnSpell(48477, false); // Rebirth [Rank 7]
-	pPlayer->learnSpell(48443, false); // Regrowth [Rank 12]
-	pPlayer->learnSpell(48441, false); // Rejuvenation [Rank 15]
-	pPlayer->learnSpell(2782, false); // Remove Curse	
-	pPlayer->learnSpell(50763, false); // Revive [Rank 7]
-	pPlayer->learnSpell(49800, false); // Rip [Rank 9]
-	pPlayer->learnSpell(62600, false); // Savage Defense
-	pPlayer->learnSpell(48572, false); // Shred [Rank 9]
-	pPlayer->learnSpell(26995, false); // Soothe Animal [Rank 4]
-	pPlayer->learnSpell(48465, false); // Starfire [Rank 10]
-	pPlayer->learnSpell(40120, false); // Swift Flight Form
-	pPlayer->learnSpell(62078, false); // Swipe (Cat) [Rank 1]
-	pPlayer->learnSpell(48562, false); // Swipe (Bear) [Rank 8]
-	pPlayer->learnSpell(18960, false); // Teleport: Moonglade
-	pPlayer->learnSpell(53307, false); // Thorns [Rank 8]
-	pPlayer->learnSpell(50213, false); // Tiger's Fury [Rank 6]
-	pPlayer->learnSpell(5225, false); // Track Humanoids
-	pPlayer->learnSpell(48447, false); // Tranquility [Rank 7]
-	pPlayer->learnSpell(783, false); // Travel Form
-	pPlayer->learnSpell(48461, false); // Wrath [Rank 12]
+	pPlayer->learnSpell(2893, false);	// Abolish Poison
+	pPlayer->learnSpell(1066, false);	// Aquatic Form
+	pPlayer->learnSpell(22812, false);	// Barkskin
+	pPlayer->learnSpell(8983, false);	// Bash [Rank 3]
+	pPlayer->learnSpell(768, false);	// Cat Form
+	pPlayer->learnSpell(5209, false);	// Challenging Roar	
+	pPlayer->learnSpell(48570, false);	// Claw [Rank 8]
+	pPlayer->learnSpell(48575, false);	// Cower [Rank 6]
+	pPlayer->learnSpell(8946, false);	// Cure Poison
+	pPlayer->learnSpell(33786, false);	// Cyclone
+	pPlayer->learnSpell(33357, false);	// Dash [Rank 3]
+	pPlayer->learnSpell(48560, false);	// Demoralizing Roar [Rank 8]
+	pPlayer->learnSpell(9634, false);	// Dire Bear Form
+	pPlayer->learnSpell(5229, false);	// Enrage
+	pPlayer->learnSpell(53308, false);	// Entangling Roots [Rank 8]
+	pPlayer->learnSpell(770, false);	// Faerie Fire
+	pPlayer->learnSpell(16857, false);	// Faerie Fire (Feral)
+	pPlayer->learnSpell(20719, false);	// Feline Grace 
+	pPlayer->learnSpell(16979, false);	// Feral Charge - Bear
+	pPlayer->learnSpell(49376, false);	// Feral Charge - Cat 
+	pPlayer->learnSpell(48577, false);	// Ferocious Bite [Rank 8]
+	pPlayer->learnSpell(33943, false);	// Flight Form
+	pPlayer->learnSpell(48470, false);	// Gift of the Wild [Rank 4]
+	pPlayer->learnSpell(6795, false);	// Growl 
+	pPlayer->learnSpell(22842, false);	// Frenzied Regeneration [Rank 1]
+	pPlayer->learnSpell(48378, false);	// Healing Touch [Rank 15]
+	pPlayer->learnSpell(48467, false);	// Hurricane [Rank 5]
+	pPlayer->learnSpell(29166, false);	// Innervate
+	pPlayer->learnSpell(48451, false);	// Lifebloom [Rank 3]
+	pPlayer->learnSpell(48568, false);	// Lacerate [Rank 3]
+	pPlayer->learnSpell(49802, false);	// Maim [Rank 2]
+	pPlayer->learnSpell(48564, false);	// Mangle (Bear, false); [Rank 5]
+	pPlayer->learnSpell(48566, false);	// Mangle (Cat, false); [Rank 5]
+	pPlayer->learnSpell(48469, false);	// Mark of the Wild [Rank 9]
+	pPlayer->learnSpell(48480, false);	// Maul [Rank 10]
+	pPlayer->learnSpell(48463, false);	// Moonfire [Rank 14]
+	pPlayer->learnSpell(53312, false);	// Nature's Grasp [Rank 8]
+	pPlayer->learnSpell(50464, false);	// Nourish [Rank 1]
+	pPlayer->learnSpell(49803, false);	// Pounce [Rank 5]
+	pPlayer->learnSpell(9913, false);	// Prowl [Rank 3]
+	pPlayer->learnSpell(48574, false);	// Rake [Rank 7]
+	pPlayer->learnSpell(48579, false);	// Ravage [Rank 7]
+	pPlayer->learnSpell(48477, false);	// Rebirth [Rank 7]
+	pPlayer->learnSpell(48443, false);	// Regrowth [Rank 12]
+	pPlayer->learnSpell(48441, false);	// Rejuvenation [Rank 15]
+	pPlayer->learnSpell(2782, false);	// Remove Curse	
+	pPlayer->learnSpell(50763, false);	// Revive [Rank 7]
+	pPlayer->learnSpell(49800, false);	// Rip [Rank 9]
+	pPlayer->learnSpell(62600, false);	// Savage Defense
+	pPlayer->learnSpell(48572, false);	// Shred [Rank 9]
+	pPlayer->learnSpell(26995, false);	// Soothe Animal [Rank 4]
+	pPlayer->learnSpell(48465, false);	// Starfire [Rank 10]
+	pPlayer->learnSpell(40120, false);	// Swift Flight Form
+	pPlayer->learnSpell(62078, false);	// Swipe (Cat) [Rank 1]
+	pPlayer->learnSpell(48562, false);	// Swipe (Bear) [Rank 8]
+	pPlayer->learnSpell(18960, false);	// Teleport: Moonglade
+	pPlayer->learnSpell(53307, false);	// Thorns [Rank 8]
+	pPlayer->learnSpell(50213, false);	// Tiger's Fury [Rank 6]
+	pPlayer->learnSpell(5225, false);	// Track Humanoids
+	pPlayer->learnSpell(48447, false);	// Tranquility [Rank 7]
+	pPlayer->learnSpell(783, false);	// Travel Form
+	pPlayer->learnSpell(48461, false);	// Wrath [Rank 12]
 		
 	pPlayer->CLOSE_GOSSIP_MENU();
-	pCreature->MonsterWhisper(MSG_LEARNED, pPlayer->GetGUID());
+	pCreature->MonsterWhisper(MSG_LEARNED_SPELL, pPlayer->GetGUID());
+	
+break;
+
+case 11000: // Weapon Skills
+	if(pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_ROGUE || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->learnSpell(264, false),	// Bows
+	pPlayer->learnSpell(5011, false),	// Crossbows
+	pPlayer->learnSpell(266, false),	// Guns
+	pPlayer->learnSpell(3018, false),	// Shoot (Ranged)
+	pPlayer->learnSpell(2764, false),	// Throw
+	pPlayer->learnSpell(2567, false);	// Thrown
+	
+	if(pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_MAGE || pPlayer->getClass() == CLASS_PRIEST || pPlayer->getClass() == CLASS_ROGUE || pPlayer->getClass() == CLASS_SHAMAN || pPlayer->getClass() == CLASS_WARLOCK || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->learnSpell(1180, false),	// Daggers
+	pPlayer->learnSpell(227, false);	// Staves
+	
+	if(pPlayer->getClass() == CLASS_DEATHKNIGHT || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_ROGUE || pPlayer->getClass() == CLASS_SHAMAN || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->learnSpell(674, false);	// Dual Wield
+	
+	if(pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_ROGUE || pPlayer->getClass() == CLASS_SHAMAN || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->learnSpell(15590, false);	// Fist Weapons
+	
+	if(pPlayer->getClass() == CLASS_DEATHKNIGHT || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_ROGUE || pPlayer->getClass() == CLASS_SHAMAN || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->learnSpell(196, false),	// One-Handed Axes
+	pPlayer->learnSpell(3127, false);	// Parry
+	
+	if(pPlayer->getClass() == CLASS_DEATHKNIGHT || pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_PRIEST || pPlayer->getClass() == CLASS_ROGUE || pPlayer->getClass() == CLASS_SHAMAN || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->learnSpell(198, false);	// One-Handed Maces
+	
+	if(pPlayer->getClass() == CLASS_DEATHKNIGHT || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_MAGE || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_PRIEST || pPlayer->getClass() == CLASS_ROGUE || pPlayer->getClass() == CLASS_WARLOCK || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->learnSpell(201, false);	// One-Handed Swords
+	
+	if(pPlayer->getClass() == CLASS_DEATHKNIGHT || pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->learnSpell(200, false);	// Polearms
+	
+	if(pPlayer->getClass() == CLASS_MAGE || pPlayer->getClass() == CLASS_PRIEST || pPlayer->getClass() == CLASS_WARLOCK)
+	pPlayer->learnSpell(5009, false),	// Wands
+	pPlayer->learnSpell(5019, false);	// Shoot (Wand)
+	
+	if(pPlayer->getClass() == CLASS_DEATHKNIGHT || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_SHAMAN || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->learnSpell(197, false);	// Two-Handed Axes
+	
+	if(pPlayer->getClass() == CLASS_DEATHKNIGHT || pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_SHAMAN || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->learnSpell(199, false);	// Two-Handed Maces
+	
+	if(pPlayer->getClass() == CLASS_DEATHKNIGHT || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->learnSpell(202, false);	// Two-Handed Swords
+
+		
+	pPlayer->CLOSE_GOSSIP_MENU();
+	pCreature->MonsterWhisper(MSG_LEARNED_SKILL, pPlayer->GetGUID());
 	
 break;
 
 // Close gossip menu
-case 11000:
+case 12000:
 	pPlayer->CLOSE_GOSSIP_MENU();
 break;
 

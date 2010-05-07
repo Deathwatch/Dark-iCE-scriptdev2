@@ -29,8 +29,8 @@ enum
 
     NPC_THRALL                  = 34994,
     NPC_PROUDMOORE              = 34992,
-    NPC_PORTAL                  = 19224,
     NPC_TRIGGER                 = 22517,
+    NPC_WILFRED_PORTAL          = 35651,
 
     NPC_ICEHOWL                 = 34797,
     NPC_GORMOK                  = 34796,
@@ -86,6 +86,10 @@ enum
 
     GO_ARGENT_COLISEUM_FLOOR    = 195527, //20943
     GO_MAIN_GATE_DOOR           = 195647,
+
+    GO_WEST_PORTCULLIS          = 195589,
+    GO_SOUTH_PORTCULLIS         = 195590,
+    GO_NORTH_PORTCULLIS         = 195591,
 
     TYPE_DIFFICULTY             = 101,
     TYPE_EVENT_TIMER            = 102,
@@ -151,6 +155,16 @@ enum NorthrendBeasts
     SNAKES_DONE                     = 2004,
     ICEHOWL_IN_PROGRESS             = 3000,
     ICEHOWL_DONE                    = 3001,
+};
+
+enum AnnounserMessages
+{
+    MSG_BEASTS                 = 724001,
+    MSG_JARAXXUS               = 724002,
+    MSG_CRUSADERS              = 724003,
+    MSG_VALKIRIES              = 724004,
+    MSG_LICH_KING              = 724005,
+    MSG_ANUBARAK               = 724006,
 };
 
 #endif

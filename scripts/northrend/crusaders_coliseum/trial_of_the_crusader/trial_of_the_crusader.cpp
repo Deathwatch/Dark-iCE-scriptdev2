@@ -1,4 +1,4 @@
-/* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2006 - 2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -26,7 +26,7 @@ EndScriptData */
 
 struct _Messages
 {
-    char const* name;
+    AnnounserMessages msgnum;
     uint32 id;
     bool state;
     uint32 encounter;
@@ -34,16 +34,19 @@ struct _Messages
 
 static _Messages _GossipMessage[]=
 {
-{"Вы готовы пройти Испытание Крестоносца?",GOSSIP_ACTION_INFO_DEF+1,false,TYPE_BEASTS}, //
-{"Вы готовы к следующему этапу?",GOSSIP_ACTION_INFO_DEF+2,false,TYPE_JARAXXUS},  //
-{"Вы готовы драться с чемпионами Серебряного авангарда?",GOSSIP_ACTION_INFO_DEF+3,false,TYPE_CRUSADERS}, //
-{"Вы готовы к следующему этапу?",GOSSIP_ACTION_INFO_DEF+4,false,TYPE_VALKIRIES}, //
-{"Вы готовы продолжить бой с Ануб-Араком?",GOSSIP_ACTION_INFO_DEF+5,false,TYPE_ANUBARAK}, //
-{"Не надо сюда тыкать. На сегодня арена закрыта.",GOSSIP_ACTION_INFO_DEF+6,true,TYPE_ANUBARAK}, //
+{MSG_BEASTS,GOSSIP_ACTION_INFO_DEF+1,false,TYPE_BEASTS}, //
+{MSG_JARAXXUS,GOSSIP_ACTION_INFO_DEF+2,false,TYPE_JARAXXUS},  //
+{MSG_CRUSADERS,GOSSIP_ACTION_INFO_DEF+3,false,TYPE_CRUSADERS}, //
+{MSG_VALKIRIES,GOSSIP_ACTION_INFO_DEF+4,false,TYPE_VALKIRIES}, //
+{MSG_LICH_KING,GOSSIP_ACTION_INFO_DEF+5,false,TYPE_ANUBARAK}, //
+{MSG_ANUBARAK,GOSSIP_ACTION_INFO_DEF+6,true,TYPE_ANUBARAK}, //
 };
+
 enum
 {
-         NUM_MESSAGES = 6,
+    NUM_MESSAGES = 6,
+    SPELL_WILFRED_PORTAL        = 68424,
+    SPELL_JARAXXUS_CHAINS       = 67924,
 };
 
 
@@ -89,12 +92,12 @@ struct MANGOS_DLL_DECL npc_toc_announcerAI : public ScriptedAI
             if (pInstance->GetData(TYPE_NORTHREND_BEASTS) == GORMOK_DONE) {
                          pInstance->SetData(TYPE_STAGE,2);
                          pInstance->SetData(TYPE_EVENT,200);
-                         pInstance->SetData(TYPE_NORTHREND_BEASTS,IN_PROGRESS);
+                         pInstance->SetData(TYPE_NORTHREND_BEASTS,SNAKES_IN_PROGRESS);
                          pInstance->SetData(TYPE_BEASTS,IN_PROGRESS);
                          };
             if (pInstance->GetData(TYPE_NORTHREND_BEASTS) == FAIL) {
                          pInstance->SetData(TYPE_STAGE,0);
-                         pInstance->SetData(TYPE_EVENT,0);
+                         pInstance->SetData(TYPE_EVENT,666);
                          pInstance->SetData(TYPE_BEASTS,NOT_STARTED);
                          };
                  break;
@@ -103,12 +106,12 @@ struct MANGOS_DLL_DECL npc_toc_announcerAI : public ScriptedAI
             if (pInstance->GetData(TYPE_NORTHREND_BEASTS) == SNAKES_DONE) {
                          pInstance->SetData(TYPE_STAGE,3);
                          pInstance->SetData(TYPE_EVENT,300);
-                         pInstance->SetData(TYPE_NORTHREND_BEASTS,IN_PROGRESS);
+                         pInstance->SetData(TYPE_NORTHREND_BEASTS,SNAKES_IN_PROGRESS);
                          pInstance->SetData(TYPE_BEASTS,IN_PROGRESS);
                  };
             if (pInstance->GetData(TYPE_NORTHREND_BEASTS) == FAIL) {
                          pInstance->SetData(TYPE_STAGE,0);
-                         pInstance->SetData(TYPE_EVENT,0);
+                         pInstance->SetData(TYPE_EVENT,666);
                          pInstance->SetData(TYPE_BEASTS,NOT_STARTED);
                          };
                  break;
@@ -122,9 +125,8 @@ struct MANGOS_DLL_DECL npc_toc_announcerAI : public ScriptedAI
                         }
             if (pInstance->GetData(TYPE_NORTHREND_BEASTS) == FAIL) {
                          pInstance->SetData(TYPE_STAGE,0);
-                         pInstance->SetData(TYPE_EVENT,0);
+                         pInstance->SetData(TYPE_EVENT,666);
                          pInstance->SetData(TYPE_BEASTS,NOT_STARTED);
-                         pInstance->SetData(TYPE_BEASTS,IN_PROGRESS);
                          };
                  break;
                  };
@@ -153,6 +155,10 @@ struct MANGOS_DLL_DECL npc_toc_announcerAI : public ScriptedAI
                                  pInstance->SetData(TYPE_STAGE,0);
                                  pInstance->SetData(TYPE_EVENT,4020);
                                  }
+                 if (pInstance->GetData(TYPE_VALKIRIES) == FAIL) {
+                                 pInstance->SetData(TYPE_STAGE,0);
+                                 pInstance->SetData(TYPE_EVENT,0);
+                                 }
                 break;
                 };
         case 8: {
@@ -162,6 +168,10 @@ struct MANGOS_DLL_DECL npc_toc_announcerAI : public ScriptedAI
              if (pInstance->GetData(TYPE_ANUBARAK) == DONE) {
                                  pInstance->SetData(TYPE_STAGE,10);
                                  pInstance->SetData(TYPE_EVENT,6000);
+                                 }
+             if (pInstance->GetData(TYPE_ANUBARAK) == FAIL) {
+                                 pInstance->SetData(TYPE_STAGE,0);
+                                 pInstance->SetData(TYPE_EVENT,0);
                                  }
                  break;
                  };
@@ -185,22 +195,48 @@ bool GossipHello_npc_toc_announcer(Player* pPlayer, Creature* pCreature)
  
     ScriptedInstance* pInstance;
     pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+    char const* _message;
+    uint8 i;
 
     if (!pInstance) return false;
 
-    if(!pPlayer->getAttackers().empty()) return true;
+    if( !pPlayer->getAttackers().empty() ||
+        pInstance->IsEncounterInProgress() ||
+        pInstance->GetData(TYPE_EVENT)) 
+           return true;
 
-    for(uint8 i = 0; i < NUM_MESSAGES; i++) {
+    switch (LocaleConstant currentlocale = pPlayer->GetSession()->GetSessionDbcLocale())
+    {
+     case LOCALE_enUS:
+     case LOCALE_koKR:
+     case LOCALE_frFR:
+     case LOCALE_deDE:
+     case LOCALE_zhCN:
+     case LOCALE_zhTW:
+     case LOCALE_esES:
+     case LOCALE_esMX:
+                      _message = "We are ready!";
+                      break;
+     case LOCALE_ruRU:
+                      _message = "Всегда готовы!";
+                      break;
+     default:
+                      _message = "We are ready!";
+                      break;
+    };
+
+    for(i = 0; i < NUM_MESSAGES; i++) {
     if (!_GossipMessage[i].state && (pInstance->GetData(_GossipMessage[i].encounter) != DONE )) {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, _GossipMessage[i].name, GOSSIP_SENDER_MAIN,_GossipMessage[i].id);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, _message, GOSSIP_SENDER_MAIN,_GossipMessage[i].id);
         break;
         }
     if (_GossipMessage[i].state && pInstance->GetData(_GossipMessage[i].encounter) == DONE) {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, _GossipMessage[i].name, GOSSIP_SENDER_MAIN,_GossipMessage[i].id);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, _message, GOSSIP_SENDER_MAIN,_GossipMessage[i].id);
         break;
         }
     };
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(_GossipMessage[i].msgnum, pCreature->GetGUID());
 
     return true;
 }
@@ -218,6 +254,7 @@ switch(uiAction) {
     if (pInstance->GetData(TYPE_BEASTS) != DONE) {
            pInstance->SetData(TYPE_EVENT,110);
            pInstance->SetData(TYPE_NORTHREND_BEASTS,NOT_STARTED);
+           pInstance->SetData(TYPE_BEASTS,IN_PROGRESS);
            };
     break;
     };
@@ -428,7 +465,7 @@ struct MANGOS_DLL_DECL boss_lich_king_tocAI : public ScriptedAI
                Event=false;
                m_creature->ForcedDespawn();
                pPortal->ForcedDespawn();
-               pInstance->SetData(TYPE_EVENT,5090);
+               pInstance->SetData(TYPE_EVENT,0);
                UpdateTimer = 20000;
                break;
         }
@@ -456,7 +493,7 @@ struct MANGOS_DLL_DECL boss_lich_king_tocAI : public ScriptedAI
 CreatureAI* GetAI_boss_lich_king_toc(Creature* pCreature)
 {
     return new boss_lich_king_tocAI(pCreature);
-}
+};
 
 struct MANGOS_DLL_DECL npc_fizzlebang_tocAI : public ScriptedAI
 {
@@ -469,6 +506,7 @@ struct MANGOS_DLL_DECL npc_fizzlebang_tocAI : public ScriptedAI
     InstanceData* pInstance;
     uint32 UpdateTimer;
     Creature* pPortal;
+    Creature* pTrigger;
 
     void JustDied(Unit* pKiller)
     {
@@ -497,7 +535,8 @@ struct MANGOS_DLL_DECL npc_fizzlebang_tocAI : public ScriptedAI
               {
                case 1110:
                     pInstance->SetData(TYPE_EVENT, 1120);
-                    UpdateTimer = 4000;
+                    UpdateTimer = 3000;
+                    pInstance->SetData(TYPE_JARAXXUS,IN_PROGRESS);
                     break;
                case 1120:
                     DoScriptText(-1713511, m_creature);
@@ -506,44 +545,75 @@ struct MANGOS_DLL_DECL npc_fizzlebang_tocAI : public ScriptedAI
                     break;
                case 1130:
                     m_creature->GetMotionMaster()->MovementExpired();
-                    pPortal = m_creature->SummonCreature(NPC_PORTAL, SpawnLoc[1].x, SpawnLoc[1].y, SpawnLoc[1].z, 5, TEMPSUMMON_CORPSE_TIMED_DESPAWN, DESPAWN_TIME);
-                    if (pPortal) pPortal->SetRespawnDelay(DAY);
+                    m_creature->HandleEmoteCommand(EMOTE_STATE_SPELL_CHANNEL_OMNI);
+                    pPortal = m_creature->SummonCreature(NPC_WILFRED_PORTAL, SpawnLoc[1].x, SpawnLoc[1].y, SpawnLoc[1].z, 5, TEMPSUMMON_MANUAL_DESPAWN, 5000);
+                    if (pPortal)  {
+                                  pPortal->SetRespawnDelay(DAY);
+                                  pPortal->SetDisplayId(22862);
+                                  }
                     DoScriptText(-1713512, m_creature);
-                    pInstance->SetData(TYPE_EVENT, 1135);
+                    pInstance->SetData(TYPE_EVENT, 1132);
                     UpdateTimer = 4000;
+                    break;
+               case 1132:
+                    m_creature->GetMotionMaster()->MovementExpired();
+                    if (pPortal) pPortal->SetFloatValue(OBJECT_FIELD_SCALE_X, 1.5f);
+                    pInstance->SetData(TYPE_EVENT, 1134);
+                    UpdateTimer = 4000;
+                    break;
+               case 1134:
+                    if (pPortal) pPortal->SetDisplayId(15900);
+                    pTrigger =  m_creature->SummonCreature(NPC_TRIGGER, SpawnLoc[1].x, SpawnLoc[1].y, SpawnLoc[1].z, 5.0f, TEMPSUMMON_MANUAL_DESPAWN, 5000);
+                    if (pTrigger)  {
+                                   pTrigger->SetDisplayId(17612);
+                                   pTrigger->CastSpell(pTrigger, SPELL_WILFRED_PORTAL, false);
+                                   pTrigger->SetRespawnDelay(DAY);
+                                   }
+                    m_creature->HandleEmoteCommand(EMOTE_ONESHOT_SPELLCAST_OMNI);
+                    UpdateTimer = 4000;
+                    pInstance->SetData(TYPE_EVENT, 1135);
                     break;
                case 1135:
-                    m_creature->GetMotionMaster()->MovementExpired();
-                    if (pPortal) pPortal->SetDisplayId(15900);
+                    if (pTrigger) pTrigger->SetFloatValue(OBJECT_FIELD_SCALE_X, 2.0f);
+                    m_creature->HandleEmoteCommand(EMOTE_ONESHOT_SPELLCAST_OMNI);
+                    UpdateTimer = 3000;
                     pInstance->SetData(TYPE_EVENT, 1140);
-                    UpdateTimer = 4000;
                     break;
                case 1140:
-                    m_creature->CastSpell(pPortal,69016,false);
                     pInstance->SetData(TYPE_STAGE,4);
-                    pInstance->SetData(TYPE_JARAXXUS,IN_PROGRESS);
                           m_creature->SummonCreature(NPC_JARAXXUS, SpawnLoc[1].x, SpawnLoc[1].y, SpawnLoc[1].z, 5, TEMPSUMMON_CORPSE_TIMED_DESPAWN, DESPAWN_TIME);
                           if (Creature* pTemp = (Creature*)Unit::GetUnit((*m_creature),pInstance->GetData64(NPC_JARAXXUS))) {
+                                pTemp->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                                pTemp->CastSpell(pTemp, SPELL_JARAXXUS_CHAINS, false);
+                                }
+                    pInstance->SetData(TYPE_EVENT, 1142);
+                    UpdateTimer = 5000;
+                    break;
+               case 1142:
+                    UpdateTimer = 5000;
+                    pInstance->SetData(TYPE_EVENT, 1144);
+                    DoScriptText(-1713513, m_creature);
+                    break;
+               case 1144:
+                    if (pTrigger) pTrigger->ForcedDespawn();
+                    pInstance->SetData(TYPE_EVENT, 1150);
+                    UpdateTimer = 5000;
+                    break;
+               case 1150:
+                      if (Creature* pTemp = (Creature*)Unit::GetUnit((*m_creature),pInstance->GetData64(NPC_JARAXXUS))) {
+                                pTemp->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                                pTemp->RemoveAurasDueToSpell(SPELL_JARAXXUS_CHAINS);
                                 pTemp->SetInCombatWithZone();
                                 m_creature->SetInCombatWith(pTemp);
                                 pTemp->AddThreat(m_creature, 1000.0f);
                                 pTemp->AI()->AttackStart(m_creature);
                                 }
-                    pInstance->SetData(TYPE_EVENT, 1150);
-                    UpdateTimer = 500;
-                    break;
-               case 1150:
-                    DoScriptText(-1713513, m_creature);
+                    DoScriptText(-1713515, m_creature);
                     pInstance->SetData(TYPE_EVENT, 1160);
-                    UpdateTimer = 1000;
+                    UpdateTimer = 3000;
                     break;
                case 1160:
-                    DoScriptText(-1713515, m_creature);
                     pInstance->SetData(TYPE_EVENT, 1170);
-                    UpdateTimer = 1000;
-                    break;
-               case 1170:
-                    pInstance->SetData(TYPE_EVENT, 1175);
                     UpdateTimer = 1000;
                     break;
               }
@@ -592,13 +662,14 @@ struct MANGOS_DLL_DECL npc_tirion_tocAI : public ScriptedAI
         case 110:
                m_creature->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_ONESHOT_TALK);
                DoScriptText(-1713500, m_creature);
-               UpdateTimer = 10000;
+               UpdateTimer = 12000;
                pInstance->SetData(TYPE_EVENT,120);
+//               pInstance->DoUseDoorOrButton(pInstance->GetData64(GO_WEST_PORTCULLIS));
                break;
         case 140:
                m_creature->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_ONESHOT_TALK);
                DoScriptText(-1713501, m_creature);
-               UpdateTimer = 8000;
+               UpdateTimer = 10000;
                pInstance->SetData(TYPE_EVENT,150);
                pInstance->DoUseDoorOrButton(pInstance->GetData64(GO_MAIN_GATE_DOOR));
                break;
@@ -676,7 +747,15 @@ struct MANGOS_DLL_DECL npc_tirion_tocAI : public ScriptedAI
         case 400:
                DoScriptText(-1713509, m_creature);
                UpdateTimer = 5000;
-               pInstance->SetData(TYPE_EVENT,410);
+               pInstance->SetData(TYPE_EVENT,0);
+//               pInstance->DoUseDoorOrButton(pInstance->GetData64(GO_WEST_PORTCULLIS));
+               break;
+
+        case 666:
+               DoScriptText(-1713709, m_creature);
+               UpdateTimer = 5000;
+               pInstance->SetData(TYPE_EVENT,0);
+//               pInstance->DoUseDoorOrButton(pInstance->GetData64(GO_WEST_PORTCULLIS));
                break;
 
         case 1010:
@@ -689,7 +768,7 @@ struct MANGOS_DLL_DECL npc_tirion_tocAI : public ScriptedAI
         case 1180:
                DoScriptText(-1713516, m_creature);
                UpdateTimer = 3000;
-               pInstance->SetData(TYPE_EVENT,1190);
+               pInstance->SetData(TYPE_EVENT,0);
                break;
 
         case 2000:
@@ -700,7 +779,7 @@ struct MANGOS_DLL_DECL npc_tirion_tocAI : public ScriptedAI
         case 2030:
                DoScriptText(-1713529, m_creature);
                UpdateTimer = 5000;
-               pInstance->SetData(TYPE_EVENT,2040);
+               pInstance->SetData(TYPE_EVENT,0);
                break;
         case 3000:
                DoScriptText(-1713530, m_creature);
@@ -881,7 +960,7 @@ struct MANGOS_DLL_DECL npc_tirion_tocAI : public ScriptedAI
         case 3100:
                DoScriptText(-1713535, m_creature);
                UpdateTimer = 5000;
-               pInstance->SetData(TYPE_EVENT,3110);
+               pInstance->SetData(TYPE_EVENT,0);
                break;
 
         case 4000:
@@ -923,7 +1002,11 @@ struct MANGOS_DLL_DECL npc_tirion_tocAI : public ScriptedAI
 
         case 5000:
                DoScriptText(-1713549, m_creature);
-               UpdateTimer = 2000;
+               UpdateTimer = 8000;
+               pInstance->SetData(TYPE_EVENT,5005);
+               break;
+        case 5005:
+               UpdateTimer = 8000;
                pInstance->SetData(TYPE_EVENT,5010);
                pInstance->SetData(TYPE_STAGE,8);
                     m_creature->SummonCreature(NPC_LICH_KING_1, SpawnLoc[2].x, SpawnLoc[2].y, SpawnLoc[2].z, 5, TEMPSUMMON_MANUAL_DESPAWN, 0);

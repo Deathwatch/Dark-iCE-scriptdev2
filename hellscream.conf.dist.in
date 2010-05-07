@@ -3,7 +3,7 @@
 # This file must be placed within the directory which holds mangosd.conf and realmd.conf
 # or the scripts will not work as they should.
 ################################################################################################
-ConfVersion=2010040301
+ConfVersion=2010050701
 
 ################################################################################################
 # Info:
@@ -116,3 +116,21 @@ Item_CooldownRemoverInfinte = 1
 ################################################################################################
 LevelUpItemSafeLevel = 75
 LevelUpItemAddLevel = 5
+
+################################################################################################
+# Spellmaster.MaxOutWeaponSkills
+#	          Default:	0 (no)
+#						1 (yes)
+# 
+# If for some reason players dont start with maxed out weapon skills (if you've configured that
+# in the mangos.conf file), enable this. They'll be able to max out their weapon skills from the
+# Spellmaster NPC.
+#
+# Spellmaster.MaxOutRidingSkills
+#	          Default:	0 (no)
+#						1 (yes)
+# 
+# Enable this if you wish to learn Artisan and Cold Weather Riding.
+################################################################################################
+Spellmaster.MaxOutWeaponSkills = 0
+Spellmaster.MaxOutRidingSkills = 0

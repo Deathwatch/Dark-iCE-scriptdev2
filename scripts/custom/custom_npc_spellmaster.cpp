@@ -29,6 +29,8 @@ EndScriptData */
 #define MSG_COMBAT				"You are in combat!"
 #define MSG_LEARNED_SPELL	    "Congratulations, you've learned all of your class spells!"
 #define MSG_LEARNED_SKILL		"Congratulations, you've learned all your class weapon skills!"
+#define MSG_MAXED_WEAPON		"Congratulations, you've maxed out your weapon skills!"
+#define MSG_MAXED_RIDING		"Congratulations, you've maxed out your riding skills!"
 #define CLASS_WARRIOR 		 	1
 #define CLASS_PALADIN 		 	2
 #define CLASS_HUNTER 		 	3
@@ -46,48 +48,57 @@ bool GossipHello_custom_npc_spellmaster(Player* pPlayer, Creature* pCreature)
     Config HNConfig;
 	if(!HNConfig.SetSource(_HELLSCREAM_CONFIG,true))
 		error_log("HN: Unable to open configuration file");
+		
+	bool MaxOutWeaponSkills = HNConfig.GetBoolDefault("Spellmaster.MaxOutWeaponSkills", true);
+	bool MaxOutRidingSkills = HNConfig.GetBoolDefault("Spellmaster.MaxOutRidingSkills", true);
 
 	if(pPlayer->getLevel() > (HNConfig.GetFloatDefault("SpellMaster.MinimumLevel",0)))
 	{
 		// Warrior Spells
 		if(pPlayer->getClass() == CLASS_WARRIOR)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Warrior Spells"			, GOSSIP_SENDER_MAIN, 1000);
+		pPlayer->ADD_GOSSIP_ITEM( 3, "Learn All Warrior Spells"			, GOSSIP_SENDER_MAIN, 1000);
 		// Paladin Spells
 		if(pPlayer->getClass() == CLASS_PALADIN)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Paladin Spells"			, GOSSIP_SENDER_MAIN, 2000);
+		pPlayer->ADD_GOSSIP_ITEM( 3, "Learn All Paladin Spells"			, GOSSIP_SENDER_MAIN, 2000);
 		// Hunter Spells
 		if(pPlayer->getClass() == CLASS_HUNTER)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Hunter Spells"			, GOSSIP_SENDER_MAIN, 3000);
+		pPlayer->ADD_GOSSIP_ITEM( 3, "Learn All Hunter Spells"			, GOSSIP_SENDER_MAIN, 3000);
 		// Rogue Spells
 		if(pPlayer->getClass() == CLASS_ROGUE)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Rogue Spells"			, GOSSIP_SENDER_MAIN, 4000);
+		pPlayer->ADD_GOSSIP_ITEM( 3, "Learn All Rogue Spells"			, GOSSIP_SENDER_MAIN, 4000);
 		// Priest Spells
 		if(pPlayer->getClass() == CLASS_PRIEST)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Priest Spells"			, GOSSIP_SENDER_MAIN, 5000);
+		pPlayer->ADD_GOSSIP_ITEM( 3, "Learn All Priest Spells"			, GOSSIP_SENDER_MAIN, 5000);
 		// Death Knight Spells
 		if(pPlayer->getClass() == CLASS_DEATHKNIGHT)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Death Knight Spells"	, GOSSIP_SENDER_MAIN, 6000);
+		pPlayer->ADD_GOSSIP_ITEM( 3, "Learn All Death Knight Spells"	, GOSSIP_SENDER_MAIN, 6000);
 		// Shaman Spells
 		if(pPlayer->getClass() == CLASS_SHAMAN)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Shaman Spells"			, GOSSIP_SENDER_MAIN, 7000);
+		pPlayer->ADD_GOSSIP_ITEM( 3, "Learn All Shaman Spells"			, GOSSIP_SENDER_MAIN, 7000);
 		// Mage Spells
 		if(pPlayer->getClass() == CLASS_MAGE)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Mage Spells"			, GOSSIP_SENDER_MAIN, 8000);
+		pPlayer->ADD_GOSSIP_ITEM( 3, "Learn All Mage Spells"			, GOSSIP_SENDER_MAIN, 8000);
 		// Warlock Spells
 		if(pPlayer->getClass() == CLASS_WARLOCK)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Warlock Spells"			, GOSSIP_SENDER_MAIN, 9000);
+		pPlayer->ADD_GOSSIP_ITEM( 3, "Learn All Warlock Spells"			, GOSSIP_SENDER_MAIN, 9000);
 		// Druid Spells
 		if(pPlayer->getClass() == CLASS_DRUID)
-		pPlayer->ADD_GOSSIP_ITEM( 5, "Learn All Druid Spells"			, GOSSIP_SENDER_MAIN, 10000);
+		pPlayer->ADD_GOSSIP_ITEM( 3, "Learn All Druid Spells"			, GOSSIP_SENDER_MAIN, 10000);
 		// Weapon Skills
-		pPlayer->ADD_GOSSIP_ITEM( 2, "Learn My Class Weapon Skills"		, GOSSIP_SENDER_MAIN, 11000);
+		pPlayer->ADD_GOSSIP_ITEM( 9, "Learn My Class Weapon Skills"		, GOSSIP_SENDER_MAIN, 11000);
+		// Max out all weapon skills
+		if(MaxOutWeaponSkills)
+		pPlayer->ADD_GOSSIP_ITEM( 9, "Max out weapon skills"			, GOSSIP_SENDER_MAIN, 12000);
+		// Max out all riding skills
+		if(MaxOutRidingSkills)
+		pPlayer->ADD_GOSSIP_ITEM( 2, "Max out riding skills"			, GOSSIP_SENDER_MAIN, 13000);
 		
-		pPlayer->ADD_GOSSIP_ITEM( 7, "Not Interested"					, GOSSIP_SENDER_MAIN, 12000);
+		pPlayer->ADD_GOSSIP_ITEM( 0, "Not Interested"					, GOSSIP_SENDER_MAIN, 14000);
 	}
 	else
 	{
         pPlayer->CLOSE_GOSSIP_MENU();
-		pCreature->MonsterWhisper("You must be level 10 to learn new spells!", pPlayer->GetGUID());
+		pCreature->MonsterWhisper("You need more levels to learn the spells!", pPlayer->GetGUID());
 	}
 
     pPlayer->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE,pCreature->GetGUID());
@@ -734,14 +745,69 @@ case 11000: // Weapon Skills
 	if(pPlayer->getClass() == CLASS_DEATHKNIGHT || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_WARRIOR)
 	pPlayer->learnSpell(202, false);	// Two-Handed Swords
 
-		
 	pPlayer->CLOSE_GOSSIP_MENU();
 	pCreature->MonsterWhisper(MSG_LEARNED_SKILL, pPlayer->GetGUID());
 	
 break;
 
+case 12000: // Max out all weapon skills
+
+	if(pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_ROGUE || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->SetSkill(SKILL_BOWS, 450, 450),		// Max Out Bows
+	pPlayer->SetSkill(SKILL_CROSSBOWS, 450, 450),	// Max Out Crossbows
+	pPlayer->SetSkill(SKILL_GUNS, 450, 450),		// Max Out Guns
+	pPlayer->SetSkill(SKILL_THROWN, 450, 450);		// Max Out Thrown
+
+	if(pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_MAGE || pPlayer->getClass() == CLASS_PRIEST || pPlayer->getClass() == CLASS_ROGUE || pPlayer->getClass() == CLASS_SHAMAN || pPlayer->getClass() == CLASS_WARLOCK || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->SetSkill(SKILL_DAGGERS, 450, 450),		// Max Out Daggers
+	pPlayer->SetSkill(SKILL_STAVES, 450, 450);		// Max Out Staves
+
+	if(pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_ROGUE || pPlayer->getClass() == CLASS_SHAMAN || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->SetSkill(SKILL_FIST_WEAPONS, 450, 450);// Max Out Fist Weapons
+
+	if(pPlayer->getClass() == CLASS_DEATHKNIGHT || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_ROGUE || pPlayer->getClass() == CLASS_SHAMAN || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->SetSkill(SKILL_AXES, 450, 450);		// Max Out Axes
+	
+	if(pPlayer->getClass() == CLASS_DEATHKNIGHT || pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_PRIEST || pPlayer->getClass() == CLASS_ROGUE || pPlayer->getClass() == CLASS_SHAMAN || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->SetSkill(SKILL_MACES, 450, 450);		// Max Out Maces 
+	
+	if(pPlayer->getClass() == CLASS_DEATHKNIGHT || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_MAGE || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_PRIEST || pPlayer->getClass() == CLASS_ROGUE || pPlayer->getClass() == CLASS_WARLOCK || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->SetSkill(SKILL_SWORDS, 450, 450);		// Max Out Swords
+	
+	if(pPlayer->getClass() == CLASS_DEATHKNIGHT || pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->SetSkill(SKILL_POLEARMS, 450, 450);	// Max Out Polearms
+	
+	if(pPlayer->getClass() == CLASS_MAGE || pPlayer->getClass() == CLASS_PRIEST || pPlayer->getClass() == CLASS_WARLOCK)
+	pPlayer->SetSkill(SKILL_WANDS, 450, 450);		// Max Out Wands
+	
+	if(pPlayer->getClass() == CLASS_DEATHKNIGHT || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_SHAMAN || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->SetSkill(SKILL_2H_AXES, 450, 450);		// Max Out Two-Handed Axes
+	
+	if(pPlayer->getClass() == CLASS_DEATHKNIGHT || pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_SHAMAN || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->SetSkill(SKILL_2H_MACES, 450, 450);	// Max Out Two-Handed Maces
+	
+	if(pPlayer->getClass() == CLASS_DEATHKNIGHT || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_WARRIOR)
+	pPlayer->SetSkill(SKILL_2H_SWORDS, 450, 450);	// Max Out Two-Handed Swords
+
+	pPlayer->SetSkill(SKILL_UNARMED, 450, 450);		// Max Out Unarmed
+
+	pPlayer->CLOSE_GOSSIP_MENU();
+	pCreature->MonsterWhisper(MSG_MAXED_WEAPON, pPlayer->GetGUID());
+	
+break;
+
+case 13000: // Max out all riding skills
+
+	pPlayer->learnSpell(34091, false);		// Artisan Riding
+	pPlayer->learnSpell(54197, false);		// Cold Weather Flying
+
+	pPlayer->CLOSE_GOSSIP_MENU();
+	pCreature->MonsterWhisper(MSG_MAXED_RIDING, pPlayer->GetGUID());
+	
+break;
+
 // Close gossip menu
-case 12000:
+case 14000:
 	pPlayer->CLOSE_GOSSIP_MENU();
 break;
 

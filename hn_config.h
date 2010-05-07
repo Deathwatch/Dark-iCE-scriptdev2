@@ -24,7 +24,7 @@
 
 // Format is YYYYMMDDRR where RR is the change in the conf file
 // for that day.
-#define HN_CONF_VERSION    2010040301
+#define HN_CONF_VERSION    2010050701
 
 #ifdef WIN32
   #define MANGOS_DLL_EXPORT extern "C" __declspec(dllexport)

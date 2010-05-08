@@ -571,6 +571,15 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
         if (m_creature->HasAura(SPELL_SUPERCHARGE))
             m_creature->RemoveAurasDueToSpell(SPELL_SUPERCHARGE);
     }
+	
+	void KilledUnit(Unit *victim)
+    {
+		switch(urand(0, 1))
+        {
+        	case 0: DoScriptText(SAY_MOLGEIM_SLAY_1, m_creature); break;
+            case 1: DoScriptText(SAY_MOLGEIM_SLAY_2, m_creature); break;
+		}
+    }
 
     void DamageTaken(Unit* pDoneBy, uint32& uiDamage)
     {

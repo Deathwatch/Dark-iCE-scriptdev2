@@ -291,6 +291,7 @@ bool AreaTrigger_at_orgrimmar_barber_shop(Player* pPlayer, AreaTriggerEntry *pAt
 void AddSC_areatrigger_scripts()
 {
     Script *newscript;
+	newscript = new Script;
     newscript->Name = "at_childrens_week_spot";
     newscript->pAreaTrigger = &AreaTrigger_at_childrens_week_spot;
     newscript->RegisterSelf();

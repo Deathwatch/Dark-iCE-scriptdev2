@@ -755,7 +755,7 @@ struct MANGOS_DLL_DECL mob_felmyst_vapor_trailAI : public ScriptedAI
         }
 
         //despawn after 25 seconds
-        if(m_liveTimer < diff)
+        if(uint32(m_liveTimer) < diff)
         {
             m_creature->ForcedDespawn();
         } else m_liveTimer -= diff;

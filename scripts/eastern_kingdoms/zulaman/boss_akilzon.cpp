@@ -388,7 +388,7 @@ struct MANGOS_DLL_DECL boss_akilzonAI : public ScriptedAI
             CallLighting_Timer = (12 + rand()%5)*1000; //totaly random timer. can't find any info on this
         }else CallLighting_Timer -= diff;
 
-        if (!isRaining && ElectricalStorm_Timer < 8000 + rand()%5000)
+        if (!isRaining && int(ElectricalStorm_Timer) < 8000 + rand()%5000)
         {
             SetWeather(WEATHER_STATE_HEAVY_RAIN, 0.9999f);
             isRaining = true;

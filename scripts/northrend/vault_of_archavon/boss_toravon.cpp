@@ -34,6 +34,7 @@ struct MANGOS_DLL_DECL boss_toravonAI : public ScriptedAI
 
     bool m_bIsRegularMode;
     ScriptedInstance *pInstance;
+    uint32 m_uiEvadeCheckCooldown;
 
     int orbsNum;
     uint32 WhiteoutTimer;
@@ -42,6 +43,7 @@ struct MANGOS_DLL_DECL boss_toravonAI : public ScriptedAI
 
     void Reset()
     {
+        m_uiEvadeCheckCooldown = 2000;
         WhiteoutTimer = 40000;
         OrbsTimer = 15000;
         FreezeTimer = 20000 + rand()%5000;
@@ -74,6 +76,15 @@ struct MANGOS_DLL_DECL boss_toravonAI : public ScriptedAI
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
+
+        if (m_uiEvadeCheckCooldown < uiDiff)
+        {
+            if (m_creature->GetDistance2d(-43.68f, -289.02f) > 80.0f)
+                EnterEvadeMode();
+            m_uiEvadeCheckCooldown = 2000;
+        }
+        else
+            m_uiEvadeCheckCooldown -= uiDiff;
 
         if(WhiteoutTimer < diff)
         {

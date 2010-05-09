@@ -1,7 +1,7 @@
 @package RSA scripts for ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
 @version 0.2
 @revision (current)
-@copyright (c) 2009-2010 /dev/rsa
+@copyright (c) 2009-2010 /dev/rsa and Hellscream ofc.
 @license GNU Public License
 
 This program is free software; you can redistribute it and/or modify
@@ -45,4 +45,5 @@ Thanks to:
 - Dron01 - bugreports and valuable advice;
 - gladden, ghostart - bugreports;
 - Insider42 - bugreports, features;
+- Hellscream staff - LOTS of features
 - all - testing.

@@ -253,7 +253,9 @@ struct MANGOS_DLL_DECL boss_moroesAI : public ScriptedAI
                 m_creature->setFaction(35);
                 m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                DoCastSpellIfCan(m_creature, SPELL_VANISH);
+                // SPELL_VANISH buggy: resets moroes
+                //DoCastSpellIfCan(m_creature, SPELL_VANISH);
+                m_creature->SetVisibility(VISIBILITY_OFF);
                 m_bInVanish      = true;
                 m_uiVanish_Timer = 30000;
                 m_uiWait_Timer   = 5000;
@@ -265,6 +267,7 @@ struct MANGOS_DLL_DECL boss_moroesAI : public ScriptedAI
             {
                 if (m_uiWait_Timer < uiDiff)
                 {
+                    m_creature->SetVisibility(VISIBILITY_ON);
                     DoScriptText(urand(0, 1) ? SAY_SPECIAL_1 : SAY_SPECIAL_2, m_creature);
 
                     if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
@@ -405,7 +408,6 @@ struct MANGOS_DLL_DECL boss_baroness_dorothea_millstipeAI : public boss_moroes_g
         m_uiManaBurn_Timer       = 7000;
         m_uiMindFlay_Timer       = 1000;
         m_uiShadowWordPain_Timer = 6000;
-
         DoCastSpellIfCan(m_creature, SPELL_SHADOWFORM, CAST_TRIGGERED);
     }
 

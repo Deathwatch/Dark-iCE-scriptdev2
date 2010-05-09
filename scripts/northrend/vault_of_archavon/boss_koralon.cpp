@@ -60,12 +60,21 @@ struct MANGOS_DLL_DECL boss_koralonAI : public ScriptedAI
         if(pInstance) pInstance->SetData(TYPE_KORALON, DONE);
     };
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 uiDiff)
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        if(BurningBreathTimer < diff)
+        if (m_uiEvadeCheckCooldown < uiDiff)
+        {
+            if (m_creature->GetDistance2d(-218.57f, 103.86f) > 80.0f)
+                EnterEvadeMode();
+            m_uiEvadeCheckCooldown = 2000;
+        }
+        else
+            m_uiEvadeCheckCooldown -= uiDiff;
+
+        if(BurningBreathTimer < uiDiff)
         {
             DoCastSpellIfCan(m_creature, Regular ? SP_BURNING_BREATH : H_SP_BURNING_BREATH);
             BurningBreathTimer = 45000;
@@ -74,21 +83,21 @@ struct MANGOS_DLL_DECL boss_koralonAI : public ScriptedAI
             BBTickTimer = 1000;
             BBTicks = 0;
         }
-        else BurningBreathTimer -= diff;
+        else BurningBreathTimer -= uiDiff;
 
         if(BB)
         {
-            if(BBTickTimer < diff)
+            if(BBTickTimer < uiDiff)
             {
                 DoCastSpellIfCan(NULL, Regular ? SP_BB_EFFECT : H_SP_BB_EFFECT, true);
                 BBTickTimer = 1000;
                 ++BBTicks;
                 if(BBTicks > 2) BB = false;
             }
-            else BBTickTimer -= diff;
+            else BBTickTimer -= uiDiff;
         }
 
-        if(FlamesTimer < diff)
+        if(FlamesTimer < uiDiff)
         {
             int flames = Regular ? 3 : 5;
             int i;
@@ -99,14 +108,14 @@ struct MANGOS_DLL_DECL boss_koralonAI : public ScriptedAI
             }
             FlamesTimer = 20000;
         }
-        else FlamesTimer -= diff;
+        else FlamesTimer -= uiDiff;
 
-        if(MeteorFistsTimer < diff)
+        if(MeteorFistsTimer < uiDiff)
         {
             DoCastSpellIfCan(m_creature->getVictim(), SP_METEOR_FISTS_EFF);
             MeteorFistsTimer = 45000;
         }
-        else MeteorFistsTimer -= diff;
+        else MeteorFistsTimer -= uiDiff;
 
         DoMeleeAttackIfReady();
     }

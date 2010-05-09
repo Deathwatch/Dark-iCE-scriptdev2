@@ -418,7 +418,7 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
                 //tendrils emote (?)
                 m_creature->CastStop();
                 DoCast(m_creature, LIGHTNING_TENDRILS_VISUAL);
-                if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 {
                     m_creature->AddThreat(pTarget,0.0f);
                     m_creature->AI()->AttackStart(pTarget);
@@ -437,7 +437,7 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
 
         if (Tendrils_Change < diff && tendrils)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
             {
                 m_creature->AddThreat(pTarget,0.0f);
                 m_creature->AI()->AttackStart(pTarget);
@@ -711,7 +711,7 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
 
         if (Rune_Death_Timer < diff && supercharge1)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(pTarget, m_bIsRegularMode ? SPELL_RUNE_OF_DEATH : SPELL_RUNE_OF_DEATH_H);
             Rune_Death_Timer = 60000;
         }else Rune_Death_Timer -= diff;
@@ -719,7 +719,7 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
         if (Rune_Summon_Timer < diff && supercharge2)
         {
             m_creature->CastStop();
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(pTarget, SPELL_RUNE_OF_SUMMONING);
             Rune_Summon_Timer = 30000;
         }else Rune_Summon_Timer -= diff;

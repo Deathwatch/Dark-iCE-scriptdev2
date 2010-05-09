@@ -24,10 +24,10 @@ EndScriptData */
 #include "precompiled.h"
 
 # define GOSSIP_ITEM1 "You are free to go, Orsonn, but first tell me what is wrong with the Furbolg."
-# Define GOSSIP_ITEM2 "What happened then?"
+# define GOSSIP_ITEM2 "What happened then?"
 # define GOSSIP_ITEM3 "Thanks, Son of Ursoc. I'll see what I can do."
-# Define GOSSIP_ITEM4 "This stranger, who was that?"
-# Define GOSSIP_ITEM5 "Thanks, Kodian. I'll do what I can."
+# define GOSSIP_ITEM4 "This stranger, who was that?"
+# define GOSSIP_ITEM5 "Thanks, Kodian. I'll do what I can."
 
 enum
 {

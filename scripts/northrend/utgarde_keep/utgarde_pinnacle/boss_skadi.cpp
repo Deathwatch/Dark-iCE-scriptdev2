@@ -158,7 +158,7 @@ struct MANGOS_DLL_DECL boss_skadiAI : public ScriptedAI
         {
             Creature* pAdd = m_creature->SummonCreature(m_uiSkadiAdds[urand(0,2)], m_creature->GetPositionX()+urand(5,10), m_creature->GetPositionY()+urand(5,10), m_creature->GetPositionZ(), m_creature->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
             if(pAdd)
-                if(Unit* pPlayer = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                if(Unit* pPlayer = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                     pAdd->AI()->AttackStart(pPlayer);
         }
        ++m_uiNextWaveCount;
@@ -214,7 +214,7 @@ struct MANGOS_DLL_DECL boss_skadiAI : public ScriptedAI
                     case 2: DoScriptText(SAY_DRAKEBREATH_3, m_creature); break;
                 }
                 //breath ID missing
-                if(Unit* pPlayer = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                if(Unit* pPlayer = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 {
                     m_creature->CastSpell(pPlayer, m_bIsRegularMode ? SPELL_POISONED_SPEAR : SPELL_POISONED_SPEAR_H, false);
                     pPlayer->CastSpell(pPlayer, m_bIsRegularMode ? SPELL_POISONED : SPELL_POISONED_H, true);
@@ -228,7 +228,7 @@ struct MANGOS_DLL_DECL boss_skadiAI : public ScriptedAI
         {
             if(m_uiPoisonedSpearTimer < uiDiff)
             {
-                if(Unit* pPlayer = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                if(Unit* pPlayer = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 {
                     m_creature->CastSpell(pPlayer, m_bIsRegularMode ? SPELL_POISONED_SPEAR : SPELL_POISONED_SPEAR_H, false);
                     pPlayer->CastSpell(pPlayer, m_bIsRegularMode ? SPELL_POISONED : SPELL_POISONED_H, true);

@@ -294,7 +294,7 @@ struct MANGOS_DLL_DECL boss_alythessAI : public ScriptedAI
 		{
 			if(m_uiConflagrationTimer < diff)
 			{
-				if (Unit *victim = SelectUnit(SELECT_TARGET_RANDOM, 0))
+				if (Unit *victim = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
 				{			
 					DoScriptText(YELL_ALYTHESS_CONFLAGRATE,m_creature);
 					DoPlaySoundToSet(m_creature,SOUND_ALY_CANFLAGRATION);
@@ -332,7 +332,7 @@ struct MANGOS_DLL_DECL boss_alythessAI : public ScriptedAI
 		{
 			if(m_uiShadowNovaTimer < diff)
 			{
-				if(Unit* victim = SelectUnit(SELECT_TARGET_RANDOM,0))// todo: victim should be 2nd on threat list
+				if(Unit* victim = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))// todo: victim should be 2nd on threat list
 				{	
 					m_uiNovaTargetGUID = victim->GetGUID();
 
@@ -411,7 +411,7 @@ struct MANGOS_DLL_DECL boss_alythessAI : public ScriptedAI
         {
             uint8 i = urand(3,5);
             for(uint8 k=0; k<i; ++k)
-			    if(Unit* victim = SelectUnit(SELECT_TARGET_RANDOM, 0))
+			    if(Unit* victim = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
 				{
 					//if(DoCastSpellIfCan(victim,SPELL_FLAME_SEAR)==CAST_OK)
 					DoCast(victim,SPELL_FLAME_SEAR,false);
@@ -630,7 +630,7 @@ struct MANGOS_DLL_DECL boss_sacrolashAI : public ScriptedAI
 		{
 			if(m_uiShadowNovaTimer < diff)
 			{
-				if(Unit* victim = SelectUnit(SELECT_TARGET_RANDOM,0))// todo: victim should be 2nd on threat list
+				if(Unit* victim = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))// todo: victim should be 2nd on threat list
 				{
 					m_uiNovaTargetGUID = victim->GetGUID();
 
@@ -664,7 +664,7 @@ struct MANGOS_DLL_DECL boss_sacrolashAI : public ScriptedAI
 		{
 			if(m_uiConflagrationTimer < diff)
 			{
-				if (Unit *victim = SelectUnit(SELECT_TARGET_RANDOM, 0))
+				if (Unit *victim = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
 				{			
 					DoScriptText(YELL_ALYTHESS_CONFLAGRATE,m_creature);
 					DoPlaySoundToSet(m_creature,SOUND_ALY_CANFLAGRATION);
@@ -781,7 +781,7 @@ struct MANGOS_DLL_DECL npc_shadow_imageAI : public ScriptedAI
 		
 		if(m_uiShadowfuryTimer < diff)
         {
-            if(Unit* victim = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if(Unit* victim = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
 			{	
 				m_creature->CastSpell(victim, SPELL_SHADOWFURY, true);
 

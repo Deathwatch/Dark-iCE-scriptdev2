@@ -65,37 +65,8 @@ struct MANGOS_DLL_DECL boss_hodirAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        SpeedKillTimer -= diff;
-
-        if(FlashFreezeTimer < diff)
-        {
-            DoScriptText(SAY_FLASH_FREEZE, m_creature);
-            FlashFreezeTimer = 60000;
-        }
-        else FlashFreezeTimer -= diff;
-
-        if(FrozenBlowsTimer < diff)
-        {
-            DoPlaySoundToSet(m_creature, SOUND_FROZEN_BLOWS);
-            DoCast(m_creature, Regular ? SP_FROZEN_BLOWS : H_SP_FROZEN_BLOWS);
-            FrozenBlowsTimer = 60000;
-        }
-        else FrozenBlowsTimer -= diff;
-
-        if(FreezeTimer < diff)
-        {
-            Unit *target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
-            if(target) DoCast(target, SP_FREEZE);
-            FreezeTimer = 60000;
-        }
-        else FreezeTimer -= diff;
-
-        if(EnrageTimer < diff)
-        {
-            DoCast(m_creature, SP_ENRAGE);
-            EnrageTimer = 30000;
-        }
-        else EnrageTimer -= diff;
+//SPELLS TODO:
+//
 
         DoMeleeAttackIfReady();
 

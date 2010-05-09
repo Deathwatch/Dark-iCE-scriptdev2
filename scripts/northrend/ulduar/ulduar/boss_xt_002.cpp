@@ -473,7 +473,7 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
 
         if (Light_Bomb_Timer < diff && !phase2)
         {
-            if (targetLightBomb = SelectUnit(SELECT_TARGET_RANDOM, 1))
+            if (targetLightBomb = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1))
                 DoCast(targetLightBomb, m_bIsRegularMode ? SPELL_LIGHT_BOMB : SPELL_LIGHT_BOMB_H);
             Light_Bomb_Timer = m_bIsRegularMode ? 14000 :7000;
             Light_Bomb_End_Timer = 9000;
@@ -481,7 +481,7 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
 
         if (Gravity_Bomb_Timer < diff && !phase2)
         {
-            if (targetGravityBomb = SelectUnit(SELECT_TARGET_RANDOM, 1))
+            if (targetGravityBomb = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1))
                 DoCast(targetGravityBomb, m_bIsRegularMode ? SPELL_GRAVITY_BOMB : SPELL_GRAVITY_BOMB_H);
             Gravity_Bomb_Timer = m_bIsRegularMode ? 18000 :11000;
             Gravity_Bomb_End_Timer = 9000;
@@ -659,7 +659,7 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
             if (!add2 && add1)
             {
                 if (Creature* pTemp = m_creature->SummonCreature(NPC_PUMMELER, XtAddX[3], XtAddY[3], XtAddZ[3], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
-                if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 {
                     pTemp->AddThreat(pTarget,0.0f);
                     pTemp->AI()->AttackStart(pTarget);
@@ -713,7 +713,7 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
             if (!add4 && add3 && add2 && add1)
             {
                 if (Creature* pTemp = m_creature->SummonCreature(NPC_PUMMELER, XtAddX[3], XtAddY[3], XtAddZ[3], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
-                if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 {
                     pTemp->AddThreat(pTarget,0.0f);
                     pTemp->AI()->AttackStart(pTarget);

@@ -292,7 +292,7 @@ struct MANGOS_DLL_DECL boss_grand_warlock_nethekurseAI : public ScriptedAI
 
             if (DeathCoil_Timer < diff)
             {
-                if (Unit *target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))))
+                if (Unit *target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                     DoCastSpellIfCan(target,m_bIsRegularMode ? SPELL_DEATH_COIL : H_SPELL_DEATH_COIL);
                 DeathCoil_Timer = urand(15000, 20000);
             }else DeathCoil_Timer -= diff;

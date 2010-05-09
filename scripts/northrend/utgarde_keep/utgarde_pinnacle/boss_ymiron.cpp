@@ -181,7 +181,7 @@ struct MANGOS_DLL_DECL boss_ymironAI : public ScriptedAI
         {
             Creature* pSpirit = (Creature*)Unit::GetUnit(*m_creature, m_uiOrbGUID);
             if(pSpirit && pSpirit->isAlive())
-                if(Unit* pPlayer = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                if(Unit* pPlayer = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                     pSpirit->GetMotionMaster()->MoveChase(pPlayer);
             m_uiOrbTargetChanger = 15000;
         }else m_uiOrbTargetChanger -= uiDiff;
@@ -194,7 +194,7 @@ struct MANGOS_DLL_DECL boss_ymironAI : public ScriptedAI
 
         if(m_uiFetidRotTimer < uiDiff)
         {
-            if(Unit* pPlayer = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if(Unit* pPlayer = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 m_creature->CastSpell(pPlayer, m_bIsRegularMode ? SPELL_FETID_ROT : H_SPELL_FETID_ROT, true);
             m_uiFetidRotTimer = urand(10000,15000);
         }else m_uiFetidRotTimer -= uiDiff;
@@ -228,7 +228,7 @@ struct MANGOS_DLL_DECL boss_ymironAI : public ScriptedAI
         {
             for (uint8 i = 0; i < 4; ++i)
                 if (Creature* pSpirit = m_creature->SummonCreature(CREATURE_AVENGING_SPIRIT, m_creature->GetPositionX()+urand(1,10), m_creature->GetPositionY()+urand(1,10), m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
-                    if (Unit* pPlayer = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                    if (Unit* pPlayer = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                         pSpirit->AI()->AttackStart(pPlayer);
             m_uiAbilityTORGYNTimer = 10000;
         }else m_uiAbilityTORGYNTimer -= uiDiff;

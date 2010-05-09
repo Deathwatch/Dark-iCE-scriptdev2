@@ -448,9 +448,9 @@ struct MANGOS_DLL_DECL boss_algalon_the_observerAI : public ScriptedAI
             PhasePunch_Timer = 15000;
         }else PhasePunch_Timer -= diff;
 		
-		Unit* pTemp = SelectUnit(SELECT_TARGET_RANDOM, 0);
-		Unit* pTemp2 = SelectUnit(SELECT_TARGET_RANDOM, 0);
-		Unit* pTemp3 = SelectUnit(SELECT_TARGET_RANDOM, 0);
+		Unit* pTemp = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
+		Unit* pTemp2 = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
+		Unit* pTemp3 = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
 
         if (CosmicSmash_Timer < diff)
         {
@@ -785,7 +785,7 @@ struct MANGOS_DLL_DECL boss_algalon_the_observerAI : public ScriptedAI
             {
                 Unit* target;
                 do{
-                    target = SelectUnit(SELECT_TARGET_RANDOM, 0);
+                    target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
                 }while (target->GetTypeId() != TYPEID_PLAYER);
                 if (target)
                     pAdd->AI()->AttackStart(target);
@@ -798,7 +798,7 @@ struct MANGOS_DLL_DECL boss_algalon_the_observerAI : public ScriptedAI
             {
                 Unit* target;
                 do{
-                    target = SelectUnit(SELECT_TARGET_RANDOM, 0);
+                    target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
                 }while (target->GetTypeId() != TYPEID_PLAYER);
                 if (target)
                     pAdd->AI()->AttackStart(target);
@@ -811,7 +811,7 @@ struct MANGOS_DLL_DECL boss_algalon_the_observerAI : public ScriptedAI
             {
                 Unit* target;
                 do{
-                    target = SelectUnit(SELECT_TARGET_RANDOM, 0);
+                    target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
                 }while (target->GetTypeId() != TYPEID_PLAYER);
                 if (target)
                     pAdd->AI()->AttackStart(target);
@@ -824,7 +824,7 @@ struct MANGOS_DLL_DECL boss_algalon_the_observerAI : public ScriptedAI
             {
                 Unit* target;
                 do{
-                    target = SelectUnit(SELECT_TARGET_RANDOM, 0);
+                    target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
                 }while (target->GetTypeId() != TYPEID_PLAYER);
                 if (target)
                     pAdd->AI()->AttackStart(target);
@@ -873,7 +873,7 @@ struct MANGOS_DLL_DECL boss_algalon_the_observerAI : public ScriptedAI
             {
                 Unit* target;
                 do{
-                    target = SelectUnit(SELECT_TARGET_RANDOM, 0);
+                    target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
                 }while (target->GetTypeId() != TYPEID_PLAYER);
                 if (target)
                     pAdd->AI()->AttackStart(target);
@@ -886,7 +886,7 @@ struct MANGOS_DLL_DECL boss_algalon_the_observerAI : public ScriptedAI
             {
                 Unit* target;
                 do{
-                    target = SelectUnit(SELECT_TARGET_RANDOM, 0);
+                    target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
                 }while (target->GetTypeId() != TYPEID_PLAYER);
                 if (target)
                     pAdd->AI()->AttackStart(target);
@@ -899,7 +899,7 @@ struct MANGOS_DLL_DECL boss_algalon_the_observerAI : public ScriptedAI
             {
                 Unit* target;
                 do{
-                    target = SelectUnit(SELECT_TARGET_RANDOM, 0);
+                    target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
                 }while (target->GetTypeId() != TYPEID_PLAYER);
                 if (target)
                     pAdd->AI()->AttackStart(target);
@@ -1196,7 +1196,7 @@ struct MANGOS_DLL_DECL mob_black_holeAI : public ScriptedAI
 					m_creature->GetPosition(fPosX, fPosY, fPosZ);
                     Creature* DM = pAlgalon->SummonCreature(UNLEASHED_DM, fPosX, fPosY, fPosZ, 0, TEMPSUMMON_DEAD_DESPAWN, 500);
                     if (DM)
-                        DM->AI()->AttackStart(SelectUnit(SELECT_TARGET_RANDOM, 0));
+                        DM->AI()->AttackStart(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0));
                     ++DarkMattery_Count;
                 }
                 Summon_Timer = 30000;

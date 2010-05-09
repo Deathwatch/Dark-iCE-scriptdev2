@@ -174,7 +174,7 @@ struct MANGOS_DLL_DECL boss_krikthirAI : public ScriptedAI
             if(j<3)
                 ID = MOB_SKITTERING_SWARMER_INFECTOR;
             if(Creature* pSummoned = m_creature->SummonCreature(ID, m_creature->GetPositionX()+rand()%20, m_creature->GetPositionY()+rand()%20, m_creature->GetPositionZ()+rand()%20, m_creature->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000))
-                if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                     pSummoned->AI()->AttackStart(pTarget);
         }
     }
@@ -266,14 +266,14 @@ struct MANGOS_DLL_DECL boss_krikthirAI : public ScriptedAI
 
         if(m_uiMindFlyTimer < uiDiff)
         {
-            if(Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+            if(Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 DoCast(pTarget, m_bIsRegularMode ? SPELL_MIND_FLAY : H_SPELL_MIND_FLAY, false); 
             m_uiMindFlyTimer = urand(15000, 20000);
         }m_uiMindFlyTimer -= uiDiff;
 
         if(m_uiCurseTimer < uiDiff)
         {
-            if(Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+            if(Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 m_creature->CastSpell(pTarget, m_bIsRegularMode ? SPELL_CURSE_OF_FATIGUE : H_SPELL_CURSE_OF_FATIGUE, false); 
             m_uiCurseTimer = urand(25000, 35000);
         }m_uiCurseTimer -= uiDiff;
@@ -329,7 +329,7 @@ struct MANGOS_DLL_DECL mob_silthikAI : public ScriptedAI
 
         if(m_uiPoisonSprayTimer <uiDiff)
         {
-            if(Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+            if(Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 m_creature->CastSpell(pTarget, m_bIsRegularMode ? SPELL_POISON_SPRAY : H_SPELL_POISON_SPRAY, false);
             m_uiPoisonSprayTimer = urand(15000,30000);
         }m_uiPoisonSprayTimer -= uiDiff;
@@ -343,7 +343,7 @@ struct MANGOS_DLL_DECL mob_silthikAI : public ScriptedAI
 
         if(m_uiWebWarpTimer <uiDiff)
         {
-            if(Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+            if(Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 m_creature->CastSpell(pTarget, SPELL_WEBWARP, false);
             m_uiWebWarpTimer = urand(25000,35000);
         }m_uiWebWarpTimer -= uiDiff;
@@ -401,7 +401,7 @@ struct MANGOS_DLL_DECL mob_gashraAI : public ScriptedAI
 
         if(m_uiWebWarpTimer <uiDiff)
         {
-            if(Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+            if(Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 m_creature->CastSpell(pTarget, SPELL_WEBWARP, false);
             m_uiWebWarpTimer = urand(25000,35000);
         }m_uiWebWarpTimer -= uiDiff;
@@ -465,7 +465,7 @@ struct MANGOS_DLL_DECL mob_narjilAI : public ScriptedAI
 
         if(m_uiWebWarpTimer <uiDiff)
         {
-            if(Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+            if(Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 m_creature->CastSpell(pTarget, SPELL_WEBWARP, false);
             m_uiWebWarpTimer = urand(25000,35000);
         }else m_uiWebWarpTimer -= uiDiff;

@@ -345,8 +345,11 @@ struct MANGOS_DLL_DECL boss_akilzonAI : public ScriptedAI
 
         if (StaticDisruption_Timer < diff)
         {
-            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1))
-            m_creature->CastSpell(pTarget, SPELL_STATIC_DISRUPTION, false);
+            Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1);
+			if (!target)
+				target = m_creature->getVictim();
+			TargetGUID = target->GetGUID();
+            m_creature->CastSpell(target, SPELL_STATIC_DISRUPTION, false);
             m_creature->SetInFront(m_creature->getVictim());
             StaticDisruption_Timer = (10+rand()%8)*1000; // < 20s
 
@@ -432,7 +435,7 @@ struct MANGOS_DLL_DECL boss_akilzonAI : public ScriptedAI
             m_creature->GetPosition(x, y, z);
             for (uint8 i = 0; i < 6 + rand()%3; i++)
             {
-                if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                if(Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 {
                     x = target->GetPositionX() + 10 - rand()%20;
                     y = target->GetPositionY() + 10 - rand()%20;
@@ -506,7 +509,7 @@ struct MANGOS_DLL_DECL mob_soaring_eagleAI : public ScriptedAI
 
         if(arrived)
         {
-            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
             {
                 float x, y, z;
                 if(EagleSwoop_Timer)

@@ -171,7 +171,7 @@ struct MANGOS_DLL_DECL boss_gortokAI : public ScriptedAI
 
         if(m_uiImpaleTimer < uiDiff)
         {
-            if(Unit* pPlayer = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if(Unit* pPlayer = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 m_creature->CastSpell(pPlayer, m_bIsRegularMode ? SPELL_IMPALE : SPELL_IMPALE_H, false);
             m_uiImpaleTimer = urand(15000,25000);
         }else m_uiImpaleTimer -= uiDiff;

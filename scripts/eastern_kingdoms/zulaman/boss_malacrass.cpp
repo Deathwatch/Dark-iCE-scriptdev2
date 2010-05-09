@@ -433,7 +433,7 @@ struct MANGOS_DLL_DECL boss_hex_lord_malacrassAI : public ScriptedAI
             break;
 		case ABILITY_TARGET_ENEMY:
         default:
-            target = SelectUnit(SELECT_TARGET_RANDOM, 0);
+            target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
             break;
         }
         m_creature->CastSpell(target, PlayerAbility[PlayerClass][random].spell, false);
@@ -611,7 +611,7 @@ struct MANGOS_DLL_DECL boss_alyson_antilleAI : public boss_hexlord_addAI
                     m_creature->CastSpell(target, SPELL_DISPEL_MAGIC, false);
                 }
                 else
-                    m_creature->CastSpell(SelectUnit(SELECT_TARGET_RANDOM, 0), SPELL_DISPEL_MAGIC, false);
+                    m_creature->CastSpell(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0), SPELL_DISPEL_MAGIC, false);
             }
             flashheal_timer = 2500;
         }else flashheal_timer -= diff;
@@ -632,7 +632,7 @@ struct MANGOS_DLL_DECL boss_alyson_antilleAI : public boss_hexlord_addAI
         m_creature->CastSpell(target, SPELL_DISPEL_MAGIC, false);
         }
         else
-        m_creature->CastSpell(SelectUnit(SELECT_TARGET_RANDOM, 0), SPELL_DISPEL_MAGIC, false);
+        m_creature->CastSpell(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0), SPELL_DISPEL_MAGIC, false);
 
         dispelmagic_timer = 12000;
         }else dispelmagic_timer -= diff;*/
@@ -809,7 +809,7 @@ struct MANGOS_DLL_DECL boss_slitherAI : public boss_hexlord_addAI
             venomspit_timer = 2500;
         }
         else
-            venomspit_timer -= uiDiff;
+            venomspit_timer -= diff;
 
         boss_hexlord_addAI::UpdateAI(diff);
     }

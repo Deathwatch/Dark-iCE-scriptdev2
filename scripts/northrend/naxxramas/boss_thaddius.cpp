@@ -166,7 +166,7 @@ if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
 //Cast Ball Lightning
         if(BallLightning_Timer < uiDiff)
         {
-            Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0);
+            Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0);
             DoCast(target,SPELL_BALL_LIGHTNING);
             BallLightning_Timer = 20000;
         }

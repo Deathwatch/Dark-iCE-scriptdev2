@@ -94,7 +94,7 @@ struct MANGOS_DLL_DECL boss_loathebAI : public ScriptedAI
             return;
 
         if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-            summoned->AddThreat(pTarget);
+            pSummoned->AddThreat(pTarget);
     }
 
     void UpdateAI(const uint32 uiDiff)
@@ -160,7 +160,7 @@ struct MANGOS_DLL_DECL boss_loathebAI : public ScriptedAI
         // Deathbloom
         if (m_uiDeathbloomTimer < uiDiff)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 DoCastSpellIfCan(pTarget, SPELL_DEATHBLOOM);
 
             m_uiDeathbloomTimer = 30000;

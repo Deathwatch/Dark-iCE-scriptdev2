@@ -150,7 +150,7 @@ struct MANGOS_DLL_DECL boss_hadronoxAI : public ScriptedAI
             {
                 Creature* Trash = m_creature->SummonCreature(ID[k], fSpawnX+1, fSpawnY+1, m_creature->GetPositionZ(), m_creature->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
                 if(Trash) 
-			        if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+			        if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
 				        Trash->AI()->AttackStart(target);
             }
     }
@@ -206,7 +206,7 @@ struct MANGOS_DLL_DECL boss_hadronoxAI : public ScriptedAI
 
 		if(m_uiAcidCloudTimer < diff)
 		{
-			if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+			if(Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
 				m_creature->CastSpell(target, m_bIsRegularMode ? SPELL_ACID_CLOUD : H_SPELL_ACID_CLOUD, false);
 			m_uiAcidCloudTimer = 25000+rand()%10000;
 		}else m_uiAcidCloudTimer -= diff;
@@ -215,7 +215,7 @@ struct MANGOS_DLL_DECL boss_hadronoxAI : public ScriptedAI
 		{
 			for(uint8 i=0; i<3; ++i)
 			{
-				if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+				if(Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
 					m_creature->CastSpell(target, m_bIsRegularMode ? SPELL_LEECH_POISON : H_SPELL_LEECH_POISON, false);
 			}
 			m_uiLeechPoisonTimer = 10000;

@@ -141,7 +141,7 @@ struct MANGOS_DLL_DECL boss_volkhanAI : public ScriptedAI
                 pGolem->setFaction(14);
                 m_uiGolemsGUID[i][0] = pGolem->GetGUID();
                 m_uiGolemsGUID[i][1] = 0;
-                if(Unit* pPlayer = SelectUnit(SELECT_TARGET_RANDOM,0))
+                if(Unit* pPlayer = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                     pGolem->AI()->AttackStart(pPlayer);
             }
         }
@@ -163,18 +163,10 @@ struct MANGOS_DLL_DECL boss_volkhanAI : public ScriptedAI
         }
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
-    {
-        if (pSpell->Id == SPELL_TEMPER_DUMMY)
-            m_bIsStriking = true;
-    }
-
     void JustSummoned(Creature* pSummoned)
     {
         if (pSummoned->GetEntry() == NPC_MOLTEN_GOLEM)
         {
-            m_lGolemGUIDList.push_back(pSummoned->GetGUID());
-
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 pSummoned->AI()->AttackStart(pTarget);
 

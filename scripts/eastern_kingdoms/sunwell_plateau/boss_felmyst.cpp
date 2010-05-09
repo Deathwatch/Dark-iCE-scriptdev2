@@ -322,7 +322,7 @@ struct MANGOS_DLL_DECL boss_felmystAI : public ScriptedAI
 
             if(m_uiEncapsulateTimer < diff)
             {
-                if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                if(Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 {
                     m_uiEncapsulateGUID = target->GetGUID();
                     DoCastSpellIfCan(target, SPELL_ENCAPSULATE_CHANNEL);

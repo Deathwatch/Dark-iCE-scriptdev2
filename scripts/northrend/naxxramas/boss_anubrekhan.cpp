@@ -49,6 +49,7 @@ enum
     SPELL_SELF_SPAWN_10 = 28864, //This is used by the crypt guards when they die
  
 	NPC_CRYPT_GUARD		= 16573,
+	NPC_SMALL_SPAWN     = 16698,
     SPELL_ACID_SPIT		= 28969,
     SPELL_ACID_SPIT_H	= 56098,
     SPELL_CLEAVE		= 40504,

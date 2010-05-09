@@ -133,13 +133,6 @@ struct MANGOS_DLL_DECL boss_nothAI : public ScriptedAI
     void JustSummoned(Creature* pSummoned)
     {
         pSummoned->SetInCombatWithZone();
-
-		if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-        {
-            summoned->AddThreat(target,0.0f);
-            summoned->AI()->AttackStart(target);
-        }
-
     }
  
     void KilledUnit(Unit* pVictim)

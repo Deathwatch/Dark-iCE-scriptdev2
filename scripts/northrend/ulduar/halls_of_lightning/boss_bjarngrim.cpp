@@ -160,7 +160,7 @@ struct MANGOS_DLL_DECL boss_bjarngrimAI : public ScriptedAI
         {
             Creature* Guard = m_creature->SummonCreature(NPC_STORMFORGED_LIEUTENANT, m_creature->GetPositionX()+urand(1,4), m_creature->GetPositionY()+urand(1,4), m_creature->GetPositionZ(), m_creature->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
             if(Guard)
-                if(Unit* pPlayer = SelectUnit(SELECT_TARGET_RANDOM,0))
+                if(Unit* pPlayer = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                     Guard->AI()->AttackStart(pPlayer);
         }
     }

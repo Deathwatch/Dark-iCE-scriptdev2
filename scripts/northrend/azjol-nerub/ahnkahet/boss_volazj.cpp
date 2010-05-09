@@ -43,7 +43,7 @@ enum Spells
 {
     SPELL_FLY                       = 57941,
     SPELL_FLY_H                     = 59974,
-    SPELL_BOLT                      = 57942,
+	SPELL_BOLT                      = 57942,
     SPELL_BOLT_H                    = 59975,
     SPELL_SHIVER                    = 57949,
     SPELL_SHIVER_DMG                = 57952,
@@ -205,7 +205,7 @@ struct MANGOS_DLL_DECL boss_volazjAI : public ScriptedAI
 
         if(m_uiShiverTimer < uiDiff)
         {
-            if(Unit* pPlayer = SelectUnit(SELECT_TARGET_RANDOM, 0))
+            if(Unit* pPlayer = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 if(pPlayer->isAlive())
                     pPlayer->CastSpell(pPlayer, m_bIsRegularMode ? SPELL_SHIVER_DMG : SPELL_SHIVER_DMG_H, true);
             m_uiShiverTimer = urand(8000,12000);

@@ -371,7 +371,7 @@ DoCast(m_creature, SPELL_HASTE);
  
 if (Polymorph_Timer < diff)
         {
-if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM,1))
+if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,1))
 DoCast(target, m_bIsRegularMode ? SPELL_POLYMORPH : SPELL_POLYMORPH_H);
             Polymorph_Timer = 15000;
         }else Polymorph_Timer -= diff;
@@ -902,7 +902,7 @@ FoK_Timer = 7000;
  
 if (Poison_Timer < diff)
         {
-if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
 DoCast(m_creature, SPELL_POISON_BOTTLE);
             Poison_Timer = 6000;
         }else Poison_Timer -= diff;

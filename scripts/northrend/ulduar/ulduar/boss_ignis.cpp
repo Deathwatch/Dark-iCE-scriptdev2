@@ -299,7 +299,7 @@ struct MANGOS_DLL_DECL boss_ignisAI : public ScriptedAI
 
         if (m_uiSlagPotTimer < diff)
         {
-            if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 1))
+            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,1))
             {
                 if (DoCastSpellIfCan(target, m_bIsRegularMode ? SPELL_SLAG_POT : SPELL_SLAG_POT_H) == CAST_OK)
                 {

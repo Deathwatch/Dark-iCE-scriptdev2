@@ -471,7 +471,7 @@ struct MANGOS_DLL_DECL mob_singularityAI : public ScriptedAI
 
         if(ChangeTargetTimer < diff)
         {
-            if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 m_creature->Attack(target, true);
             ChangeTargetTimer = 5000;
         }else ChangeTargetTimer -= diff;

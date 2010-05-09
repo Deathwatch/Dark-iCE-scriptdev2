@@ -260,7 +260,7 @@ struct MANGOS_DLL_DECL boss_bjarngrimAI : public ScriptedAI
 
                 if (m_uiPummel_Timer < uiDiff)
                 {
-                    if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+                    if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                         DoCast(target, SPELL_PUMMEL);
                     m_uiPummel_Timer = urand(10000, 11000);
                 }
@@ -282,7 +282,7 @@ struct MANGOS_DLL_DECL boss_bjarngrimAI : public ScriptedAI
             {
                 if (m_uiIntercept_Timer < uiDiff)
                 {
-                    if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+                    if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                     //not much point is this, better random target and more often?
                         DoCast(target, SPELL_INTERCEPT);
                     m_uiIntercept_Timer = urand(45000, 46000);

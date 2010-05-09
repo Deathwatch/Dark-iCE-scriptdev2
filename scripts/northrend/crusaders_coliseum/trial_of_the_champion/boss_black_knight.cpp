@@ -87,7 +87,7 @@ struct MANGOS_DLL_DECL mob_toc5_risen_ghoulAI : public ScriptedAI
             if (m_creature->IsWithinDistInMap(m_creature->getVictim(), 4))
             {
                 DoCast(m_creature->getVictim(), SPELL_CLAW);
-                if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM,1))
+                if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,1))
                     m_creature->AI()->AttackStart(target);
                 Attack = 2500;
             }else
@@ -269,9 +269,9 @@ struct MANGOS_DLL_DECL boss_black_knightAI : public ScriptedAI
 
         if (Choke_Timer < diff && phase1)
         {
-            if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM,1))
-                DoCast(m_creature->getVictim(), SPELL_CHOKE);
-            Choke_Timer = 15000;
+			if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,1))
+				DoCast(m_creature->getVictim(), SPELL_CHOKE);
+			Choke_Timer = m_bIsRegularMode ? 15000 : 10000;
         }else Choke_Timer -= diff;
 
         if (Summon_Ghoul < diff && phase1 && !ghoul)
@@ -285,9 +285,9 @@ struct MANGOS_DLL_DECL boss_black_knightAI : public ScriptedAI
 
         if (Mark_Timer < diff && phase3)
         {
-            if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM,1))
-                DoCast(target, SPELL_MARK);
-            Mark_Timer = 15000;
+			if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,1))
+				DoCast(target, SPELL_MARK);
+			Mark_Timer = m_bIsRegularMode ? 15000 : 10000;
         }else Mark_Timer -= diff;
 
         if (Death_Timer < diff && phase3)

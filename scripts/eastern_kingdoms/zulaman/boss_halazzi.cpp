@@ -257,7 +257,7 @@ struct MANGOS_DLL_DECL boss_halazziAI : public ScriptedAI
 
             if(ShockTimer < diff)
             {
-                if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+                if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 {
                     if(target->IsNonMeleeSpellCasted(false))
                         DoCast(target,SPELL_EARTHSHOCK);
@@ -288,8 +288,7 @@ struct MANGOS_DLL_DECL boss_halazziAI : public ScriptedAI
         {
             if(CheckTimer < diff)
             {
-                Unit *Lynx = Unit::GetUnit(*m_creature, LynxGUID);
-                if(Lynx && m_creature->IsWithinDistInMap(Lynx, 6.0f))
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 {
                     if(TransformCount < 3)
                         EnterPhase(PHASE_LYNX);

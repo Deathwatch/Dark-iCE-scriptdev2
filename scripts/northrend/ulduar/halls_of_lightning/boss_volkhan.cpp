@@ -163,6 +163,26 @@ struct MANGOS_DLL_DECL boss_volkhanAI : public ScriptedAI
         }
     }
 
+    void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
+    {
+        if (pSpell->Id == SPELL_TEMPER_DUMMY)
+            m_bIsStriking = true;
+    }
+
+    void JustSummoned(Creature* pSummoned)
+    {
+        if (pSummoned->GetEntry() == NPC_MOLTEN_GOLEM)
+        {
+            m_lGolemGUIDList.push_back(pSummoned->GetGUID());
+
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+                pSummoned->AI()->AttackStart(pTarget);
+
+            //why healing when just summoned?
+            pSummoned->CastSpell(pSummoned, m_bIsRegularMode ? SPELL_HEAT_N : SPELL_HEAT_H, false, NULL, NULL, m_creature->GetGUID());
+        }
+    }
+
     void UpdateAI(const uint32 uiDiff)
     {
         //Return since we have no target

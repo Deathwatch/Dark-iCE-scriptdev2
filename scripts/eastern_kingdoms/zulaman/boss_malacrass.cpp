@@ -618,9 +618,16 @@ struct MANGOS_DLL_DECL boss_alyson_antilleAI : public boss_hexlord_addAI
 
         /*if(dispelmagic_timer < diff)
         {
-        if(rand()%2)
-        {
-        Unit* target = SelectTarget();
+            Unit* pTarget = NULL;
+            std::list<Creature*> lTempList = DoFindFriendlyCC(RANGE_FRIENDLY_TARGET);
+
+            if (!lTempList.empty())
+                pTarget = *(lTempList.begin());
+            else
+                pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
+
+            if (pTarget)
+                DoCastSpellIfCan(pTarget, SPELL_DISPEL_MAGIC);
 
         m_creature->CastSpell(target, SPELL_DISPEL_MAGIC, false);
         }
@@ -796,10 +803,13 @@ struct MANGOS_DLL_DECL boss_slitherAI : public boss_hexlord_addAI
 
         if (venomspit_timer < diff)
         {
-            Unit* victim = SelectUnit(SELECT_TARGET_RANDOM, 0);
-            m_creature->CastSpell(victim,SPELL_VENOM_SPIT, false);
+            if (Unit* pVictim = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+                DoCastSpellIfCan(pVictim, SPELL_VENOM_SPIT);
+
             venomspit_timer = 2500;
-        }else venomspit_timer -= diff;
+        }
+        else
+            venomspit_timer -= uiDiff;
 
         boss_hexlord_addAI::UpdateAI(diff);
     }
@@ -869,8 +879,9 @@ struct MANGOS_DLL_DECL boss_koraggAI : public boss_hexlord_addAI
         }
         if (coldstare_timer < diff)
         {
-            Unit* victim = SelectUnit(SELECT_TARGET_RANDOM, 0);
-            m_creature->CastSpell(victim,SPELL_COLD_STARE, false);
+            if (Unit* pVictim = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+                DoCastSpellIfCan(pVictim, SPELL_COLD_STARE);
+
             coldstare_timer = 12000;
         }
 

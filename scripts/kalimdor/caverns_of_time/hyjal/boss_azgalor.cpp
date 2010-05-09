@@ -157,7 +157,7 @@ struct MANGOS_DLL_DECL boss_azgalorAI : public ScriptedAI
 				case 2: DoPlaySoundToSet(m_creature, SAY_AGGRO); break;
 			}
 
-			if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+			if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
 			{
 				DoCast(target, SPELL_RAIN, false);
 				target->CastSpell(target, SPELL_FLAMES, false);

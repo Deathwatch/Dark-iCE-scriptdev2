@@ -956,7 +956,7 @@ struct MANGOS_DLL_DECL boss_steelbreakerAI : public ScriptedAI
 
         if (Static_Disruption_Timer < diff && supercharge1)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,1))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,1))
                 DoCast(pTarget, m_bIsRegularMode ? SPELL_STATIC_DISRUPTION : SPELL_STATIC_DISRUPTION_H);
             Static_Disruption_Timer = 60000;
         }else Static_Disruption_Timer -= diff;

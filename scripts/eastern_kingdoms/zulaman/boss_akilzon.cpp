@@ -202,7 +202,6 @@ struct MANGOS_DLL_DECL boss_akilzonAI : public ScriptedAI
 		    return (*j);
 		}
         return NULL;
-
     }
 
     void SetWeather(uint32 weather, float grade)
@@ -346,12 +345,8 @@ struct MANGOS_DLL_DECL boss_akilzonAI : public ScriptedAI
 
         if (StaticDisruption_Timer < diff)
         {
-            Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 1);
-            if(!target)
-                target = m_creature->getVictim();
-
-            TargetGUID = target->GetGUID();
-            m_creature->CastSpell(target, SPELL_STATIC_DISRUPTION, false);
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1))
+            m_creature->CastSpell(pTarget, SPELL_STATIC_DISRUPTION, false);
             m_creature->SetInFront(m_creature->getVictim());
             StaticDisruption_Timer = (10+rand()%8)*1000; // < 20s
 
@@ -374,11 +369,9 @@ struct MANGOS_DLL_DECL boss_akilzonAI : public ScriptedAI
 
         if (GustOfWind_Timer < diff)
         {
-            Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 1);
-            if (!target)
-                target = m_creature->getVictim();
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1))
+                m_creature->CastSpell(pTarget, SPELL_GUST_OF_WIND, false);
 
-            DoCast(target, SPELL_GUST_OF_WIND);
             GustOfWind_Timer = (20+rand()%10)*1000; //20 to 30 seconds(bosskillers)
         }else GustOfWind_Timer -= diff;
 
@@ -513,7 +506,7 @@ struct MANGOS_DLL_DECL mob_soaring_eagleAI : public ScriptedAI
 
         if(arrived)
         {
-            if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
             {
                 float x, y, z;
                 if(EagleSwoop_Timer)

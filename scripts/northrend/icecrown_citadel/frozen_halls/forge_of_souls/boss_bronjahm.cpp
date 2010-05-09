@@ -98,16 +98,16 @@ struct MANGOS_DLL_DECL boss_bronjahmAI : public ScriptedAI
             case 0: 
                     if  (bsw->timedQuery(SPELL_CORRUPT_SOUL, diff))
                         {
-                            if (Unit* pTarget= SelectUnit(SELECT_TARGET_RANDOM, 0))
-                                {
+                            if (Unit* pTarget= m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+                            {
                                 if (bsw->doCast(SPELL_CORRUPT_SOUL, pTarget) == CAST_OK)
-                                    {
+                                {
                                     DoScriptText(-1632006,m_creature,pTarget);
                                     float fPosX, fPosY, fPosZ;
                                     pTarget->GetPosition(fPosX, fPosY, fPosZ);
                                     bsw->doSummon(NPC_SOUL_FRAGMENT,fPosX, fPosY, fPosZ);
-                                    }
                                 }
+                            }
                         }
                     break;
             case 1: 

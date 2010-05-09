@@ -93,8 +93,8 @@ struct MANGOS_DLL_DECL boss_loathebAI : public ScriptedAI
         if (pSummoned->GetEntry() != NPC_SPORE)
             return;
 
-        if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-            pSummoned->AddThreat(pTarget);
+        if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+            summoned->AddThreat(pTarget);
     }
 
     void UpdateAI(const uint32 uiDiff)

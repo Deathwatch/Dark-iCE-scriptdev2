@@ -270,7 +270,7 @@ struct MANGOS_DLL_DECL boss_moroesAI : public ScriptedAI
                     m_creature->SetVisibility(VISIBILITY_ON);
                     DoScriptText(urand(0, 1) ? SAY_SPECIAL_1 : SAY_SPECIAL_2, m_creature);
 
-                    if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                    if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                         pTarget->CastSpell(pTarget, SPELL_GARROTE, true);
 
                     m_creature->setFaction(16);
@@ -428,7 +428,7 @@ struct MANGOS_DLL_DECL boss_baroness_dorothea_millstipeAI : public boss_moroes_g
 
         if (m_uiManaBurn_Timer < uiDiff)
         {
-            Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0);
+            Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
             if (pTarget && pTarget->getPowerType() == POWER_MANA)
                 DoCastSpellIfCan(pTarget, SPELL_MANABURN);
 
@@ -439,7 +439,7 @@ struct MANGOS_DLL_DECL boss_baroness_dorothea_millstipeAI : public boss_moroes_g
 
         if (m_uiShadowWordPain_Timer < uiDiff)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
             {
                 DoCastSpellIfCan(pTarget, SPELL_SWPAIN);
                 m_uiShadowWordPain_Timer = 7000;
@@ -566,7 +566,7 @@ struct MANGOS_DLL_DECL boss_lady_catriona_von_indiAI : public boss_moroes_guestA
 
         if (m_uiDispelMagic_Timer < uiDiff)
         {
-            if (Unit* pTarget = urand(0, 1) ? SelectTarget() : SelectUnit(SELECT_TARGET_RANDOM, 0))
+            if (Unit* pTarget = urand(0, 1) ? SelectTarget() : m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 DoCastSpellIfCan(pTarget, SPELL_DISPELMAGIC);
 
             m_uiDispelMagic_Timer = 25000;

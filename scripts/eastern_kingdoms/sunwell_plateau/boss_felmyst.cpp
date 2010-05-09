@@ -644,7 +644,7 @@ struct MANGOS_DLL_DECL mob_deathcloudAI : public Scripted_NoMovementAI
 				{
 					if(!cImage->isDead())
 					{
-						if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+						if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
 							cImage->CastSpell(target, m_uiImageGUID[i][1], true);
 						//DoCastSpellIfCan(cImage->getVictim(),m_uiImageGUID[i][1],
 					}

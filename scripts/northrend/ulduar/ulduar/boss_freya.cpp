@@ -113,7 +113,7 @@ struct MANGOS_DLL_DECL boss_freyaAI : public ScriptedAI
             x = (rand_norm() * 30.0f) - 15.0f;
             y = (rand_norm() * 30.0f) - 15.0f;
             Creature *lasher = DoSpawnCreature(CR_DETONATING_LASHER, x, y, 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 2000);
-            Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0);
+            Unit *target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
             if(lasher && target)
                 lasher->AddThreat(target, 1.0f);
         }
@@ -124,7 +124,7 @@ struct MANGOS_DLL_DECL boss_freyaAI : public ScriptedAI
         float x = (rand_norm() * 30.0f) - 15.0f;
         float y = (rand_norm() * 30.0f) - 15.0f;
         Creature *add = DoSpawnCreature(CR_ANCIENT_CONSERVATOR, x, y, 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 2000);
-        Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0);
+        Unit *target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
         if(add && target)
             add->AddThreat(target, 1.0f);
     }
@@ -134,17 +134,17 @@ struct MANGOS_DLL_DECL boss_freyaAI : public ScriptedAI
         Creature *add;
         Unit *target;
         add = DoSpawnCreature(CR_WATER_SPIRIT, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 2000);
-        target = SelectUnit(SELECT_TARGET_RANDOM, 0);
+        target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
         if(add && target)
             add->AddThreat(target, 1.0f);
 
         add = DoSpawnCreature(CR_STORM_LASHER, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 2000);
-        target = SelectUnit(SELECT_TARGET_RANDOM, 0);
+        target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
         if(add && target)
             add->AddThreat(target, 1.0f);
 
         add = DoSpawnCreature(CR_SNAPLASHER, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 2000);
-        target = SelectUnit(SELECT_TARGET_RANDOM, 0);
+        target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
         if(add && target)
             add->AddThreat(target, 1.0f);
     }
@@ -199,7 +199,7 @@ struct MANGOS_DLL_DECL boss_freyaAI : public ScriptedAI
         //All phases
         if(SunbeamTimer < diff)
         {
-            if( Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+            if( Unit *target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 DoCast(target, Regular ? SP_SUNBEAM : H_SP_SUNBEAM);
             SunbeamTimer = 6000 + rand()%10000;
         }

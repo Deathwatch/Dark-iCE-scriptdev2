@@ -589,7 +589,7 @@ case 2: DoPlaySoundToSet(m_creature, SAY_KALEC_ORB_READY3); break;
 {
 if(!Sinister->isDead())
 {
-if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
 Sinister->CastSpell(target, m_uiSinisterGUID[i][1], true);
 }
 }
@@ -608,7 +608,7 @@ Sinister->CastSpell(target, m_uiSinisterGUID[i][1], true);
             
             for(uint8 i=0; i<h; ++i)
             {
-                if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+                if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                     Creature* Armagedon = m_creature->SummonCreature(ID_ARMAGEDON, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 15000);
             }
             m_uiAramageddonTimer = 14000;
@@ -616,7 +616,7 @@ Sinister->CastSpell(target, m_uiSinisterGUID[i][1], true);
  
         if((m_uiShadowSpikeEndsTimer < diff) && m_bShadowSpikeEnds && m_bPhase3)
         {
-            if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
             {
                 if(Creature* cShadowSpike = m_creature->SummonCreature(ID_SHADOWSPIKE, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 6000))
                 {
@@ -861,7 +861,7 @@ m_creature->AI()->AttackStart(who);
             {
                 Creature* Imp = m_creature->SummonCreature(ID_IMP, m_fxx, m_fyy, m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 60000);
                 if(Imp)
-                    if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+                    if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                         Imp->AI()->AttackStart(target);
             }
             m_uiImpTimer = 5000;
@@ -907,7 +907,7 @@ struct MANGOS_DLL_DECL mob_orbAI : public Scripted_NoMovementAI
         {
             for(uint8 i=0; i<3; ++i)
             {
-                if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+                if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                     m_creature->CastSpell(target, SPELL_ORB_BOLT, true);
             }
             m_uiSpellTimer = 1000;
@@ -1105,7 +1105,7 @@ Reset();
         {
             Creature* Deveiver = m_creature->SummonCreature(ID_DECIVER, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
                 if(Deveiver)
-                    if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+                    if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                         Deveiver->AI()->AttackStart(target);
         }
     }

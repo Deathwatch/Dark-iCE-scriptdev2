@@ -243,23 +243,20 @@ struct MANGOS_DLL_DECL boss_nalorakkAI : public ScriptedAI
                // else Mangle_Timer = 10000 + rand()%5000;
             }else Mangle_Timer -= diff;
 
-            if(Surge_Timer < diff)
+            //Surge
+            if (Surge_Timer < diff)
             {
-                DoScriptText(SAY_SURGE, m_creature);
+                //select a random unit other than the main tank
+                Unit *target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1);
 
-                Unit *target = SelectRandomPlayer(45);
-                if(!target) target = m_creature->getVictim();
-                isCharging = true;
-                ChargeTargetGUID = target->GetGUID();
+                //if there aren't other units, cast on the tank
+                if (!target)
+                    target = m_creature->getVictim();
 
-                float x, y, z;
-                target->GetContactPoint(m_creature, x, y, z);
-                m_creature->SetSpeedRate(MOVE_RUN, 5.0f);
-                m_creature->GetMotionMaster()->Clear();
-                m_creature->GetMotionMaster()->MovePoint(0, x, y, z);
+                if (DoCastSpellIfCan(target, SPELL_SURGE) == CAST_OK)
+                    DoScriptText(SAY_SURGE, m_creature);
 
-                Surge_Timer = 15000 + rand()%5000;
-                return;
+                Surge_Timer = urand(15000, 32500);
             }else Surge_Timer -= diff;
         }
         else

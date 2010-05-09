@@ -204,8 +204,8 @@ struct MANGOS_DLL_DECL boss_nadoxAI : public ScriptedAI
 
         if (m_uiBroodPlagueTimer < uiDiff)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
-                DoCast(pTarget, m_bIsRegularMode ? SPELL_BROOD_PLAGUE : SPELL_BROOD_PLAGUE_H);
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+                DoCastSpellIfCan(pTarget, m_bIsRegularMode ? SPELL_BROOD_PLAGUE : SPELL_BROOD_PLAGUE_H);
 
             m_uiBroodPlagueTimer = 20000;
         }

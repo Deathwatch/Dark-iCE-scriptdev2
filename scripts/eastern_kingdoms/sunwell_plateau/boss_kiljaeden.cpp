@@ -527,7 +527,7 @@ struct MANGOS_DLL_DECL boss_kiljadenAI : public Scripted_NoMovementAI
 			{
                 if(Unit* Sinister = Unit::GetUnit(*m_creature, m_uiSinisterGUID[i][0]))
 				{
-					if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+					if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
 						Sinister->CastSpell(target, m_uiSinisterGUID[i][1], true);
 				}
 			}
@@ -546,7 +546,7 @@ struct MANGOS_DLL_DECL boss_kiljadenAI : public Scripted_NoMovementAI
             
             for(uint8 i=0; i<h; ++i)
             {
-                if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+                if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                     Creature* Armagedon = m_creature->SummonCreature(ID_ARMAGEDON, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 15000);
             }
             m_uiAramageddonTimer = 14000;
@@ -554,7 +554,7 @@ struct MANGOS_DLL_DECL boss_kiljadenAI : public Scripted_NoMovementAI
 
         if((m_uiShadowSpikeEndsTimer < diff) && m_bShadowSpikeEnds && m_bPhase3)
         {
-            if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
             {
                 cShadowSpike = m_creature->SummonCreature(ID_SHADOWSPIKE, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 6000);
                 cShadowSpike->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -864,7 +864,7 @@ struct MANGOS_DLL_DECL mob_deceiverAI : public ScriptedAI
             {
                 Creature* Imp = m_creature->SummonCreature(ID_IMP, m_fxx, m_fyy, m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 60000);
                 if(Imp)
-                    if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+                    if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                         Imp->AI()->AttackStart(target);  
             }
             m_uiImpTimer = 5000;
@@ -910,7 +910,7 @@ struct MANGOS_DLL_DECL mob_orbAI : public Scripted_NoMovementAI
         {
             for(uint8 i=0; i<3; ++i)
             {
-                if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+                if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                     m_creature->CastSpell(target, SPELL_ORB_BOLT, true);
             }
             m_uiSpellTimer = 1000;
@@ -1108,7 +1108,7 @@ struct MANGOS_DLL_DECL mob_kiljaeden_controllerAI : public Scripted_NoMovementAI
         {
             Creature* Deveiver = m_creature->SummonCreature(ID_DECIVER, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 10000);
                 if(Deveiver)
-                    if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+                    if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                         Deveiver->AI()->AttackStart(target);
         }*/
     }

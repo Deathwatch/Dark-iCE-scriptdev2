@@ -725,7 +725,7 @@ struct MANGOS_DLL_DECL boss_sacrolashAI : public ScriptedAI
                     image->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     image->setFaction(14); 
 
-                    if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+                    if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                         image->AI()->AttackStart(target);
 			    }
             }

@@ -132,5 +132,4 @@ class PlayerAtMinimumRangeAway
         Unit const* pUnit;
         float fRange;
 };
-
 #endif

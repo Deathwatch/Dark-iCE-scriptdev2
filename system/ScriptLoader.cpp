@@ -324,7 +324,6 @@ extern void AddSC_boss_four_horsemen();
 extern void AddSC_boss_faerlina();
 extern void AddSC_boss_gluth();
 extern void AddSC_boss_thaddius();
-extern void AddSC_howling_fjord();
 extern void AddSC_boss_kelthuzad();
 extern void AddSC_boss_loatheb();
 extern void AddSC_boss_maexxna();
@@ -342,6 +341,7 @@ extern void AddSC_instance_nexus();
 extern void AddSC_boss_sartharion();                        //obsidian_sanctum
 extern void AddSC_instance_obsidian_sanctum();
 extern void AddSC_instance_vault_of_archavon();             //vault_of_archavon
+extern void AddSC_boss_toravon();
 extern void AddSC_boss_koralon();
 extern void AddSC_boss_toravon();
 extern void AddSC_boss_emalon();
@@ -398,6 +398,7 @@ extern void AddSC_borean_tundra();
 extern void AddSC_dalaran();
 extern void AddSC_dragonblight();
 extern void AddSC_grizzly_hills();
+extern void AddSC_howling_fjord();
 extern void AddSC_icecrown();
 extern void AddSC_sholazar_basin();
 extern void AddSC_storm_peaks();
@@ -414,6 +415,8 @@ extern void AddSC_boss_deathbringer_saurfang();
 extern void AddSC_boss_rotface();
 extern void AddSC_boss_festergut();
 extern void AddSC_boss_proffesor_putricide();
+extern void AddSC_blood_prince_council();
+extern void AddSC_boss_blood_queen_lanathel();
 
 extern void AddSC_instance_forge_of_souls();                // Forge_of_souls
 extern void AddSC_boss_bronjahm();
@@ -832,10 +835,10 @@ void AddScripts()
     AddSC_instance_obsidian_sanctum();
 
 	AddSC_instance_vault_of_archavon();             		//vault_of_archavon
-	AddSC_boss_koralon();
-	AddSC_boss_emalon();
-	AddSC_boss_archavon();
-        AddSC_boss_toravon();
+    AddSC_boss_toravon();
+    AddSC_boss_koralon();
+    AddSC_boss_emalon();
+    AddSC_boss_archavon();
 
     AddSC_boss_bjarngrim();                                 //Ulduar, halls_of_lightning
     AddSC_boss_ionar();
@@ -906,6 +909,8 @@ void AddScripts()
     AddSC_boss_rotface();
     AddSC_boss_festergut();
     AddSC_boss_proffesor_putricide();
+    AddSC_blood_prince_council();
+    AddSC_boss_blood_queen_lanathel();
 
 	AddSC_instance_forge_of_souls();                        // Forge_of_souls
     AddSC_boss_bronjahm();

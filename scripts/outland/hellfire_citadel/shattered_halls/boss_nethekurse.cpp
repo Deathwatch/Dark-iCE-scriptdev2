@@ -285,14 +285,14 @@ struct MANGOS_DLL_DECL boss_grand_warlock_nethekurseAI : public ScriptedAI
         {
             if (ShadowFissure_Timer < diff)
             {
-                if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM,0))
+                if (Unit *target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                     DoCastSpellIfCan(target,SPELL_SHADOW_FISSURE);
                 ShadowFissure_Timer = urand(7500, 15000);
             }else ShadowFissure_Timer -= diff;
 
             if (DeathCoil_Timer < diff)
             {
-                if (Unit *target = SelectUnit(SELECT_TARGET_RANDOM,0))
+                if (Unit *target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))))
                     DoCastSpellIfCan(target,m_bIsRegularMode ? SPELL_DEATH_COIL : H_SPELL_DEATH_COIL);
                 DeathCoil_Timer = urand(15000, 20000);
             }else DeathCoil_Timer -= diff;

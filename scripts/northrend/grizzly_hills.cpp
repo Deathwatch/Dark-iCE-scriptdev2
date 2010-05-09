@@ -21,17 +21,13 @@ SDComment: Quest support: 12247, 12231
 SDCategory: Grizzly Hills
 EndScriptData */
 
-/* ContentData
-npc_orsonn_and_kodian
-EndContentData */
-
 #include "precompiled.h"
 
-#define GOSSIP_ITEM1 "Ihr seid frei zu gehen, Orsonn, aber erz\303\244hlt mir zuerst, was mit den Furbolg nicht stimmt."
-#define GOSSIP_ITEM2 "Was ist dann passiert?"
-#define GOSSIP_ITEM3 "Habt Dank, Sohn des Ursoc. Ich werde sehen, was ich tun kann."
-#define GOSSIP_ITEM4 "Dieser Fremde, wer war das?"
-#define GOSSIP_ITEM5 "Habt Dank, Kodian. Ich werde tun, was ich kann."
+# define GOSSIP_ITEM1 "You are free to go, Orsonn, but first tell me what is wrong with the Furbolg."
+# Define GOSSIP_ITEM2 "What happened then?"
+# define GOSSIP_ITEM3 "Thanks, Son of Ursoc. I'll see what I can do."
+# Define GOSSIP_ITEM4 "This stranger, who was that?"
+# Define GOSSIP_ITEM5 "Thanks, Kodian. I'll do what I can."
 
 enum
 {

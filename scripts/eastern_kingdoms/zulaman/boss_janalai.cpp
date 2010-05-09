@@ -342,6 +342,16 @@ struct MANGOS_DLL_DECL boss_janalaiAI : public ScriptedAI
         if(!enraged && m_creature->GetHealth() * 4 < m_creature->GetMaxHealth())
             EnrageTimer = 0;
 
+        //FIRE BREATH  several videos says every 8Secounds
+        if (fire_breath_timer < diff)
+        {
+            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                DoCastSpellIfCan(target,SPELL_FLAME_BREATH);
+            fire_breath_timer = 8000;
+        }
+        else 
+            fire_breath_timer -=diff;
+
         if(EnrageTimer < diff)
         {
             if(!enraged)
@@ -433,7 +443,7 @@ struct MANGOS_DLL_DECL boss_janalaiAI : public ScriptedAI
 
         if(FireBreathTimer < diff)
         {
-            if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
             {
                 m_creature->AttackStop();
                 m_creature->GetMotionMaster()->Clear();
@@ -647,10 +657,11 @@ struct MANGOS_DLL_DECL mob_hatchlingAI : public ScriptedAI
 
         if(BuffetTimer < diff)
         {
-            m_creature->CastSpell(m_creature->getVictim(), SPELL_FLAMEBUFFET, false);
-            BuffetTimer = 5000;
-        }else BuffetTimer -= diff;
-
+            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                DoCastSpellIfCan(target,SPELL_FLAMEBUFFED);
+            BuffetTimer = 7000;
+        }
+		    else BuffetTimer -=diff;
         DoMeleeAttackIfReady();
     }
 };

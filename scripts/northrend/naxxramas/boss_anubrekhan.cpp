@@ -134,7 +134,42 @@ struct MANGOS_DLL_DECL boss_anubrekhanAI : public ScriptedAI
  
         ScriptedAI::MoveInLineOfSight(pWho);
     }
- 
+
+    void Despawnall()
+    {
+        std::list<Creature*> m_pSmall;
+        GetCreatureListWithEntryInGrid(m_pSmall, m_creature, NPC_SMALL_SPAWN, DEFAULT_VISIBILITY_INSTANCE);
+
+        if (!m_pSmall.empty())
+            for(std::list<Creature*>::iterator itr = m_pSmall.begin(); itr != m_pSmall.end(); ++itr)
+            {
+                (*itr)->ForcedDespawn();
+            }
+
+        std::list<Creature*> m_pGuard;
+        GetCreatureListWithEntryInGrid(m_pGuard, m_creature, NPC_CRYPT_GUARD, DEFAULT_VISIBILITY_INSTANCE);
+
+        if (!m_pGuard.empty())
+            for(std::list<Creature*>::iterator iter = m_pGuard.begin(); iter != m_pGuard.end(); ++iter)
+            {
+                (*iter)->ForcedDespawn();
+            }
+    }
+    void StartSummonGuard()
+    {
+        m_creature->SummonCreature(NPC_CRYPT_GUARD, 3307, -3465, 287, 3.5, TEMPSUMMON_CORPSE_DESPAWN, 0);
+        if(!m_bIsRegularMode)
+            m_creature->SummonCreature(NPC_CRYPT_GUARD, 3304, -3490, 287, 2.5, TEMPSUMMON_CORPSE_DESPAWN, 0);
+        
+    }
+    
+    void SummonGuard()
+    {
+        //DoCast(m_creature, SPELL_SUMMONGUARD);
+        if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+            m_creature->SummonCreature(NPC_CRYPT_GUARD, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
+    }
+
     void UpdateAI(const uint32 uiDiff)
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
@@ -147,7 +182,7 @@ struct MANGOS_DLL_DECL boss_anubrekhanAI : public ScriptedAI
             //Do NOT cast it when we are afflicted by locust swarm
             if (!m_creature->HasAura(SPELL_LOCUSTSWARM) || !m_creature->HasAura(SPELL_LOCUSTSWARM_H))
             {
-                if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+                if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                     DoCastSpellIfCan(target, m_bIsRegularMode ? SPELL_IMPALE : SPELL_IMPALE_H);
             }
  

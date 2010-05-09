@@ -177,7 +177,7 @@ struct MANGOS_DLL_DECL boss_volazjAI : public ScriptedAI
             {
                 Unit* pImage = Unit::GetUnit((*m_creature), m_uiImageGUID[i][0]);
 				if(pImage && pImage->isAlive())
-					if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+					if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
 						pImage->CastSpell(target, m_uiImageGUID[i][1], true);
             }
             m_uiImageCastTimer = 8000;

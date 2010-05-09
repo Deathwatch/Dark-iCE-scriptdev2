@@ -1,0 +1,63 @@
+Map
+id: 724 (10m h10m 25m h25m)
+area ID: 4987
+areatrigger0: 5869 (entry)
+areatrigger1: 5867 (Script trigger)
+areatrigger2: 5872 (Exit)
+
+Creature
+name: Halion ( the Twilight Destroyer)
+Info: Boss
+name: General Zarithrian 
+Info: Add
+name: Baltharus the Warborn
+Info: Add
+name: Saviana Ragefire
+Info: Add
+name: xerestrasza
+Info: NPC
+name: Ruby Drakonid 
+Info: Trash
+name: Ruby Drake 
+Info: Trash
+name: Ruby Scalebane 
+Info: Trash
+name: Ruby Drake 
+Info: Trash
+name: Ruby Dragon 
+Info: Trash
+
+WORLD STATES
+5049: Halion's corporeality % (10 Man) dmg taken inc & dmg done inc
+5050: Halion's corporeality % (25 Man) dmg taken inc & dmg done inc
+
+GO
+Name: Twilight Portal Entry
+Info:
+Name: Twilight Portal Exit
+Info:
+Name: Fire ring 
+Info: Around halion ??
+Name: Fire wall small 
+Info:
+Name: Fire wall Large 
+Info:
+Name: Tree (Burning)
+Info: xerestrasza is trapped within
+
+SQL
+Creature Template
+Creature Spawns (Coming soon)
+Gameobject Template
+Object Spawns (Coming soon)
+Loot
+Item Template
+Scriptdev2
+Extras
+
+The Fight
+Once you enter the instance xerestrasza is trapped withing a tree. once you release her she talks then hangs around.
+Halion has 3 phases 
+Phase 1 dps burn
+Phase 2 at 70% inside twilight realm (Whole raid)
+Phase 3 20% (out of twilight realm) dps burn

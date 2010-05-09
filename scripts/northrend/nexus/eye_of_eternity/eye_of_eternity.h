@@ -13,5 +13,4 @@ enum
     GO_ALEXSTRASZAS_GIFT         = 193905, // Loot chest
     GO_ALEXSTRASZAS_GIFT_H       = 193967, // Loot chest
 };
-
 #endif

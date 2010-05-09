@@ -1,4 +1,4 @@
-/* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2006 - 2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -54,7 +54,6 @@ struct MANGOS_DLL_DECL instance_eye_of_eternity : public ScriptedInstance
         m_uiGiftHeroGUID = 0;
         m_uiGiftGUID =  0;
     }
-
     void OnCreatureCreate(Creature* pCreature)
     {
         switch(pCreature->GetEntry())
@@ -107,7 +106,6 @@ struct MANGOS_DLL_DECL instance_eye_of_eternity : public ScriptedInstance
                 m_uiOutroCheck = uiData;
                 break;
         }
-
         OUT_SAVE_INST_DATA;
         std::ostringstream saveStream;
         saveStream << m_auiEncounter[0] << " " << m_uiOutroCheck;

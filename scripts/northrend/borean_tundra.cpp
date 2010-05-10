@@ -31,7 +31,7 @@ npc_lurgglbr
 EndContentData */
 
 #include "precompiled.h"
-#include "follower_ai.h"
+#include "follower_ai.h
 #include "escort_ai.h"
 
 /*######
@@ -372,6 +372,7 @@ bool GossipSelect_npc_orphaned_calf(Player* pPlayer, Creature* pCreature, uint32
     }
 
     return true;
+}
 
 /*######
 ## npc_lurgglbr
@@ -542,7 +543,6 @@ bool QuestAccept_npc_lurgglbr(Player* pPlayer, Creature* pCreature, const Quest*
 CreatureAI* GetAI_npc_lurgglbr(Creature* pCreature)
 {
     return new npc_lurgglbrAI(pCreature);
-
 }
 
 void AddSC_borean_tundra()
@@ -595,10 +595,10 @@ void AddSC_borean_tundra()
     newscript->pGossipHello = &GossipHello_npc_tiare;
     newscript->pGossipSelect = &GossipSelect_npc_tiare;
     newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_lurgglbr";
-    newscript->GetAI = &GetAI_npc_lurgglbr;
-    newscript->pQuestAccept = &QuestAccept_npc_lurgglbr;
-    newscript->RegisterSelf();
+	
+	newscript = new Script;
+	newscript->Name = "npc_lurgglbr";
+	newscript->GetAI = &GetAI_npc_lurgglbr;
+	newscript->pQuestAccept = &QuestAccept_npc_lurgglbr;
+	newscript->RegisterSelf();
 }

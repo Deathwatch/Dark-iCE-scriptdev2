@@ -2153,6 +2153,11 @@ struct MANGOS_DLL_DECL mob_mirror_imageAI : public ScriptedAI
 
     void Reset()
     {
+        m_creature->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
+        m_creature->SetUInt32Value(UNIT_FIELD_BYTES_0, 2048);
+        m_creature->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
+        m_creature->SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);
+
         m_uiFrostboltTimer = 1000;
         m_uiFireBlastTimer = urand(4500, 6000);
     }
@@ -2176,6 +2181,12 @@ struct MANGOS_DLL_DECL mob_mirror_imageAI : public ScriptedAI
             {
                 fDist = m_creature->GetDistance(pOwner);
                 fAngle = m_creature->GetAngle(pOwner);
+
+                if(pOwner->IsPvP())
+                    m_creature->SetPvP(true);
+                if(pOwner->IsFFAPvP())
+                    m_creature->SetFFAPvP(true);
+
                 pOwner->CastSpell(m_creature, 57507, true); // Not right spell, but it has both auras we need
             }
             bLocked = true;

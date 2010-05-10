@@ -77,14 +77,14 @@ struct MANGOS_DLL_DECL boss_toravonAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        if (m_uiEvadeCheckCooldown < diff)
+        if (m_uiEvadeCheckCooldown < uiDiff)
         {
             if (m_creature->GetDistance2d(-43.68f, -289.02f) > 80.0f)
                 EnterEvadeMode();
             m_uiEvadeCheckCooldown = 2000;
         }
         else
-            m_uiEvadeCheckCooldown -= diff;
+            m_uiEvadeCheckCooldown -= uiDiff;
 
         if(WhiteoutTimer < uiDiff)
         {

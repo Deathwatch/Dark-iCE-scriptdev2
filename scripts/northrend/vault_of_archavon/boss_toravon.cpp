@@ -72,29 +72,29 @@ struct MANGOS_DLL_DECL boss_toravonAI : public ScriptedAI
         orb->SetInCombatWithZone();
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 uiDiff)
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        if (m_uiEvadeCheckCooldown < diff)
+        if (m_uiEvadeCheckCooldown < uiDiff)
         {
             if (m_creature->GetDistance2d(-43.68f, -289.02f) > 80.0f)
                 EnterEvadeMode();
             m_uiEvadeCheckCooldown = 2000;
         }
         else
-            m_uiEvadeCheckCooldown -= diff;
+            m_uiEvadeCheckCooldown -= uiDiff;
 
-        if(WhiteoutTimer < diff)
+        if(WhiteoutTimer < uiDiff)
         {
             DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SP_WHITEOUT : H_SP_WHITEOUT);
             WhiteoutTimer = 40000;
         }
         else
-            WhiteoutTimer -= diff;
+            WhiteoutTimer -= uiDiff;
 
-        if(OrbsTimer < diff)
+        if(OrbsTimer < uiDiff)
         {
             for(int i=0; i<orbsNum; ++i)
             {
@@ -104,15 +104,15 @@ struct MANGOS_DLL_DECL boss_toravonAI : public ScriptedAI
             OrbsTimer = 40000;
         }
         else
-            OrbsTimer -= diff;
+            OrbsTimer -= uiDiff;
 
-        if(FreezeTimer < diff)
+        if(FreezeTimer < uiDiff)
         {
             DoCastSpellIfCan(m_creature, SP_FREEZING_GROUND);
             FreezeTimer = 20000 + rand()%5000;
         }
         else
-            FreezeTimer -= diff;
+            FreezeTimer -= uiDiff;
 
         DoMeleeAttackIfReady();
     }

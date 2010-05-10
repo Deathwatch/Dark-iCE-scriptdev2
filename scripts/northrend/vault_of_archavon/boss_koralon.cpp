@@ -65,15 +65,6 @@ struct MANGOS_DLL_DECL boss_koralonAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        if (m_uiEvadeCheckCooldown < uiDiff)
-        {
-            if (m_creature->GetDistance2d(-218.57f, 103.86f) > 80.0f)
-                EnterEvadeMode();
-            m_uiEvadeCheckCooldown = 2000;
-        }
-        else
-            m_uiEvadeCheckCooldown -= uiDiff;
-
         if(BurningBreathTimer < uiDiff)
         {
             DoCastSpellIfCan(m_creature, Regular ? SP_BURNING_BREATH : H_SP_BURNING_BREATH);

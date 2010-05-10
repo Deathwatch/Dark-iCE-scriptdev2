@@ -219,10 +219,10 @@ void UpdateAI(const uint32 diff)
 
     Unit *target = m_creature->getVictim();
 
-       if(target == SelectUnit(SELECT_TARGET_TOPAGGRO,0) && !target->isAlive() && !m_creature->IsNonMeleeSpellCasted(false))
+       if(target == m_creature->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO,0) && !target->isAlive() && !m_creature->IsNonMeleeSpellCasted(false))
        {
           Unit* target2 = NULL;
-          target2 = SelectUnit(SELECT_TARGET_TOPAGGRO,1);
+          target2 = m_creature->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO,1);
           m_creature->getThreatManager().modifyThreatPercent(target,-100);
           if(target2 && target2->isAlive())
               {

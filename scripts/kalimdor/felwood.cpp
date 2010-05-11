@@ -331,6 +331,93 @@ bool ChooseReward_npc_niby_the_almighty(Player* pPlayer, Creature* pCreature, co
     return true;
 }
 
+/*###### 
+## npc_kroshius 
+######*/ 
+enum { 
+	    NPC_KROSHIUS        = 14467, 
+	    SPELL_KNOCKBACK     = 10101, 
+	    SAY_KROSHIUS_REVIVE = -1022000 
+}; 
+
+struct MANGOS_DLL_DECL npc_kroshiusAI : public ScriptedAI 
+{ 
+    uint32 m_uiKnockBackTimer; 
+	bool m_bIAmDeadKroshius; 
+	 
+    npc_kroshiusAI(Creature* pCreature) : ScriptedAI(pCreature) 
+    { 
+        //TemporarySummon* p_unit = dynamic_cast<TemporarySummon*>(pCreature); 
+        //if (p_unit)
+        if(m_creature->isTemporarySummon())
+            m_bIAmDeadKroshius = false; 
+        else 
+            m_bIAmDeadKroshius = true; 
+
+        if (!m_bIAmDeadKroshius) 
+        { 
+            std::list<Creature*> lAddsList; 
+            GetCreatureListWithEntryInGrid(lAddsList, m_creature, NPC_KROSHIUS, 100.0f); 
+
+            // despawn dead krosius if present 
+            for(std::list<Creature*>::iterator itr = lAddsList.begin(); itr != lAddsList.end(); ++itr) 
+            { 
+	            //TemporarySummon* temp = dynamic_cast<TemporarySummon*>((*itr)); 
+                //if (!temp) 
+                if(!(*itr)->isTemporarySummon())
+                { 
+                    (*itr)->ForcedDespawn(0); 
+                    break; 
+	            } 
+	        } 
+	    } 
+ 
+        Reset(); 
+	 
+	        if (!m_bIAmDeadKroshius) 
+	            DoScriptText(SAY_KROSHIUS_REVIVE, m_creature);      //Yell on "Revive" 
+	    } 
+	 
+	void Reset() 
+	{ 
+        if (!m_bIAmDeadKroshius) 
+        { 
+            m_uiKnockBackTimer=3000; 
+	        //Change faction to be attackable 
+            m_creature->setFaction(90); 
+            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_OOC_NOT_ATTACKABLE); 
+	        m_creature->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_TAPPED | UNIT_DYNFLAG_DEAD); 
+	    } 
+    } 
+	 
+    void JustRespawned() 
+    { 
+	        // workaround? core sets dynamicflags 0 on respawn 
+	        if (m_bIAmDeadKroshius) 
+	            m_creature->SetUInt32Value(UNIT_DYNAMIC_FLAGS, m_creature->GetCreatureInfo()->dynamicflags); 
+	}
+
+	void UpdateAI(const uint32 diff) 
+    { 
+	        //Return since we have no target 
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim() || m_bIAmDeadKroshius) 
+            return; 
+	 
+	    if (m_uiKnockBackTimer<diff) 
+	    { 
+            DoCast(m_creature->getVictim(),SPELL_KNOCKBACK); 
+            m_uiKnockBackTimer = urand(10000, 16000); 
+	    }else m_uiKnockBackTimer -= diff; 
+ 
+	    DoMeleeAttackIfReady(); 
+    } 
+}; 
+ 
+CreatureAI* GetAI_npc_kroshius(Creature* pCreature) 
+{
+    return new npc_kroshiusAI(pCreature); 
+} 
+
 void AddSC_felwood()
 {
     Script* newscript;
@@ -358,4 +445,9 @@ void AddSC_felwood()
     newscript->GetAI = &GetAI_npc_niby_the_almighty;
     newscript->pChooseReward = &ChooseReward_npc_niby_the_almighty;
     newscript->RegisterSelf();
+	
+	newscript = new Script; 
+ 	newscript->Name = "npc_kroshius"; 
+ 	newscript->GetAI = &GetAI_npc_kroshius; 
+ 	newscript->RegisterSelf();
 }

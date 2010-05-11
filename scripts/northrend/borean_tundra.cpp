@@ -31,7 +31,7 @@ npc_lurgglbr
 EndContentData */
 
 #include "precompiled.h"
-#include "follower_ai.h
+#include "follower_ai.h"
 #include "escort_ai.h"
 
 /*######

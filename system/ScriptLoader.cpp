@@ -371,6 +371,8 @@ extern void AddSC_boss_thorim();
 extern void AddSC_boss_xt002();
 extern void AddSC_boss_yogg_saron();
 extern void AddSC_instance_ulduar();
+extern void AddSC_ulduar();
+extern void AddSC_ulduar_teleport();
 
 extern void AddSC_boss_ingvar();                            //utgarde_keep
 extern void AddSC_boss_keleseth();
@@ -867,7 +869,7 @@ void AddScripts()
     AddSC_boss_xt002();
     AddSC_boss_yogg_saron();
     AddSC_instance_ulduar();
-
+    AddSC_ulduar();
     AddSC_boss_ingvar();                                    //utgarde_keep
     AddSC_boss_keleseth();
     AddSC_boss_skarvald_and_dalronn();

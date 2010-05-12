@@ -328,14 +328,14 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
 
         /*if (Light_Bomb_Timer < diff && !phase2)
         {
-            if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM,1))
+            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,1))
                 DoCast(target, m_bIsRegularMode ? SPELL_LIGHT_BOMB : SPELL_LIGHT_BOMB_H);
             Light_Bomb_Timer = m_bIsRegularMode ? 14000 :7000;
         }else Light_Bomb_Timer -= diff;   
 
         if (Gravity_Bomb_Timer < diff && !phase2)
         {
-            if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM,1))
+            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,1))
                 DoCast(target, m_bIsRegularMode ? SPELL_GRAVITY_BOMB : SPELL_GRAVITY_BOMB_H);
             Gravity_Bomb_Timer = m_bIsRegularMode ? 18000 :11000;
         }else Gravity_Bomb_Timer -= diff;  */
@@ -522,7 +522,7 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
             if (!add4 && add3 && add2 && add1)
             {
                 if (Creature* pTemp = m_creature->SummonCreature(NPC_PUMMELER, XtAddX[3], XtAddY[3], XtAddZ[3], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
-                if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM,0))
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 {
                     pTemp->AddThreat(pTarget,0.0f);
                     pTemp->AI()->AttackStart(pTarget);

@@ -459,7 +459,7 @@ scripts/northrend/ulduar/ulduar/boss_kologarn.cpp \
 scripts/northrend/ulduar/ulduar/boss_mimiron.cpp \
 scripts/northrend/ulduar/ulduar/boss_razorscale.cpp \
 scripts/northrend/ulduar/ulduar/boss_thorim.cpp \
-scripts/northrend/ulduar/ulduar/boss_xt_002.cpp \
+scripts/northrend/ulduar/ulduar/boss_xt002.cpp \
 scripts/northrend/ulduar/ulduar/boss_yogg_saron.cpp \
 scripts/northrend/ulduar/ulduar/def_ulduar.h \
 scripts/northrend/ulduar/ulduar/instance_ulduar.cpp \

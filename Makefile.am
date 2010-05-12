@@ -38,8 +38,6 @@ base/simple_ai.cpp \
 base/simple_ai.h \
 include/precompiled.cpp \
 include/precompiled.h \
-include/sc_boss_spell_worker.cpp \
-include/sc_boss_spell_worker.h \
 include/sc_creature.cpp \
 include/sc_creature.h \
 include/sc_gossip.h \
@@ -47,8 +45,8 @@ include/sc_grid_searchers.cpp \
 include/sc_grid_searchers.h \
 include/sc_instance.cpp \
 include/sc_instance.h \
-include/sc_boss_spell_worker.h \
 include/sc_boss_spell_worker.cpp \
+include/sc_boss_spell_worker.h \
 scripts/battlegrounds/battleground.cpp \
 scripts/custom/custom_gameobjects.cpp \
 scripts/custom/custom_items.cpp \

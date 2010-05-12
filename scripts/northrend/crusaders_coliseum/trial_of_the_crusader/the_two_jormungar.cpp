@@ -34,14 +34,14 @@ void Aggro(Unit *who)
 	{
 	}else{
 
-	Unit *pTarget1 = SelectUnit(SELECT_TARGET_RANDOM,0);
+	Unit *pTarget1 = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0);
 		m_creature->MonsterSay("Agro'ed!", LANG_UNIVERSAL, 0);
 		Creature *pAcidmaw = m_creature->SummonCreature(Acidmaw,538.347, 165.509, 394.6500, 5.431659,TEMPSUMMON_MANUAL_DESPAWN, 0);
 		pAcidmaw->HandleEmoteCommand(Emerge);
 		pAcidmaw->AI()->AttackStart(pTarget1); 
 		flag = 1;
 		pAcidmaw->GetMotionMaster()->Clear(false);
-		Unit *pTarget = SelectUnit(SELECT_TARGET_RANDOM,0);
+		Unit *pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0);
 		pAcidmaw->AI()->AttackStart(pTarget); 
 
 	}

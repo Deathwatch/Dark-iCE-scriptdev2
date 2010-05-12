@@ -64,7 +64,7 @@ void UpdateAI(const uint32 diff )
 
 				if(summon_timer < diff && summon_count <= 4)
 				{
-					Unit *pTarget1 = SelectUnit(SELECT_TARGET_RANDOM,0);
+					Unit *pTarget1 = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0);
 					Creature *pLarva1 = pTarget1->SummonCreature(34800,pTarget1->GetPositionX() ,pTarget1->GetPositionY()+1, pTarget1->GetPositionZ()+1, 0,TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 3000);
 					DoCast(m_creature,RisingAnger);	
 					//CastSpell(m_creature,RisingAnger,false);

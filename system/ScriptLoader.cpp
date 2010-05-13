@@ -340,6 +340,8 @@ extern void AddSC_boss_telestra();
 extern void AddSC_instance_nexus();
 extern void AddSC_boss_sartharion();                        //obsidian_sanctum
 extern void AddSC_instance_obsidian_sanctum();
+extern void AddSC_boss_halion();							//ruby_sanctum
+extern void AddSC_instance_ruby_sanctum();
 extern void AddSC_instance_vault_of_archavon();             //vault_of_archavon
 extern void AddSC_boss_toravon();
 extern void AddSC_boss_koralon();
@@ -835,6 +837,9 @@ void AddScripts()
 
     AddSC_boss_sartharion();                                //obsidian_sanctum
     AddSC_instance_obsidian_sanctum();
+
+	AddSC_boss_halion();									//ruby_sanctum
+    AddSC_instance_ruby_sanctum();
 
 	AddSC_instance_vault_of_archavon();             		//vault_of_archavon
     AddSC_boss_toravon();

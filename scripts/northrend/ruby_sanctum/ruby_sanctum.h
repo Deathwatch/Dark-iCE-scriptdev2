@@ -11,7 +11,7 @@ enum
 
 	//10man norm
 	TYPE_DEAD0_EVENT		= 0, //check if mobs are dead to spawn halion
-	TYPE_HALION0_EVENT		= 1,
+	TYPE_HALION_0_EVENT		= 1,
 	
 	DATA_HALION0            = 10,
     DATA_ZARITHRIAN0        = 11,

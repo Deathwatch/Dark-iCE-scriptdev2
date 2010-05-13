@@ -500,13 +500,13 @@ struct MANGOS_DLL_DECL boss_sir_zeliekAI : public ScriptedAI
         }else m_uiMarkTimer -= uiDiff;
 
         // Shield Wall - All 4 horsemen will shield wall at 50% hp and 20% hp for 20 seconds
-        if (m_bIsShieldWall1 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 50f)
+        if (m_bIsShieldWall1 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 50)
         {
             DoCast(m_creature,SPELL_SHIELDWALL);
             m_bIsShieldWall1 = false;
         }
 
-        if (m_bIsShieldWall2 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 20f)
+        if (m_bIsShieldWall2 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 20)
         {
             DoCast(m_creature,SPELL_SHIELDWALL);
             m_bIsShieldWall2 = false;

@@ -76,7 +76,7 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
     {
         if (uiType == TYPE_DEAD0_EVENT)
             m_auiEncounter[0] = uiData;
-		if (uiType == TYPE_HALION0_EVENT)
+		if (uiType == TYPE_HALION_0_EVENT)
             m_auiEncounter[0] = uiData;
     }
 
@@ -84,7 +84,7 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
     {
         if (uiType == TYPE_DEAD0_EVENT)
             return m_auiEncounter[0];
-		if (uiType == TYPE_HALION0_EVENT)
+		if (uiType == TYPE_HALION_0_EVENT)
             return m_auiEncounter[0];
 
         return 0;

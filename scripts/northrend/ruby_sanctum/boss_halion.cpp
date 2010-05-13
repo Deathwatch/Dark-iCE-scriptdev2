@@ -146,7 +146,7 @@ struct MANGOS_DLL_DECL boss_halion_0AI : public ScriptedAI
 	uint32 m_uiEnrageTimer;
     bool m_bIsHardEnraged;
 
-    uint32 m_uiFlameBreathTimer;
+    uint32 m_uiDarkBreathTimer;
     uint32 m_uiTailSweepTimer;
     uint32 m_uiCleaveTimer;
     uint32 m_uiLavaStrikeTimer;
@@ -159,7 +159,7 @@ struct MANGOS_DLL_DECL boss_halion_0AI : public ScriptedAI
 		m_uiEnrageTimer = MINUTE*15*IN_MILLISECONDS;
         m_bIsHardEnraged = false;
 
-        m_uiFlameBreathTimer = 20000;
+        m_uiDarkBreathTimer = 20000;
         m_uiTailSweepTimer = 20000;
         m_uiCleaveTimer = 7000;
         m_uiLavaStrikeTimer = 15000;
@@ -221,44 +221,14 @@ struct MANGOS_DLL_DECL boss_halion_0AI : public ScriptedAI
                 m_uiEnrageTimer -= uiDiff;
 
 		}
-        if (m_uiFlameBreathTimer < uiDiff)
+        if (m_uiDarkBreathTimer < uiDiff)
         {
             DoScriptText(SAY_HALION_SPECIAL_2, m_creature);
-			DoCastSpellIfCan(m_creature->getVictim(), SPELL_DARK_BREATH);
-            m_uiFlameBreathTimer = urand(25000, 35000);
+			DoCastSpellIfCan(m_creature->getVictim(), SPELL_DARK_BREATH1);
+            m_uiDarkBreathTimer = urand(25000, 35000);
         }
         else
-            m_uiFlameBreathTimer -= uiDiff;
-
-        // Tail Sweep
-        if (m_uiTailSweepTimer < uiDiff)
-        {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_TAIL_LASH);
-            m_uiTailSweepTimer = urand(15000, 20000);
-        }
-        else
-            m_uiTailSweepTimer -= uiDiff;
-
-        // Cleave
-        if (m_uiCleaveTimer < uiDiff)
-        {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE);
-            m_uiCleaveTimer = urand(7000, 10000);
-        }       
-		else            
-			m_uiCleaveTimer -= uiDiff;
-
-        // Lavas Strike
-        if (m_uiLavaStrikeTimer < uiDiff)
-        {
-            DoScriptText(SAY_HALION_SPECIAL_1, m_creature);
-			DoCastSpellIfCan(m_creature->getVictim(), SPELL_COMBUSTION);
-            m_uiLavaStrikeTimer = urand(10000, 20000);
-        }
-        else
-            m_uiLavaStrikeTimer -= uiDiff;
-
-	
+            m_uiDarkBreathTimer -= uiDiff;
 
         DoMeleeAttackIfReady();
     }

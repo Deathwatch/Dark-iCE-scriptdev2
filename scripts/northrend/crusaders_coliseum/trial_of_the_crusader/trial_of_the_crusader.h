@@ -99,7 +99,8 @@ enum
 
     DATA_HEALTH_EYDIS           = 201,
     DATA_HEALTH_FJOLA           = 202,
-    DATA_CASTING_VALKYRS        = 203,
+    DATA_CASTING_EYDIS          = 203,
+    DATA_CASTING_FJOLA          = 204,
 
     DESPAWN_TIME                = 300000,
 

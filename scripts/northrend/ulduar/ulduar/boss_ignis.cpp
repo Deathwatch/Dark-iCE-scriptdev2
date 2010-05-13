@@ -195,6 +195,36 @@ struct MANGOS_DLL_DECL boss_ignisAI : public ScriptedAI
 
         DoScriptText(SAY_DEATH, m_creature);
         RespawnAdds();
+
+		if (stokin)
+		{
+			AchievementEntry const *AchievStokin = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_STOKIN : ACHIEV_STOKIN_H);
+            if (AchievStokin)
+            {
+                Map* pMap = m_creature->GetMap();
+                if (pMap && pMap->IsDungeon())
+                {
+                    Map::PlayerList const &players = pMap->GetPlayers();
+                    for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+                        itr->getSource()->CompletedAchievement(AchievStokin);
+                }
+            }
+		}
+
+		if (shattered)
+		{
+			AchievementEntry const *AchievShattered = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_SHATTERED : ACHIEV_SHATTERED_H);
+            if (AchievShattered)
+            {
+                Map* pMap = m_creature->GetMap();
+                if (pMap && pMap->IsDungeon())
+                {
+                    Map::PlayerList const &players = pMap->GetPlayers();
+                    for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+                        itr->getSource()->CompletedAchievement(AchievShattered);
+                }
+            }
+		}
     }
 
     void JustSummoned(Creature* pSummoned)
@@ -299,7 +329,7 @@ struct MANGOS_DLL_DECL boss_ignisAI : public ScriptedAI
 
         if (m_uiSlagPotTimer < diff)
         {
-            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,1))
+            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1))
             {
                 if (DoCastSpellIfCan(target, m_bIsRegularMode ? SPELL_SLAG_POT : SPELL_SLAG_POT_H) == CAST_OK)
                 {

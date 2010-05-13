@@ -1,4 +1,4 @@
-/* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2006 - 2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -15,7 +15,7 @@
  */
 
 /* ScriptData
-SDName: Flame Leviathan
+SDName: Flame Leviatan
 SD%Complete: 0
 SDComment: PH.
 SDCategory: Ulduar
@@ -37,9 +37,9 @@ EndScriptData */
 
 
 
-struct MANGOS_DLL_DECL boss_flameleviathanAI : public ScriptedAI
+struct MANGOS_DLL_DECL boss_flame_leviathan : public ScriptedAI
 {
-    boss_flameleviathanAI(Creature* pCreature) : ScriptedAI(pCreature)
+    boss_flame_leviathan(Creature* pCreature) : ScriptedAI(pCreature)
     {
         pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         Regular = pCreature->GetMap()->IsRegularDifficulty();
@@ -59,19 +59,19 @@ struct MANGOS_DLL_DECL boss_flameleviathanAI : public ScriptedAI
         FlameVentsTimer = 20000 + rand()%10000;
         RocketTimer = 1000;
 
-        if(pInstance) pInstance->SetData(TYPE_LEVIATHAN, NOT_STARTED);
+        if(pInstance) pInstance->SetData(TYPE_FLAME_LEVIATHAN, NOT_STARTED);
     }
 
     void Aggro(Unit *who) 
     {
-        if(pInstance) pInstance->SetData(TYPE_LEVIATHAN, IN_PROGRESS);
+        if(pInstance) pInstance->SetData(TYPE_FLAME_LEVIATHAN, IN_PROGRESS);
 
         DoScriptText(SAY_AGGRO, m_creature);
     }
 
     void JustDied(Unit *killer)
     {
-        if(pInstance) pInstance->SetData(TYPE_LEVIATHAN, DONE);
+        if(pInstance) pInstance->SetData(TYPE_FLAME_LEVIATHAN, DONE);
 
         DoScriptText(SAY_DEATH, m_creature);
     }
@@ -120,16 +120,16 @@ struct MANGOS_DLL_DECL boss_flameleviathanAI : public ScriptedAI
     }
 };
 
-CreatureAI* GetAI_boss_flameleviathanAI(Creature* pCreature)
+CreatureAI* GetAI_boss_flame_leviathan(Creature* pCreature)
 {
-    return new boss_flameleviathanAI(pCreature);
+    return new boss_flame_leviathan(pCreature);
 }
 
-void AddSC_boss_flameleviathan()
+void AddSC_boss_leviathan()
 {
     Script *newscript;
     newscript = new Script;
-    newscript->Name = "boss_flameleviathan";
-    newscript->GetAI = &GetAI_boss_flameleviathanAI;
+    newscript->Name = "boss_flame_leviathan";
+    newscript->GetAI = &GetAI_boss_flame_leviathan;
     newscript->RegisterSelf();
 }

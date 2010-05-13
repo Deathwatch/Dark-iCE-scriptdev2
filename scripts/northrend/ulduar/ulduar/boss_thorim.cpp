@@ -1,4 +1,4 @@
-/* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2006 - 2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -24,55 +24,40 @@ EndScriptData */
 #include "precompiled.h"
 #include "def_ulduar.h"
 
-/*
-#define SAY_AGGRO -1
-#define SAY_SLAY -1
-*/
-
 struct MANGOS_DLL_DECL boss_thorimAI : public ScriptedAI
 {
     boss_thorimAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        Regular = pCreature->GetMap()->IsRegularDifficulty();
         Reset();
     }
 
-    ScriptedInstance* m_pInstance;
+    bool Regular;
+    ScriptedInstance *pInstance;
 
     void Reset()
     {
+        if(pInstance) pInstance->SetData(TYPE_THORIM, NOT_STARTED);
     }
 
-    void KilledUnit(Unit *victim)
+    void Aggro(Unit *who) 
     {
+        if(pInstance) pInstance->SetData(TYPE_THORIM, IN_PROGRESS);
     }
 
-    void JustDied(Unit *victim)
+    void JustDied(Unit *killer)
     {
-    }
-
-    void Aggro(Unit* pWho)
-    {
-//        DoScriptText(SAY_AGGRO, m_creature);
-        m_creature->SetInCombatWithZone();
-
-        if (m_pInstance)
-            m_pInstance->SetData(TYPE_THORIM, IN_PROGRESS);
+        if(pInstance) pInstance->SetData(TYPE_THORIM, DONE);
     }
 
     void UpdateAI(const uint32 diff)
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
-//SPELLS TODO:
 
-//
         DoMeleeAttackIfReady();
-
-        EnterEvadeIfOutOfCombatArea(diff);
-
     }
-
 };
 
 CreatureAI* GetAI_boss_thorim(Creature* pCreature)
@@ -87,6 +72,4 @@ void AddSC_boss_thorim()
     newscript->Name = "boss_thorim";
     newscript->GetAI = &GetAI_boss_thorim;
     newscript->RegisterSelf();
-
 }
-

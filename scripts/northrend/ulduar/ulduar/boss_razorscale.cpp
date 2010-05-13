@@ -1,4 +1,4 @@
-/* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2006 - 2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
 * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: boss_razorscale
 SD%Complete: 90%
-SDComment: missing knockback at beggining of phase2. yells and emotes missing, need to use harpoons to start ground phase instead of timer
+SDComment:m TODO: knockback at beggining of phase2. yells and emotes. need to use harpoons to start ground phase instead of timer
 SDCategory: Ulduar
 EndScriptData */
 
@@ -29,42 +29,46 @@ enum
     //yells/emotes
 
     //razorscale air phase
-    SPELL_FIREBALL                = 62796,
-    SPELL_FIREBALL_H            = 63815,
-    SPELL_WING_BUFFET            = 62666,
-    SPELL_STUN                    = 62794,
+    SPELL_FIREBALL				= 62796,
+    SPELL_FIREBALL_H			= 63815,
+    SPELL_WING_BUFFET			= 62666,
+    SPELL_STUN					= 62794,
     //both
-    SPELL_BERSERK                = 47008,
-    DEVOURING_FLAME_VISUAL        = 63236,
-    SPELL_FLAME_BREATH            = 63317,
-    SPELL_FLAME_BREATH_H        = 64021,
+    SPELL_BERSERK				= 47008,
+    DEVOURING_FLAME_VISUAL		= 63236,
+    SPELL_FLAME_BREATH			= 63317,
+    SPELL_FLAME_BREATH_H		= 64021,
     //ground
-    SPELL_FLAME_BUFFET            = 64016,
-    SPELL_FLAME_BUFFET_H        = 64023,
-    SPELL_FUSE_ARMOR            = 64771,
+    SPELL_FLAME_BUFFET			= 64016,
+    SPELL_FLAME_BUFFET_H		= 64023,
+    SPELL_FUSE_ARMOR			= 64771,
 
     //devouring flame target
-    AURA_DEVOURING_FLAME        = 64709,
-    AURA_DEVOURING_FLAME_H        = 64734,
+    AURA_DEVOURING_FLAME		= 64709,
+    AURA_DEVOURING_FLAME_H		= 64734,
 
     //dark rune watcher
-    SPELL_LIGHTNING_BOLT        = 63809,
-    SPELL_LIGHTNING_BOLT_H        = 64696,
-    SPELL_CHAIN_LIGHTNING        = 64758,
-    SPELL_CHAIN_LIGHTNING_H        = 64759,
+    SPELL_LIGHTNING_BOLT		= 63809,
+    SPELL_LIGHTNING_BOLT_H		= 64696,
+    SPELL_CHAIN_LIGHTNING		= 64758,
+    SPELL_CHAIN_LIGHTNING_H		= 64759,
 
     //dark rune sentinel
-    SPELL_BATTLE_SHOUT            = 46763,
-    SPELL_BATTLE_SHOUT_H        = 64062,
-    SPELL_WHIRLWIND                = 63808,
+    SPELL_BATTLE_SHOUT			= 46763,
+    SPELL_BATTLE_SHOUT_H		= 64062,
+    SPELL_WHIRLWIND				= 63808,
 
     //dark rune guardian
-    SPELL_STORMSTRIKE            = 64757,
+    SPELL_STORMSTRIKE			= 64757,
 
     //NPC ids
-    MOB_DARK_RUNE_WATCHER        = 33453,
-    MOB_DARK_RUNE_SENTINEL        = 33846,
-    MOB_DARK_RUNE_GUARDIAN        = 33388
+    MOB_DARK_RUNE_WATCHER		= 33453,
+    MOB_DARK_RUNE_SENTINEL		= 33846,
+    MOB_DARK_RUNE_GUARDIAN		= 33388,
+
+    //Achievements
+    ACHIEV_QUICK_SHAVE			= 2919,
+    ACHIEV_QUICK_SHAVE_H			= 2921
 };
 
 #define GOSSIP_START     "Bring Razorscale down!"
@@ -81,24 +85,23 @@ struct MANGOS_DLL_DECL npc_expedition_commanderAI : public ScriptedAI
 
     ScriptedInstance* m_pInstance;
 
-    void Reset()
-    {
-    }
+    void Reset() {}
 
     void BeginRazorscaleEvent(Player* pPlayer)
     {
         if (!m_pInstance)
             return;
-        if(m_pInstance->GetData(TYPE_RAZORSCALE) == NOT_STARTED || m_pInstance->GetData(TYPE_RAZORSCALE) == FAIL){
 
-        debug_log("SD2: Razorscale - event initiated by player %s", pPlayer->GetName());
+        if(m_pInstance->GetData(TYPE_RAZORSCALE) == NOT_STARTED || m_pInstance->GetData(TYPE_RAZORSCALE) == FAIL)
+		{
+			debug_log("SD2: Razorscale - event initiated by player %s", pPlayer->GetName());
 
-        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_RAZORSCALE))))
-                {
-                    pTemp->SetInCombatWithZone();
-                    pTemp->AddThreat(pPlayer,0.0f);
-                    pTemp->AI()->AttackStart(pPlayer);
-                }
+			if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_RAZORSCALE))))
+			{
+				pTemp->SetInCombatWithZone();
+				pTemp->AddThreat(pPlayer,0.0f);
+				pTemp->AI()->AttackStart(pPlayer);
+			}
         }else debug_log("SD2: Razorscale - player %s is a moron. he tried to start the event when its already done, or over", pPlayer->GetName());
     }
 
@@ -121,8 +124,8 @@ CreatureAI* GetAI_npc_expedition_commander(Creature* pCreature)
 bool GossipHello_npc_expedition_commander(Player* pPlayer, Creature* pCreature)
 {
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
-
     pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+
     return true;
 }
 
@@ -142,9 +145,9 @@ struct MANGOS_DLL_DECL mob_devouring_flame_targetAI : public ScriptedAI
 {
     mob_devouring_flame_targetAI(Creature* pCreature) : ScriptedAI(pCreature) 
     {
-        Reset();
-        SetCombatMovement(false);
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+		m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
+        Reset();
     }
 
     ScriptedInstance* m_pInstance;
@@ -156,9 +159,8 @@ struct MANGOS_DLL_DECL mob_devouring_flame_targetAI : public ScriptedAI
     {
         Death_Timer = 25500;
         m_creature->SetDisplayId(11686);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         DoCast(m_creature,  m_bIsRegularMode ? AURA_DEVOURING_FLAME : AURA_DEVOURING_FLAME_H);
+		SetCombatMovement(false);
     }
 
     void UpdateAI(const uint32 diff)
@@ -183,8 +185,9 @@ struct MANGOS_DLL_DECL mob_dark_rune_watcherAI : public ScriptedAI
 {
     mob_dark_rune_watcherAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        Reset();
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+		m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
+        Reset();
     }
 
     ScriptedInstance* m_pInstance;
@@ -230,8 +233,9 @@ struct MANGOS_DLL_DECL mob_dark_rune_sentinelAI : public ScriptedAI
 {
     mob_dark_rune_sentinelAI(Creature* pCreature) : ScriptedAI(pCreature) 
     {
-        Reset();
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+		m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
+        Reset();
     }
 
     ScriptedInstance* m_pInstance;
@@ -278,8 +282,9 @@ struct MANGOS_DLL_DECL mob_dark_rune_guardianAI : public ScriptedAI
 {
     mob_dark_rune_guardianAI(Creature* pCreature) : ScriptedAI(pCreature) 
     {
-        Reset();
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+		m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
+        Reset();
     }
 
     ScriptedInstance* m_pInstance;
@@ -332,7 +337,7 @@ struct MANGOS_DLL_DECL boss_razorscaleAI : public ScriptedAI
         RazorscaleAddX[1] = 564.140198f; RazorscaleAddY[1] = -222.049149f; RazorscaleAddZ[1] = 391.517212f; //left
         RazorscaleAddX[2] = 591; RazorscaleAddY[2] = -209; RazorscaleAddZ[2] = 392; //middle
         RazorscaleBossX[2] = 587.629761f; RazorscaleBossY[2] = -179.022522f; RazorscaleBossZ[2] = 391.625061f; //ground
-        RazorscaleBossX[1] = 587.629761f; RazorscaleBossY[1] = -179.022522f; RazorscaleBossZ[1] = 435.415070f; //air
+        RazorscaleBossX[1] = 587.629761f; RazorscaleBossY[1] = -179.022522f; RazorscaleBossZ[1] = 445.415070f; //air
 
         Reset();
     }
@@ -354,6 +359,7 @@ struct MANGOS_DLL_DECL boss_razorscaleAI : public ScriptedAI
     uint32 Ground_Knockback;
     uint32 Timetoground;
     uint32 Stun_Timer;
+    uint32 Shave_Count;
     bool airphase;
     bool grounded;
     bool berserk;
@@ -367,6 +373,7 @@ struct MANGOS_DLL_DECL boss_razorscaleAI : public ScriptedAI
         wave3_spawn = 11000; //56
         Berserk_Timer = 900000;
         Timetoground = 80000;
+        Shave_Count = 0;
         airphase = false;
         grounded = false;
         berserk = false;
@@ -378,6 +385,22 @@ struct MANGOS_DLL_DECL boss_razorscaleAI : public ScriptedAI
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_RAZORSCALE, DONE);
+
+        if (Shave_Count<2)
+        {
+            AchievementEntry const *AchievQuickShave = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_QUICK_SHAVE : ACHIEV_QUICK_SHAVE_H);
+            if (AchievQuickShave )
+            {
+                Map* pMap = m_creature->GetMap();
+                if (pMap && pMap->IsDungeon())
+                {
+                    Map::PlayerList const &players = pMap->GetPlayers();
+                    for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+                        itr->getSource()->CompletedAchievement(AchievQuickShave );
+                }
+            }
+        }
+
     }
 
     void Aggro(Unit* pWho)
@@ -404,14 +427,14 @@ struct MANGOS_DLL_DECL boss_razorscaleAI : public ScriptedAI
 
         if (Fireball_Timer < diff && airphase && !grounded)
         {
-            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 DoCast(target, m_bIsRegularMode ? SPELL_FIREBALL : SPELL_FIREBALL_H);
             Fireball_Timer = 2000;
         }else Fireball_Timer -= diff;   
 
         if (Devouring_Flame_Timer < diff && !grounded)
         {
-            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 DoCast(target, DEVOURING_FLAME_VISUAL);
             Devouring_Flame_Timer = 12000;
         }else Devouring_Flame_Timer -= diff;  
@@ -419,15 +442,15 @@ struct MANGOS_DLL_DECL boss_razorscaleAI : public ScriptedAI
         if (wave1_spawn < diff && airphase && !grounded)
         {
             if (Creature* pTemp = m_creature->SummonCreature(MOB_DARK_RUNE_WATCHER, RazorscaleAddX[3], RazorscaleAddY[3], RazorscaleAddZ[3], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000))
-                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 {
-                    pTemp->AddThreat(pTarget,0.0f);
+                    pTemp->AddThreat(pTarget, 0.0f);
                     pTemp->AI()->AttackStart(pTarget);
                 }
             if (Creature* pTemp = m_creature->SummonCreature(MOB_DARK_RUNE_GUARDIAN, RazorscaleAddX[3], RazorscaleAddY[3], RazorscaleAddZ[3], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000))
-                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 {
-                    pTemp->AddThreat(pTarget,0.0f);
+                    pTemp->AddThreat(pTarget, 0.0f);
                     pTemp->AI()->AttackStart(pTarget);
                 }
             wave1_spawn = 54000;
@@ -436,15 +459,15 @@ struct MANGOS_DLL_DECL boss_razorscaleAI : public ScriptedAI
         if (wave2_spawn < diff && airphase && !grounded)
         {
             if (Creature* pTemp = m_creature->SummonCreature(MOB_DARK_RUNE_WATCHER, RazorscaleAddX[1], RazorscaleAddY[1], RazorscaleAddZ[1], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000))
-                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 {
-                    pTemp->AddThreat(pTarget,0.0f);
+                    pTemp->AddThreat(pTarget, 0.0f);
                     pTemp->AI()->AttackStart(pTarget);
                 }
             if (Creature* pTemp = m_creature->SummonCreature(MOB_DARK_RUNE_GUARDIAN, RazorscaleAddX[1], RazorscaleAddY[1], RazorscaleAddZ[1], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000))
-                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 {
-                    pTemp->AddThreat(pTarget,0.0f);
+                    pTemp->AddThreat(pTarget, 0.0f);
                     pTemp->AI()->AttackStart(pTarget);
                 }
             wave2_spawn = 54000;
@@ -458,9 +481,9 @@ struct MANGOS_DLL_DECL boss_razorscaleAI : public ScriptedAI
                 break;
                 case 1:
                     if (Creature* pTemp = m_creature->SummonCreature(MOB_DARK_RUNE_SENTINEL, RazorscaleAddX[2], RazorscaleAddY[2], RazorscaleAddZ[2], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000))
-                        if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                        if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                         {
-                            pTemp->AddThreat(pTarget,0.0f);
+                            pTemp->AddThreat(pTarget, 0.0f);
                             pTemp->AI()->AttackStart(pTarget);
                         }
                 break;
@@ -517,6 +540,7 @@ struct MANGOS_DLL_DECL boss_razorscaleAI : public ScriptedAI
             wave1_spawn = 7000;
             wave2_spawn = 9000;
             wave3_spawn = 11000;
+            ++Shave_Count;
         }else Grounded_Timer -= diff;
 
         if (airphase && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 50)

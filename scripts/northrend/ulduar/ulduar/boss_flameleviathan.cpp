@@ -125,11 +125,11 @@ CreatureAI* GetAI_boss_flame_leviathan(Creature* pCreature)
     return new boss_flame_leviathan(pCreature);
 }
 
-void AddSC_boss_leviathan()
+void AddSC_boss_flameleviathan()
 {
     Script *newscript;
     newscript = new Script;
-    newscript->Name = "boss_flame_leviathan";
+    newscript->Name = "boss_flameleviathan";
     newscript->GetAI = &GetAI_boss_flame_leviathan;
     newscript->RegisterSelf();
 }

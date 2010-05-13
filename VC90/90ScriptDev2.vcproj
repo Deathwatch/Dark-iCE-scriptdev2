@@ -2040,7 +2040,7 @@
 							>
 						</File>
 						<File
-							RelativePath="..\scripts\northrend\ulduar\ulduar\boss_assemblyofiron.cpp"
+							RelativePath="..\scripts\northrend\ulduar\ulduar\boss_iron_council.cpp"
 							>
 						</File>
 						<File
@@ -2056,19 +2056,11 @@
 							>
 						</File>
 						<File
-							RelativePath="..\scripts\northrend\ulduar\ulduar\boss_generalvezax.cpp"
-							>
-						</File>
-						<File
 							RelativePath="..\scripts\northrend\ulduar\ulduar\boss_hodir.cpp"
 							>
 						</File>
 						<File
 							RelativePath="..\scripts\northrend\ulduar\ulduar\boss_ignis.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\scripts\northrend\ulduar\ulduar\boss_iron_council.cpp"
 							>
 						</File>
 						<File
@@ -2104,11 +2096,7 @@
 							>
 						</File>
 						<File
-							RelativePath="..\scripts\northrend\ulduar\ulduar\ulduar.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\scripts\northrend\ulduar\ulduar\ulduar.h"
+							RelativePath="..\scripts\northrend\ulduar\ulduar\ulduar_teleport.cpp"
 							>
 						</File>
 					</Filter>

@@ -836,9 +836,7 @@ void AddScripts()
     AddSC_boss_sartharion();                                //obsidian_sanctum
     AddSC_instance_obsidian_sanctum();
 
-	AddSC_boss_halion();									//ruby_sanctum
-    AddSC_instance_ruby_sanctum();
-
+	
 	AddSC_instance_vault_of_archavon();             		//vault_of_archavon
     AddSC_boss_toravon();
     AddSC_boss_koralon();

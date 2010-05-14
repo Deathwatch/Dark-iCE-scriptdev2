@@ -16,8 +16,8 @@
 
 /* ScriptData
 SDName: Instance_Ruby_Sanctum
-SD%Complete: 10%
-SDComment: Working on it lol
+SD%Complete: 15%
+SDComment: Waiting for blizzlike to come out b4 i finish it
 SDCategory: Ruby Sanctum
 EndScriptData */
 
@@ -26,7 +26,7 @@ EndScriptData */
 
 struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
 {
-    instance_ruby_sanctum(Map *pMap) : ScriptedInstance(pMap) {Initialize();}
+    instance_ruby_sanctum(Map* pMap) : ScriptedInstance(pMap) {Initialize();};
 
     uint32 m_auiEncounter[MAX_ENCOUNTER];
     std::string strSaveData;

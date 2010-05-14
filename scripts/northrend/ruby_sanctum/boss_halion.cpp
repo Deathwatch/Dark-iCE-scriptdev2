@@ -146,18 +146,20 @@ struct MANGOS_DLL_DECL boss_halionAI : public ScriptedAI
 	bool m_bPhase1;
 	bool m_bPhase2;
 	bool m_bPhase3;
-
-    uint64 m_auiAdd[MAX_ADDS];                       // Add GUIDs
+	
+	uint64 m_auiAdd[MAX_ADDS];                       // Add GUIDs
 
     void Reset()
     {
-        m_uiAddDeathCount		= 0;
+		m_uiAddDeathCount		= 0;
 		m_bPhase1               = true;
 		m_bPhase2               = false;
 		m_bPhase3               = false;
 		
-		m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-        m_creature->SetVisibility(VISIBILITY_OFF);
+		m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+		m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+		m_creature->SetVisibility(VISIBILITY_OFF);
+		m_creature->setFaction(35);
     }
 
     void JustReachedHome()
@@ -193,7 +195,6 @@ struct MANGOS_DLL_DECL boss_halionAI : public ScriptedAI
         if (!m_pInstance)
             return;
 
-        //we risk being DONE before adds are in fact dead
         m_pInstance->SetData(TYPE_HALION_EVENT, DONE);
     }
 
@@ -210,17 +211,15 @@ struct MANGOS_DLL_DECL boss_halionAI : public ScriptedAI
 
     void EventAddDeath()
     {
-        switch(++m_uiAddDeathCount)
+        ++m_uiAddDeathCount;
+		
+		if(m_uiAddDeathCount == 3)
         {
-            case 1: //30% transparent
-            case 2: //60% transparent
-            case 3: //100% spawned
-			{
-				DoScriptText(SAY_HALION_SPAWN, m_creature); break;
-				//reveal now
-				m_creature->SetVisibility(VISIBILITY_ON);
-                m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-			}
+			m_pInstance->SetData(TYPE_DEAD_EVENT, DONE);
+			m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+			m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+			m_creature->SetVisibility(VISIBILITY_ON);
+			m_creature->setFaction(14);
         }
     }
 
@@ -230,27 +229,32 @@ struct MANGOS_DLL_DECL boss_halionAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        //someone evaded!
-        if (m_pInstance && m_pInstance->GetData(TYPE_HALION_EVENT) == NOT_STARTED)
-        {
-            EnterEvadeMode();
-            return;
-        }
-
+		if (m_pInstance->GetData(TYPE_DEAD_EVENT) == DONE)
+		{
+			//reveal now
+		}
+		
+		if (m_pInstance->GetData(TYPE_DEAD_EVENT) == NOT_STARTED)
+		{
+			DoScriptText(SAY_HALION_SPAWN, m_creature);
+		}
+	
 		//Entering Phase 2
         if (m_creature->GetHealthPercent() < 70.0f)
         {
-            m_bPhase1 = false;
+            
 			m_bPhase2 = true;
             DoScriptText(SAY_HALION_PHASE_2, m_creature);
+			m_bPhase1 = false;
         }
 		
 		//Entering Phase 3
         if (m_creature->GetHealthPercent() < 30.0f)
         {
-            m_bPhase2 = false;
+            
 			m_bPhase3 = true;
             DoScriptText(SAY_HALION_PHASE_3, m_creature);
+			m_bPhase2 = false;
         }
 
         if (m_bPhase2)
@@ -282,14 +286,35 @@ struct MANGOS_DLL_DECL boss_savianaAI : public ScriptedAI
 
     void Aggro(Unit *pWho)
     {
+		DoScriptText(SAY_SAVIANA_AGGRO, m_creature);
+
+		if (m_pInstance->GetData(TYPE_DEAD_EVENT) == NOT_STARTED)
+            m_pInstance->SetData(TYPE_DEAD_EVENT, IN_PROGRESS);
     }
 
-    void JustDied(Unit* pVictim)
+    void JustReachedHome()
+    {
+        if (m_pInstance && m_pInstance->GetData(TYPE_DEAD_EVENT) == IN_PROGRESS)
+            m_pInstance->SetData(TYPE_DEAD_EVENT, NOT_STARTED);
+    }
+
+	void KilledUnit()
+    {
+        switch(urand(0, 1))
+        {
+            case 0: DoScriptText(SAY_SAVIANA_SLAY_1, m_creature); break;
+            case 1: DoScriptText(SAY_SAVIANA_SLAY_2, m_creature); break;
+        }
+    }
+	
+	void JustDied(Unit* pVictim)
     {
         if (!m_pInstance)
             return;
 
-        Creature* pHalion = (Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_HALION));
+        DoScriptText(SAY_SAVIANA_AGGRO, m_creature);
+		
+		Creature* pHalion = (Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_HALION));
 
         if (pHalion->isAlive())
         {
@@ -324,14 +349,35 @@ struct MANGOS_DLL_DECL boss_zarithrianAI : public ScriptedAI
 
     void Aggro(Unit *pWho)
     {
+		DoScriptText(SAY_ZARITHRIAN_AGGRO, m_creature);
+
+		if (m_pInstance->GetData(TYPE_DEAD_EVENT) == NOT_STARTED)
+            m_pInstance->SetData(TYPE_DEAD_EVENT, IN_PROGRESS);
     }
 
-    void JustDied(Unit* pVictim)
+    void JustReachedHome()
+    {
+        if (m_pInstance && m_pInstance->GetData(TYPE_DEAD_EVENT) == IN_PROGRESS)
+            m_pInstance->SetData(TYPE_DEAD_EVENT, NOT_STARTED);
+    }
+	
+	void KilledUnit()
+    {
+        switch(urand(0, 1))
+        {
+            case 0: DoScriptText(SAY_ZARITHRIAN_SLAY_1, m_creature); break;
+            case 1: DoScriptText(SAY_ZARITHRIAN_SLAY_2, m_creature); break;
+        }
+    }
+	
+	void JustDied(Unit* pVictim)
     {
         if (!m_pInstance)
             return;
 
-        Creature* pHalion = (Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_HALION));
+        DoScriptText(SAY_ZARITHRIAN_DEATH, m_creature);
+		
+		Creature* pHalion = (Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_HALION));
 
         if (pHalion->isAlive())
         {
@@ -366,6 +412,25 @@ struct MANGOS_DLL_DECL boss_baltharusAI : public ScriptedAI
 
     void Aggro(Unit *pWho)
     {
+		DoScriptText(SAY_BALTHARUS_AGGRO, m_creature);
+
+		if (m_pInstance->GetData(TYPE_DEAD_EVENT) == NOT_STARTED)
+            m_pInstance->SetData(TYPE_DEAD_EVENT, IN_PROGRESS);
+    }
+
+    void JustReachedHome()
+    {
+        if (m_pInstance && m_pInstance->GetData(TYPE_DEAD_EVENT) == IN_PROGRESS)
+            m_pInstance->SetData(TYPE_DEAD_EVENT, NOT_STARTED);
+    }
+	
+	void KilledUnit()
+    {
+        switch(urand(0, 1))
+        {
+            case 0: DoScriptText(SAY_BALTHARUS_SLAY_1, m_creature); break;
+            case 1: DoScriptText(SAY_BALTHARUS_SLAY_2, m_creature); break;
+        }
     }
 
     void JustDied(Unit* pVictim)
@@ -373,7 +438,9 @@ struct MANGOS_DLL_DECL boss_baltharusAI : public ScriptedAI
         if (!m_pInstance)
             return;
 
-        Creature* pHalion = (Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_HALION));
+        DoScriptText(SAY_BALTHARUS_DEATH, m_creature);
+		
+		Creature* pHalion = (Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_HALION));
 
         if (pHalion->isAlive())
         {

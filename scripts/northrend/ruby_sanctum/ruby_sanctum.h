@@ -10,6 +10,7 @@ enum
     MAX_ENCOUNTER           = 1,
 
     // Encounter Status
+	TYPE_DEAD_EVENT			= 0,
 	TYPE_HALION_EVENT		= 1,
 
     DATA_HALION             = 2,

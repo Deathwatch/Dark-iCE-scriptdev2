@@ -73,19 +73,19 @@ enum
     SAY_SAVIANA_SPECIAL_1				    = -1666404, //17532 Burn in the master's flame!
 
     //Halion Spells ALL
-    SPELL_BERSERK                           = 61632,    // Increases the caster's attack speed by 150% and all damage it deals by 500% for 5 min.
+    SPELL_BERSERK                           = 61632,    //Increases the caster's attack speed by 150% and all damage it deals by 500% for 5 min.
 	SPELL_PORTALS							= 74809,	//Summon Twilight Portal
-	SPELL_CORPOREALITY0						= 74826,    //the 0% normal Damage
-	SPELL_CORPOREALITY1						= 74827,    //the +15% increases damage dealt and damage taken
-	SPELL_CORPOREALITY2						= 74828,    //the +35% increases damage dealt and damage taken
-	SPELL_CORPOREALITY3						= 74829,    //the +55% increases damage dealt and damage taken
-	SPELL_CORPOREALITY4						= 74830,    //the +75% increases damage dealt and damage taken
-	SPELL_CORPOREALITY5						= 74831,    //the +95% increases damage dealt and damage taken
-	SPELL_CORPOREALITY6						= 74832,    //the -15% decreases damage dealt and damage taken
-	SPELL_CORPOREALITY7						= 74833,    //the -35% decreases damage dealt and damage taken
-	SPELL_CORPOREALITY8						= 74834,    //the -55% decreases damage dealt and damage taken
-	SPELL_CORPOREALITY9						= 74835,    //the -75% decreases damage dealt and damage taken
-	SPELL_CORPOREALITY10					= 74836,    //the -95% decreases damage dealt and damage taken
+	SPELL_CORPOREALITY0						= 74826,    //Deals and Receives Normal Damage
+	SPELL_CORPOREALITY1						= 74827,    //Damage Dealt Increased By 15% & Damage Taken Increased By 20%
+	SPELL_CORPOREALITY2						= 74828,    //Damage Dealt Increased By 30% & Damage Taken Increased By 50%
+	SPELL_CORPOREALITY3						= 74829,    //Damage Dealt Increased By 60% & Damage Taken Increased By 100%
+	SPELL_CORPOREALITY4						= 74830,    //Damage Dealt Increased By 100% & Damage Taken Increased By 200%
+	SPELL_CORPOREALITY5						= 74831,    //Damage Dealt Increased By 200 & Damage Taken Increased By 400%
+	SPELL_CORPOREALITY6						= 74832,    //Damage Dealt Reduced By 10% & Damage Taken Reduced By 15%
+	SPELL_CORPOREALITY7						= 74833,    //Damage Dealt Reduced By 20% & Damage Taken Reduced By 30%
+	SPELL_CORPOREALITY8						= 74834,    //Damage Dealt Reduced By 30% & Damage Taken Reduced By 50%
+	SPELL_CORPOREALITY9						= 74835,    //Damage Dealt Reduced By 50% & Damage Taken Reduced By 80%
+	SPELL_CORPOREALITY10					= 74836,    //Damage Dealt Reduced By 70% & Damage Taken Reduced By 100%
 	SPELL_MARK_OF_CONSUMPTION				= 74795,	//Builds Marks of Combustion on an enemy target. When Combustion fades or is dispelled, it creates an explosion and a patch of fire proportional in size to the number of Combustion charges present at the time. 
 
 	//10 man norm
@@ -109,7 +109,7 @@ enum
 	//25man hero
 	SPELL_METEORSTRIKE3						= 75952,	//Deals 11310 to 12690 Fire damage.
 	SPELL_METEORSTRIKE3A					= 75949,	//Deals 11310 to 12690 Fire damage.
-	SPELL_METEORSTRIKE3B					= 75879,	//Deals x to y Fire damage to enemies within 0 yards and spawns a Living Inferno.
+	SPELL_METEORSTRIKE3B					= 75879,	//Deals x to y Fire damage to enemies within 0 yards and spawns 40681.
 	SPELL_CONSUMPTION3						= 75876,    //Deals 8750 to 11250 Shadow damage
 	SPELL_COMBUSTION3						= 75884,    //Deals x to y Fire damage. 
 	SPELL_SOUL_CONSUMPTION3					= 74800,    //Engulfs an enemy target in flame, dealing 4000 Shadow damage every 2.0 sec. Every time Soul Consumption deals damage, it generates a Mark of Consumption charge on the target. When Consumption fades or is dispelled, it unleashes a dark explosion proportional to the number of charges present at the time
@@ -127,75 +127,59 @@ enum
 	SPELL_ENTER_REALM						= 74807,	//or 74808 ??
 	SPELL_EXIT_REALM						= 74812,
 
+	MAX_ADDS								= 3
 };
 
-/*######
-## Boss Halion_0
-######*/
-
-struct MANGOS_DLL_DECL boss_halion_0AI : public ScriptedAI
+struct MANGOS_DLL_DECL boss_halionAI : public ScriptedAI
 {
-    boss_halion_0AI(Creature* pCreature) : ScriptedAI(pCreature)
+    boss_halionAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        m_pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
+        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        memset(&m_auiAdd, 0, sizeof(m_auiAdd));
         Reset();
     }
 
     ScriptedInstance* m_pInstance;
 
-	uint32 m_uiEnrageTimer;
-    bool m_bIsHardEnraged;
+    uint32 m_uiAddDeathCount;
 
-    uint32 m_uiDarkBreathTimer;
-    uint32 m_uiTailSweepTimer;
-    uint32 m_uiCleaveTimer;
-    uint32 m_uiLavaStrikeTimer;
-	//portal
-	int32 m_iPortalRespawnTime;
+	bool m_bPhase1;
+	bool m_bPhase2;
+	bool m_bPhase3;
+	
+	uint64 m_auiAdd[MAX_ADDS];                       // Add GUIDs
 
     void Reset()
     {
-        uint32 uiSpellId = 49368;
-		m_uiEnrageTimer = MINUTE*15*IN_MILLISECONDS;
-        m_bIsHardEnraged = false;
-
-        m_uiDarkBreathTimer = 20000;
-        m_uiTailSweepTimer = 20000;
-        m_uiCleaveTimer = 7000;
-        m_uiLavaStrikeTimer = 15000;
-		//portal
-		m_iPortalRespawnTime = 30000;
-		RemoveDebuff(uiSpellId);
-
+		m_uiAddDeathCount		= 0;
+		m_bPhase1               = true;
+		m_bPhase2               = false;
+		m_bPhase3               = false;
+		
+		m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+		m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+		m_creature->SetVisibility(VISIBILITY_OFF);
+		m_creature->setFaction(35);
     }
 
     void JustReachedHome()
     {
-        if (m_pInstance)
-            m_pInstance->SetData(TYPE_HALION_0_EVENT, NOT_STARTED);
-    }
-
-    void Aggro(Unit* pWho)
-    {
-        DoScriptText(SAY_HALION_AGGRO,m_creature);
-
-        m_creature->SetInCombatWithZone();
-
-        if (m_pInstance)
+        for (uint8 i = 0; i < MAX_ADDS; ++i)
         {
-            m_pInstance->SetData(TYPE_HALION_0_EVENT, IN_PROGRESS);
+            if (Creature* pCreature = (Creature*)Unit::GetUnit((*m_creature), m_auiAdd[i]))
+            {
+                if (!pCreature->isAlive())
+                    pCreature->Respawn();
+                else if (pCreature->getVictim())
+                    pCreature->AI()->EnterEvadeMode();
+            }
         }
+
+        if (m_pInstance && m_pInstance->GetData(TYPE_HALION_EVENT) == IN_PROGRESS)
+            m_pInstance->SetData(TYPE_HALION_EVENT, NOT_STARTED);
     }
 
-    void JustDied(Unit* pKiller)
-    {
-        DoScriptText(SAY_HALION_DEATH,m_creature);
-
-        if (m_pInstance)
-            m_pInstance->SetData(TYPE_HALION_0_EVENT, DONE);
-    }
-
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit()
     {
         switch(urand(0, 1))
         {
@@ -204,66 +188,317 @@ struct MANGOS_DLL_DECL boss_halion_0AI : public ScriptedAI
         }
     }
 
+    void JustDied(Unit* pKiller)
+    {
+        DoScriptText(SAY_HALION_DEATH, m_creature);
+
+        if (!m_pInstance)
+            return;
+
+        m_pInstance->SetData(TYPE_HALION_EVENT, DONE);
+    }
+
+    void Aggro(Unit *pWho)
+    {
+        if (!m_pInstance)
+            return;
+
+        DoScriptText(SAY_HALION_AGGRO, m_creature);
+
+        if (m_pInstance->GetData(TYPE_HALION_EVENT) == NOT_STARTED)
+            m_pInstance->SetData(TYPE_HALION_EVENT, IN_PROGRESS);
+    }
+
+    void EventAddDeath()
+    {
+        ++m_uiAddDeathCount;
+		
+		if(m_uiAddDeathCount == 3)
+        {
+			m_pInstance->SetData(TYPE_DEAD_EVENT, DONE);
+			m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+			m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+			m_creature->SetVisibility(VISIBILITY_ON);
+			m_creature->setFaction(14);
+        }
+    }
+
     void UpdateAI(const uint32 uiDiff)
     {
         //Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
-		// hard enrage
-        if (!m_bIsHardEnraged)
-        {
-            if (m_uiEnrageTimer < uiDiff)
-            {
-                DoCastSpellIfCan(m_creature, SPELL_BERSERK, CAST_TRIGGERED);
-                m_bIsHardEnraged = true;
-            }
-            else
-                m_uiEnrageTimer -= uiDiff;
 
+		if (m_pInstance->GetData(TYPE_DEAD_EVENT) == DONE)
+		{
+			//reveal now
 		}
-        if (m_uiDarkBreathTimer < uiDiff)
+		
+		if (m_pInstance->GetData(TYPE_DEAD_EVENT) == NOT_STARTED)
+		{
+			DoScriptText(SAY_HALION_SPAWN, m_creature);
+		}
+	
+		//Entering Phase 2
+        if (m_creature->GetHealthPercent() < 70.0f)
         {
-            DoScriptText(SAY_HALION_SPECIAL_2, m_creature);
-			DoCastSpellIfCan(m_creature->getVictim(), SPELL_DARK_BREATH1);
-            m_uiDarkBreathTimer = urand(25000, 35000);
+            
+			m_bPhase2 = true;
+            DoScriptText(SAY_HALION_PHASE_2, m_creature);
+			m_bPhase1 = false;
         }
-        else
-            m_uiDarkBreathTimer -= uiDiff;
+		
+		//Entering Phase 3
+        if (m_creature->GetHealthPercent() < 30.0f)
+        {
+            
+			m_bPhase3 = true;
+            DoScriptText(SAY_HALION_PHASE_3, m_creature);
+			m_bPhase2 = false;
+        }
+
+        if (m_bPhase2)
+        {
+        }
+
+		if (m_bPhase3)
+        {  
+        }
 
         DoMeleeAttackIfReady();
     }
+};
 
-    //Removes each drakes unique debuff from players
-    void RemoveDebuff(uint32 uiSpellId)
+//saviana AI
+struct MANGOS_DLL_DECL boss_savianaAI : public ScriptedAI
+{
+    boss_savianaAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        Reset();
+    }
+	
+	ScriptedInstance* m_pInstance;
+
+    void Reset()
     {
-        Map* pMap = m_creature->GetMap();
+    }
 
-        if (pMap && pMap->IsDungeon())
+    void Aggro(Unit *pWho)
+    {
+		DoScriptText(SAY_SAVIANA_AGGRO, m_creature);
+
+		if (m_pInstance->GetData(TYPE_DEAD_EVENT) == NOT_STARTED)
+            m_pInstance->SetData(TYPE_DEAD_EVENT, IN_PROGRESS);
+    }
+
+    void JustReachedHome()
+    {
+        if (m_pInstance && m_pInstance->GetData(TYPE_DEAD_EVENT) == IN_PROGRESS)
+            m_pInstance->SetData(TYPE_DEAD_EVENT, NOT_STARTED);
+    }
+
+	void KilledUnit()
+    {
+        switch(urand(0, 1))
         {
-            Map::PlayerList const &PlayerList = pMap->GetPlayers();
-
-            if (PlayerList.isEmpty())
-                return;
-
-            for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
-            {
-                if (i->getSource()->isAlive() && i->getSource()->HasAura(uiSpellId))
-                    i->getSource()->RemoveAurasDueToSpell(uiSpellId);
-            }
+            case 0: DoScriptText(SAY_SAVIANA_SLAY_1, m_creature); break;
+            case 1: DoScriptText(SAY_SAVIANA_SLAY_2, m_creature); break;
         }
+    }
+	
+	void JustDied(Unit* pVictim)
+    {
+        if (!m_pInstance)
+            return;
+
+        DoScriptText(SAY_SAVIANA_AGGRO, m_creature);
+		
+		Creature* pHalion = (Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_HALION));
+
+        if (pHalion->isAlive())
+        {
+            if (boss_halionAI* pHalionAI = dynamic_cast<boss_halionAI*>(pHalion->AI()))
+                pHalionAI->EventAddDeath();
+        }
+    }
+	void UpdateAI(const uint32 uiDiff)
+    {
+        //Return since we have no target
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        DoMeleeAttackIfReady();
     }
 };
 
-CreatureAI* GetAI_boss_halion_0(Creature* pCreature)
+//zarithrian AI
+struct MANGOS_DLL_DECL boss_zarithrianAI : public ScriptedAI
 {
-    return new boss_halion_0AI(pCreature);
+    boss_zarithrianAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        Reset();
+    }
+	
+	ScriptedInstance* m_pInstance;
+
+    void Reset()
+    {
+    }
+
+    void Aggro(Unit *pWho)
+    {
+		DoScriptText(SAY_ZARITHRIAN_AGGRO, m_creature);
+
+		if (m_pInstance->GetData(TYPE_DEAD_EVENT) == NOT_STARTED)
+            m_pInstance->SetData(TYPE_DEAD_EVENT, IN_PROGRESS);
+    }
+
+    void JustReachedHome()
+    {
+        if (m_pInstance && m_pInstance->GetData(TYPE_DEAD_EVENT) == IN_PROGRESS)
+            m_pInstance->SetData(TYPE_DEAD_EVENT, NOT_STARTED);
+    }
+	
+	void KilledUnit()
+    {
+        switch(urand(0, 1))
+        {
+            case 0: DoScriptText(SAY_ZARITHRIAN_SLAY_1, m_creature); break;
+            case 1: DoScriptText(SAY_ZARITHRIAN_SLAY_2, m_creature); break;
+        }
+    }
+	
+	void JustDied(Unit* pVictim)
+    {
+        if (!m_pInstance)
+            return;
+
+        DoScriptText(SAY_ZARITHRIAN_DEATH, m_creature);
+		
+		Creature* pHalion = (Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_HALION));
+
+        if (pHalion->isAlive())
+        {
+            if (boss_halionAI* pHalionAI = dynamic_cast<boss_halionAI*>(pHalion->AI()))
+                pHalionAI->EventAddDeath();
+        }
+    }
+	void UpdateAI(const uint32 uiDiff)
+    {
+        //Return since we have no target
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+//baltharus AI
+struct MANGOS_DLL_DECL boss_baltharusAI : public ScriptedAI
+{
+    boss_baltharusAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        Reset();
+    }
+	
+	ScriptedInstance* m_pInstance;
+
+    void Reset()
+    {
+    }
+
+    void Aggro(Unit *pWho)
+    {
+		DoScriptText(SAY_BALTHARUS_AGGRO, m_creature);
+
+		if (m_pInstance->GetData(TYPE_DEAD_EVENT) == NOT_STARTED)
+            m_pInstance->SetData(TYPE_DEAD_EVENT, IN_PROGRESS);
+    }
+
+    void JustReachedHome()
+    {
+        if (m_pInstance && m_pInstance->GetData(TYPE_DEAD_EVENT) == IN_PROGRESS)
+            m_pInstance->SetData(TYPE_DEAD_EVENT, NOT_STARTED);
+    }
+	
+	void KilledUnit()
+    {
+        switch(urand(0, 1))
+        {
+            case 0: DoScriptText(SAY_BALTHARUS_SLAY_1, m_creature); break;
+            case 1: DoScriptText(SAY_BALTHARUS_SLAY_2, m_creature); break;
+        }
+    }
+
+    void JustDied(Unit* pVictim)
+    {
+        if (!m_pInstance)
+            return;
+
+        DoScriptText(SAY_BALTHARUS_DEATH, m_creature);
+		
+		Creature* pHalion = (Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_HALION));
+
+        if (pHalion->isAlive())
+        {
+            if (boss_halionAI* pHalionAI = dynamic_cast<boss_halionAI*>(pHalion->AI()))
+                pHalionAI->EventAddDeath();
+        }
+    }
+	void UpdateAI(const uint32 uiDiff)
+    {
+        //Return since we have no target
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_boss_halion(Creature* pCreature)
+{
+    return new boss_halionAI(pCreature);
 }
+
+CreatureAI* GetAI_boss_saviana(Creature* pCreature)
+{
+    return new boss_savianaAI(pCreature);
+}
+
+CreatureAI *GetAI_boss_zarithrian(Creature* pCreature)
+{
+    return new boss_zarithrianAI(pCreature);
+}
+
+CreatureAI *GetAI_boss_baltharus(Creature* pCreature)
+{
+    return new boss_baltharusAI(pCreature);
+}
+
 void AddSC_boss_halion()
 {
     Script *newscript;
 
     newscript = new Script;
-    newscript->Name = "boss_halion_0";
-    newscript->GetAI = &GetAI_boss_halion_0;
+    newscript->Name = "boss_halion";
+    newscript->GetAI = &GetAI_boss_halion;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "boss_zarithrian";
+    newscript->GetAI = &GetAI_boss_zarithrian;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "boss_baltharus";
+    newscript->GetAI = &GetAI_boss_baltharus;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "boss_saviana";
+    newscript->GetAI = &GetAI_boss_saviana;
     newscript->RegisterSelf();
 }

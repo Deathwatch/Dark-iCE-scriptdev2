@@ -43,6 +43,8 @@
 #define GOSSIP_TEXT_ARENA               "Arena"
 #define GOSSIP_TEXT_EYEOFTHESTORM       "Eye of The Storm"
 #define GOSSIP_TEXT_STRANDOFANCIENT     "Strand of the Ancients"
+#define GOSSIP_TEXT_ISLEOFCONQUEST      "Isle of Conquest"
+#define GOSSIP_TEXT_TWINPEAKS			"Twin Peaks"
 
 #define GOSSIP_TEXT_DEATH_KNIGHT        "Death Knight"
 #define GOSSIP_TEXT_DRUID               "Druid"
@@ -69,6 +71,7 @@
 #define GOSSIP_TEXT_SKINNING            "Skinning"
 #define GOSSIP_TEXT_JEWELCRAFTING       "Jewelcrafting"
 #define GOSSIP_TEXT_INSCRIPTION         "Inscription"
+#define GOSSIP_TEXT_ARCHAEOLOGY         "Archaeology"
 
 enum
 {
@@ -88,6 +91,7 @@ enum
     TRADESKILL_SKINNING            = 13,
     TRADESKILL_JEWLCRAFTING        = 14,
     TRADESKILL_INSCRIPTION         = 15,
+	TRADESKILL_ARCHAEOLOGY         = 16,
 
     TRADESKILL_LEVEL_NONE          = 0,
     TRADESKILL_LEVEL_APPRENTICE    = 1,
@@ -96,6 +100,7 @@ enum
     TRADESKILL_LEVEL_ARTISAN       = 4,
     TRADESKILL_LEVEL_MASTER        = 5,
     TRADESKILL_LEVEL_GRAND_MASTER  = 6,
+	TRADESKILL_LEVEL_I_GRAND_MASTER  = 7, //Illustrious
 
     // Gossip defines
     GOSSIP_ACTION_TRADE            = 1,

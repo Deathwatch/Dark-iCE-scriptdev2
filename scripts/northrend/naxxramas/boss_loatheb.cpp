@@ -59,7 +59,7 @@ struct MANGOS_DLL_DECL boss_loathebAI : public ScriptedAI
     uint32 m_uiEnrage2Timer;
     uint32 m_uiBloomTimer;
     uint32 m_uiNecroticAuraTimer;
-    uint32 m_uiDeatchBloomTimer;
+    uint32 m_uiDeathBloomTimer;
     uint32 m_uiDoomTimer;
     uint32 m_uiEnrageTimer;
     uint32 m_uiSummonTimer;

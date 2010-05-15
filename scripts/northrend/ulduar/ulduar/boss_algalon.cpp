@@ -199,7 +199,7 @@ struct MANGOS_DLL_DECL boss_algalon_the_observerAI : public ScriptedAI
     // reset
 	void Reset()
 	{
-        if (Instance->GetData(DATA_ALGALON) == DONE)
+        if (Instance->GetData(TYPE_ALGALON) == DONE)
             return;
 
         if (m_creature->HasFlag64(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE+UNIT_FLAG_UNK_16+UNIT_FLAG_PASSIVE))
@@ -243,7 +243,7 @@ struct MANGOS_DLL_DECL boss_algalon_the_observerAI : public ScriptedAI
 
     void ResetDialogow()
     {
-        if (Instance->GetData(DATA_ALGALON) == DONE)
+        if (Instance->GetData(TYPE_ALGALON) == DONE)
             return;
 
         IntroStart = false;
@@ -271,9 +271,9 @@ struct MANGOS_DLL_DECL boss_algalon_the_observerAI : public ScriptedAI
     // handle functions
     void JustReachedHome()
     {
-        if (Instance->GetData(DATA_ALGALON) != DONE)
+        if (Instance->GetData(TYPE_ALGALON) != DONE)
         {
-            Instance->SetData(DATA_ALGALON, FAIL);
+            Instance->SetData(TYPE_ALGALON, FAIL);
             ResetDialogow();
         }
         DespawnAll();
@@ -287,7 +287,7 @@ struct MANGOS_DLL_DECL boss_algalon_the_observerAI : public ScriptedAI
         if (IntroStart && IntroEnd)
             return;
 
-        if (Instance->GetData(DATA_ALGALON) == NOT_STARTED)
+        if (Instance->GetData(TYPE_ALGALON) == NOT_STARTED)
         {
             EngagedFirstTime = true;
             IntroStart = true;
@@ -299,7 +299,7 @@ struct MANGOS_DLL_DECL boss_algalon_the_observerAI : public ScriptedAI
             DoStartCombat();
         }
 
-        Instance->SetData(DATA_ALGALON, IN_PROGRESS);
+        Instance->SetData(TYPE_ALGALON, IN_PROGRESS);
 	}
 
 	void KilledUnit()
@@ -371,7 +371,7 @@ struct MANGOS_DLL_DECL boss_algalon_the_observerAI : public ScriptedAI
         if (m_creature->GetHealth()*100/m_creature->GetMaxHealth() < 2 && !DefeatedStart)
         {
             DefeatedStart = true;
-            Instance->SetData(DATA_ALGALON, DONE);
+            Instance->SetData(TYPE_ALGALON, DONE);
             DoStopCombat(true, true);
             DespawnAll();
         }

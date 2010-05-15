@@ -1,4 +1,4 @@
-/* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2006 - 2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
 * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -17,51 +17,71 @@
 /* ScriptData
 SDName: boss_xt002
 SD%Complete: 95%
-SDComment: need core support for light and gravity bomb. correct number of adds in 25man missing
+SDComment: TODO: better movement behaviour of Scrapbots
 SDCategory: Ulduar
 EndScriptData */
 
 #include "precompiled.h"
-#include "ulduar.h"
+#include "def_ulduar.h"
 
 enum
 {
     //xt yells
-    SAY_AGGRO                = -1603000,
-    SAY_DEATH                = -1603008,
-    SAY_TANCTRUM            = -1603001,
-    SAY_SLAY_01                = -1603002,
-    SAY_SLAY_02                = -1603003,
-    SAY_BERSERK                = -1603007,
-    SAY_ADDS                = -1603006,
-    SAY_HEART_OPEN            = -1603004,
-    SAY_HEART_CLOSE            = -1603005,
+    SAY_AGGRO				= -1603000,
+    SAY_DEATH				= -1603008,
+    SAY_TANCTRUM			= -1603001,
+    SAY_SLAY_01				= -1603002,
+    SAY_SLAY_02				= -1603003,
+    SAY_BERSERK				= -1603007,
+    SAY_ADDS				= -1603006,
+    SAY_HEART_OPEN			= -1603004,
+    SAY_HEART_CLOSE			= -1603005,
 
     //xt-002
-    SPELL_TANCTRUM            = 62776,
-    SPELL_LIGHT_BOMB        = 63018,
-    SPELL_LIGHT_BOMB_H        = 65121,
-    SPELL_GRAVITY_BOMB        = 63024,
-    SPELL_GRAVITY_BOMB_H    = 64234,
-    SPELL_ENRAGE            = 47008,
-    SPELL_STUN                = 3618,
+    SPELL_TANCTRUM			= 62776,
+    SPELL_LIGHT_BOMB		= 63018,
+    SPELL_LIGHT_BOMB_H		= 65121,
+    SPELL_GRAVITY_BOMB		= 63024,
+    SPELL_GRAVITY_BOMB_H	= 64234,
+    SPELL_ENRAGE			= 47008,
+    SPELL_STUN				= 3618,
+	SPELL_HEARTBREAK		= 65737,
+	SPELL_HEARTBREAK_H		= 64193,
+	SPELL_SCRAP_REPAIR		= 62832,
+	SPELL_VOID_ZONE			= 64203,
 
     //heart of the deconstructor
-    SPELL_EXPOSED_HEART        = 63849,
+    SPELL_EXPOSED_HEART		= 63849,
 
     //XE-321 Boombot
-    SPELL_BOOM                = 38831,            // replacing real spell
+    SPELL_BOOM				= 38831,            // replacing real spell
 
     //XM-024 Pummeller
-    SPELL_CLEAVE            = 8374,
-    SPELL_TRAMPLE            = 5568,
-    SPELL_UPPERCUT            = 10966,
+    SPELL_CLEAVE			= 8374,
+    SPELL_TRAMPLE			= 5568,
+    SPELL_UPPERCUT			= 10966,
+
+	//Life Spark
+	SPELL_SHOCK				= 64230,
+	SPELL_STATIC_CHARGED	= 64227,
+	SPELL_STATIC_CHARGED_H	= 64236,
 
     //NPC ids
-    NPC_HEART                = 33329,
-    NPC_SCRAPBOT            = 33343,
-    NPC_BOOMBOT                = 33346,
-    NPC_PUMMELER            = 33344
+    NPC_HEART				= 33329,
+    NPC_SCRAPBOT			= 33343,
+    NPC_BOOMBOT				= 33346,
+    NPC_PUMMELER			= 33344,
+	NPC_LIFE_SPARK			= 34004,
+
+	//Achievements
+	ACHIEV_HEARTBRAKER		= 3058,
+	ACHIEV_HEARTBRAKER_H	= 3059,
+	ACHIEV_DECONSTRUCT		= 2937,
+	ACHIEV_DECONSTRUCT_H	= 2938,
+	ACHIEV_NERF				= 2931,
+	ACHIEV_NERF_H			= 2932,
+	ACHIEV_NERF_GRAVITY		= 2934,
+	ACHIEV_NERF_GRAVITY_H	= 2936
 };
 
 // XM-024 Pummeller
@@ -118,7 +138,8 @@ struct MANGOS_DLL_DECL mob_boombotAI : public ScriptedAI
 
     void DamageTaken(Unit* pDoneBy, uint32& uiDamage)
     {
-        if (uiDamage > m_creature->GetHealth()){
+        if (uiDamage > m_creature->GetHealth())
+		{
             uiDamage = 0;
             DoCast(m_creature, SPELL_BOOM);
         }
@@ -128,9 +149,7 @@ struct MANGOS_DLL_DECL mob_boombotAI : public ScriptedAI
     {
         //If we are within range melee the target
         if (m_creature->IsWithinDistInMap(m_creature->getVictim(), ATTACK_DISTANCE))
-        {
             DoCast(m_creature, SPELL_BOOM);
-        }
     }
 
     void UpdateAI(const uint32 diff)
@@ -152,50 +171,45 @@ struct MANGOS_DLL_DECL mob_xtheartAI : public ScriptedAI
 {
     mob_xtheartAI(Creature* pCreature) : ScriptedAI(pCreature) 
     {
-        SetCombatMovement(false);
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+		m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
         Reset();
     }
 
     ScriptedInstance* m_pInstance;
+	bool m_bIsRegularMode;
 
     uint32 Exposed_Timer;
     uint32 heartdamage;
 
     void Reset()
     {
-        Exposed_Timer = 30000;
+		SetCombatMovement(false);
+        Exposed_Timer = 36000;
         DoCast(m_creature, SPELL_EXPOSED_HEART);
         heartdamage = 0;
     }
 
     void DamageTaken(Unit* pDoneBy, uint32& uiDamage)
     {
-        heartdamage += uiDamage;
+		if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_XT002))))
+			if (pTemp->isAlive())
+				pTemp->DealDamage(pTemp, uiDamage, NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
     }
 
     void JustDied(Unit* pKiller)
     {
-        if (heartdamage != 0)
-            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_XT002))))
-                if (pTemp->isAlive())
-                {
-                    pTemp->DealDamage(pTemp, heartdamage, NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
-                    heartdamage = 0;
-                }
+        if(Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_XT002))))
+			pTemp->CastSpell(pTemp, m_bIsRegularMode ? SPELL_HEARTBREAK : SPELL_HEARTBREAK_H, false);
     }
 
     void UpdateAI(const uint32 diff)
     {
         if (Exposed_Timer < diff)
         {
-            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_XT002))))
-                if (pTemp->isAlive())
-                    pTemp->DealDamage(pTemp, heartdamage, NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
-            heartdamage = 0;
-            m_creature->DealDamage(m_creature, m_creature->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
+			if(m_creature)
+				m_creature->ForcedDespawn();
         }else Exposed_Timer -= diff;
-            
     }
 
 };
@@ -203,6 +217,102 @@ struct MANGOS_DLL_DECL mob_xtheartAI : public ScriptedAI
 CreatureAI* GetAI_mob_xtheart(Creature* pCreature)
 {
     return new mob_xtheartAI(pCreature);
+}
+
+// Life Spark
+struct MANGOS_DLL_DECL mob_life_spark_AI : public ScriptedAI
+{
+    mob_life_spark_AI(Creature *pCreature) : ScriptedAI(pCreature)
+    {
+        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+		m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
+		Reset();
+    }
+    
+    ScriptedInstance* m_pInstance;
+	bool m_bIsRegularMode;
+
+    void Reset() {}
+    
+    void EnterCombat(Unit* who)
+    {
+		DoCast(m_creature, m_bIsRegularMode ? SPELL_STATIC_CHARGED : SPELL_STATIC_CHARGED_H);
+    }
+
+	void UpdateAI(const uint32 diff)
+	{
+		switch(urand(0,2))
+		{
+			case 0:
+				DoMeleeAttackIfReady();
+				break;
+			case 1:
+			case 2:
+				DoCast(m_creature->getVictim(), SPELL_SHOCK);
+				break;
+		}
+	}
+};
+
+CreatureAI* GetAI_mob_life_spark(Creature* pCreature)
+{
+    return new mob_life_spark_AI (pCreature);
+}
+
+//Void Zone
+struct MANGOS_DLL_DECL mob_void_zoneAI : public ScriptedAI
+{
+    mob_void_zoneAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+		m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+		m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
+        Reset();
+        SetCombatMovement(false);
+    }
+
+    ScriptedInstance* m_pInstance;
+    bool m_bIsRegularMode;
+
+    uint32 m_uiDeathTimer;
+	uint32 m_uiDamageTimer;
+
+    void Reset()
+    {
+        m_uiDeathTimer = 180000;
+		m_uiDamageTimer = 1000;
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+		SetCombatMovement(false);
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        if (m_uiDeathTimer < diff)
+        {
+            m_creature->DealDamage(m_creature, m_creature->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
+        }else m_uiDeathTimer -= diff;
+		
+        if (m_uiDamageTimer < diff)
+        {
+			Map* pMap = m_creature->GetMap();
+			if (pMap && pMap->IsDungeon())
+			{
+				Map::PlayerList const &players = pMap->GetPlayers();
+				for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+					if (m_creature->IsWithinDistInMap(itr->getSource(), ATTACK_DISTANCE))
+						m_creature->DealDamage(m_creature, m_bIsRegularMode ? 5000 : 7500, NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_SHADOW, NULL, false);
+			}
+			m_uiDamageTimer = 1000;
+        }else m_uiDamageTimer -= diff;
+    }
+};
+
+CreatureAI* GetAI_mob_void_zone(Creature* pCreature)
+{
+    return new mob_void_zoneAI(pCreature);
 }
 
 float XtAddX[4];
@@ -230,19 +340,29 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
     std::list<uint64> m_lBoombotsGUIDList;
     std::list<uint64> m_lPummelerGUIDList;
 
+	Unit* targetLightBomb;
+	Unit* targetGravityBomb;
+
     uint32 Heart_Timer;
     uint32 Light_Bomb_Timer;
+	uint32 Light_Bomb_End_Timer;
     uint32 Gravity_Bomb_Timer;
+	uint32 Gravity_Bomb_End_Timer;
     uint32 Tanctrum_Timer;
     uint32 add_summon_delay;
     uint32 Enrage_Timer;
     uint32 Range_Check_Timer;
+	uint32 Deconstruct_Timer;
     uint32 Addcount;
     bool heart1;
     bool heart2;
     bool heart3;
     bool enrage;
     bool phase2;
+	bool hardmode;
+	bool deconstruct;
+	bool nerf;
+	bool nerfgravity;
     bool add1;
     bool add2;
     bool add3;
@@ -256,8 +376,7 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
         Tanctrum_Timer = 38000; // 38 seconds first 40 secs all after
         add_summon_delay = 5000;
         Enrage_Timer = 600000;
-        Range_Check_Timer = 1000;
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+		Deconstruct_Timer = 205000;
         m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         Addcount = 0;
         heart1 = false;
@@ -265,10 +384,16 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
         heart3 = false;
         enrage = false;
         phase2 = false;
+		hardmode = false;
+		deconstruct = true;
+		nerf = true;
+		nerfgravity = true;
         add1 = false;
         add2 = false;
         add3 = false;
         add4 = false;
+		targetLightBomb = NULL;
+		targetGravityBomb = NULL;
         m_lScrapbotsGUIDList.clear();
         m_lBoombotsGUIDList.clear();
         m_lPummelerGUIDList.clear();
@@ -279,24 +404,85 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
         if (m_pInstance)
             m_pInstance->SetData(TYPE_XT002, DONE);
         DoScriptText(SAY_DEATH, m_creature);
+
         if (!m_lScrapbotsGUIDList.empty())
-            {
-                for(std::list<uint64>::iterator itr = m_lScrapbotsGUIDList.begin(); itr != m_lScrapbotsGUIDList.end(); ++itr)
-                    if (Creature* pTemp = (Creature*)Unit::GetUnit(*m_creature, *itr))
-                            pTemp->ForcedDespawn();
-            }
+		{
+			for(std::list<uint64>::iterator itr = m_lScrapbotsGUIDList.begin(); itr != m_lScrapbotsGUIDList.end(); ++itr)
+			if (Creature* pTemp = (Creature*)Unit::GetUnit(*m_creature, *itr))
+				pTemp->ForcedDespawn();
+		}
         if (!m_lBoombotsGUIDList.empty())
-            {
-                for(std::list<uint64>::iterator itr = m_lBoombotsGUIDList.begin(); itr != m_lBoombotsGUIDList.end(); ++itr)
-                    if (Creature* pTemp = (Creature*)Unit::GetUnit(*m_creature, *itr))
-                            pTemp->ForcedDespawn();
-            }
+		{
+			for(std::list<uint64>::iterator itr = m_lBoombotsGUIDList.begin(); itr != m_lBoombotsGUIDList.end(); ++itr)
+			if (Creature* pTemp = (Creature*)Unit::GetUnit(*m_creature, *itr))
+				pTemp->ForcedDespawn();
+		}
         if (!m_lPummelerGUIDList.empty())
+		{
+			for(std::list<uint64>::iterator itr = m_lPummelerGUIDList.begin(); itr != m_lPummelerGUIDList.end(); ++itr)
+			if (Creature* pTemp = (Creature*)Unit::GetUnit(*m_creature, *itr))
+				pTemp->ForcedDespawn();
+		}
+
+		if (hardmode)
+		{
+			AchievementEntry const *AchievHeartbreak = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_HEARTBRAKER : ACHIEV_HEARTBRAKER_H);
+            if (AchievHeartbreak)
             {
-                for(std::list<uint64>::iterator itr = m_lPummelerGUIDList.begin(); itr != m_lPummelerGUIDList.end(); ++itr)
-                    if (Creature* pTemp = (Creature*)Unit::GetUnit(*m_creature, *itr))
-                            pTemp->ForcedDespawn();
+                Map* pMap = m_creature->GetMap();
+                if (pMap && pMap->IsDungeon())
+                {
+                    Map::PlayerList const &players = pMap->GetPlayers();
+                    for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+                        itr->getSource()->CompletedAchievement(AchievHeartbreak);
+                }
             }
+		}
+
+		if (deconstruct)
+		{
+			AchievementEntry const *AchievDeconstruct = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_DECONSTRUCT : ACHIEV_DECONSTRUCT_H);
+            if (AchievDeconstruct)
+            {
+                Map* pMap = m_creature->GetMap();
+                if (pMap && pMap->IsDungeon())
+                {
+                    Map::PlayerList const &players = pMap->GetPlayers();
+                    for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+                        itr->getSource()->CompletedAchievement(AchievDeconstruct);
+                }
+            }
+		}
+
+		if (nerf)
+		{
+			AchievementEntry const *AchievNerf = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_NERF : ACHIEV_NERF_H);
+            if (AchievNerf)
+            {
+                Map* pMap = m_creature->GetMap();
+                if (pMap && pMap->IsDungeon())
+                {
+                    Map::PlayerList const &players = pMap->GetPlayers();
+                    for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+                        itr->getSource()->CompletedAchievement(AchievNerf);
+                }
+            }
+		}
+
+		if (nerfgravity)
+		{
+			AchievementEntry const *AchievNerfGravity = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_NERF_GRAVITY : ACHIEV_NERF_GRAVITY_H);
+            if (AchievNerfGravity)
+            {
+                Map* pMap = m_creature->GetMap();
+                if (pMap && pMap->IsDungeon())
+                {
+                    Map::PlayerList const &players = pMap->GetPlayers();
+                    for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+                        itr->getSource()->CompletedAchievement(AchievNerfGravity);
+                }
+            }
+		}
     }
 
     void Aggro(Unit* pWho)
@@ -315,10 +501,15 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
     void KilledUnit(Unit* pVictim)
     {
         switch(urand(0, 1))
-                {
-                    case 0: DoScriptText(SAY_SLAY_01, m_creature); break;
-                    case 1: DoScriptText(SAY_SLAY_02, m_creature); break;
-                }
+		{
+			case 0: DoScriptText(SAY_SLAY_01, m_creature); break;
+			case 1: DoScriptText(SAY_SLAY_02, m_creature); break;
+		}
+    }
+
+    void AchievNerfFail()
+    {
+        nerf = false;
     }
 
     void UpdateAI(const uint32 diff)
@@ -326,19 +517,31 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        /*if (Light_Bomb_Timer < diff && !phase2)
+        if (Light_Bomb_Timer < diff && !phase2)
         {
-            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,1))
-                DoCast(target, m_bIsRegularMode ? SPELL_LIGHT_BOMB : SPELL_LIGHT_BOMB_H);
+            if (Unit* pTemp = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1))
+			{
+                DoCast(pTemp, m_bIsRegularMode ? SPELL_LIGHT_BOMB : SPELL_LIGHT_BOMB_H);
+				targetLightBomb = pTemp;
+			}
+			else
+				targetLightBomb = NULL;
             Light_Bomb_Timer = m_bIsRegularMode ? 14000 :7000;
+            Light_Bomb_End_Timer = 9000;
         }else Light_Bomb_Timer -= diff;   
 
         if (Gravity_Bomb_Timer < diff && !phase2)
         {
-            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,1))
-                DoCast(target, m_bIsRegularMode ? SPELL_GRAVITY_BOMB : SPELL_GRAVITY_BOMB_H);
+            if (Unit* pTemp = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1))
+			{
+                DoCast(pTemp, m_bIsRegularMode ? SPELL_GRAVITY_BOMB : SPELL_GRAVITY_BOMB_H);
+				targetGravityBomb = pTemp;
+			}
+			else
+				targetGravityBomb = NULL;
             Gravity_Bomb_Timer = m_bIsRegularMode ? 18000 :11000;
-        }else Gravity_Bomb_Timer -= diff;  */
+            Gravity_Bomb_End_Timer = 9000;
+        }else Gravity_Bomb_Timer -= diff;
 
         if (Tanctrum_Timer < diff && !phase2)
         {
@@ -359,29 +562,10 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
                 Enrage_Timer = 5000;
         }else Enrage_Timer -= diff;
 
-        if (Range_Check_Timer < diff)
+        if (Deconstruct_Timer < diff)
         {
-            if (!m_lScrapbotsGUIDList.empty())
-            {
-                for(std::list<uint64>::iterator itr = m_lScrapbotsGUIDList.begin(); itr != m_lScrapbotsGUIDList.end(); ++itr)
-                    if (Creature* pTemp = (Creature*)Unit::GetUnit(*m_creature, *itr))
-                        if (pTemp->isAlive() && m_creature->IsWithinDistInMap(pTemp, ATTACK_DISTANCE))
-                        {
-                            m_creature->SetHealth(m_creature->GetHealth() + m_creature->GetMaxHealth() * 0.01);
-                            pTemp->DealDamage(pTemp, pTemp->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
-                        }
-            }
-            if (!m_lBoombotsGUIDList.empty())
-            {
-                for(std::list<uint64>::iterator itr = m_lBoombotsGUIDList.begin(); itr != m_lBoombotsGUIDList.end(); ++itr)
-                    if (Creature* pTemp = (Creature*)Unit::GetUnit(*m_creature, *itr))
-                        if (pTemp->isAlive() && m_creature->IsWithinDistInMap(pTemp, ATTACK_DISTANCE))
-                        {
-                            pTemp->DealDamage(pTemp, pTemp->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
-                        }
-            }
-            Range_Check_Timer = 1000;
-        }else Range_Check_Timer -= diff;
+            deconstruct = false;
+        }else Deconstruct_Timer -= diff;
 
         if (!phase2 && !heart1 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 75)
         {
@@ -394,10 +578,9 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
             add4 = false;
             add_summon_delay = 5000;
             DoScriptText(SAY_HEART_OPEN, m_creature);
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             DoCast(m_creature, SPELL_STUN);
             m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-            m_creature->SummonCreature(NPC_HEART, 0.0f, 0.0f, 0.0f, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+            m_creature->SummonCreature(NPC_HEART, 0.0f, 0.0f, 0.0f, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 36000);
         }
 
         if (!phase2 && heart1 && !heart2 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 50)
@@ -411,10 +594,9 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
             add4 = false;
             add_summon_delay = 5000;
             DoScriptText(SAY_HEART_OPEN, m_creature);
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             DoCast(m_creature, SPELL_STUN);
             m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-            m_creature->SummonCreature(NPC_HEART, 0.0f, 0.0f, 0.0f, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+            m_creature->SummonCreature(NPC_HEART, 0.0f, 0.0f, 0.0f, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 36000);
         }
 
         if (!phase2 && heart1 && heart2 && !heart3 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 25)
@@ -428,17 +610,31 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
             add4 = false;
             add_summon_delay = 5000;
             DoScriptText(SAY_HEART_OPEN, m_creature);
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             DoCast(m_creature, SPELL_STUN);
             m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-            m_creature->SummonCreature(NPC_HEART, 0.0f, 0.0f, 0.0f, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+            m_creature->SummonCreature(NPC_HEART, 0.0f, 0.0f, 0.0f, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 36000);
         }
 
-        if (phase2 && Heart_Timer < diff)
+		if (!hardmode && (m_creature->HasAura(SPELL_HEARTBREAK) || m_creature->HasAura(SPELL_HEARTBREAK_H)))
+		{
+			hardmode = true;
+			heart2 = true;
+			heart3 = true;
+			phase2 = false;
+            DoScriptText(SAY_HEART_CLOSE, m_creature);
+			m_creature->SetHealth(m_creature->GetMaxHealth());
+            m_creature->RemoveAurasDueToSpell(SPELL_STUN);
+            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            m_creature->AI()->AttackStart(m_creature->getVictim());
+            Light_Bomb_Timer = 7000;
+            Gravity_Bomb_Timer = 11000;
+            Tanctrum_Timer = 38000;
+		}
+
+        if (!hardmode && phase2 && Heart_Timer < diff)
         {
             DoScriptText(SAY_HEART_CLOSE, m_creature);
             m_creature->RemoveAurasDueToSpell(SPELL_STUN);
-            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             m_creature->AI()->AttackStart(m_creature->getVictim());
             phase2 = false;
@@ -446,6 +642,58 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
             Gravity_Bomb_Timer = 11000;
             Tanctrum_Timer = 38000;
         }else Heart_Timer -= diff;
+
+		if (!hardmode)
+		{
+			if (Light_Bomb_End_Timer < diff)
+			{
+				if(targetLightBomb && targetLightBomb->IsInWorld())
+					if(targetLightBomb->isDead())
+					{
+						nerfgravity = false;
+						targetLightBomb = NULL;
+					}
+				Light_Bomb_End_Timer = 90000;
+			} else Light_Bomb_End_Timer -= diff;
+
+			if (Gravity_Bomb_End_Timer < diff)
+			{
+				if(targetGravityBomb && targetGravityBomb->IsInWorld())
+					if(targetGravityBomb->isDead())
+					{
+						nerfgravity = false;
+						targetGravityBomb = NULL;
+					}
+				Gravity_Bomb_End_Timer = 90000;
+			} else Gravity_Bomb_End_Timer -= diff;
+		}
+
+		if (hardmode)
+		{
+			if (Light_Bomb_End_Timer < diff)
+			{
+				if(targetLightBomb && targetLightBomb->IsInWorld())
+				{
+					m_creature->SummonCreature(NPC_LIFE_SPARK, targetLightBomb->GetPositionX(),  targetLightBomb->GetPositionY(),  targetLightBomb->GetPositionZ(),  0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 600000);
+					if(targetLightBomb->isDead())
+						nerfgravity = false;
+					targetLightBomb = NULL;
+				}
+				Light_Bomb_End_Timer = 90000;
+			} else Light_Bomb_End_Timer -= diff;
+
+			if (Gravity_Bomb_End_Timer < diff)
+			{
+				if(targetGravityBomb && targetGravityBomb->IsInWorld())
+				{
+					DoCast(targetGravityBomb, SPELL_VOID_ZONE);
+					if(targetGravityBomb->isDead())
+						nerfgravity = false;
+					targetGravityBomb = NULL;
+				}
+				Gravity_Bomb_End_Timer = 90000;
+			} else Gravity_Bomb_End_Timer -= diff;
+		}
 
         if (phase2 && add_summon_delay < diff)
         {
@@ -456,7 +704,7 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
                 if (Creature* pTemp = m_creature->SummonCreature(NPC_SCRAPBOT, XtAddX[0], XtAddY[0], XtAddZ[0], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
                 {
                     pTemp->AddThreat(m_creature->getVictim(),1000.0f);
-                    pTemp->AI()->AttackStart(m_creature->getVictim());
+					pTemp->AI()->AttackStart(m_creature->getVictim());
                     m_lScrapbotsGUIDList.push_back(pTemp->GetGUID());
                     Addcount++;
                 }} while(Addcount<3);
@@ -465,21 +713,28 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
                 if (Creature* pTemp = m_creature->SummonCreature(NPC_BOOMBOT, XtAddX[0], XtAddY[0], XtAddZ[0], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
                 {
                     pTemp->AddThreat(m_creature->getVictim(),1000.0f);
-                    pTemp->AI()->AttackStart(m_creature->getVictim());
+					pTemp->AI()->AttackStart(m_creature->getVictim());
                     m_lBoombotsGUIDList.push_back(pTemp->GetGUID());
                     Addcount++;
-                }} while(Addcount<1);
+                }} while(Addcount<2);
                 add1 = true;
                 add_summon_delay = 4000;
             }
             if (!add2 && add1)
             {
+                if (Creature* pTemp = m_creature->SummonCreature(NPC_PUMMELER, XtAddX[3], XtAddY[3], XtAddZ[3], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                {
+                    pTemp->AddThreat(pTarget,0.0f);
+                    pTemp->AI()->AttackStart(pTarget);
+                    m_lPummelerGUIDList.push_back(pTemp->GetGUID());
+                }
                 Addcount = 0;
                 do{
                 if (Creature* pTemp = m_creature->SummonCreature(NPC_SCRAPBOT, XtAddX[1], XtAddY[1], XtAddZ[1], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
                 {
                     pTemp->AddThreat(m_creature->getVictim(),1000.0f);
-                    pTemp->AI()->AttackStart(m_creature->getVictim());
+					pTemp->AI()->AttackStart(m_creature->getVictim());
                     m_lScrapbotsGUIDList.push_back(pTemp->GetGUID());
                     Addcount++;
                 }} while(Addcount<3);
@@ -488,10 +743,10 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
                 if (Creature* pTemp = m_creature->SummonCreature(NPC_BOOMBOT, XtAddX[1], XtAddY[1], XtAddZ[1], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
                 {
                     pTemp->AddThreat(m_creature->getVictim(),1000.0f);
-                    pTemp->AI()->AttackStart(m_creature->getVictim());
+					pTemp->AI()->AttackStart(m_creature->getVictim());
                     m_lBoombotsGUIDList.push_back(pTemp->GetGUID());
                     Addcount++;
-                }} while(Addcount<1);
+                }} while(Addcount<2);
                 add2 = true;
                 DoScriptText(SAY_ADDS, m_creature);
                 add_summon_delay = 1000;
@@ -503,7 +758,7 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
                 if (Creature* pTemp = m_creature->SummonCreature(NPC_SCRAPBOT, XtAddX[2], XtAddY[2], XtAddZ[2], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
                 {
                     pTemp->AddThreat(m_creature->getVictim(),1000.0f);
-                    pTemp->AI()->AttackStart(m_creature->getVictim());
+					pTemp->AI()->AttackStart(m_creature->getVictim());
                     m_lScrapbotsGUIDList.push_back(pTemp->GetGUID());
                     Addcount++;
                 }} while(Addcount<3);
@@ -512,10 +767,10 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
                 if (Creature* pTemp = m_creature->SummonCreature(NPC_BOOMBOT, XtAddX[2], XtAddY[2], XtAddZ[2], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
                 {
                     pTemp->AddThreat(m_creature->getVictim(),1000.0f);
-                    pTemp->AI()->AttackStart(m_creature->getVictim());
+					pTemp->AI()->AttackStart(m_creature->getVictim());
                     m_lBoombotsGUIDList.push_back(pTemp->GetGUID());
                     Addcount++;
-                }} while(Addcount<1);
+                }} while(Addcount<2);
                 add3 = true;
                 add_summon_delay = 4000;
             }
@@ -533,7 +788,7 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
                 if (Creature* pTemp = m_creature->SummonCreature(NPC_SCRAPBOT, XtAddX[3], XtAddY[3], XtAddZ[3], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
                 {
                     pTemp->AddThreat(m_creature->getVictim(),1000.0f);
-                    pTemp->AI()->AttackStart(m_creature->getVictim());
+					pTemp->AI()->AttackStart(m_creature->getVictim());
                     m_lScrapbotsGUIDList.push_back(pTemp->GetGUID());
                     Addcount++;
                 }} while(Addcount<3);
@@ -542,10 +797,10 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
                 if (Creature* pTemp = m_creature->SummonCreature(NPC_BOOMBOT, XtAddX[3], XtAddY[3], XtAddZ[3], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
                 {
                     pTemp->AddThreat(m_creature->getVictim(),1000.0f);
-                    pTemp->AI()->AttackStart(m_creature->getVictim());
+					pTemp->AI()->AttackStart(m_creature->getVictim());
                     m_lBoombotsGUIDList.push_back(pTemp->GetGUID());
                     Addcount++;
-                }} while(Addcount<1);
+                }} while(Addcount<2);
                 add4 = true;
                 add_summon_delay = 30000;
             }
@@ -561,13 +816,63 @@ CreatureAI* GetAI_boss_xt002(Creature* pCreature)
     return new boss_xt002AI(pCreature);
 }
 
+// XS-013 Scrapbot
+struct MANGOS_DLL_DECL mob_scrapbotAI : public ScriptedAI
+{
+    mob_scrapbotAI(Creature* pCreature) : ScriptedAI(pCreature) 
+	{
+		m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+		Reset();
+	}
+
+	ScriptedInstance* m_pInstance;
+	bool move;
+
+    void Reset()
+    {
+		move = false;
+    }
+
+    void DoMeleeAttackIfReady()
+    {
+        //If we are within range heal XT002
+		if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_XT002))))
+			if (m_creature->IsWithinDistInMap(pTemp, ATTACK_DISTANCE))
+			{
+				pTemp->SetHealth(pTemp->GetHealth() + pTemp->GetMaxHealth() * 0.01);
+				if (m_pInstance)
+					CAST_AI(boss_xt002AI, pTemp->AI())->AchievNerfFail();
+				m_creature->ForcedDespawn();
+			}
+			else
+				if (!move)
+				{
+					move = true;
+					m_creature->GetMotionMaster()->MovePoint(0, pTemp->GetPositionX(), pTemp->GetPositionY(), pTemp->GetPositionZ());
+				}
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_mob_scrapbot(Creature* pCreature)
+{
+    return new mob_scrapbotAI(pCreature);
+}
+
 void AddSC_boss_xt002()
 {
     Script* NewScript;
 
     NewScript = new Script;
     NewScript->Name = "boss_xt002";
-    NewScript->GetAI = GetAI_boss_xt002;
+    NewScript->GetAI = &GetAI_boss_xt002;
     NewScript->RegisterSelf();
 
     NewScript = new Script;
@@ -581,7 +886,22 @@ void AddSC_boss_xt002()
     NewScript->RegisterSelf();
 
     NewScript = new Script;
+    NewScript->Name = "mob_scrapbot";
+    NewScript->GetAI = &GetAI_mob_scrapbot;
+    NewScript->RegisterSelf();
+
+    NewScript = new Script;
     NewScript->Name = "mob_xtheart";
     NewScript->GetAI = &GetAI_mob_xtheart;
+    NewScript->RegisterSelf();
+
+    NewScript = new Script;
+    NewScript->Name = "mob_life_spark";
+    NewScript->GetAI = &GetAI_mob_life_spark;
+    NewScript->RegisterSelf();
+
+    NewScript = new Script;
+    NewScript->Name = "mob_void_zone";
+    NewScript->GetAI = &GetAI_mob_void_zone;
     NewScript->RegisterSelf();
 }

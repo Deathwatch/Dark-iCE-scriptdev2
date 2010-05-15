@@ -1,4 +1,4 @@
-/* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2006 - 2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
 * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -27,73 +27,44 @@ EndScriptData */
 enum
 {
     //yells
-	SAY_STEELBREAKER_AGGRO			= -1603020,
-    SAY_STEELBREAKER_SLAY_1         = -1603021,
-    SAY_STEELBREAKER_SLAY_2         = -1603022,
-    SAY_STEELBREAKER_POWER          = -1603023,
-    SAY_STEELBREAKER_DEATH_1        = -1603024,
-    SAY_STEELBREAKER_DEATH_2        = -1603025,
-    SAY_STEELBREAKER_BERSERK        = -1603026,
-
-    SAY_MOLGEIM_AGGRO               = -1603030,
-    SAY_MOLGEIM_SLAY_1              = -1603031,
-    SAY_MOLGEIM_SLAY_2              = -1603032,
-    SAY_MOLGEIM_RUNE_DEATH          = -1603033,
-    SAY_MOLGEIM_SUMMON              = -1603034,
-    SAY_MOLGEIM_DEATH_1             = -1603035,
-    SAY_MOLGEIM_DEATH_2             = -1603036,
-    SAY_MOLGEIM_BERSERK             = -1603037,
-
-    SAY_BRUNDIR_AGGRO               = -1603040,
-    SAY_BRUNDIR_SLAY_1              = -1603041,
-    SAY_BRUNDIR_SLAY_2              = -1603042,
-    SAY_BRUNDIR_SPECIAL             = -1603043,
-    SAY_BRUNDIR_FLIGHT              = -1603044,
-    SAY_BRUNDIR_DEATH_1             = -1603045,
-    SAY_BRUNDIR_DEATH_2             = -1603046,
-    SAY_BRUNDIR_BERSERK             = -1603047,
 
     //all
-    SPELL_BERSERK					= 47008,
-    SPELL_SUPERCHARGE				= 61920,
-
+    SPELL_BERSERK                = 47008,
+    SPELL_SUPERCHARGE            = 61920,
     //steelbreaker
-    SPELL_HIGH_VOLTAGE				= 61890,
-    SPELL_HIGH_VOLTAGE_H			= 63498,
-    SPELL_FUSION_PUNCH				= 61903,
-    SPELL_FUSION_PUNCH_H			= 63493,
-    SPELL_STATIC_DISRUPTION			= 44008,
-    SPELL_STATIC_DISRUPTION_H		= 63494,
-    SPELL_POWER						= 64637,
-    SPELL_POWER_H					= 61888,
-    SPELL_ELECTRICAL_CHARGE			= 61902,
-
+    SPELL_HIGH_VOLTAGE            = 61890,
+    SPELL_HIGH_VOLTAGE_H        = 63498,
+    SPELL_FUSION_PUNCH            = 61903,
+    SPELL_FUSION_PUNCH_H        = 63493,
+    SPELL_STATIC_DISRUPTION        = 44008,
+    SPELL_STATIC_DISRUPTION_H    = 63494,
+    SPELL_POWER                    = 64637,
+    SPELL_POWER_H                = 61888,
+    SPELL_ELECTRICAL_CHARGE        = 61902,
     //runemaster molgeim
-    SPELL_SHIELD					= 62274,
-    SPELL_SHIELD_H					= 63489,
-    SPELL_RUNE_OF_POWER				= 63513,
-    SPELL_RUNE_OF_DEATH				= 62269,
-    SPELL_RUNE_OF_DEATH_H			= 63490,
-    SPELL_RUNE_OF_SUMMONING			= 62273,
-
+    SPELL_SHIELD                = 62274,
+    SPELL_SHIELD_H                = 63489,
+    SPELL_RUNE_OF_POWER            = 63513,
+    SPELL_RUNE_OF_DEATH            = 62269,
+    SPELL_RUNE_OF_DEATH_H        = 63490,
+    SPELL_RUNE_OF_SUMMONING        = 62273,
     //rune of power
-    AURA_RUNE_OF_POWER				= 61974,
+    AURA_RUNE_OF_POWER            = 61974,
     //rune of summoning
-    AURA_RUNE_OF_SUMMONING			= 62019,
+    AURA_RUNE_OF_SUMMONING        = 62019,
     //lightning elemental
-    SPELL_LIGHTNING_BLAST			= 62054,
-    SPELL_LIGHTNING_BLAST_H			= 63491,
-
+    SPELL_LIGHTNING_BLAST        = 62054,
+    SPELL_LIGHTNING_BLAST_H        = 63491,
     //stormcaller brundir
-    SPELL_CHAIN_LIGHTNING			= 61879,
-    SPELL_CHAIN_LIGHTNING_H			= 63479,
-    SPELL_OVERLOAD					= 61869,
-    SPELL_LIGHTNING_WHIRL			= 61915,
-    SPELL_LIGHTNING_WHIRL_H			= 63483,
-    SPELL_STORMSHIELD				= 64187,
-    SPELL_LIGHTNING_TENDRILS		= 61887,
-    SPELL_LIGHTNING_TENDRILS_H		= 63486,
-    LIGHTNING_TENDRILS_VISUAL		= 61883,
+    SPELL_CHAIN_LIGHTNING        = 61879,
+    SPELL_CHAIN_LIGHTNING_H        = 63479,
+    SPELL_OVERLOAD                = 61869,
+    SPELL_LIGHTNING_WHIRL        = 61915,
+    SPELL_LIGHTNING_WHIRL_H        = 63483,
+    SPELL_STORMSHIELD            = 64187,
+    SPELL_LIGHTNING_TENDRILS    = 61887,
+    SPELL_LIGHTNING_TENDRILS_H    = 63486,
+    LIGHTNING_TENDRILS_VISUAL    = 61883,
     //NPC ids
     MOB_LIGHTNING_ELEMENTAL        = 32958
 };
@@ -285,15 +256,6 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
             m_creature->RemoveAurasDueToSpell(SPELL_SUPERCHARGE);
     }
 
-	void KilledUnit(Unit *victim)
-    {
-		switch(urand(0, 1))
-        {
-        	case 0: DoScriptText(SAY_BRUNDIR_SLAY_1, m_creature); break;
-            case 1: DoScriptText(SAY_BRUNDIR_SLAY_2, m_creature); break;
-		}
-    }
-
     void DamageTaken(Unit* pDoneBy, uint32& uiDamage)
     {
         if (uiDamage > m_creature->GetHealth() && !die)
@@ -303,10 +265,10 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
             m_creature->setFaction(1925);
             if (supercharge1)
             {
-                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_MOLGEIM))))
+                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
                     if (pTemp->isAlive() && pTemp->HasAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0))
                         pTemp->GetAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0)->modStackAmount(+1);
-                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_STEELBREAKER))))
+                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
                     if (pTemp->isAlive() && pTemp->HasAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0))
                         pTemp->GetAura(SPELL_SUPERCHARGE,EFFECT_INDEX_0)->modStackAmount(+1);
             }else
@@ -318,12 +280,7 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
 
     void JustDied(Unit* pKiller)
     {
-		switch(urand(0, 1))
-        {
-        	case 0: DoScriptText(SAY_BRUNDIR_DEATH_1, m_creature); break;
-            case 1: DoScriptText(SAY_BRUNDIR_DEATH_2, m_creature); break;
-		}
-
+        //death yell
         m_creature->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
         m_creature->setFaction(14);
         Map* pMap = m_creature->GetMap();
@@ -340,20 +297,20 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
         }
         if (m_pInstance)
         {
-            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_STEELBREAKER))))
+            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
                 if (!pTemp->isAlive())
-                    if (Creature* p2Temp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_MOLGEIM))))
+                    if (Creature* p2Temp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
                         if (!p2Temp->isAlive())
                         {
-                            m_pInstance->SetData(TYPE_ASSEMBLY, DONE);
+                            m_pInstance->SetData(TYPE_IRON_COUNCIL, DONE);
                             m_creature->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                             pTemp->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                             p2Temp->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                         }
-            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_STEELBREAKER))))
+            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
                 if (!pTemp->isAlive())
                     pTemp->SetHealth(pTemp->GetMaxHealth());
-            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_MOLGEIM))))
+            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
                 if (!pTemp->isAlive())
                     pTemp->SetHealth(pTemp->GetMaxHealth());
         }
@@ -361,28 +318,26 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
 
     void Aggro(Unit* pWho)
     {
-		DoScriptText(SAY_BRUNDIR_AGGRO, m_creature);
-
-        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_STEELBREAKER))))
+        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
             if (pTemp->isAlive())
                 pTemp->SetInCombatWithZone();
-        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_MOLGEIM))))
+        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
             if (pTemp->isAlive())
                 pTemp->SetInCombatWithZone();
         if (m_pInstance)
-            m_pInstance->SetData(TYPE_ASSEMBLY, IN_PROGRESS);
+            m_pInstance->SetData(TYPE_IRON_COUNCIL, IN_PROGRESS);
     }
 
     void JustReachedHome()
     {
-        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_STEELBREAKER))))
+        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
             if (!pTemp->isAlive())
                 pTemp->Respawn();
-        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_MOLGEIM))))
+        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
             if (!pTemp->isAlive())
                 pTemp->Respawn();
         if (m_pInstance)
-            m_pInstance->SetData(TYPE_ASSEMBLY, FAIL);
+            m_pInstance->SetData(TYPE_IRON_COUNCIL, FAIL);
     }
 
     void UpdateAI(const uint32 diff)
@@ -478,7 +433,7 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
         if (Check < diff)
         {
             if (!steelbreaker)
-                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_STEELBREAKER))))
+                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
                     if (!pTemp->isAlive())
                     {
                         steelbreaker = true;
@@ -496,7 +451,7 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
                         }
                     }
             if (!molgeim)
-                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_MOLGEIM))))
+                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
                     if (!pTemp->isAlive())
                     {
                         molgeim = true;
@@ -571,15 +526,6 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
         if (m_creature->HasAura(SPELL_SUPERCHARGE))
             m_creature->RemoveAurasDueToSpell(SPELL_SUPERCHARGE);
     }
-	
-	void KilledUnit(Unit *victim)
-    {
-		switch(urand(0, 1))
-        {
-        	case 0: DoScriptText(SAY_MOLGEIM_SLAY_1, m_creature); break;
-            case 1: DoScriptText(SAY_MOLGEIM_SLAY_2, m_creature); break;
-		}
-    }
 
     void DamageTaken(Unit* pDoneBy, uint32& uiDamage)
     {
@@ -590,10 +536,10 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
             m_creature->setFaction(1925);
             if (supercharge1)
             {
-                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_BRUNDIR))))
+                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
                     if (pTemp->isAlive() && pTemp->HasAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0))
                         pTemp->GetAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0)->modStackAmount(+1);
-                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_STEELBREAKER))))
+                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
                     if (pTemp->isAlive() && pTemp->HasAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0))
                         pTemp->GetAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0)->modStackAmount(+1);
             }else
@@ -606,12 +552,6 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
     void JustDied(Unit* pKiller)
     {
         //death yell
-		switch(urand(0, 1))
-        {
-        	case 0: DoScriptText(SAY_MOLGEIM_DEATH_1 , m_creature); break;
-            case 1: DoScriptText(SAY_MOLGEIM_DEATH_2 , m_creature); break;
-		}
-
         m_creature->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
         m_creature->setFaction(14);
         Map* pMap = m_creature->GetMap();
@@ -628,20 +568,20 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
         }
         if (m_pInstance)
         {
-            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_STEELBREAKER))))
+            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
                 if (!pTemp->isAlive())
-                    if (Creature* p2Temp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_BRUNDIR))))
+                    if (Creature* p2Temp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
                         if (!p2Temp->isAlive())
                         {
-                            m_pInstance->SetData(TYPE_ASSEMBLY, DONE);
+                            m_pInstance->SetData(TYPE_IRON_COUNCIL, DONE);
                             m_creature->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                             pTemp->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                             p2Temp->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                         }
-            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_STEELBREAKER))))
+            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
                 if (!pTemp->isAlive())
                     pTemp->SetHealth(pTemp->GetMaxHealth());
-            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_BRUNDIR))))
+            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
                 if (!pTemp->isAlive())
                     pTemp->SetHealth(pTemp->GetMaxHealth());
         }
@@ -649,28 +589,26 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
 
     void Aggro(Unit* pWho)
     {
-		DoScriptText(SAY_MOLGEIM_AGGRO, m_creature);
-
-        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_STEELBREAKER))))
+        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
             if (pTemp->isAlive())
                 pTemp->SetInCombatWithZone();
-        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_BRUNDIR))))
+        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
             if (pTemp->isAlive())
                 pTemp->SetInCombatWithZone();
         if (m_pInstance)
-            m_pInstance->SetData(TYPE_ASSEMBLY, IN_PROGRESS);
+            m_pInstance->SetData(TYPE_IRON_COUNCIL, IN_PROGRESS);
     }
 
     void JustReachedHome()
     {
-        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_STEELBREAKER))))
+        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
             if (!pTemp->isAlive())
                 pTemp->Respawn();
-        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_BRUNDIR))))
+        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
             if (!pTemp->isAlive())
                 pTemp->Respawn();
         if (m_pInstance)
-            m_pInstance->SetData(TYPE_ASSEMBLY, FAIL);
+            m_pInstance->SetData(TYPE_IRON_COUNCIL, FAIL);
     }
 
     void UpdateAI(const uint32 diff)
@@ -689,14 +627,14 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
             switch(urand(0, 2))
             {
                 case 0:
-                    if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_BRUNDIR))))
+                    if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
                         if (pTemp->isAlive())
                             DoCast(pTemp, SPELL_RUNE_OF_POWER);
                         else
                             DoCast(m_creature, SPELL_RUNE_OF_POWER);
                 break;
                 case 1:
-                    if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_STEELBREAKER))))
+                    if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
                         if (pTemp->isAlive())
                             DoCast(pTemp, SPELL_RUNE_OF_POWER);
                         else
@@ -741,7 +679,7 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
         if (Check < diff)
         {
             if (!steelbreaker)
-                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_STEELBREAKER))))
+                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
                     if (!pTemp->isAlive())
                     {
                         steelbreaker = true;
@@ -757,7 +695,7 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
                         }
                     }
             if (!brundir)
-                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_BRUNDIR))))
+                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
                     if (!pTemp->isAlive())
                     {
                         brundir = true;
@@ -843,12 +781,6 @@ struct MANGOS_DLL_DECL boss_steelbreakerAI : public ScriptedAI
     {
         if (supercharge2)
             DoCast(m_creature, SPELL_ELECTRICAL_CHARGE);
-
-	    switch(urand(0, 1))
-        {
-        	case 0: DoScriptText(SAY_STEELBREAKER_SLAY_1, m_creature); break;
-            case 1: DoScriptText(SAY_STEELBREAKER_SLAY_2, m_creature); break;
-		}
     }
 
     void DamageTaken(Unit* pDoneBy, uint32& uiDamage)
@@ -860,10 +792,10 @@ struct MANGOS_DLL_DECL boss_steelbreakerAI : public ScriptedAI
             m_creature->setFaction(1925);
             if (supercharge1)
             {
-                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_MOLGEIM))))
+                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
                     if (pTemp->isAlive() && pTemp->HasAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0))
                         pTemp->GetAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0)->modStackAmount(+1);
-                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_BRUNDIR))))
+                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
                     if (pTemp->isAlive() && pTemp->HasAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0))
                         pTemp->GetAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0)->modStackAmount(+1);
             }else
@@ -875,12 +807,7 @@ struct MANGOS_DLL_DECL boss_steelbreakerAI : public ScriptedAI
 
     void JustDied(Unit* pKiller)
     {
-		switch(urand(0, 1))
-        {
-        	case 0: DoScriptText(SAY_STEELBREAKER_DEATH_1, m_creature); break;
-            case 1: DoScriptText(SAY_STEELBREAKER_DEATH_2, m_creature); break;
-		}
-
+        //death yell
         m_creature->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
         m_creature->setFaction(14);
         Map* pMap = m_creature->GetMap();
@@ -897,20 +824,20 @@ struct MANGOS_DLL_DECL boss_steelbreakerAI : public ScriptedAI
         }
         if (m_pInstance)
         {
-            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_MOLGEIM))))
+            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
                 if (!pTemp->isAlive())
-                    if (Creature* p2Temp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_BRUNDIR))))
+                    if (Creature* p2Temp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
                         if (!p2Temp->isAlive())
                         {
-                            m_pInstance->SetData(TYPE_ASSEMBLY, DONE);
+                            m_pInstance->SetData(TYPE_IRON_COUNCIL, DONE);
                             m_creature->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                             pTemp->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                             p2Temp->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                         }
-            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_BRUNDIR))))
+            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
                 if (!pTemp->isAlive())
                     pTemp->SetHealth(pTemp->GetMaxHealth());
-            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_MOLGEIM))))
+            if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
                 if (!pTemp->isAlive())
                     pTemp->SetHealth(pTemp->GetMaxHealth());
         }
@@ -918,29 +845,27 @@ struct MANGOS_DLL_DECL boss_steelbreakerAI : public ScriptedAI
 
     void Aggro(Unit* pWho)
     {
-		DoScriptText(SAY_STEELBREAKER_AGGRO, m_creature);
-
-        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_MOLGEIM))))
+        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
             if (pTemp->isAlive())
                 pTemp->SetInCombatWithZone();
-        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_BRUNDIR))))
+        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
             if (pTemp->isAlive())
                 pTemp->SetInCombatWithZone();
         DoCast(m_creature, m_bIsRegularMode ? SPELL_HIGH_VOLTAGE : SPELL_HIGH_VOLTAGE_H);
         if (m_pInstance)
-            m_pInstance->SetData(TYPE_ASSEMBLY, IN_PROGRESS);
+            m_pInstance->SetData(TYPE_IRON_COUNCIL, IN_PROGRESS);
     }
 
     void JustReachedHome()
     {
-        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_MOLGEIM))))
+        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
             if (!pTemp->isAlive())
                 pTemp->Respawn();
-        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_BRUNDIR))))
+        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
             if (!pTemp->isAlive())
                 pTemp->Respawn();
         if (m_pInstance)
-            m_pInstance->SetData(TYPE_ASSEMBLY, FAIL);
+            m_pInstance->SetData(TYPE_IRON_COUNCIL, FAIL);
     }
 
     void UpdateAI(const uint32 diff)
@@ -994,7 +919,7 @@ struct MANGOS_DLL_DECL boss_steelbreakerAI : public ScriptedAI
         if (Check < diff)
         {
             if (!brundir)
-                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_BRUNDIR))))
+                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
                     if (!pTemp->isAlive())
                     {
                         brundir = true;
@@ -1011,7 +936,7 @@ struct MANGOS_DLL_DECL boss_steelbreakerAI : public ScriptedAI
                         }
                     }
             if (!molgeim)
-                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_MOLGEIM))))
+                if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
                     if (!pTemp->isAlive())
                     {
                         molgeim = true;

@@ -1,98 +1,99 @@
 /* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-*/
- 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 /* ScriptData
 SDName: Boss_Anubrekhan
-SD%Complete: 70
-SDComment:
+SD%Complete: 90
+SDComment: Guards need acid support and db update
 SDCategory: Naxxramas
+SDAuthor: modified sd2 by ScrappyDoo (c) Andeeria
 EndScriptData */
- 
+
 #include "precompiled.h"
 #include "naxxramas.h"
- 
+
 enum
 {
-    SAY_GREET			= -1533000,
-    SAY_AGGRO1 			= -1533001,
-    SAY_AGGRO2 			= -1533002,
-    SAY_AGGRO3 			= -1533003,
-    SAY_TAUNT1 			= -1533004,
-    SAY_TAUNT2 			= -1533005,
-    SAY_TAUNT3 			= -1533006,
-    SAY_TAUNT4 			= -1533007,
-    SAY_SLAY 			= -1533008,
- 
-    SPELL_IMPALE 		= 28783, //May be wrong spell id. Causes more dmg than I expect
-    SPELL_IMPALE_H 		= 56090,
-    SPELL_LOCUSTSWARM 	= 28785, //This is a self buff that triggers the dmg debuff
-    SPELL_LOCUSTSWARM_H = 54021,
-	SPELL_BERSERK		= 26662,
- 
+    SAY_GREET                   = -1533000,
+    SAY_AGGRO1                  = -1533001,
+    SAY_AGGRO2                  = -1533002,
+    SAY_AGGRO3                  = -1533003,
+    SAY_TAUNT1                  = -1533004,
+    SAY_TAUNT2                  = -1533005,
+    SAY_TAUNT3                  = -1533006,
+    SAY_TAUNT4                  = -1533007,
+    SAY_SLAY                    = -1533008,
+
+    SPELL_IMPALE                = 28783,                    //May be wrong spell id. Causes more dmg than I expect
+    SPELL_IMPALE_H              = 56090,
+    SPELL_LOCUSTSWARM           = 28785,                    //This is a self buff that triggers the dmg debuff
+    SPELL_LOCUSTSWARM_H         = 54021,
+
     //spellId invalid
-    SPELL_SUMMONGUARD 	= 29508, //Summons 1 crypt guard at targeted location
- 
-    SPELL_SELF_SPAWN_5 	= 29105, //This spawns 5 corpse scarabs ontop of us (most likely the pPlayer casts this on death)
-    SPELL_SELF_SPAWN_10 = 28864, //This is used by the crypt guards when they die
- 
-	NPC_CRYPT_GUARD		= 16573,
-	NPC_SMALL_SPAWN     = 16698,
-    SPELL_ACID_SPIT		= 28969,
-    SPELL_ACID_SPIT_H	= 56098,
-    SPELL_CLEAVE		= 40504,
-    SPELL_FRENZY		= 8269
+    SPELL_SUMMONGUARD           = 29508,                    //Summons 1 crypt guard at targeted location
+
+    SPELL_SELF_SPAWN_5          = 29105,                    //This spawns 5 corpse scarabs ontop of us (most likely the pPlayer casts this on death)
+    SPELL_SELF_SPAWN_10         = 28864,                    //This is used by the crypt guards when they die
+
+    NPC_CRYPT_GUARD             = 16573
 };
- 
+
 struct MANGOS_DLL_DECL boss_anubrekhanAI : public ScriptedAI
 {
     boss_anubrekhanAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        m_pInstance = (instance_naxxramas*)pCreature->GetInstanceData();
+        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
         m_bHasTaunted = false;
         Reset();
     }
- 
-    instance_naxxramas* m_pInstance;
+
+    ScriptedInstance* m_pInstance;
     bool m_bIsRegularMode;
- 
+
+    uint64 m_uiGuardGUID[4];
     uint32 m_uiImpaleTimer;
     uint32 m_uiLocustSwarmTimer;
     uint32 m_uiSummonTimer;
-    bool m_bHasTaunted;
- 
+    bool   m_bHasTaunted;
+
     void Reset()
     {
-        m_uiImpaleTimer = 15000; // 15 seconds
-        m_uiLocustSwarmTimer = urand(80000, 120000); // Random time between 80 seconds and 2 minutes for initial cast
-        m_uiSummonTimer = m_uiLocustSwarmTimer + 45000; // 45 seconds after initial locust swarm
+        m_uiImpaleTimer = 15000;                            // 15 seconds
+        m_uiLocustSwarmTimer = urand(80000, 120000);        // Random time between 80 seconds and 2 minutes for initial cast
+        m_uiSummonTimer = m_uiLocustSwarmTimer + 45000;     // 45 seconds after initial locust swarm
+        for(uint8 i=0; i<4; ++i)
+            m_uiGuardGUID[i] = 0;  
+
+        if(m_pInstance)
+            m_pInstance->SetData(TYPE_ANUB_REKHAN, NOT_STARTED);
     }
- 
+
     void KilledUnit(Unit* pVictim)
     {
         //Force the player to spawn corpse scarabs via spell
         if (pVictim->GetTypeId() == TYPEID_PLAYER)
             pVictim->CastSpell(pVictim, SPELL_SELF_SPAWN_5, true);
- 
+
         if (urand(0, 4))
             return;
- 
+
         DoScriptText(SAY_SLAY, m_creature);
     }
- 
+
     void Aggro(Unit* pWho)
     {
         switch(urand(0, 2))
@@ -101,23 +102,31 @@ struct MANGOS_DLL_DECL boss_anubrekhanAI : public ScriptedAI
             case 1: DoScriptText(SAY_AGGRO2, m_creature); break;
             case 2: DoScriptText(SAY_AGGRO3, m_creature); break;
         }
- 
-        if (m_pInstance)
+
+        uint8 CryptCount = 1;
+        if(!m_bIsRegularMode)
+            CryptCount = 2;
+        for(uint8 i=0; i<CryptCount; ++i)
+        {
+            Creature* Guard = m_creature->SummonCreature(NPC_CRYPT_GUARD, m_creature->GetPositionX(), m_creature->GetPositionY()+10, m_creature->GetPositionZ(), m_creature->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+            if(Guard)
+            {
+                m_uiGuardGUID[i] = Guard->GetGUID();
+                if(Unit* pPlayer = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                    Guard->AI()->AttackStart(pPlayer);
+            }
+        }
+
+        if(m_pInstance)
             m_pInstance->SetData(TYPE_ANUB_REKHAN, IN_PROGRESS);
     }
- 
+
     void JustDied(Unit* pKiller)
     {
-        if (m_pInstance)
+        if(m_pInstance)
             m_pInstance->SetData(TYPE_ANUB_REKHAN, DONE);
     }
- 
-    void JustReachedHome()
-    {
-        if (m_pInstance)
-            m_pInstance->SetData(TYPE_ANUB_REKHAN, FAIL);
-    }
- 
+
     void MoveInLineOfSight(Unit* pWho)
     {
         if (!m_bHasTaunted && m_creature->IsWithinDistInMap(pWho, 60.0f))
@@ -132,50 +141,26 @@ struct MANGOS_DLL_DECL boss_anubrekhanAI : public ScriptedAI
             }
             m_bHasTaunted = true;
         }
- 
+
         ScriptedAI::MoveInLineOfSight(pWho);
-    }
-
-    void Despawnall()
-    {
-        std::list<Creature*> m_pSmall;
-        GetCreatureListWithEntryInGrid(m_pSmall, m_creature, NPC_SMALL_SPAWN, DEFAULT_VISIBILITY_INSTANCE);
-
-        if (!m_pSmall.empty())
-            for(std::list<Creature*>::iterator itr = m_pSmall.begin(); itr != m_pSmall.end(); ++itr)
-            {
-                (*itr)->ForcedDespawn();
-            }
-
-        std::list<Creature*> m_pGuard;
-        GetCreatureListWithEntryInGrid(m_pGuard, m_creature, NPC_CRYPT_GUARD, DEFAULT_VISIBILITY_INSTANCE);
-
-        if (!m_pGuard.empty())
-            for(std::list<Creature*>::iterator iter = m_pGuard.begin(); iter != m_pGuard.end(); ++iter)
-            {
-                (*iter)->ForcedDespawn();
-            }
-    }
-    void StartSummonGuard()
-    {
-        m_creature->SummonCreature(NPC_CRYPT_GUARD, 3307, -3465, 287, 3.5, TEMPSUMMON_CORPSE_DESPAWN, 0);
-        if(!m_bIsRegularMode)
-            m_creature->SummonCreature(NPC_CRYPT_GUARD, 3304, -3490, 287, 2.5, TEMPSUMMON_CORPSE_DESPAWN, 0);
-        
-    }
-    
-    void SummonGuard()
-    {
-        //DoCast(m_creature, SPELL_SUMMONGUARD);
-        if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-            m_creature->SummonCreature(NPC_CRYPT_GUARD, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
     }
 
     void UpdateAI(const uint32 uiDiff)
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
- 
+
+        //If some worshiper ar dead cast spell
+        for(uint8 i=0; i<4; ++i)
+        {
+            Unit* pGuard = Unit::GetUnit(*m_creature, m_uiGuardGUID[i]);
+            if(pGuard && !pGuard->isAlive())
+            {
+                m_creature->CastSpell(m_creature, SPELL_SELF_SPAWN_10, true);
+                m_uiGuardGUID[i] = 0;
+            }
+        }
+
         // Impale
         if (m_uiImpaleTimer < uiDiff)
         {
@@ -184,41 +169,52 @@ struct MANGOS_DLL_DECL boss_anubrekhanAI : public ScriptedAI
             if (!m_creature->HasAura(SPELL_LOCUSTSWARM) || !m_creature->HasAura(SPELL_LOCUSTSWARM_H))
             {
                 if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-                    DoCastSpellIfCan(target, m_bIsRegularMode ? SPELL_IMPALE : SPELL_IMPALE_H);
+                    DoCast(target, m_bIsRegularMode ? SPELL_IMPALE : SPELL_IMPALE_H);
             }
- 
+
             m_uiImpaleTimer = 15000;
         }
         else
             m_uiImpaleTimer -= uiDiff;
- 
+
         // Locust Swarm
         if (m_uiLocustSwarmTimer < uiDiff)
         {
-            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_LOCUSTSWARM :SPELL_LOCUSTSWARM_H);
+            if(m_creature)
+                DoCast(m_creature, m_bIsRegularMode ? SPELL_LOCUSTSWARM : SPELL_LOCUSTSWARM_H);
+            m_uiLocustSwarmTimer = 90000;
+
+            Creature* Guard = m_creature->SummonCreature(NPC_CRYPT_GUARD, m_creature->GetPositionX(), m_creature->GetPositionY()+10, m_creature->GetPositionZ(), m_creature->GetOrientation(), TEMPSUMMON_CORPSE_TIMED_DESPAWN, 30000);
+            if(Guard)
+            {
+                m_uiGuardGUID[3] = Guard->GetGUID();
+                if(Unit* pPlayer = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                    Guard->AI()->AttackStart(pPlayer);
+            }
+
             m_uiLocustSwarmTimer = 90000;
         }
         else
             m_uiLocustSwarmTimer -= uiDiff;
- 
+
         // Summon
         /*if (m_uiSummonTimer < uiDiff)
-{
-DoCastSpellIfCan(m_creature, SPELL_SUMMONGUARD);
-Summon_Timer = 45000;
-}
-else
-m_uiSummonTimer -= uiDiff;*/
- 
+        {
+            DoCast(m_creature, SPELL_SUMMONGUARD);
+            Summon_Timer = 45000;
+        }
+        else
+            m_uiSummonTimer -= uiDiff;*/
+
         DoMeleeAttackIfReady();
     }
 };
- 
+
 CreatureAI* GetAI_boss_anubrekhan(Creature* pCreature)
 {
     return new boss_anubrekhanAI(pCreature);
 }
- 
+
 void AddSC_boss_anubrekhan()
 {
     Script* NewScript;

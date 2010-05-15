@@ -362,7 +362,6 @@ extern void AddSC_boss_algalon();							//ulduar
 extern void AddSC_boss_auriaya();
 extern void AddSC_boss_flameleviathan();
 extern void AddSC_boss_freya();
-extern void AddSC_boss_vezax();
 extern void AddSC_boss_hodir();
 extern void AddSC_boss_ignis();
 extern void AddSC_boss_iron_council();
@@ -373,7 +372,6 @@ extern void AddSC_boss_thorim();
 extern void AddSC_boss_xt002();
 extern void AddSC_boss_yogg_saron();
 extern void AddSC_instance_ulduar();
-extern void AddSC_ulduar();
 extern void AddSC_ulduar_teleport();
 
 extern void AddSC_boss_ingvar();                            //utgarde_keep
@@ -719,16 +717,16 @@ void AddScripts()
     AddSC_wetlands();
 
     //kalimdor
-    AddSC_instance_blackfathom_deeps();                     //blackfathom_deeps
-    AddSC_boss_aeonus();                                    //COT, dark_portal
+    AddSC_instance_blackfathom_deeps();                     // blackfathom deeps
+    AddSC_boss_aeonus();                                    // Opening the Dark Portal
     AddSC_boss_chrono_lord_deja();
     AddSC_boss_temporus();
     AddSC_dark_portal();
     AddSC_instance_dark_portal();
-    AddSC_hyjal();                                          //COT, hyjal
+    AddSC_hyjal();                                          // Battle of Mount Hyjal
     AddSC_boss_archimonde();
     AddSC_instance_mount_hyjal();
-    AddSC_boss_captain_skarloc();                           //COT, old_hillsbrad
+    AddSC_boss_captain_skarloc();                           // Escape from Durnholde Keep
     AddSC_boss_epoch_hunter();
     AddSC_boss_lieutenant_drake();
     AddSC_instance_old_hillsbrad();
@@ -838,7 +836,7 @@ void AddScripts()
     AddSC_boss_sartharion();                                //obsidian_sanctum
     AddSC_instance_obsidian_sanctum();
 
-	AddSC_boss_halion();									//ruby_sanctum
+    AddSC_boss_halion();									//ruby_sanctum
     AddSC_instance_ruby_sanctum();
 
 	AddSC_instance_vault_of_archavon();             		//vault_of_archavon
@@ -863,7 +861,6 @@ void AddScripts()
     AddSC_boss_auriaya();
     AddSC_boss_flameleviathan();
     AddSC_boss_freya();
-    AddSC_boss_vezax();
     AddSC_boss_hodir();
     AddSC_boss_ignis();
     AddSC_boss_iron_council();
@@ -874,7 +871,7 @@ void AddScripts()
     AddSC_boss_xt002();
     AddSC_boss_yogg_saron();
     AddSC_instance_ulduar();
-    AddSC_ulduar();
+    AddSC_ulduar_teleport();
     AddSC_boss_ingvar();                                    //utgarde_keep
     AddSC_boss_keleseth();
     AddSC_boss_skarvald_and_dalronn();

@@ -1,299 +1,279 @@
 /* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-*/
- 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 /* ScriptData
 SDName: Boss_Gothik
-SD%Complete: 0
-SDComment: Placeholder
+SD%Complete: 90
+SDComment:  
 SDCategory: Naxxramas
+SDAuthor: ScrappyDoo (c) Andeeria
 EndScriptData */
- 
+
 #include "precompiled.h"
 #include "naxxramas.h"
- 
+
 enum
 {
-    SAY_SPEECH = -1533040,
-    SAY_KILL = -1533041,
-    SAY_DEATH = -1533042,
-    SAY_TELEPORT = -1533043,
- 
+    SAY_SPEECH                = -1533040,
+    SAY_KILL                  = -1533041,
+    SAY_DEATH                 = -1533042,
+    SAY_TELEPORT              = -1533043,
+
     //Gothik
-    SPELL_HARVESTSOUL = 28679,
-    SPELL_SHADOWBOLT = 29317,
-    H_SPELL_SHADOWBOLT = 56405,
- 
-    //Unrelenting Trainee
-    SPELL_EAGLECLAW = 30285,
-    SPELL_KNOCKDOWN_PASSIVE = 6961,
- 
-    //Unrelenting Deathknight
-    SPELL_CHARGE = 22120,
-    SPELL_SHADOW_MARK = 27825,
- 
-    //Unrelenting Rider
-    SPELL_UNHOLY_AURA = 55606,
-    H_SPELL_UNHOLY_AURA = 55608,
-    SPELL_SHADOWBOLT_VOLLEY = 27831, //Search thru targets and find those who have the SHADOW_MARK to cast this on
-    H_SPELL_SHADOWBOLT_VOLLEY = 55638,
- 
-    //Spectral Trainee
-    SPELL_ARCANE_EXPLOSION = 27989,
- 
-    //Spectral Deathknight
-    SPELL_WHIRLWIND = 28334,
-    SPELL_SUNDER_ARMOR = 25051, //cannot find sunder that reduces armor by 2950
-    SPELL_CLEAVE = 20677,
-    SPELL_MANA_BURN = 17631,
- 
-    //Spectral Rider
-    SPELL_LIFEDRAIN = 24300,
-    //USES SAME UNHOLY AURA AS UNRELENTING RIDER
- 
-    //Spectral Horse
-    SPELL_STOMP = 27993
+    SPELL_HARVESTSOUL         = 28679,
+    SPELL_SHADOWBOLT          = 29317,
+    SPELL_SHADOWBOLT_H        = 56405,
+
+    CREATURE_TRAINEE            = 16124,
+    CREATURE_DEATCHKNIGHT       = 16125,
+    CREATURE_RIDER              = 16126,
+    CREATURE_SPEC_TRAINEE       = 16127,
+    CREATURE_SPEC_DEATCHKNIGHT  = 16148,
+    CREATURE_SPEC_RIDER         = 16150,
+    CREATURE_SPEC_HORSE         = 16149
 };
- 
- 
-#define MOB_LIVE_TRAINEE 16124
-#define MOB_LIVE_KNIGHT 16125
-#define MOB_LIVE_RIDER 16126
-#define MOB_DEAD_TRAINEE 16127
-#define MOB_DEAD_KNIGHT 16148
-#define MOB_DEAD_RIDER 16150
-#define MOB_DEAD_HORSE 16149
- 
-#define POS_LIVE 3
-#define POS_DEAD 5
- 
-const struct waves { uint32 entry, number, time; }
-waves[] =
+
+uint32 m_uiAddsList[3] = 
 {
-    {MOB_LIVE_TRAINEE, 2, 20000},
-    {MOB_LIVE_TRAINEE, 2, 20000},
-    {MOB_LIVE_TRAINEE, 2, 10000},
-    {MOB_LIVE_KNIGHT, 1, 10000}, // 60
-    {MOB_LIVE_TRAINEE, 2, 15000},
-    {MOB_LIVE_KNIGHT, 1, 10000},
-    {MOB_LIVE_TRAINEE, 2, 15000},
-    {MOB_LIVE_TRAINEE, 2, 0},
-    {MOB_LIVE_KNIGHT, 1, 10000},
-    {MOB_LIVE_RIDER, 1, 10000}, // 120
-    {MOB_LIVE_TRAINEE, 2, 5000},
-    {MOB_LIVE_KNIGHT, 1, 15000},
-    {MOB_LIVE_TRAINEE, 2, 0},
-    {MOB_LIVE_RIDER, 1, 10000},
-    {MOB_LIVE_KNIGHT, 1, 10000},
-    {MOB_LIVE_TRAINEE, 2, 10000},
-    {MOB_LIVE_RIDER, 1, 5000},
-    {MOB_LIVE_KNIGHT, 1, 5000}, // 180
-    {MOB_LIVE_TRAINEE, 2, 20000},
-    {MOB_LIVE_TRAINEE, 2, 0},
-    {MOB_LIVE_KNIGHT, 1, 0},
-    {MOB_LIVE_RIDER, 1, 15000},
-    {MOB_LIVE_TRAINEE, 2, 29000}, // 244
-    {0, 0, 0},
+    CREATURE_TRAINEE, CREATURE_DEATCHKNIGHT, CREATURE_RIDER
 };
- 
-const float PosSummonLive[POS_LIVE][3] =
+
+uint32 m_uiUndeadList[3] = 
 {
-    {2669.7f, -3430.9f, 268.56f},
-    {2692.0f, -3430.9f, 268.56f},
-    {2714.1f, -3430.9f, 268.56f},
+    CREATURE_SPEC_TRAINEE, CREATURE_SPEC_DEATCHKNIGHT, CREATURE_SPEC_RIDER
 };
- 
-const float PosSummonDead[POS_DEAD][3] =
+
+double  fAddsPos[2][3] = 
 {
-    {2725.1f, -3310.0f, 268.85f},
-    {2699.3f, -3322.8f, 268.60f},
-    {2733.1f, -3348.5f, 268.84f},
-    {2682.8f, -3304.2f, 268.85f},
-    {2664.8f, -3340.7f, 268.23f},
+    {2692.4526, -3420.8408, 267.688},
+    {2689.0485, -3300.6027, 267.683}
 };
- 
-const float PosPlatform[4] = {2640.5f, -3360.6f, 285.26f, 0};
-const float PosGroundLive[4] = {2692.174f, -3400.963f, 267.680f, 1.7f};
-const float PosGroundDeath[4] = {2690.378f, -3328.279f, 267.681f, 1.7f};
- 
-struct MANGOS_DLL_DECL boss_gothikAI : public Scripted_NoMovementAI
+
+struct MANGOS_DLL_DECL boss_gothikAI : public ScriptedAI
 {
-    boss_gothikAI(Creature* pCreature) : Scripted_NoMovementAI(pCreature)
+    boss_gothikAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
         Reset();
     }
- 
+
     ScriptedInstance* m_pInstance;
     bool m_bIsRegularMode;
-    bool SummonPhase;
- 
-    std::list<uint64> SummonsList;
- 
-    uint32 waveCount;
-    uint32 Summon_Timer;
-    uint32 SummonDeathCheck_Timer;
-    uint32 HarvestSoul_Timer;
-    uint32 ShadowBolt_Timer;
- 
+    bool m_bIsSecondPhase;
+    bool m_bIsGateOpen;
+
+    uint32 m_uiSwitchPhaseTimer;
+    uint32 m_uiShadowBoltTimer;
+    uint32 m_uiHavestSoulTimer;
+    uint32 m_uiSpawnAddsTimer;
+    uint8  m_uiPhaseSide;
+
+    uint64 m_uiLiveAddsGUID[70][2];
+    uint8  m_uiMaxAdds;
+
     void Reset()
     {
-     SummonPhase = false;
- 
-     SummonsList.clear();
- 
-        waveCount = 0;
-        Summon_Timer = 10000;
-        SummonDeathCheck_Timer = 1000;
-        HarvestSoul_Timer = 15000;
-        ShadowBolt_Timer = 1100;
- 
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
- 
+        //Phase1
+        m_bIsGateOpen           = false;
+        m_bIsSecondPhase        = false;
+        m_uiShadowBoltTimer     = 5000;
+        m_uiHavestSoulTimer     = 15000;
+        m_uiPhaseSide           = 0;
+
+        //Phase2
+        m_uiSpawnAddsTimer      = 5000;
+        m_uiSwitchPhaseTimer    = 274000;
+        m_uiMaxAdds             = 0;
+
         if (m_pInstance)
             m_pInstance->SetData(TYPE_GOTHIK, NOT_STARTED);
-    }
- 
-    void EnterCombat(Unit *who)
-    {
-        DoScriptText(SAY_SPEECH, m_creature);
- 
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-        m_creature->SetInCombatWithZone();
- 
-        if (m_pInstance)
+
+        for (uint8 i=0; i<70; ++i)
         {
-            m_pInstance->SetData(TYPE_GOTHIK, IN_PROGRESS);
- 
-            if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_MILI_GOTH_COMBAT_GATE)))
-                pGate->SetGoState(GO_STATE_READY);
+            m_uiLiveAddsGUID[i][1] = 0;
+            m_uiLiveAddsGUID[i][2] = 0;
         }
+
+        if (GameObject* pCombatDoor = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_MILI_GOTH_COMBAT_GATE)))
+                pCombatDoor->SetGoState(GO_STATE_ACTIVE);
     }
- 
-    void KilledUnit(Unit* victim)
+
+    void KilledUnit(Unit* Victim)
     {
-        if(!(rand()%5))
-            DoScriptText(SAY_KILL, m_creature);
+        DoScriptText(SAY_KILL, m_creature);
     }
- 
-    void JustDied(Unit* Killer)
+
+    void JustDied(Unit* pKiller)
     {
         DoScriptText(SAY_DEATH, m_creature);
- 
+
         if (m_pInstance)
             m_pInstance->SetData(TYPE_GOTHIK, DONE);
     }
- 
-    void JustSummoned(Creature* pSummon)
+
+    void Aggro(Unit* pWho)
     {
-        pSummon->AI()->AttackStart(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0));
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+
+        DoScriptText(SAY_SPEECH, m_creature);
+
+        if (m_pInstance)
+        {
+            m_pInstance->SetData(TYPE_GOTHIK, IN_PROGRESS);
+            m_pInstance->SetData(TYPE_GOTHIK, SPECIAL);
+        }
     }
- 
-    void UpdateAI(const uint32 diff)
+
+    void JustSummoned(Creature* pSummoned)
+    {
+        if (Unit* pPlayer = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+            pSummoned->AI()->AttackStart(pPlayer);
+    }
+
+    void UpdateAI(const uint32 uiDiff)
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
- 
-        if (SummonPhase)
+
+        m_creature->StopMoving();
+        m_creature->GetMotionMaster()->Clear();
+        m_creature->GetMotionMaster()->MoveIdle();
+
+        //when sumoned add died we summon undead for replace 
+        for (uint8 i=0; i<m_uiMaxAdds; ++i)
         {
-            if (HarvestSoul_Timer < diff)
+            Unit* pLive = Unit::GetUnit(*m_creature, m_uiLiveAddsGUID[i][1]);
+            if(pLive && !pLive->isAlive())
             {
-                DoCast(m_creature->getVictim(), SPELL_HARVESTSOUL, 1);
-                HarvestSoul_Timer = 15000 + rand()%1000;
-            }else HarvestSoul_Timer -= diff;
- 
-            if (ShadowBolt_Timer < diff)
+                if (m_uiLiveAddsGUID[i][2] == 2)
+                    m_creature->SummonCreature(CREATURE_SPEC_HORSE, fAddsPos[1][0], fAddsPos[1][1], fAddsPos[1][2], m_creature->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+
+                Creature* pUndeadAdd = m_creature->SummonCreature(m_uiUndeadList[m_uiLiveAddsGUID[i][2]], fAddsPos[1][0], fAddsPos[1][1], fAddsPos[1][2], m_creature->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+
+                m_uiLiveAddsGUID[i][1] = 0;
+                m_uiLiveAddsGUID[i][2] = 0;
+            }
+        }
+
+        if (m_bIsSecondPhase)
+        {
+            if (m_uiSwitchPhaseTimer < uiDiff)
             {
-                DoCast(m_creature->getVictim(), m_bIsRegularMode ? H_SPELL_SHADOWBOLT : SPELL_SHADOWBOLT);
-                ShadowBolt_Timer = 1100 + rand()%500;
-            }else ShadowBolt_Timer -= diff;
- 
-DoMeleeAttackIfReady();
+                if(m_uiPhaseSide == 0)
+                    m_uiPhaseSide = 1;
+                else m_uiPhaseSide = 0;
+
+                m_creature->GetMap()->CreatureRelocation(m_creature, fAddsPos[m_uiPhaseSide][0], fAddsPos[m_uiPhaseSide][1], fAddsPos[m_uiPhaseSide][2], m_creature->GetOrientation());
+
+                m_uiSwitchPhaseTimer = 15000;
+            }else m_uiSwitchPhaseTimer -= uiDiff;
+
+            if ((m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 30 && !m_bIsGateOpen)
+            {
+                if (m_pInstance)
+                    m_pInstance->SetData(TYPE_GOTHIK, SPECIAL);
+                m_bIsGateOpen = true;
+            }
+
+            if (m_uiHavestSoulTimer < uiDiff)
+            {
+                if (m_creature->getVictim())
+                    m_creature->CastSpell(m_creature->getVictim(), SPELL_HARVESTSOUL, false);
+               
+                m_uiHavestSoulTimer = 14000;
+            }else m_uiHavestSoulTimer -= uiDiff;
+
+            if (m_uiShadowBoltTimer < uiDiff)
+            {
+                if (m_creature->getVictim())
+                    m_creature->CastSpell(m_creature->getVictim(), m_bIsRegularMode ? SPELL_SHADOWBOLT : SPELL_SHADOWBOLT_H, false);
+
+                m_uiShadowBoltTimer = 1000;
+            }else m_uiShadowBoltTimer -= uiDiff;
+
+            DoMeleeAttackIfReady();
         }
         else
         {
-            if (Summon_Timer < diff)
+            //spawn add and get guid for future checking
+            if (m_uiSpawnAddsTimer < uiDiff)
             {
-                if(waves[waveCount].entry)
+                if (m_uiMaxAdds > 68)
+                    m_uiMaxAdds = 0;
+
+                if (Creature* pLiveAdd = m_creature->SummonCreature(m_uiAddsList[2], fAddsPos[0][0], fAddsPos[0][1], fAddsPos[0][2], m_creature->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
                 {
-                    for(uint32 i = 0; i < waves[waveCount].number; ++i)
+                    m_uiLiveAddsGUID[m_uiMaxAdds][1] = pLiveAdd->GetGUID();
+                    m_uiLiveAddsGUID[m_uiMaxAdds][2] = 2;
+                    ++m_uiMaxAdds;
+                }
+
+                for (uint8 i=0; i<4; ++i)
+                    if (Creature* pLiveAdd = m_creature->SummonCreature(m_uiAddsList[0], fAddsPos[0][0], fAddsPos[0][1], fAddsPos[0][2], m_creature->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
                     {
-                        uint8 SummonLoc = rand()%POS_LIVE;
-                        if (Creature* pTemp = m_creature->SummonCreature(waves[waveCount].entry, PosSummonLive[SummonLoc][0], PosSummonLive[SummonLoc][1], PosSummonLive[SummonLoc][2], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
-                            SummonsList.push_back(pTemp->GetGUID());
+                        m_uiLiveAddsGUID[m_uiMaxAdds][1] = pLiveAdd->GetGUID();
+                        m_uiLiveAddsGUID[m_uiMaxAdds][2] = 0;
+                        ++m_uiMaxAdds;
                     }
-                    Summon_Timer = waves[waveCount].time;
-                    ++waveCount;
-                }
-                else
-                {
-                    DoScriptText(SAY_TELEPORT, m_creature);
-                    uint8 SummonLoc = rand()%POS_LIVE;
-                    m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
- 
-                    SummonPhase = true;
-                }
-            }else Summon_Timer -= diff;
-        }
- 
-        if (SummonDeathCheck_Timer < diff)
-        {
-            if (!SummonsList.empty())
+
+                for (uint8 i=0; i<2; ++i)
+                    if (Creature* pLiveAdd = m_creature->SummonCreature(m_uiAddsList[1], fAddsPos[0][0], fAddsPos[0][1], fAddsPos[0][2], m_creature->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
+                    {
+                        m_uiLiveAddsGUID[m_uiMaxAdds][1] = pLiveAdd->GetGUID();
+                        m_uiLiveAddsGUID[m_uiMaxAdds][2] = 1;
+                        ++m_uiMaxAdds;
+                    }
+
+                m_uiSpawnAddsTimer = 30000;
+            }else m_uiSpawnAddsTimer -= uiDiff;
+
+            if (m_uiSwitchPhaseTimer < uiDiff)
             {
-                for(std::list<uint64>::iterator itr = SummonsList.begin(); itr != SummonsList.end(); ++itr)
-                {
-                    if (Creature* pTemp = ((Creature*)Unit::GetUnit(*m_creature, *itr)))
-                    {
-                        if (!pTemp->isAlive())
-                        {
-                            uint8 SummonLoc = rand()%POS_DEAD;
-                            if (pTemp->GetEntry() == MOB_LIVE_TRAINEE)
-                                m_creature->SummonCreature(MOB_DEAD_TRAINEE, PosSummonDead[SummonLoc][0], PosSummonDead[SummonLoc][1], PosSummonDead[SummonLoc][2], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
-                            else if (pTemp->GetEntry() == MOB_LIVE_KNIGHT)
-                                m_creature->SummonCreature(MOB_DEAD_KNIGHT, PosSummonDead[SummonLoc][0], PosSummonDead[SummonLoc][1], PosSummonDead[SummonLoc][2], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
-                            else if (pTemp->GetEntry() == MOB_LIVE_RIDER)
-                            {
-                                m_creature->SummonCreature(MOB_DEAD_RIDER, PosSummonDead[SummonLoc][0], PosSummonDead[SummonLoc][1], PosSummonDead[SummonLoc][2], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
-                                m_creature->SummonCreature(MOB_DEAD_HORSE, PosSummonDead[SummonLoc][0], PosSummonDead[SummonLoc][1], PosSummonDead[SummonLoc][2], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
-                            }
- 
-                            if (m_pInstance)
-                                if (GameObject* pGate = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(GO_MILI_GOTH_COMBAT_GATE)))
-                                    pGate->SetGoState(GO_STATE_ACTIVE);
-                            SummonsList.remove(pTemp->GetGUID());
-                            break;
-                        }
-                    }
-                }
-            }
-            SummonDeathCheck_Timer = 1000;
-        }else SummonDeathCheck_Timer -= diff;
+                DoScriptText(SAY_TELEPORT, m_creature);
+
+                m_uiSwitchPhaseTimer = 15000;
+                m_uiHavestSoulTimer  = 10000;
+                m_uiShadowBoltTimer  = 5000;
+
+                m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+
+                m_uiPhaseSide = 1;
+                m_creature->GetMap()->CreatureRelocation(m_creature, fAddsPos[1][0], fAddsPos[1][1], fAddsPos[1][2], m_creature->GetOrientation());
+
+                m_bIsSecondPhase = true;
+                return;
+            }else m_uiSwitchPhaseTimer -= uiDiff;
+        } 
     }
 };
- 
+
 CreatureAI* GetAI_boss_gothik(Creature* pCreature)
 {
     return new boss_gothikAI(pCreature);
 }
- 
+
 void AddSC_boss_gothik()
 {
-    Script *newscript;
-    newscript = new Script;
-    newscript->Name = "boss_gothik";
-    newscript->GetAI = &GetAI_boss_gothik;
-    newscript->RegisterSelf();
+    Script* NewScript;
+
+    NewScript = new Script;
+    NewScript->Name = "boss_gothik";
+    NewScript->GetAI = &GetAI_boss_gothik;
+    NewScript->RegisterSelf();
 }

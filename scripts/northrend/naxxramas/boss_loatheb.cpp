@@ -70,7 +70,7 @@ struct MANGOS_DLL_DECL boss_loathebAI : public ScriptedAI
         m_bIsEnrage          = false;
         m_uiBloomTimer        = 26000;
         m_uiNecroticAuraTimer = 10000;
-        m_uiDeatchBloomTimer  = 20000;
+        m_uiDeathBloomTimer  = 20000;
         m_uiDoomTimer         = 120000;
         m_uiEnrageTimer       = 300000;
         m_uiEnrage2Timer      = 720000;
@@ -128,14 +128,14 @@ struct MANGOS_DLL_DECL boss_loathebAI : public ScriptedAI
             m_uiNecroticAuraTimer = 20000;
         }else m_uiNecroticAuraTimer -= uiDiff;
 
-        if(m_uiDeatchBloomTimer < uiDiff)
+        if(m_uiDeathBloomTimer < uiDiff)
         {
             if(m_creature->getVictim())
                 m_creature->CastSpell(m_creature->getVictim(), m_bIsRegularMode ? SPELL_DEATHBLOOM : SPELL_DEATHBLOOM_H, false);
-            m_uiDeatchBloomTimer = (m_bIsRegularMode ? 30000 : 20000);
+            m_uiDeathBloomTimer = (m_bIsRegularMode ? 30000 : 20000);
             m_uiBloomTimer = 6000;
             m_bIsBloom = true;
-        }else m_uiDeatchBloomTimer -= uiDiff;
+        }else m_uiDeathBloomTimer -= uiDiff;
 
         if(m_uiDoomTimer < uiDiff)
         {

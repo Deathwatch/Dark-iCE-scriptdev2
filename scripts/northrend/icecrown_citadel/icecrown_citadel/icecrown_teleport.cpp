@@ -16,7 +16,7 @@
 
 /* ScriptData
 SDName: icecrown_teleport
-SD%Complete: 30%
+SD%Complete: 100%
 SDComment: by /dev/rsa
 SDCategory: Icecrown Citadel
 EndScriptData */
@@ -47,7 +47,7 @@ static t_Locations PortalLoc[]=
 {"Icecrown Citadel",4198.42f, 2769.22f, 351.065f,70859,false,true,TYPE_SAURFANG}, //
 {"Sanctuary of blood",4490.205566f, 2769.275635f, 403.983765f,0,false,true,TYPE_BLOOD_COUNCIL}, //
 {"Lair of the Queen of Ice",4356.580078f, 2565.75f, 220.401993f,70861,false,true,TYPE_VALITHRIA}, //
-{"Frozen Throne",529.3f, -2124.7f, 1041, 70860,false,true,TYPE_SINDRAGOSA}, //
+{"Frozen Throne",528.767273f, -2124.845947f, 1041.86f, 70860,false,true,TYPE_SINDRAGOSA}, //
 };
 
 

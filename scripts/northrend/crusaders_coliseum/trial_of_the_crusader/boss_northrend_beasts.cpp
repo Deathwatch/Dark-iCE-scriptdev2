@@ -600,7 +600,7 @@ struct MANGOS_DLL_DECL boss_icehowlAI : public ScriptedAI
                                     DoScriptText(-1713508,m_creature);
                                     bsw->doCast(SPELL_ADRENALINE);
                                     stage = 4;
-                                    }
+        }                            }
                 break;
                 }
         case 4: {

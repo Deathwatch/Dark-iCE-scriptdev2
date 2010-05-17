@@ -198,10 +198,14 @@ bool GossipHello_boss_tirion_icc(Player* pPlayer, Creature* pCreature)
 
 bool GossipSelect_boss_tirion_icc(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    if (uiAction == GOSSIP_ACTION_INFO_DEF)
+    switch(uiAction)
     {
-        pPlayer->CLOSE_GOSSIP_MENU();
+		case GOSSIP_ACTION_INFO_DEF:
+            pPlayer->CLOSE_GOSSIP_MENU();
+            break;
+		default: break;
     }
+	return true;
 };
 
 CreatureAI* GetAI_boss_tirion_icc(Creature* pCreature)

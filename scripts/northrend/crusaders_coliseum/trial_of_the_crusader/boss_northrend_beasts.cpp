@@ -601,6 +601,7 @@ struct MANGOS_DLL_DECL boss_icehowlAI : public ScriptedAI
                                     bsw->doCast(SPELL_ADRENALINE);
                                     stage = 4;
                                     }
+				}
                 break;
                 }
         case 4: {

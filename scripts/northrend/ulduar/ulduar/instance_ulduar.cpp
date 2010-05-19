@@ -43,8 +43,8 @@ struct MANGOS_DLL_DECL instance_ulduar : public ScriptedInstance
 	uint64 mXT002GUID;
 	uint64 mIgnisGUID;
     uint64 mKologarnGUID;
-    uint64 mKologarnLeftArmGUID;
-    uint64 mKologarnRightArmGUID;
+    uint64 mLeftArmGUID;
+    uint64 mRightArmGUID;
     uint64 mSteelbreakerGUID;
     uint64 mMolgeimGUID;
     uint64 mBrundirGUID;
@@ -100,8 +100,8 @@ struct MANGOS_DLL_DECL instance_ulduar : public ScriptedInstance
 		mXT002GUID = 0;
 		mIgnisGUID = 0;
         mKologarnGUID = 0;
-        mKologarnLeftArmGUID = 0;
-        mKologarnRightArmGUID = 0;
+        mLeftArmGUID = 0;
+        mRightArmGUID = 0;
         mSteelbreakerGUID = 0;
         mMolgeimGUID = 0;
         mBrundirGUID = 0;
@@ -139,8 +139,8 @@ struct MANGOS_DLL_DECL instance_ulduar : public ScriptedInstance
 			case 33186: mRazorscaleGUID = pCreature->GetGUID();break;
 			case 33293: mXT002GUID = pCreature->GetGUID();break;
             case 32930: mKologarnGUID = pCreature->GetGUID();break;
-            case 32933: mKologarnLeftArmGUID = pCreature->GetGUID();break;
-            case 32934: mKologarnRightArmGUID = pCreature->GetGUID();break;
+            case 32933: mLeftArmGUID = pCreature->GetGUID();break;
+            case 32934: mRightArmGUID = pCreature->GetGUID();break;
             case 32867: mSteelbreakerGUID = pCreature->GetGUID();break;
             case 32927: mMolgeimGUID = pCreature->GetGUID();break;
             case 32857: mBrundirGUID = pCreature->GetGUID();break;
@@ -373,8 +373,8 @@ struct MANGOS_DLL_DECL instance_ulduar : public ScriptedInstance
             case NPC_MOLGEIM:               return mMolgeimGUID;
             case NPC_BRUNDIR:               return mBrundirGUID;
             case NPC_KOLOGARN:              return mKologarnGUID;
-            case NPC_KOLOGARN_LEFT_ARM:     return mKologarnLeftArmGUID;
-            case NPC_KOLOGARN_RIGHT_ARM:    return mKologarnRightArmGUID;
+            case NPC_KOLOGARN_LEFT_ARM:     return mLeftArmGUID;
+            case NPC_KOLOGARN_RIGHT_ARM:    return mRightArmGUID;
         }
         return 0;
     }

@@ -461,7 +461,7 @@ scripts/northrend/ulduar/ulduar/boss_xt002.cpp \
 scripts/northrend/ulduar/ulduar/boss_yogg_saron.cpp \
 scripts/northrend/ulduar/ulduar/def_ulduar.h \
 scripts/northrend/ulduar/ulduar/instance_ulduar.cpp \
-scripts/northrend/ulduar/ulduar/ulduar.cpp/ulduar_teleport.cpp \
+scripts/northrend/ulduar/ulduar/ulduar_teleport.cpp \
 scripts/northrend/utgarde_keep/utgarde_keep/boss_ingvar.cpp \
 scripts/northrend/utgarde_keep/utgarde_keep/boss_keleseth.cpp \
 scripts/northrend/utgarde_keep/utgarde_keep/boss_skarvald_and_dalronn.cpp \

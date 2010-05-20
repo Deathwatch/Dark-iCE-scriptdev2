@@ -2,10 +2,10 @@
  * This program is free software licensed under GPL version 2
  * Please see the included DOCS/LICENSE.TXT for more information */
 
-#ifndef SC_HYJALAI_H
-#define SC_HYJALAI_H
+#ifndef SC_DEF_HYJALAI_H
+#define SC_DEF_HYJALAI_H
 
-#include "hyjal.h"
+#include "def_hyjal.h"
 
 enum eBaseArea
 {

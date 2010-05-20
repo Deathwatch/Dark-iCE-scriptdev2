@@ -522,10 +522,6 @@ void AddScripts()
 {
     //battlegrounds
     AddSC_battleground();
-	AddSC_boss_balinda();                       // alterac valley
-	AddSC_boss_drekthar();
-	AddSC_boss_galvangar();
-	AddSC_boss_vanndar();
 
     //custom
 	AddSC_custom_items();
@@ -734,10 +730,7 @@ void AddScripts()
     AddSC_dark_portal();
     AddSC_instance_dark_portal();
     AddSC_hyjal();                                      	// Battle of Mount Hyjal
-	AddSC_boss_anetheron();
     AddSC_boss_archimonde();
-	AddSC_boss_azgalor();
-	AddSC_boss_kazrogal();
     AddSC_instance_mount_hyjal();
     AddSC_boss_captain_skarloc();                           // Escape from Durnholde Keep
     AddSC_boss_epoch_hunter();

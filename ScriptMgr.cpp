@@ -19,7 +19,7 @@ Config SD2Config;
 
 QueryResult* strSD2Pquery(char* str)
 {
-return SD2Database.Query(str);
+    return SD2Database.Query(str);
 }
 
 void FillSpellSummary();
@@ -51,7 +51,6 @@ void LoadDatabase()
         error_log("SD2: Unable to connect to Database. Load database aborted.");
         return;
     }
-
 }
 
 struct TSpellSummary {

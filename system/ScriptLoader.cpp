@@ -248,6 +248,7 @@ extern void AddSC_boss_ptheradras();
 extern void AddSC_boss_onyxia();                            //onyxias_lair
 extern void AddSC_boss_amnennar_the_coldbringer();          //razorfen_downs
 extern void AddSC_razorfen_downs();
+extern void AddSC_instance_razorfen_kraul();                //razorfen_kraul
 extern void AddSC_boss_ayamiss();                           //ruins_of_ahnqiraj
 extern void AddSC_boss_kurinnaxx();
 extern void AddSC_boss_moam();
@@ -309,10 +310,10 @@ extern void AddSC_instance_trial_of_the_crusader();         //Crusaders' Coliseu
 extern void AddSC_northrend_beasts();
 extern void AddSC_boss_jaraxxus();
 extern void AddSC_boss_anubarak_trial();
-extern void AddSC_boss_faction_champions();
+extern void AddSC_faction_champions();
 extern void AddSC_twin_valkyr();
 extern void AddSC_trial_of_the_crusader();
-
+extern void AddSC_instance_trial_of_the_crusader();
 extern void AddSC_boss_novos();                             //draktharon_keep
 extern void AddSC_boss_dred();
 extern void AddSC_boss_tharonja();
@@ -744,6 +745,7 @@ void AddScripts()
     AddSC_boss_onyxia();                                    //onyxias_lair
     AddSC_boss_amnennar_the_coldbringer();                  //razorfen_downs
     AddSC_razorfen_downs();
+    AddSC_instance_razorfen_kraul();                        //razorfen_kraul
     AddSC_boss_ayamiss();                                   //ruins_of_ahnqiraj
     AddSC_boss_kurinnaxx();
     AddSC_boss_moam();
@@ -805,10 +807,10 @@ void AddScripts()
     AddSC_northrend_beasts();
     AddSC_boss_jaraxxus();
     AddSC_boss_anubarak_trial();
-    AddSC_boss_faction_champions();
+    AddSC_faction_champions();
     AddSC_twin_valkyr();
     AddSC_trial_of_the_crusader();
-
+    AddSC_instance_trial_of_the_crusader();
     AddSC_boss_novos();                                     //draktharon_keep
     AddSC_boss_dred();
     AddSC_boss_tharonja();
@@ -841,14 +843,11 @@ void AddScripts()
 
     AddSC_boss_sartharion();                                //obsidian_sanctum
     AddSC_instance_obsidian_sanctum();
-
-	
-	AddSC_instance_vault_of_archavon();             		//vault_of_archavon
-    AddSC_boss_toravon();
+    AddSC_instance_vault_of_archavon();                     //vault_of_archavon
     AddSC_boss_koralon();
     AddSC_boss_emalon();
     AddSC_boss_archavon();
-
+    AddSC_boss_toravon();
     AddSC_boss_bjarngrim();                                 //Ulduar, halls_of_lightning
     AddSC_boss_ionar();
     AddSC_boss_loken();

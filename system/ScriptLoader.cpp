@@ -230,8 +230,11 @@ extern void AddSC_boss_chrono_lord_deja();
 extern void AddSC_boss_temporus();
 extern void AddSC_dark_portal();
 extern void AddSC_instance_dark_portal();
-extern void AddSC_hyjal();                                  //COT, hyjal
+extern void AddSC_hyjal();                                     //COT, hyjal
+extern void AddSC_boss_anetheron();
 extern void AddSC_boss_archimonde();
+extern void AddSC_boss_azgalor();
+extern void AddSC_boss_kazrogal();
 extern void AddSC_instance_mount_hyjal();
 extern void AddSC_boss_captain_skarloc();                   //COT, old_hillsbrad
 extern void AddSC_boss_epoch_hunter();
@@ -518,6 +521,10 @@ void AddScripts()
 {
     //battlegrounds
     AddSC_battleground();
+	AddSC_boss_balinda();                       // alterac valley
+	AddSC_boss_drekthar();
+	AddSC_boss_galvangar();
+	AddSC_boss_vanndar();
 
     //custom
 	AddSC_custom_items();
@@ -725,8 +732,11 @@ void AddScripts()
     AddSC_boss_temporus();
     AddSC_dark_portal();
     AddSC_instance_dark_portal();
-    AddSC_hyjal();                                          // Battle of Mount Hyjal
+    AddSC_hyjal();                                      	// Battle of Mount Hyjal
+	AddSC_boss_anetheron();
     AddSC_boss_archimonde();
+	AddSC_boss_azgalor();
+	AddSC_boss_kazrogal();
     AddSC_instance_mount_hyjal();
     AddSC_boss_captain_skarloc();                           // Escape from Durnholde Keep
     AddSC_boss_epoch_hunter();

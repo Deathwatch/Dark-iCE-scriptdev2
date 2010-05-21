@@ -28,6 +28,11 @@ npc_grimstone
 mob_phalanx
 npc_kharan_mighthammer
 npc_lokhtos_darkbargainer
+
+BREWERFEST
+mob_machine_bunny
+go_mole_console
+
 EndContentData */
 
 #include "precompiled.h"
@@ -48,6 +53,105 @@ bool GOHello_go_shadowforge_brazier(Player* pPlayer, GameObject* pGo)
             pInstance->SetData(TYPE_LYCEUM, IN_PROGRESS);
     }
     return false;
+}
+
+/*######
+## go_mole_console
+######*/
+// Brewerfest machine
+enum
+{
+    MOB_MOLE_BUNNY              = 26834,
+    SPELL_RUBLE                 = 42427,
+    SAY_MACHINE                 = -1799999
+};
+
+float MachineLoc[4] = {437.1f, -1.96379f, -70.7342f, 0.0f};
+
+bool GOHello_go_mole_console(Player* pPlayer, GameObject* pGo)
+{
+    ScriptedInstance* m_pInstance = (ScriptedInstance*)pGo->GetInstanceData();
+
+    error_log("Debug: Mole Console nas been used by %s", pPlayer->GetName());
+    if (!m_pInstance)
+    {
+        error_log("Debug: Mole Console - Blackrock Depths instance script has not been initialized!");
+        return true;
+    }
+    GameObject* machine = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(DATA_GO_MOLE_MACHINE));
+    if (!machine)
+    {
+        error_log("Debug: Mole Console - there is no Mole Machine to begin event");
+        return true;
+    }
+    // disable doubleuse in short time (time handled in bunny's UpadteAI 
+    pGo->SetFlag(GAMEOBJECT_FLAGS,GO_FLAG_INTERACT_COND); 
+    
+    if (m_pInstance->GetData(DATA_FIRST_TIME)>0)      // if FirstTime == false
+    {
+        pPlayer->CastSpell(pPlayer,49846,true);
+    }
+
+    Creature* bunny = pGo->SummonCreature(MOB_MOLE_BUNNY, MachineLoc[0], MachineLoc[1], MachineLoc[2], MachineLoc[3], TEMPSUMMON_TIMED_DESPAWN,30000);
+    if (bunny)
+    {
+        bunny->CastSpell(bunny,SPELL_RUBLE,true);
+        machine->SetGoState(GO_STATE_READY);
+        m_pInstance->SetData(DATA_SUBMERGE,1);        // Submerged = true
+    }
+    return false;
+}
+
+
+/*######
+## mob_machine_bunny
+######*/
+
+// trigger for Brewerfest machine
+struct MANGOS_DLL_DECL mob_machine_bunnyAI : public ScriptedAI
+{
+    mob_machine_bunnyAI(Creature* pCreature) : ScriptedAI(pCreature) 
+    
+    {
+        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        Reset();
+    }
+
+    ScriptedInstance* m_pInstance;
+
+    uint32 Submerge_Timer;
+  
+    void Reset()
+    {
+        Submerge_Timer = 7000;
+    }
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        if (!m_pInstance)
+            return;
+
+        GameObject* machine = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(DATA_GO_MOLE_MACHINE));
+        GameObject* console = m_pInstance->instance->GetGameObject(m_pInstance->GetData64(DATA_GO_MOLE_CONSOLE));
+        
+        if (!machine || !console) 
+            return;
+
+        if (m_pInstance->GetData(DATA_SUBMERGE)>0 && Submerge_Timer < uiDiff)          // Submerged == true
+        {
+            console->RemoveFlag(GAMEOBJECT_FLAGS,GO_FLAG_INTERACT_COND);
+            machine->SetGoState(GO_STATE_ACTIVE);
+            if (m_pInstance->GetData(DATA_FIRST_TIME) == 0)
+                machine->Say(SAY_MACHINE,0,m_pInstance->GetData64(DATA_GO_MOLE_MACHINE));
+            m_pInstance->SetData(DATA_SUBMERGE, 0);                                       // Submerged  = false
+            m_pInstance->SetData(DATA_FIRST_TIME, 1);                                     // First Time = false
+        }else Submerge_Timer -=uiDiff;
+    }
+};
+
+CreatureAI* GetAI_mob_machine_bunny(Creature* pCreature)
+{
+    return new mob_machine_bunnyAI(pCreature);
 }
 
 /*######
@@ -669,6 +773,11 @@ void AddSC_blackrock_depths()
     newscript->RegisterSelf();
 
     newscript = new Script;
+    newscript->Name = "go_mole_console";
+    newscript->pGOHello = &GOHello_go_mole_console;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
     newscript->Name = "at_ring_of_law";
     newscript->pAreaTrigger = &AreaTrigger_at_ring_of_law;
     newscript->RegisterSelf();
@@ -681,6 +790,11 @@ void AddSC_blackrock_depths()
     newscript = new Script;
     newscript->Name = "mob_phalanx";
     newscript->GetAI = &GetAI_mob_phalanx;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "mob_machine_bunny";
+    newscript->GetAI = &GetAI_mob_machine_bunny;
     newscript->RegisterSelf();
 
     newscript = new Script;

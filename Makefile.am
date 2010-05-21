@@ -100,6 +100,7 @@ scripts/eastern_kingdoms/undercity.cpp \
 scripts/eastern_kingdoms/western_plaguelands.cpp \
 scripts/eastern_kingdoms/westfall.cpp \
 scripts/eastern_kingdoms/wetlands.cpp \
+scripts/eastern_kingdoms/blackrock_depths/boss_coren_direbrew.cpp \
 scripts/eastern_kingdoms/blackrock_depths/blackrock_depths.cpp \
 scripts/eastern_kingdoms/blackrock_depths/blackrock_depths.h \
 scripts/eastern_kingdoms/blackrock_depths/boss_ambassador_flamelash.cpp \
@@ -225,6 +226,7 @@ scripts/eastern_kingdoms/sunwell_plateau/boss_eredar_twins.cpp \
 scripts/eastern_kingdoms/sunwell_plateau/boss_muru_entropius.cpp \
 scripts/eastern_kingdoms/sunwell_plateau/instance_sunwell_plateau.cpp \
 scripts/eastern_kingdoms/sunwell_plateau/sunwell_plateau.h \
+scripts/eastern_kingdoms/uldaman/boss_archaedas.cpp \
 scripts/eastern_kingdoms/uldaman/boss_ironaya.cpp \
 scripts/eastern_kingdoms/uldaman/uldaman.cpp \
 scripts/eastern_kingdoms/uldaman/uldaman.h \

@@ -7,6 +7,8 @@
 
 enum
 {
+	MAX_ENCOUNTER        = 2,
+	
 	TYPE_ALTAR_EVENT     = 1,
 	TYPE_ARCHAEDAS_EVENT = 2,
 	DATA_EVENT_STARTER   = 3,

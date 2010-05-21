@@ -59,7 +59,7 @@ struct MANGOS_DLL_DECL instance_uldaman : public ScriptedInstance
             case GO_TEMPLE_DOOR2:
                 m_uiTempleDoor2GUID = pGo->GetGUID();
                 break;
-            case GO_TEMPLE_DOOR3:
+            case GO_ANCIENT_VAULT:
                 m_uiAncientVaultGUID = pGo->GetGUID();
                 break;
         }
@@ -94,7 +94,7 @@ struct MANGOS_DLL_DECL instance_uldaman : public ScriptedInstance
        switch(uiData)
        {
           case DATA_EVENT_STARTER:
-              m_uiPlayerGUID = guid;
+              m_uiPlayerGUID = uiGuid;
               break;
        }
     }

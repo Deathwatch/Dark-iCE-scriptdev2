@@ -32,6 +32,7 @@ struct MANGOS_DLL_DECL instance_pinnacle : public ScriptedInstance
     std::string strInstData;
 
     uint64 m_uiSkadiDoorGUID;
+    uint64 m_uYmironDoorGUID;
 
     uint64 m_uiRhinoGUID;
     uint64 m_uiJormungarGUID;
@@ -41,6 +42,11 @@ struct MANGOS_DLL_DECL instance_pinnacle : public ScriptedInstance
     uint64 m_uiHarpoon1GUID;
     uint64 m_uiHarpoon2GUID;
     uint64 m_uiHarpoon3GUID;
+    uint64 m_uiBjornGUID;
+    uint64 m_uiHaldorGUID;
+    uint64 m_uiRanulfGUID;
+    uint64 m_uiTorgynGUID;
+    uint64 m_uiYmironGUID;
 
     void Initialize()
     {
@@ -55,6 +61,12 @@ struct MANGOS_DLL_DECL instance_pinnacle : public ScriptedInstance
         m_uiHarpoon1GUID    = 0;
         m_uiHarpoon2GUID    = 0;
         m_uiHarpoon3GUID    = 0;
+        m_uYmironDoorGUID   = 0;
+        m_uiBjornGUID       = 0;
+        m_uiHaldorGUID      = 0;
+        m_uiRanulfGUID      = 0;
+        m_uiTorgynGUID      = 0;
+        m_uiYmironGUID      = 0;
 
     }
 
@@ -66,6 +78,11 @@ struct MANGOS_DLL_DECL instance_pinnacle : public ScriptedInstance
             case NPC_JORMUNGAR:     m_uiJormungarGUID = pCreature->GetGUID();       break;
             case NPC_WORGEN :       m_uiWorgenGUID = pCreature->GetGUID();          break;
             case NPC_FURBOLG:       m_uiFurbolgGUID = pCreature->GetGUID();         break;
+            case NPC_BJORN:         m_uiBjornGUID = pCreature->GetGUID();           break;
+            case NPC_HALDOR:        m_uiHaldorGUID = pCreature->GetGUID();          break;
+            case NPC_RANULF:        m_uiRanulfGUID = pCreature->GetGUID();          break;
+            case NPC_TORGYN:        m_uiTorgynGUID = pCreature->GetGUID();          break;
+            case NPC_YMIRON:        m_uiYmironGUID = pCreature->GetGUID();          break;
         }
     }
 
@@ -80,9 +97,10 @@ struct MANGOS_DLL_DECL instance_pinnacle : public ScriptedInstance
                     pGo->SetGoState(GO_STATE_ACTIVE);
 
                 break;
-            case GO_HARPOON1: m_uiHarpoon1GUID = pGo->GetGUID(); pGo->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1); break;
-            case GO_HARPOON2: m_uiHarpoon2GUID = pGo->GetGUID(); pGo->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1); break;
-            case GO_HARPOON3: m_uiHarpoon3GUID = pGo->GetGUID(); pGo->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_UNK1); break;
+            case GO_DOOR_YMIRON: m_uYmironDoorGUID = pGo->GetGUID(); break; 
+            case GO_HARPOON1: m_uiHarpoon1GUID = pGo->GetGUID(); break;
+            case GO_HARPOON2: m_uiHarpoon2GUID = pGo->GetGUID(); break;
+            case GO_HARPOON3: m_uiHarpoon3GUID = pGo->GetGUID(); break;
         }
     }
 
@@ -100,11 +118,14 @@ struct MANGOS_DLL_DECL instance_pinnacle : public ScriptedInstance
                 break;
             case TYPE_SKADI:
                 if (uiData == DONE)
-                    DoUseDoorOrButton(m_uiSkadiDoorGUID);
+                    instance->GetGameObject(m_uiSkadiDoorGUID)->SetGoState(GO_STATE_ACTIVE);
 
                 m_auiEncounter[2] = uiData;
                 break;
             case TYPE_YMIRON:
+                if (uiData == DONE)
+                    instance->GetGameObject(m_uYmironDoorGUID)->SetGoState(GO_STATE_ACTIVE);
+
                 m_auiEncounter[3] = uiData;
                 break;
             case TYPE_HARPOONLUNCHER:
@@ -164,6 +185,11 @@ struct MANGOS_DLL_DECL instance_pinnacle : public ScriptedInstance
             case NPC_JORMUNGAR:     return m_uiJormungarGUID; 
             case NPC_WORGEN :       return m_uiWorgenGUID;  
             case NPC_FURBOLG:       return m_uiFurbolgGUID;
+            case DATA_BJORN:        return m_uiBjornGUID;
+            case DATA_HALDOR:       return m_uiHaldorGUID;
+            case DATA_RANULF:       return m_uiRanulfGUID;
+            case DATA_TORGYN:       return m_uiTorgynGUID;
+            case DATA_YMIRON:       return m_uiYmironGUID;
             case GO_HARPOON1:       return m_uiHarpoon1GUID;
             case GO_HARPOON2:       return m_uiHarpoon2GUID;
             case GO_HARPOON3:       return m_uiHarpoon3GUID;

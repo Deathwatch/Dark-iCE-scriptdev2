@@ -23,6 +23,7 @@ EndScriptData */
 
 #include "precompiled.h"
 #include "def_ulduar.h"
+#include "Spell.h"
 
 enum
 {
@@ -32,41 +33,41 @@ enum
     SPELL_BERSERK                = 47008,
     SPELL_SUPERCHARGE            = 61920,
     //steelbreaker
-    SPELL_HIGH_VOLTAGE            = 61890,
-    SPELL_HIGH_VOLTAGE_H        = 63498,
-    SPELL_FUSION_PUNCH            = 61903,
-    SPELL_FUSION_PUNCH_H        = 63493,
-    SPELL_STATIC_DISRUPTION        = 44008,
+    SPELL_HIGH_VOLTAGE           = 61890,
+    SPELL_HIGH_VOLTAGE_H         = 63498,
+    SPELL_FUSION_PUNCH           = 61903,
+    SPELL_FUSION_PUNCH_H         = 63493,
+    SPELL_STATIC_DISRUPTION      = 44008,
     SPELL_STATIC_DISRUPTION_H    = 63494,
-    SPELL_POWER                    = 64637,
+    SPELL_POWER                  = 64637,
     SPELL_POWER_H                = 61888,
-    SPELL_ELECTRICAL_CHARGE        = 61902,
+    SPELL_ELECTRICAL_CHARGE      = 61902,
     //runemaster molgeim
-    SPELL_SHIELD                = 62274,
-    SPELL_SHIELD_H                = 63489,
-    SPELL_RUNE_OF_POWER            = 63513,
-    SPELL_RUNE_OF_DEATH            = 62269,
+    SPELL_SHIELD                 = 62274,
+    SPELL_SHIELD_H               = 63489,
+    SPELL_RUNE_OF_POWER          = 63513,
+    SPELL_RUNE_OF_DEATH          = 62269,
     SPELL_RUNE_OF_DEATH_H        = 63490,
-    SPELL_RUNE_OF_SUMMONING        = 62273,
+    SPELL_RUNE_OF_SUMMONING      = 62273,
     //rune of power
-    AURA_RUNE_OF_POWER            = 61974,
+    AURA_RUNE_OF_POWER           = 61974,
     //rune of summoning
-    AURA_RUNE_OF_SUMMONING        = 62019,
+    AURA_RUNE_OF_SUMMONING       = 62019,
     //lightning elemental
     SPELL_LIGHTNING_BLAST        = 62054,
-    SPELL_LIGHTNING_BLAST_H        = 63491,
+    SPELL_LIGHTNING_BLAST_H      = 63491,
     //stormcaller brundir
     SPELL_CHAIN_LIGHTNING        = 61879,
-    SPELL_CHAIN_LIGHTNING_H        = 63479,
-    SPELL_OVERLOAD                = 61869,
+    SPELL_CHAIN_LIGHTNING_H      = 63479,
+    SPELL_OVERLOAD               = 61869,
     SPELL_LIGHTNING_WHIRL        = 61915,
-    SPELL_LIGHTNING_WHIRL_H        = 63483,
+    SPELL_LIGHTNING_WHIRL_H      = 63483,
     SPELL_STORMSHIELD            = 64187,
-    SPELL_LIGHTNING_TENDRILS    = 61887,
-    SPELL_LIGHTNING_TENDRILS_H    = 63486,
+    SPELL_LIGHTNING_TENDRILS     = 61887,
+    SPELL_LIGHTNING_TENDRILS_H   = 63486,
     LIGHTNING_TENDRILS_VISUAL    = 61883,
     //NPC ids
-    MOB_LIGHTNING_ELEMENTAL        = 32958
+    MOB_LIGHTNING_ELEMENTAL      = 32958
 };
 
 // Rune of Power
@@ -308,10 +309,10 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
                             p2Temp->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                         }
             if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
-                if (!pTemp->isAlive())
+                if (pTemp->isAlive())
                     pTemp->SetHealth(pTemp->GetMaxHealth());
             if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
-                if (!pTemp->isAlive())
+                if (pTemp->isAlive())
                     pTemp->SetHealth(pTemp->GetMaxHealth());
         }
     }
@@ -319,11 +320,19 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
     void Aggro(Unit* pWho)
     {
         if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
-            if (pTemp->isAlive())
-                pTemp->SetInCombatWithZone();
+            if (!pTemp->isAlive())
+                pTemp->Respawn();
         if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
-            if (pTemp->isAlive())
-                pTemp->SetInCombatWithZone();
+            if (!pTemp->isAlive())
+                pTemp->Respawn();
+
+        m_creature->SetInCombatWithZone();
+        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
+            if (pTemp->isAlive() && !pTemp->getVictim())
+                pTemp->AI()->AttackStart(pWho);
+        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
+            if (pTemp->isAlive() && !pTemp->getVictim())
+                pTemp->AI()->AttackStart(pWho);
         if (m_pInstance)
             m_pInstance->SetData(TYPE_IRON_COUNCIL, IN_PROGRESS);
     }
@@ -361,7 +370,10 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
 
         if (Whirl_Timer < diff && !tendrils && supercharge1)
         {
-            m_creature->CastStop();
+            if (Spell* spell = m_creature->GetCurrentSpell(CURRENT_GENERIC_SPELL))
+                if (spell->m_spellInfo->Id == (m_bIsRegularMode ? SPELL_CHAIN_LIGHTNING : SPELL_CHAIN_LIGHTNING_H))
+                    m_creature->CastStop();
+
             DoCast(m_creature, m_bIsRegularMode ? SPELL_LIGHTNING_WHIRL : SPELL_LIGHTNING_WHIRL_H);
             Whirl_Timer = 10000;
         }else Whirl_Timer -= diff;
@@ -409,7 +421,7 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
             if (m_creature->HasAura(LIGHTNING_TENDRILS_VISUAL))
                 m_creature->RemoveAurasDueToSpell(LIGHTNING_TENDRILS_VISUAL);
             Tendrils_start_Timer = 90000;
-            m_creature->SetSpeedRate(MOVE_RUN, 1.8f);
+            m_creature->SetSpeedRate(MOVE_RUN, 0.8f);
             tendrils = false;
             Chain_Lightning_Timer = 5000;
             Overload_Timer = 35000;
@@ -579,10 +591,10 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
                             p2Temp->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                         }
             if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
-                if (!pTemp->isAlive())
+                if (pTemp->isAlive())
                     pTemp->SetHealth(pTemp->GetMaxHealth());
             if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
-                if (!pTemp->isAlive())
+                if (pTemp->isAlive())
                     pTemp->SetHealth(pTemp->GetMaxHealth());
         }
     }
@@ -590,11 +602,19 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
     void Aggro(Unit* pWho)
     {
         if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
-            if (pTemp->isAlive())
-                pTemp->SetInCombatWithZone();
+            if (!pTemp->isAlive())
+                pTemp->Respawn();
         if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
-            if (pTemp->isAlive())
-                pTemp->SetInCombatWithZone();
+            if (!pTemp->isAlive())
+                pTemp->Respawn();
+
+        m_creature->SetInCombatWithZone();
+        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
+            if (pTemp->isAlive() && !pTemp->getVictim())
+                pTemp->AI()->AttackStart(pWho);
+        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
+            if (pTemp->isAlive() && !pTemp->getVictim())
+                pTemp->AI()->AttackStart(pWho);
         if (m_pInstance)
             m_pInstance->SetData(TYPE_IRON_COUNCIL, IN_PROGRESS);
     }
@@ -835,10 +855,10 @@ struct MANGOS_DLL_DECL boss_steelbreakerAI : public ScriptedAI
                             p2Temp->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                         }
             if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
-                if (!pTemp->isAlive())
+                if (pTemp->isAlive())
                     pTemp->SetHealth(pTemp->GetMaxHealth());
             if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
-                if (!pTemp->isAlive())
+                if (pTemp->isAlive())
                     pTemp->SetHealth(pTemp->GetMaxHealth());
         }
     }
@@ -846,12 +866,20 @@ struct MANGOS_DLL_DECL boss_steelbreakerAI : public ScriptedAI
     void Aggro(Unit* pWho)
     {
         if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
-            if (pTemp->isAlive())
-                pTemp->SetInCombatWithZone();
+            if (!pTemp->isAlive())
+                pTemp->Respawn();
         if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
-            if (pTemp->isAlive())
-                pTemp->SetInCombatWithZone();
-        DoCast(m_creature, m_bIsRegularMode ? SPELL_HIGH_VOLTAGE : SPELL_HIGH_VOLTAGE_H);
+            if (!pTemp->isAlive())
+                pTemp->Respawn();
+
+        m_creature->SetInCombatWithZone();
+        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
+            if (pTemp->isAlive() && !pTemp->getVictim())
+                pTemp->AI()->AttackStart(pWho);
+        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
+            if (pTemp->isAlive() && !pTemp->getVictim())
+                pTemp->AI()->AttackStart(pWho);
+        DoCast(m_creature, m_bIsRegularMode ? SPELL_HIGH_VOLTAGE : SPELL_HIGH_VOLTAGE_H, true);
         if (m_pInstance)
             m_pInstance->SetData(TYPE_IRON_COUNCIL, IN_PROGRESS);
     }
@@ -999,3 +1027,4 @@ void AddSC_boss_iron_council()
     NewScript->GetAI = &GetAI_mob_ulduar_lightning_elemental;
     NewScript->RegisterSelf();
 }
+

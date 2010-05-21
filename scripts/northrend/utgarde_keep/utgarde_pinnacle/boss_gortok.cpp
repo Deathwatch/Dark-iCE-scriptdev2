@@ -51,10 +51,10 @@ uint32 m_uiCreature[4] = {NPC_FURBOLG, NPC_WORGEN, NPC_JORMUNGAR, NPC_RHINO};
 
 float fSpawn[4][2] =
 {
-    {292.419098f,-462.365509f},
-    {290.920288f,-441.411682f},
-    {261.907288f,-440.493561f},
-    {260.422180f,-463.380402f},
+    {292.419098f, -462.365509f},
+    {290.920288f, -441.411682f},
+    {261.907288f, -440.493561f},
+    {260.422180f, -463.380402f}
 };
 
 /*######
@@ -167,21 +167,27 @@ struct MANGOS_DLL_DECL boss_gortokAI : public ScriptedAI
             if(m_creature->getVictim())
                 m_creature->CastSpell(m_creature->getVictim(), m_bIsRegularMode ? SPELL_WITHERING_ROAR : SPELL_WITHERING_ROAR_H, false);
             m_uiRoarTimer = urand(22000,28000);
-        }else m_uiRoarTimer -= uiDiff;
+        }
+        else
+            m_uiRoarTimer -= uiDiff;
 
         if(m_uiImpaleTimer < uiDiff)
         {
-            if(Unit* pPlayer = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-                m_creature->CastSpell(pPlayer, m_bIsRegularMode ? SPELL_IMPALE : SPELL_IMPALE_H, false);
+            if(Unit* pUnit = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                DoCastSpellIfCan(pUnit, m_bIsRegularMode ? SPELL_IMPALE : SPELL_IMPALE_H);
             m_uiImpaleTimer = urand(15000,25000);
-        }else m_uiImpaleTimer -= uiDiff;
+        }
+        else
+            m_uiImpaleTimer -= uiDiff;
 
         if(m_uiArcingSmashTimer < uiDiff)   
         {
             if(m_creature->getVictim())
                 m_creature->CastSpell(m_creature->getVictim(), SPELL_ARCING_SMASH, false);
             m_uiArcingSmashTimer = urand(10000,30000);
-        }else m_uiArcingSmashTimer -= uiDiff;
+        }
+        else
+            m_uiArcingSmashTimer -= uiDiff;
 
         DoMeleeAttackIfReady();
     }

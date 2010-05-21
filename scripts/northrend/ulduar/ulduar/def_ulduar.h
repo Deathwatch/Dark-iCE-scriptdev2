@@ -38,8 +38,13 @@ enum
     TYPE_KEEPERS = 24,
 
 	//NPC_KOLOGARN = 25,
-    NPC_KOLOGARN_RIGHT_ARM = 26,
-    NPC_KOLOGARN_LEFT_ARM = 27,
+    //NPC_KOLOGARN_RIGHT_ARM = 26,
+    //NPC_KOLOGARN_LEFT_ARM = 27,
+	
+	DATA_SANCTUM_SENTRY_1       = 28,
+    DATA_SANCTUM_SENTRY_2       = 29,
+    DATA_SANCTUM_SENTRY_3       = 30,
+    DATA_SANCTUM_SENTRY_4       = 31,
 
     NPC_LEVIATHAN               = 33113,
     NPC_IGNIS                   = 33118,
@@ -49,6 +54,8 @@ enum
     NPC_MOLGEIM                 = 32927,
     NPC_BRUNDIR                 = 32857,
     NPC_KOLOGARN                = 32930,
+    NPC_KOLOGARN_LEFT_ARM                = 32933,
+    NPC_KOLOGARN_RIGHT_ARM               = 32934,
     NPC_AURIAYA                 = 33515,
     NPC_MIMIRON                 = 33350,
     NPC_HODIR                   = 32845,

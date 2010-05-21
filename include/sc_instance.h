@@ -38,5 +38,7 @@ class MANGOS_DLL_DECL ScriptedInstance : public InstanceData
 
         //sends world state update to all players in instance
         void DoUpdateWorldState(uint32 uiStateId, uint32 uiStateData);
+		
+		void DestroyItemFromAllPlayers(uint32 uiItemId);
 };
 #endif

@@ -166,10 +166,8 @@ struct MANGOS_DLL_DECL boss_onyxiaAI : public ScriptedAI
 
     void JustSummoned(Creature *pSummoned)
     {
-        if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-            pSummoned->AI()->AttackStart(pTarget);
-
-        ++m_uiSummonCount;
+        pSummoned->GetMotionMaster()->MovePoint(0, SpawnLocs[3][0], SpawnLocs[3][1], SpawnLocs[3][2]);
+        pSummoned->SetInCombatWithZone();
     }
 
     void KilledUnit(Unit* pVictim)
@@ -347,7 +345,7 @@ struct MANGOS_DLL_DECL boss_onyxiaAI : public ScriptedAI
                 if (m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() != POINT_MOTION_TYPE)
                 {
                     if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                        DoCastSpellIfCan(pTarget, SPELL_FIREBALL);
+                        DoCastSpellIfCan(pTarget, Regular ? SPELL_FIREBALL : H_SPELL_FIREBALL);
 
                     m_uiEngulfingFlamesTimer = 8000;
                 }

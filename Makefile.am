@@ -38,6 +38,8 @@ base/simple_ai.cpp \
 base/simple_ai.h \
 include/precompiled.cpp \
 include/precompiled.h \
+include/sc_boss_spell_worker.cpp \
+include/sc_boss_spell_worker.h \
 include/sc_creature.cpp \
 include/sc_creature.h \
 include/sc_gossip.h \
@@ -286,6 +288,9 @@ scripts/kalimdor/caverns_of_time/dark_portal/dark_portal.cpp \
 scripts/kalimdor/caverns_of_time/dark_portal/dark_portal.h \
 scripts/kalimdor/caverns_of_time/dark_portal/instance_dark_portal.cpp \
 scripts/kalimdor/caverns_of_time/hyjal/boss_archimonde.cpp \
+scripts/kalimdor/caverns_of_time/hyjal/boss_anetheron.cpp \
+scripts/kalimdor/caverns_of_time/hyjal/boss_azgalor.cpp \
+scripts/kalimdor/caverns_of_time/hyjal/boss_kazrogal.cpp \
 scripts/kalimdor/caverns_of_time/hyjal/hyjal.cpp \
 scripts/kalimdor/caverns_of_time/hyjal/hyjal.h \
 scripts/kalimdor/caverns_of_time/hyjal/hyjalAI.cpp \
@@ -304,6 +309,8 @@ scripts/kalimdor/maraudon/boss_princess_theradras.cpp \
 scripts/kalimdor/onyxias_lair/boss_onyxia.cpp \
 scripts/kalimdor/razorfen_downs/boss_amnennar_the_coldbringer.cpp \
 scripts/kalimdor/razorfen_downs/razorfen_downs.cpp \
+scripts/kalimdor/razorfen_kraul/instance_razorfen_kraul.cpp \
+scripts/kalimdor/razorfen_kraul/razorfen_kraul.h \
 scripts/kalimdor/ruins_of_ahnqiraj/boss_ayamiss.cpp \
 scripts/kalimdor/ruins_of_ahnqiraj/boss_buru.cpp \
 scripts/kalimdor/ruins_of_ahnqiraj/boss_kurinnaxx.cpp \
@@ -446,11 +453,9 @@ scripts/northrend/ulduar/halls_of_stone/halls_of_stone.cpp \
 scripts/northrend/ulduar/halls_of_stone/halls_of_stone.h \
 scripts/northrend/ulduar/halls_of_stone/instance_halls_of_stone.cpp \
 scripts/northrend/ulduar/ulduar/boss_algalon.cpp \
-scripts/northrend/ulduar/ulduar/boss_assemblyofiron.cpp \
 scripts/northrend/ulduar/ulduar/boss_auriaya.cpp \
 scripts/northrend/ulduar/ulduar/boss_flameleviathan.cpp \
 scripts/northrend/ulduar/ulduar/boss_freya.cpp \
-scripts/northrend/ulduar/ulduar/boss_generalvezax.cpp \
 scripts/northrend/ulduar/ulduar/boss_hodir.cpp \
 scripts/northrend/ulduar/ulduar/boss_ignis.cpp \
 scripts/northrend/ulduar/ulduar/boss_iron_council.cpp \
@@ -458,12 +463,12 @@ scripts/northrend/ulduar/ulduar/boss_kologarn.cpp \
 scripts/northrend/ulduar/ulduar/boss_mimiron.cpp \
 scripts/northrend/ulduar/ulduar/boss_razorscale.cpp \
 scripts/northrend/ulduar/ulduar/boss_thorim.cpp \
+scripts/northrend/ulduar/ulduar/boss_vezax.cpp \
 scripts/northrend/ulduar/ulduar/boss_xt002.cpp \
 scripts/northrend/ulduar/ulduar/boss_yogg_saron.cpp \
 scripts/northrend/ulduar/ulduar/def_ulduar.h \
 scripts/northrend/ulduar/ulduar/instance_ulduar.cpp \
-scripts/northrend/ulduar/ulduar/ulduar.cpp \
-scripts/northrend/ulduar/ulduar/ulduar.h \
+scripts/northrend/ulduar/ulduar/ulduar_teleport.cpp \
 scripts/northrend/utgarde_keep/utgarde_keep/boss_ingvar.cpp \
 scripts/northrend/utgarde_keep/utgarde_keep/boss_keleseth.cpp \
 scripts/northrend/utgarde_keep/utgarde_keep/boss_skarvald_and_dalronn.cpp \
@@ -569,6 +574,7 @@ scripts/outland/tempest_keep/arcatraz/instance_arcatraz.cpp \
 scripts/outland/tempest_keep/botanica/boss_high_botanist_freywinn.cpp \
 scripts/outland/tempest_keep/botanica/boss_laj.cpp \
 scripts/outland/tempest_keep/botanica/boss_warp_splinter.cpp \
+scripts/outland/tempest_keep/the_eye/boss_alar.cpp \
 scripts/outland/tempest_keep/the_eye/boss_astromancer.cpp \
 scripts/outland/tempest_keep/the_eye/boss_kaelthas.cpp \
 scripts/outland/tempest_keep/the_eye/boss_void_reaver.cpp \

@@ -480,10 +480,9 @@ bool BossSpellWorker::_doAura(uint8 m_uiSpellIdx, Unit* pTarget, SpellEffectInde
 
     if (spell = (SpellEntry *)GetSpellStore()->LookupEntry(pSpell->m_uiSpellEntry[currentDifficulty]))
         if (pTarget->AddAura(new BossAura(spell, index, &pSpell->varData, pTarget, pTarget)))
-                return true;
+            return true;
 
     return false;
-
 };
 
 // Copypasting from CreatureAI.cpp. if this called from bossAI-> crashed :(
@@ -609,7 +608,8 @@ Unit* BossSpellWorker::_doSelect(uint32 SpellID, bool spellsearchtype, float ran
     Unit* _list[pMap->GetMaxPlayers()];
 #else
     Unit* _list[INSTANCE_MAX_PLAYERS];
-#endif 
+#endif
+
     uint8 _count = 0;
 
     memset(&_list, 0, sizeof(_list));

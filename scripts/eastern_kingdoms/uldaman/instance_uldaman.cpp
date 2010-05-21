@@ -53,13 +53,13 @@ struct MANGOS_DLL_DECL instance_uldaman : public ScriptedInstance
     {
         switch(pGo->GetEntry())
         {
-            case 124367:
+            case GO_TEMPLE_DOOR1:
                 m_uiTempleDoor1GUID = pGo->GetGUID();
                 break;
-            case 141869:
+            case GO_TEMPLE_DOOR2:
                 m_uiTempleDoor2GUID = pGo->GetGUID();
                 break;
-            case 124369:
+            case GO_TEMPLE_DOOR3:
                 m_uiAncientVaultGUID = pGo->GetGUID();
                 break;
         }
@@ -89,7 +89,7 @@ struct MANGOS_DLL_DECL instance_uldaman : public ScriptedInstance
         }
     }
 
-    void SetData64(uint32 uiData, uint64 guid)
+    void SetData64(uint32 uiData, uint64 uiGuid)
     {
        switch(uiData)
        {

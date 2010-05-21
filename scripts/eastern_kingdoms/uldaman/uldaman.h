@@ -7,10 +7,12 @@
 
 enum
 {
-    MAX_ENCOUNTER           = 2,
-
-    TYPE_ALTAR_EVENT        = 1,
-    TYPE_ARCHAEDAS_EVENT    = 2,
-    DATA_EVENT_STARTER      = 3
+	TYPE_ALTAR_EVENT     = 1,
+	TYPE_ARCHAEDAS_EVENT = 2,
+	DATA_EVENT_STARTER   = 3,
+	
+	GO_TEMPLE_DOOR1      = 124367,
+	GO_TEMPLE_DOOR2      = 141869,
+	GO_ANCIENT_VAULT     = 124369
 };
 #endif

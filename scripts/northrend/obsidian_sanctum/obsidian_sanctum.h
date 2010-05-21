@@ -10,6 +10,7 @@ enum
     MAX_ENCOUNTER               = 1,
 
     TYPE_SARTHARION_EVENT       = 1,
+    TYPE_DRAGONS_ALIVE          = 2,
 
     DATA_SARTHARION             = 10,
     DATA_TENEBRON               = 11,

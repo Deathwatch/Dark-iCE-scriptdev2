@@ -66,6 +66,7 @@ enum
     SPELL_TWILIGHT_SHIFT_ENTER                  = 57620,    // enter phase. Player get this when click GO
     SPELL_TWILIGHT_SHIFT_REMOVAL                = 61187,    // leave phase
     SPELL_TWILIGHT_SHIFT_REMOVAL_ALL            = 61190,    // leave phase (probably version to make all leave)
+	SPELL_TWILIGHT_SHIFT_DAMAGE                 = 57874,
 
     //Mini bosses common spells
     SPELL_TWILIGHT_RESIDUE                      = 61885,    // makes immune to shadow damage, applied when leave phase
@@ -102,6 +103,7 @@ enum
     SPELL_HATCH_EGGS                            = 58542,
     SPELL_HATCH_EGGS_EFFECT_H                   = 59190,
     SPELL_HATCH_EGGS_EFFECT                     = 58685,
+	NPC_TWILIGHT_EGG                            = 30882,
 
     //Whelps
     NPC_TWILIGHT_WHELP                          = 30890,
@@ -124,6 +126,11 @@ enum
 struct Waypoint
 {
     float m_fX, m_fY, m_fZ;
+};
+
+struct Loc
+{
+    float x, y, z, o;
 };
 
 //each dragons special points. First where fly to before connect to connon, second where land point is.
@@ -158,13 +165,12 @@ Waypoint m_aDragonCommon[]=
 
 Loc m_FlameTsunamiLoc[]=
 {
-    {3286.92, 577.99, 55.63, 3.088},  //North 1
-    {3286.92, 527.03, 56.63, 3.088},  //North 2 
-    {3286.92, 483.11, 56.63, 3.088},  //North 3 
-
-    {3206.51, 463.45, 56.63, 6.236},  //South 1
-    {3206.51, 503.57, 56.63, 6.236},  //South 2
-    {3206.51, 554.75, 56.63, 6.236},  //South 3
+    {3286.92f, 577.99f, 55.63f, 3.088f},  //North 1
+    {3286.92f, 527.03f, 56.63f, 3.088f},  //North 2 
+    {3286.92f, 483.11f, 56.63f, 3.088f},  //North 3 
+    {3206.51f, 463.45f, 56.63f, 6.236f},  //South 1
+    {3206.51f, 503.57f, 56.63f, 6.236f},  //South 2
+    {3206.51f, 554.75f, 56.63f, 6.236f},  //South 3
 };
 
 /*######
@@ -188,6 +194,7 @@ struct MANGOS_DLL_DECL boss_sartharionAI : public ScriptedAI
 
     uint32 m_uiEnrageTimer;
     bool m_bIsHardEnraged;
+	uint8 m_uiLastTsunami;
 
     uint32 m_uiTenebronTimer;
     uint32 m_uiShadronTimer;
@@ -210,6 +217,7 @@ struct MANGOS_DLL_DECL boss_sartharionAI : public ScriptedAI
 
         m_uiEnrageTimer = MINUTE*15*IN_MILLISECONDS;
         m_bIsHardEnraged = false;
+		m_uiLastTsunami = 0;
 
         m_uiTenebronTimer = 30000;
         m_uiShadronTimer = 75000;
@@ -566,6 +574,8 @@ struct MANGOS_DLL_DECL dummy_dragonAI : public ScriptedAI
     uint32 m_uiMoveNextTimer;
     int32 m_iPortalRespawnTime;
     bool m_bCanMoveFree;
+	uint32 m_uiPortalTimer;
+    bool m_bHasSpawnedPortal;
 
     void Reset()
     {
@@ -785,13 +795,8 @@ struct MANGOS_DLL_DECL mob_tenebronAI : public dummy_dragonAI
 
     void JustDied()
     {
-        dummy_dragon::JustDied();
-        dummy_dragon::RemovePhase();
-    }
-
-    void EnterEvadeMode()
-    {
-        dummy_dragon::RemovePhase();
+        dummy_dragonAI::RemoveDebuff(SPELL_TWILIGHT_SHIFT_ENTER);
+        dummy_dragonAI::RemoveDebuff(SPELL_TWILIGHT_SHIFT_DAMAGE);
     }
 
     void SummonEggs()
@@ -848,16 +853,16 @@ struct MANGOS_DLL_DECL mob_tenebronAI : public dummy_dragonAI
             dummy_dragonAI::m_bHasSpawnedPortal = true;
             dummy_dragonAI::m_uiPortalTimer = 30000;
             SummonEggs();
-            m_uiHatchTimer = 20000;
+            m_uiHatchEggTimer = 20000;
         }else dummy_dragonAI::m_uiPortalTimer -= uiDiff;
 
         //Hatch eggs...
-        if(m_uiHatchTimer <= uiDiff)
+        if(m_uiHatchEggTimer <= uiDiff)
         {
             DoCast(m_creature, SPELL_HATCH_EGGS);
             dummy_dragonAI::RemovePhase();
-            m_uiHatchTimer = 40000;
-        }else m_uiHatchTimer -= uiDiff;
+            m_uiHatchEggTimer = 40000;
+        }else m_uiHatchEggTimer -= uiDiff;
 
         DoMeleeAttackIfReady();
     }
@@ -906,12 +911,8 @@ struct MANGOS_DLL_DECL mob_shadronAI : public dummy_dragonAI
 
     void JustDied()
     {
-        dummy_dragon::RemovePhase();
-    }
-
-    void EnterEvadeMode()
-    {
-        dummy_dragon::RemovePhase();
+        dummy_dragonAI::RemoveDebuff(SPELL_TWILIGHT_SHIFT_ENTER);
+        dummy_dragonAI::RemoveDebuff(SPELL_TWILIGHT_SHIFT_DAMAGE);
     }
 
     void UpdateAI(const uint32 uiDiff)
@@ -1012,12 +1013,8 @@ struct MANGOS_DLL_DECL mob_vesperonAI : public dummy_dragonAI
 
     void JustDied()
     {
-        dummy_dragon::RemovePhase();
-    }
-
-    void EnterEvadeMode()
-    {
-        dummy_dragon::RemovePhase();
+        dummy_dragonAI::RemoveDebuff(SPELL_TWILIGHT_SHIFT_ENTER);
+        dummy_dragonAI::RemoveDebuff(SPELL_TWILIGHT_SHIFT_DAMAGE);
     }
 
     void UpdateAI(const uint32 uiDiff)
@@ -1175,20 +1172,23 @@ CreatureAI* GetAI_mob_acolyte_of_vesperon(Creature* pCreature)
 struct MANGOS_DLL_DECL mob_twilight_eggsAI : public ScriptedAI
 {
     mob_twilight_eggsAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
+    
+    uint32 m_uiHatchTimer;
 
     void Reset()
     {
+        m_uiHatchTimer = 22500;
+        m_creature->SetPhaseMask(16, true);
     }
 
-    void AttackStart(Unit* pWho) { }
+    void AttackStart(Unit* pWho) { return; }
     void MoveInLineOfSight(Unit* pWho) { }
 
     void UpdateAI(const uint32 uiDiff)
     {
         if(m_uiHatchTimer <= uiDiff)
         {
-            if(Creature *pCreature = m_creature->SummonCreature(NPC_TWILIGHT_WHELP, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, TEMPSUMMON_DEAD_DESPAWN, 0))
-                pCreature->SetActiveObjectState(true);
+            m_creature->SummonCreature(NPC_TWILIGHT_WHELP, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, TEMPSUMMON_DEAD_DESPAWN, 0);
             m_creature->ForcedDespawn();
         }else m_uiHatchTimer -= uiDiff;
     }

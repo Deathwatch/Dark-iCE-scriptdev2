@@ -31,7 +31,7 @@ EndContentData */
 #include "precompiled.h"
 #include "follower_ai.h"
 #include "ObjectMgr.h"
-#include "escort_AI.h"
+#include "escort_ai.h"
 
 /*####
 # npc_kitten

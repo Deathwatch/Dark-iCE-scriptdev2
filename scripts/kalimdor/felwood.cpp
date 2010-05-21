@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: Felwood
 SD%Complete: 95
-SDComment: Quest support: related to 4101/4102 (To obtain Cenarion Beacon), 4506, 7603 (Summon Pollo Grande)
+SDComment: Quest support: related to 4101/4102 (To obtain Cenarion Beacon), 4506, 7603 (Summon Pollo Grande), 4261
 SDCategory: Felwood
 EndScriptData */
 
@@ -25,11 +25,13 @@ EndScriptData */
 npc_kitten
 npcs_riverbreeze_and_silversky
 npc_niby_the_almighty
+npc_arei
 EndContentData */
 
 #include "precompiled.h"
 #include "follower_ai.h"
 #include "ObjectMgr.h"
+#include "escort_AI.h"
 
 /*####
 # npc_kitten
@@ -416,7 +418,153 @@ struct MANGOS_DLL_DECL npc_kroshiusAI : public ScriptedAI
 CreatureAI* GetAI_npc_kroshius(Creature* pCreature) 
 {
     return new npc_kroshiusAI(pCreature); 
-} 
+}
+
+/*########
+## npc_arei
+########*/
+
+#define QUEST_ANCIENT_SPIRIT    4261
+#define C_TOXIC_HORROR          7132
+#define C_IRONTREE_STOMPER      7139
+#define S_AREI_TRANSFORM        14888
+#define GOSSIP_SAVED            2809
+
+#define SAY_START      -1361000
+#define SAY_AGGRO      -1361001
+#define SAY_FRAG       -1361002
+#define SAY_END1       -1361003
+#define SAY_END2       -1361004
+#define SAY_END3       -1361005
+#define SAY_END4       -1361006
+
+double SpawnPoints[5][3]=
+{
+    {6172.33,-1276.82,374.6550},
+    {6156.52,-1293.24,375.9467},
+    {6603.18,-1218.79,448.3316},
+    {6577.01,-1235.22,446.2619},
+    {6564.91,-1184.70,446.2590}
+};
+
+struct MANGOS_DLL_DECL npc_areiAI : public npc_escortAI
+{
+    npc_areiAI(Creature* pCreature) : npc_escortAI(pCreature) {Reset();}
+
+    bool Saved;
+    uint8 RPphase;
+    uint16 RPtimer;
+    void WaypointReached(uint32 i)
+    {
+        Player* pPlayer = GetPlayerForEscort();
+
+        if (!pPlayer)
+            return;
+
+        Creature* pCreature;
+        switch(i)
+        {
+            case 10:
+                for (uint8 i = 0; i < 2 ; i++ )
+                {
+                    if (pCreature=m_creature->SummonCreature(C_TOXIC_HORROR,SpawnPoints[i][0],SpawnPoints[i][1],SpawnPoints[i][2],0,TEMPSUMMON_CORPSE_TIMED_DESPAWN,10000))
+                        pCreature->AI()->AttackStart(m_creature);
+                }
+                break;
+            case 23:
+                for (uint8 i = 2; i < 5 ; i++ )
+                {
+                    if (pCreature=m_creature->SummonCreature(C_IRONTREE_STOMPER,SpawnPoints[i][0],SpawnPoints[i][1],SpawnPoints[i][2],0,TEMPSUMMON_CORPSE_TIMED_DESPAWN,10000))
+                        pCreature->AI()->AttackStart(m_creature);
+                }
+                break;
+            case 24:
+                RPtimer=500;
+                RPphase=0;
+                break;
+        }
+    }
+    void Aggro(Unit* who)
+    {
+        if (!(rand()%5))
+            DoScriptText(SAY_AGGRO, m_creature, who);
+    }
+
+    void KilledUnit(Unit* who)
+    {
+        if (!(rand()%5))
+            DoScriptText(SAY_FRAG, m_creature, who);
+    }
+
+    void UpdateEscortAI(const uint32 diff)
+    {
+        if (RPtimer)
+        {
+            if (RPtimer<=diff)
+            {
+                Player* pPlayer = GetPlayerForEscort();
+                if (!pPlayer)
+                    return;
+
+                switch (RPphase)
+                {
+                    case 0:
+                        DoScriptText(SAY_END1,m_creature, pPlayer);
+                        RPtimer=4500;
+                        RPphase++;
+                        break;
+                    case 1:
+                        DoScriptText(SAY_END2,m_creature, pPlayer);
+                        RPtimer=2500;
+                        RPphase++;
+                        break;
+                    case 2:
+                        DoCast(m_creature,S_AREI_TRANSFORM);
+                        RPphase++;
+                        RPtimer=3000;
+                        break;
+                    case 3:
+                        DoScriptText(SAY_END3,m_creature,pPlayer);
+                        RPphase++;
+                        RPtimer=6000;
+                        break;
+                    case 4:
+                        DoScriptText(SAY_END4,m_creature,pPlayer);
+                        RPtimer=0;
+                        Saved=true;
+                        pPlayer->GroupEventHappens(QUEST_ANCIENT_SPIRIT,m_creature);
+                        break;
+                }
+            }
+            else RPtimer-=diff;
+        }
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        DoMeleeAttackIfReady();
+    }
+    void Reset()
+    {
+        Saved=false;
+        RPtimer=0;
+    }
+};
+
+bool QuestAccept_npc_arei(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
+{
+    if (pQuest->GetQuestId() == QUEST_ANCIENT_SPIRIT)
+    {
+        if (npc_areiAI* pEscortAI = dynamic_cast<npc_areiAI*>(pCreature->AI()))
+            pEscortAI->Start(true, true, pPlayer->GetGUID(), pQuest);
+        DoScriptText(SAY_START, pCreature, pPlayer);
+    }
+    return true;
+}
+
+CreatureAI* GetAI_npc_arei(Creature* pCreature)
+{
+    return new npc_areiAI(pCreature);
+}
 
 void AddSC_felwood()
 {
@@ -445,9 +593,15 @@ void AddSC_felwood()
     newscript->GetAI = &GetAI_npc_niby_the_almighty;
     newscript->pChooseReward = &ChooseReward_npc_niby_the_almighty;
     newscript->RegisterSelf();
-	
-	newscript = new Script; 
- 	newscript->Name = "npc_kroshius"; 
- 	newscript->GetAI = &GetAI_npc_kroshius; 
- 	newscript->RegisterSelf();
+
+    newscript = new Script; 
+    newscript->Name = "npc_kroshius"; 
+    newscript->GetAI = &GetAI_npc_kroshius; 
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_arei";
+    newscript->GetAI = &GetAI_npc_arei;
+    newscript->pQuestAccept = &QuestAccept_npc_arei;
+    newscript->RegisterSelf();
 }

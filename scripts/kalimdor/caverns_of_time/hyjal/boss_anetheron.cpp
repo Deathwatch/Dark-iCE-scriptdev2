@@ -24,6 +24,8 @@ EndScriptData */
 #include "precompiled.h"
 #include "hyjal.h"
 
+#define SP_AnetheronSleep        31298
+
 enum
 {
     // Yells: You are defenders of a doomed world. Flee here and perhaps you will prolong your pathetic lives. 
@@ -64,7 +66,7 @@ enum
 class MANGOS_DLL_DECL AnetheronSleep : public Aura
 {
     public:
-        AnetheronSleep(SpellEntry *spellInfo, uint32 eff, int32 *bp, Unit *target, Unit *caster) : Aura(spellInfo, eff, bp, target, caster, NULL)
+        AnetheronSleep(const SpellEntry *spell, SpellEffectIndex eff, int32 *bp, Unit *target, Unit *caster) : Aura(spell, eff, bp, target, caster, NULL)
             {}
 };
 
@@ -147,7 +149,12 @@ struct MANGOS_DLL_DECL boss_anetheronAI : public ScriptedAI
 						uint8 eff = spellInfo->Effect[i];
 						if (eff>=TOTAL_SPELL_EFFECTS)
 							continue;
-						target->AddAura(new AnetheronSleep(spellInfo, i, NULL, target, target));
+						SpellEntry const *sp;
+                        int bp;
+						sp = (SpellEntry *)GetSpellStore()->LookupEntry(SP_AnetheronSleep);
+                        bp = 8;
+					    if(!target->HasAura(SP_AnetheronSleep, EFFECT_INDEX_0))
+						    target->AddAura(new AnetheronSleep(sp, EFFECT_INDEX_0, &bp, target, target));
 					}
 				}
 			}

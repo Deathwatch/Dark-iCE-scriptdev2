@@ -24,6 +24,8 @@ EndScriptData */
 #include "precompiled.h"
 #include "hyjal.h"
 
+#define SP_AzgalorDoom        31347
+
 enum
 {
     SAY_INTRO		= 10999,
@@ -49,7 +51,7 @@ enum
 class MANGOS_DLL_DECL AzgalorDoom : public Aura
 {
     public:
-        AzgalorDoom(SpellEntry *spellInfo, uint32 eff, int32 *bp, Unit *target, Unit *caster) : Aura(spellInfo, eff, bp, target, caster, NULL)
+        AzgalorDoom(const SpellEntry *spell, SpellEffectIndex eff, int32 *bp, Unit *target, Unit *caster) : Aura(spell, eff, bp, target, caster, NULL)
             {}
 };
 
@@ -126,8 +128,12 @@ struct MANGOS_DLL_DECL boss_azgalorAI : public ScriptedAI
 					uint8 eff = spellInfo->Effect[i];
 					if (eff>=TOTAL_SPELL_EFFECTS)
 						continue;
-					//uint8 i=1;
-					target->AddAura(new AzgalorDoom(spellInfo, i, NULL, target, target));
+					SpellEntry const *sp;
+                    int bp;
+					sp = (SpellEntry *)GetSpellStore()->LookupEntry(SP_AzgalorDoom);
+                    bp = 8;
+					if(!target->HasAura(SP_AzgalorDoom, EFFECT_INDEX_0))
+					    target->AddAura(new AzgalorDoom(sp, EFFECT_INDEX_0, &bp, target, target));
 				}
     }
 

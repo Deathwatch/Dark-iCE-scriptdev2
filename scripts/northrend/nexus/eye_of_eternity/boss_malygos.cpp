@@ -219,16 +219,16 @@ struct LocationsXY
 };
 static Locations GOPositions[]=
 {
-    {754.346, 1300.87, 256.249, 3.14159},   // Raid Platform position
-    {754.731, 1300.12, 266.171, 5.01343},   // Focusing iris and Alexstrazas gift
-    {724.684, 1332.92, 267.234, -0.802851}, // Exit Portal
+    {754.346f, 1300.87f, 256.249f, 3.14159f},   // Raid Platform position
+    {754.731f, 1300.12f, 266.171f, 5.01343f},   // Focusing iris and Alexstrazas gift
+    {724.684f, 1332.92f, 267.234f, -0.802851f}, // Exit Portal
 };
 static LocationsXY SparkLoc[]=
 {
-    {652.417, 1200.52},
-    {847.67, 1408.05},
-    {647.675, 1403.8},
-    {843.182, 1215.42},
+    {652.417f, 1200.52f},
+    {847.67f, 1408.05f},
+    {647.675f, 1403.8f},
+    {843.182f, 1215.42f},
 };
 
 //Also spawn locations for scions of eternity
@@ -258,16 +258,16 @@ static LocationsXY VortexLoc[]=
 };
 static Locations OtherLoc[]=
 {
-    {808, 1301, 268, 0},          // Phase 3 position 
-    {749, 1244, 332, 1.544},      // Vortex FarSight loc
-    {754.29, 1301.18, 266.17, 0}, // Center of the platform, ground.
-    {823, 1241, 299, 0},          // Alexstrasza's  position
+    {808.0f, 1301.0f, 268.0f, 0.0f},          // Phase 3 position 
+    {749.0f, 1244.0f, 332.0f, 1.544f},      // Vortex FarSight loc
+    {754.29f, 1301.18f, 266.17f, 0.0f}, // Center of the platform, ground.
+    {823.0f, 1241.0f, 299.0f, 0.0f},          // Alexstrasza's  position
 };
 #define MAX_VORTEX              21
-#define VORTEX_Z                268
+#define VORTEX_Z                268.0f
 
-#define FLOOR_Z                 268.17
-#define AIR_Z                   297.24   
+#define FLOOR_Z                 268.17f
+#define AIR_Z                   297.24f 
 /*######
 ## boss_malygos
 ######*/

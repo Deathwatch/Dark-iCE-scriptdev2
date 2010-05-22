@@ -565,10 +565,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\scripts\eastern_kingdoms\blackrock_depths\boss_coren_direbrew.cpp"
-						>
-					</File>
-					<File
 						RelativePath="..\scripts\eastern_kingdoms\blackrock_depths\blackrock_depths.h"
 						>
 					</File>
@@ -578,6 +574,10 @@
 					</File>
 					<File
 						RelativePath="..\scripts\eastern_kingdoms\blackrock_depths\boss_anubshiah.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\scripts\eastern_kingdoms\blackrock_depths\boss_coren_direbrew.cpp"
 						>
 					</File>
 					<File
@@ -1113,6 +1113,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\scripts\eastern_kingdoms\sunwell_plateau\boss_kiljaeden.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\scripts\eastern_kingdoms\sunwell_plateau\boss_muru_entropius.cpp"
 						>
 					</File>
@@ -1384,11 +1388,31 @@
 						Name="culling_of_stratholme"
 						>
 						<File
+							RelativePath="..\scripts\kalimdor\caverns_of_time\culling_of_stratholme\boss_lord_epoch.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\kalimdor\caverns_of_time\culling_of_stratholme\boss_malganis.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\kalimdor\caverns_of_time\culling_of_stratholme\boss_meathook.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\kalimdor\caverns_of_time\culling_of_stratholme\boss_salramm.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\scripts\kalimdor\caverns_of_time\culling_of_stratholme\culling_of_stratholme.cpp"
 							>
 						</File>
 						<File
 							RelativePath="..\scripts\kalimdor\caverns_of_time\culling_of_stratholme\culling_of_stratholme.h"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\kalimdor\caverns_of_time\culling_of_stratholme\def_culling_of_stratholme.h"
 							>
 						</File>
 						<File
@@ -1428,7 +1452,19 @@
 						Name="hyjal"
 						>
 						<File
+							RelativePath="..\scripts\kalimdor\caverns_of_time\hyjal\boss_anetheron.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\scripts\kalimdor\caverns_of_time\hyjal\boss_archimonde.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\kalimdor\caverns_of_time\hyjal\boss_azgalor.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\kalimdor\caverns_of_time\hyjal\boss_kazrogal.cpp"
 							>
 						</File>
 						<File
@@ -1947,6 +1983,18 @@
 					<Filter
 						Name="eye_of_eternity"
 						>
+						<File
+							RelativePath="..\scripts\northrend\nexus\eye_of_eternity\boss_malygos.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\nexus\eye_of_eternity\eye_of_eternity.h"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\nexus\eye_of_eternity\instance_eye_of_eternity.cpp"
+							>
+						</File>
 					</Filter>
 					<Filter
 						Name="nexus"
@@ -2068,10 +2116,6 @@
 							>
 						</File>
 						<File
-							RelativePath="..\scripts\northrend\ulduar\ulduar\boss_iron_council.cpp"
-							>
-						</File>
-						<File
 							RelativePath="..\scripts\northrend\ulduar\ulduar\boss_auriaya.cpp"
 							>
 						</File>
@@ -2089,6 +2133,10 @@
 						</File>
 						<File
 							RelativePath="..\scripts\northrend\ulduar\ulduar\boss_ignis.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\ulduar\ulduar\boss_iron_council.cpp"
 							>
 						</File>
 						<File
@@ -2804,11 +2852,11 @@
 						Name="the_eye"
 						>
 						<File
-							RelativePath="..\scripts\outland\tempest_keep\the_eye\boss_astromancer.cpp"
+							RelativePath="..\scripts\outland\tempest_keep\the_eye\boss_alar.cpp"
 							>
 						</File>
 						<File
-							RelativePath="..\scripts\outland\tempest_keep\the_eye\boss_alar.cpp"
+							RelativePath="..\scripts\outland\tempest_keep\the_eye\boss_astromancer.cpp"
 							>
 						</File>
 						<File

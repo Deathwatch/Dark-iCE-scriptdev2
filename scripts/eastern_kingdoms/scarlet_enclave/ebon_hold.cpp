@@ -3048,7 +3048,7 @@ struct MANGOS_DLL_DECL npc_highlord_darion_mograineAI : public npc_escortAI
                     pTemp->AttackStop();
                     pTemp->setFaction(m_creature->getFaction());
 					DoScriptText(EMOTE_LIGHT_OF_DAWN04, pTemp);
-				{
+				}
 
                 if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), uiThassarianGUID)))
                 {
@@ -3195,7 +3195,7 @@ struct MANGOS_DLL_DECL npc_highlord_darion_mograineAI : public npc_escortAI
                 pTemp->DealDamage(pTemp, pTemp->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
             }
     }
-};
+ };
 
 bool GossipHello_npc_highlord_darion_mograine(Player* pPlayer, Creature* pCreature)
 {

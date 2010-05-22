@@ -96,11 +96,6 @@ struct MANGOS_DLL_DECL instance_eye_of_eternity : public ScriptedInstance
         {
             case TYPE_MALYGOS:
                 m_auiEncounter[0] = uiData;
-                if(uiData == DONE)
-                {
-                    DoRespawnGameObject(m_uiGiftGUID, 30*MINUTE);
-					DoRespawnGameObject(m_uiGiftHeroGUID, 30*MINUTE);
-                }
                 break;
             case TYPE_OUTRO_CHECK:
                 m_uiOutroCheck = uiData;

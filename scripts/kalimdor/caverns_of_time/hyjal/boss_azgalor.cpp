@@ -120,7 +120,7 @@ struct MANGOS_DLL_DECL boss_azgalorAI : public ScriptedAI
         SpellEntry *spellInfo = (SpellEntry *)GetSpellStore()->LookupEntry(SPELL_DOOM);
         if (spellInfo)
 			//target without tank
-            if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 1))
+            if(Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1))
 				for(uint32 i=0 ;i<3; ++i)
 				{
 					uint8 eff = spellInfo->Effect[i];
@@ -133,7 +133,7 @@ struct MANGOS_DLL_DECL boss_azgalorAI : public ScriptedAI
 
 	void UpdateAI(const uint32 diff)
 	{
-		if (!m_creature->SelectHostilTarget() || !m_creature->getVictim() )
+		if (!m_creature->SelectHostileTarget() || !m_creature->getVictim() )
 			return;
 
 		if(m_creature->HasAura(SPELL_FLAMES))

@@ -140,7 +140,7 @@ struct MANGOS_DLL_DECL boss_anetheronAI : public ScriptedAI
         if (spellInfo)
             for(uint8 j=0; j<3; ++j)
 			{
-                if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                if(Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
 				{
 					for(uint32 i=0 ;i<3; ++i)
 					{
@@ -155,7 +155,7 @@ struct MANGOS_DLL_DECL boss_anetheronAI : public ScriptedAI
 
 	void UpdateAI(const uint32 diff)
 	{
-		if (!m_creature->SelectHostilTarget() || !m_creature->getVictim() )
+		if (!m_creature->SelectHostileTarget() || !m_creature->getVictim() )
 			return;
 
 		if(CarrionSwarmTimer < diff)
@@ -165,7 +165,7 @@ struct MANGOS_DLL_DECL boss_anetheronAI : public ScriptedAI
 				case 0: DoPlaySoundToSet(m_creature, SAY_SWARM); break;
 				case 1: DoPlaySoundToSet(m_creature, SAY_SWARM2); break;
 			}
-			Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0);
+			Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
 			if(target)
 			{
 				m_creature->CastSpell(target, SPELL_CARRION_SWARM, false);
@@ -198,7 +198,7 @@ struct MANGOS_DLL_DECL boss_anetheronAI : public ScriptedAI
 				case 0: DoPlaySoundToSet(m_creature, SAY_INFERNO); break;
 				case 1: DoPlaySoundToSet(m_creature, SAY_INFERNO2); break;
 			}
-			Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0);
+			Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
 			if(target)
 			{
 				target->CastSpell(target, SPELL_STUN, true);
@@ -250,7 +250,7 @@ struct MANGOS_DLL_DECL mob_towering_infernalAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff)
     {
-        if (!m_creature->SelectHostilTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
 		if(!Immolation)

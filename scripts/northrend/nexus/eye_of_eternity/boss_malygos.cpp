@@ -638,7 +638,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
             uint32 x = urand(SHELL_MIN_X, SHELL_MAX_X);
             uint32 y = urand(SHELL_MIN_Y, SHELL_MAX_Y);
             if(Creature *pScion = m_creature->SummonCreature(NPC_SCION_OF_ETERNITY, x, y, FLOOR_Z+10, 0, TEMPSUMMON_CORPSE_DESPAWN, 0))
-                if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                     pScion->AI()->AttackStart(pTarget);
         }       
     }
@@ -1019,7 +1019,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
             //Static field
             if(m_uiStaticFieldTimer <= uiDiff)
             {
-                if(Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                if(Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                     if(Creature *pField = m_creature->SummonCreature(NPC_STATIC_FIELD, pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 25000))
                         pField->CastSpell(pField, SPELL_STATIC_FIELD, true);
                 DoScriptText(SAY_CAST_SPELL1-urand(0,2), m_creature);
@@ -1032,9 +1032,9 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
                 Unit* pTarget;
                 //Malygos has some triggers in aggro list in that phase :o
                 uint8 count = 0; // limit it to prevent lag
-                for(pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0); pTarget->GetEntry() != NPC_WYRMREST_SKYTALON; )
+                for(pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0); pTarget->GetEntry() != NPC_WYRMREST_SKYTALON; )
                 {
-                    pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0);
+                    pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
                     count++;
                     if(count >= 50)
                         break;
@@ -1341,7 +1341,7 @@ struct MANGOS_DLL_DECL mob_scion_of_eternityAI : public ScriptedAI
         
         if(m_uiArcaneBarrageTimer <= uiDiff)
         {
-            if (Unit* pTarget = SelectUnit(SELECT_TARGET_RANDOM, 0))
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
             {
                 int32 bpoints0 = m_bIsRegularMode ? int32(BP_BARRAGE0) : int32(BP_BARRAGE0_H);
                 m_creature->CastCustomSpell(pTarget, SPELL_ARCANE_BARRAGE, &bpoints0, 0, 0, false);  

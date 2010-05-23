@@ -401,6 +401,26 @@
 					RelativePath="..\scripts\battlegrounds\battleground.cpp"
 					>
 				</File>
+				<Filter
+					Name="alterac_valley"
+					>
+					<File
+						RelativePath="..\scripts\battlegrounds\alterac_valley\boss_balinda.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\scripts\battlegrounds\alterac_valley\boss_drekthar.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\scripts\battlegrounds\alterac_valley\boss_galvangar.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\scripts\battlegrounds\alterac_valley\boss_vanndar.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="custom"
@@ -1181,15 +1201,15 @@
 						>
 					</File>
 					<File
+						RelativePath="..\scripts\eastern_kingdoms\zulaman\def_zulaman.h"
+						>
+					</File>
+					<File
 						RelativePath="..\scripts\eastern_kingdoms\zulaman\instance_zulaman.cpp"
 						>
 					</File>
 					<File
 						RelativePath="..\scripts\eastern_kingdoms\zulaman\zulaman.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\scripts\eastern_kingdoms\zulaman\def_zulaman.h"
 						>
 					</File>
 				</Filter>
@@ -1812,7 +1832,19 @@
 							>
 						</File>
 						<File
+							RelativePath="..\scripts\northrend\crusaders_coliseum\trial_of_the_crusader\gormok_the_impaler(needs to be writen into this).cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\scripts\northrend\crusaders_coliseum\trial_of_the_crusader\instance_trial_of_the_crusader.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\crusaders_coliseum\trial_of_the_crusader\instance_trial_of_the_crusader.h"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\crusaders_coliseum\trial_of_the_crusader\the_two_jormungar(need rewritten into this).cpp"
 							>
 						</File>
 						<File
@@ -2013,6 +2045,14 @@
 						</File>
 						<File
 							RelativePath="..\scripts\northrend\nexus\nexus\boss_telestra.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\nexus\nexus\commander_kolurg(needs heroic mode).cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\nexus\nexus\commander_stoutbeard(needs heroic mode).cpp"
 							>
 						</File>
 						<File
@@ -2308,6 +2348,10 @@
 						RelativePath="..\scripts\northrend\violet_hold\violet_hold.cpp"
 						>
 					</File>
+					<File
+						RelativePath="..\scripts\northrend\violet_hold\violet_hold.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="icecrown_citadel"
@@ -2444,6 +2488,10 @@
 							</File>
 							<File
 								RelativePath="..\scripts\northrend\icecrown_citadel\frozen_halls\forge_of_souls\def_forge.h"
+								>
+							</File>
+							<File
+								RelativePath="..\scripts\northrend\icecrown_citadel\frozen_halls\forge_of_souls\forge_of_souls.h"
 								>
 							</File>
 							<File

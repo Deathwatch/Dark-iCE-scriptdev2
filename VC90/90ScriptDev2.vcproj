@@ -2100,10 +2100,6 @@
 							>
 						</File>
 						<File
-							RelativePath="..\scripts\northrend\ulduar\halls_of_stone\halls_of_stone.h"
-							>
-						</File>
-						<File
 							RelativePath="..\scripts\northrend\ulduar\halls_of_stone\instance_halls_of_stone.cpp"
 							>
 						</File>
@@ -2153,6 +2149,10 @@
 						</File>
 						<File
 							RelativePath="..\scripts\northrend\ulduar\ulduar\boss_thorim.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\ulduar\ulduar\boss_vezax.cpp"
 							>
 						</File>
 						<File

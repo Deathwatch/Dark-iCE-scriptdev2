@@ -1872,6 +1872,10 @@
 						RelativePath="..\scripts\northrend\draktharon_keep\boss_trollgore.cpp"
 						>
 					</File>
+					<File
+						RelativePath="..\scripts\northrend\draktharon_keep\draktharon_keep.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="gundrak"

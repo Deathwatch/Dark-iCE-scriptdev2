@@ -237,7 +237,7 @@ scripts/eastern_kingdoms/zulaman/boss_nalorakk.cpp \
 scripts/eastern_kingdoms/zulaman/boss_zuljin.cpp \
 scripts/eastern_kingdoms/zulaman/instance_zulaman.cpp \
 scripts/eastern_kingdoms/zulaman/zulaman.cpp \
-scripts/eastern_kingdoms/zulaman/zulaman.h \
+scripts/eastern_kingdoms/zulaman/def_zulaman.h \
 scripts/eastern_kingdoms/zulgurub/boss_arlokk.cpp \
 scripts/eastern_kingdoms/zulgurub/boss_gahzranka.cpp \
 scripts/eastern_kingdoms/zulgurub/boss_grilek.cpp \

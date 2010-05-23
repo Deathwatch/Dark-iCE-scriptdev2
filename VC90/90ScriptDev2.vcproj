@@ -1189,7 +1189,7 @@
 						>
 					</File>
 					<File
-						RelativePath="..\scripts\eastern_kingdoms\zulaman\zulaman.h"
+						RelativePath="..\scripts\eastern_kingdoms\zulaman\def_zulaman.h"
 						>
 					</File>
 				</Filter>
@@ -1405,10 +1405,6 @@
 						</File>
 						<File
 							RelativePath="..\scripts\kalimdor\caverns_of_time\culling_of_stratholme\culling_of_stratholme.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\scripts\kalimdor\caverns_of_time\culling_of_stratholme\culling_of_stratholme.h"
 							>
 						</File>
 						<File

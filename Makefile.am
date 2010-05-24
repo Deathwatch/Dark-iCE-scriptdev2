@@ -281,6 +281,9 @@ scripts/kalimdor/ungoro_crater.cpp \
 scripts/kalimdor/winterspring.cpp \
 scripts/kalimdor/blackfathom_deeps/blackfathom_deeps.h \
 scripts/kalimdor/blackfathom_deeps/instance_blackfathom_deeps.cpp \
+scripts/kalimdor/caverns_of_time/culling_of_stratholme/culling_of_stratholme.cpp \
+scripts/kalimdor/caverns_of_time/culling_of_stratholme/def_culling_of_stratholme.h \
+scripts/kalimdor/caverns_of_time/culling_of_stratholme/instance_culling_of_stratholme.cpp \
 scripts/kalimdor/caverns_of_time/dark_portal/boss_aeonus.cpp \
 scripts/kalimdor/caverns_of_time/dark_portal/boss_chrono_lord_deja.cpp \
 scripts/kalimdor/caverns_of_time/dark_portal/boss_temporus.cpp \
@@ -366,9 +369,9 @@ scripts/northrend/crusaders_coliseum/trial_of_the_crusader/boss_faction_champion
 scripts/northrend/crusaders_coliseum/trial_of_the_crusader/boss_jaraxxus.cpp \
 scripts/northrend/crusaders_coliseum/trial_of_the_crusader/boss_northrend_beasts.cpp \
 scripts/northrend/crusaders_coliseum/trial_of_the_crusader/boss_twin_valkyr.cpp \
-scripts/northrend/crusaders_coliseum/trial_of_the_crusader/gormok_the_impaler.cpp \
+scripts/northrend/crusaders_coliseum/trial_of_the_crusader/gormok_the_impaler(needs to be writen into this).cpp \
 scripts/northrend/crusaders_coliseum/trial_of_the_crusader/instance_trial_of_the_crusader.cpp \
-scripts/northrend/crusaders_coliseum/trial_of_the_crusader/the_two_jormungar.cpp \
+scripts/northrend/crusaders_coliseum/trial_of_the_crusader/the_two_jormungar(need rewritten into this).cpp \
 scripts/northrend/crusaders_coliseum/trial_of_the_crusader/trial_of_the_crusader.cpp \
 scripts/northrend/crusaders_coliseum/trial_of_the_crusader/trial_of_the_crusader.h \
 scripts/northrend/draktharon_keep/boss_dred.cpp \
@@ -495,6 +498,7 @@ scripts/northrend/violet_hold/boss_zuramat.cpp \
 scripts/northrend/violet_hold/def_violet_hold.h \
 scripts/northrend/violet_hold/instance_violet_hold.cpp \
 scripts/northrend/violet_hold/violet_hold.cpp \
+scripts/northrend/violet_hold/violet_hold.h \
 scripts/outland/blades_edge_mountains.cpp \
 scripts/outland/boss_doomlord_kazzak.cpp \
 scripts/outland/boss_doomwalker.cpp \
@@ -537,6 +541,7 @@ scripts/outland/coilfang_reservoir/serpent_shrine/boss_leotheras_the_blind.cpp \
 scripts/outland/coilfang_reservoir/serpent_shrine/boss_morogrim_tidewalker.cpp \
 scripts/outland/coilfang_reservoir/serpent_shrine/instance_serpent_shrine.cpp \
 scripts/outland/coilfang_reservoir/serpent_shrine/serpent_shrine.h \
+scripts/outland/coilfang_reservoir/slave_pens/boss_rokmar.cpp \
 scripts/outland/coilfang_reservoir/steam_vault/boss_hydromancer_thespia.cpp \
 scripts/outland/coilfang_reservoir/steam_vault/boss_mekgineer_steamrigger.cpp \
 scripts/outland/coilfang_reservoir/steam_vault/boss_warlord_kalithresh.cpp \

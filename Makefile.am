@@ -369,9 +369,9 @@ scripts/northrend/crusaders_coliseum/trial_of_the_crusader/boss_faction_champion
 scripts/northrend/crusaders_coliseum/trial_of_the_crusader/boss_jaraxxus.cpp \
 scripts/northrend/crusaders_coliseum/trial_of_the_crusader/boss_northrend_beasts.cpp \
 scripts/northrend/crusaders_coliseum/trial_of_the_crusader/boss_twin_valkyr.cpp \
-scripts/northrend/crusaders_coliseum/trial_of_the_crusader/gormok_the_impaler(needs to be writen into this).cpp \
+"scripts/northrend/crusaders_coliseum/trial_of_the_crusader/gormok_the_impaler(needs to be writen into this).cpp" \
 scripts/northrend/crusaders_coliseum/trial_of_the_crusader/instance_trial_of_the_crusader.cpp \
-scripts/northrend/crusaders_coliseum/trial_of_the_crusader/the_two_jormungar(need rewritten into this).cpp \
+"scripts/northrend/crusaders_coliseum/trial_of_the_crusader/the_two_jormungar(need rewritten into this).cpp" \
 scripts/northrend/crusaders_coliseum/trial_of_the_crusader/trial_of_the_crusader.cpp \
 scripts/northrend/crusaders_coliseum/trial_of_the_crusader/trial_of_the_crusader.h \
 scripts/northrend/draktharon_keep/boss_dred.cpp \
@@ -436,6 +436,8 @@ scripts/northrend/nexus/nexus/boss_anomalus.cpp \
 scripts/northrend/nexus/nexus/boss_keristrasza.cpp \
 scripts/northrend/nexus/nexus/boss_ormorok.cpp \
 scripts/northrend/nexus/nexus/boss_telestra.cpp \
+"scripts/northrend/nexus/nexus/commander_kolurg(needs heroic mode).cpp" \
+"scripts/northrend/nexus/nexus/commander_stoutbeard(needs heroic mode).cpp" \
 scripts/northrend/nexus/nexus/nexus.h \
 scripts/northrend/nexus/nexus/instance_nexus.cpp \
 scripts/northrend/obsidian_sanctum/boss_sartharion.cpp \

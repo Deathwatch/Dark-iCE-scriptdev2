@@ -401,6 +401,26 @@
 					RelativePath="..\scripts\battlegrounds\battleground.cpp"
 					>
 				</File>
+				<Filter
+					Name="alterac_valley"
+					>
+					<File
+						RelativePath="..\scripts\battlegrounds\alterac_valley\boss_balinda.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\scripts\battlegrounds\alterac_valley\boss_drekthar.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\scripts\battlegrounds\alterac_valley\boss_galvangar.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\scripts\battlegrounds\alterac_valley\boss_vanndar.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="custom"
@@ -574,6 +594,10 @@
 					</File>
 					<File
 						RelativePath="..\scripts\eastern_kingdoms\blackrock_depths\boss_anubshiah.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\scripts\eastern_kingdoms\blackrock_depths\boss_coren_direbrew.cpp"
 						>
 					</File>
 					<File
@@ -1109,6 +1133,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\scripts\eastern_kingdoms\sunwell_plateau\boss_kiljaeden.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\scripts\eastern_kingdoms\sunwell_plateau\boss_muru_entropius.cpp"
 						>
 					</File>
@@ -1124,6 +1152,10 @@
 				<Filter
 					Name="uldaman"
 					>
+					<File
+						RelativePath="..\scripts\eastern_kingdoms\uldaman\boss_archaedas.cpp"
+						>
+					</File>
 					<File
 						RelativePath="..\scripts\eastern_kingdoms\uldaman\boss_ironaya.cpp"
 						>
@@ -1169,15 +1201,15 @@
 						>
 					</File>
 					<File
+						RelativePath="..\scripts\eastern_kingdoms\zulaman\def_zulaman.h"
+						>
+					</File>
+					<File
 						RelativePath="..\scripts\eastern_kingdoms\zulaman\instance_zulaman.cpp"
 						>
 					</File>
 					<File
 						RelativePath="..\scripts\eastern_kingdoms\zulaman\zulaman.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\scripts\eastern_kingdoms\zulaman\zulaman.h"
 						>
 					</File>
 				</Filter>
@@ -1376,11 +1408,27 @@
 						Name="culling_of_stratholme"
 						>
 						<File
+							RelativePath="..\scripts\kalimdor\caverns_of_time\culling_of_stratholme\boss_lord_epoch.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\kalimdor\caverns_of_time\culling_of_stratholme\boss_malganis.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\kalimdor\caverns_of_time\culling_of_stratholme\boss_meathook.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\kalimdor\caverns_of_time\culling_of_stratholme\boss_salramm.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\scripts\kalimdor\caverns_of_time\culling_of_stratholme\culling_of_stratholme.cpp"
 							>
 						</File>
 						<File
-							RelativePath="..\scripts\kalimdor\caverns_of_time\culling_of_stratholme\culling_of_stratholme.h"
+							RelativePath="..\scripts\kalimdor\caverns_of_time\culling_of_stratholme\def_culling_of_stratholme.h"
 							>
 						</File>
 						<File
@@ -1420,7 +1468,19 @@
 						Name="hyjal"
 						>
 						<File
+							RelativePath="..\scripts\kalimdor\caverns_of_time\hyjal\boss_anetheron.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\scripts\kalimdor\caverns_of_time\hyjal\boss_archimonde.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\kalimdor\caverns_of_time\hyjal\boss_azgalor.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\kalimdor\caverns_of_time\hyjal\boss_kazrogal.cpp"
 							>
 						</File>
 						<File
@@ -1636,10 +1696,6 @@
 						RelativePath="..\scripts\kalimdor\wailing_caverns\instance_wailing_caverns.cpp"
 						>
 					</File>
-					<File
-						RelativePath="..\scripts\kalimdor\wailing_caverns\wailing_caverns.cpp"
-						>
-					</File>
 				</Filter>
 				<Filter
 					Name="zulfarrak"
@@ -1772,7 +1828,19 @@
 							>
 						</File>
 						<File
+							RelativePath="..\scripts\northrend\crusaders_coliseum\trial_of_the_crusader\gormok_the_impaler(needs to be writen into this).cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\scripts\northrend\crusaders_coliseum\trial_of_the_crusader\instance_trial_of_the_crusader.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\crusaders_coliseum\trial_of_the_crusader\instance_trial_of_the_crusader.h"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\crusaders_coliseum\trial_of_the_crusader\the_two_jormungar(need rewritten into this).cpp"
 							>
 						</File>
 						<File
@@ -1796,7 +1864,7 @@
 							>
 						</File>
 						<File
-							RelativePath="..\scripts\northrend\crusaders_coliseum\trial_of_the_champion\boss_grand_champion.cpp"
+							RelativePath="..\scripts\northrend\crusaders_coliseum\trial_of_the_champion\boss_grand_champions.cpp"
 							>
 						</File>
 						<File
@@ -1830,6 +1898,10 @@
 					</File>
 					<File
 						RelativePath="..\scripts\northrend\draktharon_keep\boss_trollgore.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\scripts\northrend\draktharon_keep\draktharon_keep.h"
 						>
 					</File>
 				</Filter>
@@ -1939,6 +2011,18 @@
 					<Filter
 						Name="eye_of_eternity"
 						>
+						<File
+							RelativePath="..\scripts\northrend\nexus\eye_of_eternity\boss_malygos.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\nexus\eye_of_eternity\eye_of_eternity.h"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\nexus\eye_of_eternity\instance_eye_of_eternity.cpp"
+							>
+						</File>
 					</Filter>
 					<Filter
 						Name="nexus"
@@ -1957,6 +2041,14 @@
 						</File>
 						<File
 							RelativePath="..\scripts\northrend\nexus\nexus\boss_telestra.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\nexus\nexus\commander_kolurg(needs heroic mode).cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\nexus\nexus\commander_stoutbeard(needs heroic mode).cpp"
 							>
 						</File>
 						<File
@@ -2044,10 +2136,6 @@
 							>
 						</File>
 						<File
-							RelativePath="..\scripts\northrend\ulduar\halls_of_stone\halls_of_stone.h"
-							>
-						</File>
-						<File
 							RelativePath="..\scripts\northrend\ulduar\halls_of_stone\instance_halls_of_stone.cpp"
 							>
 						</File>
@@ -2057,10 +2145,6 @@
 						>
 						<File
 							RelativePath="..\scripts\northrend\ulduar\ulduar\boss_algalon.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\scripts\northrend\ulduar\ulduar\boss_iron_council.cpp"
 							>
 						</File>
 						<File
@@ -2084,6 +2168,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\scripts\northrend\ulduar\ulduar\boss_iron_council.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\scripts\northrend\ulduar\ulduar\boss_kologarn.cpp"
 							>
 						</File>
@@ -2097,6 +2185,10 @@
 						</File>
 						<File
 							RelativePath="..\scripts\northrend\ulduar\ulduar\boss_thorim.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\ulduar\ulduar\boss_vezax.cpp"
 							>
 						</File>
 						<File
@@ -2252,6 +2344,10 @@
 						RelativePath="..\scripts\northrend\violet_hold\violet_hold.cpp"
 						>
 					</File>
+					<File
+						RelativePath="..\scripts\northrend\violet_hold\violet_hold.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="icecrown_citadel"
@@ -2388,6 +2484,10 @@
 							</File>
 							<File
 								RelativePath="..\scripts\northrend\icecrown_citadel\frozen_halls\forge_of_souls\def_forge.h"
+								>
+							</File>
+							<File
+								RelativePath="..\scripts\northrend\icecrown_citadel\frozen_halls\forge_of_souls\forge_of_souls.h"
 								>
 							</File>
 							<File
@@ -2812,11 +2912,11 @@
 						Name="the_eye"
 						>
 						<File
-							RelativePath="..\scripts\outland\tempest_keep\the_eye\boss_astromancer.cpp"
+							RelativePath="..\scripts\outland\tempest_keep\the_eye\boss_alar.cpp"
 							>
 						</File>
 						<File
-							RelativePath="..\scripts\outland\tempest_keep\the_eye\boss_alar.cpp"
+							RelativePath="..\scripts\outland\tempest_keep\the_eye\boss_astromancer.cpp"
 							>
 						</File>
 						<File

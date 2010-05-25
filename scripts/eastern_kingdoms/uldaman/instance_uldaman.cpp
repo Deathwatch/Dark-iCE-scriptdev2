@@ -1,4 +1,4 @@
-/* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2006 - 2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -33,6 +33,7 @@ struct MANGOS_DLL_DECL instance_uldaman : public ScriptedInstance
     uint64 m_uiTempleDoor1GUID;
     uint64 m_uiTempleDoor2GUID;
     uint64 m_uiAncientVaultGUID;
+
     uint64 m_uiPlayerGUID;
 
     uint8  m_uiStoneKeepersFallen;
@@ -42,10 +43,10 @@ struct MANGOS_DLL_DECL instance_uldaman : public ScriptedInstance
         memset(&m_uiEncounter, 0, sizeof(m_uiEncounter));
         
         m_uiStoneKeepersFallen = 0;
-        m_uiTempleDoor1GUID    = 0;
-        m_uiTempleDoor2GUID    = 0;
-        m_uiAncientVaultGUID   = 0;
-        m_uiPlayerGUID         = 0;
+        m_uiTempleDoor1GUID = 0;
+        m_uiTempleDoor2GUID = 0;
+        m_uiAncientVaultGUID = 0;
+        m_uiPlayerGUID = 0;
     }
 
     void OnObjectCreate(GameObject* pGo)
@@ -79,6 +80,7 @@ struct MANGOS_DLL_DECL instance_uldaman : public ScriptedInstance
                 }
                 m_uiEncounter[0] = uiData;
                 break;
+
             case TYPE_ARCHAEDAS_EVENT:
                 if (uiData == DONE)
                     DoUseDoorOrButton(m_uiAncientVaultGUID);
@@ -91,9 +93,9 @@ struct MANGOS_DLL_DECL instance_uldaman : public ScriptedInstance
     {
        switch(uiData)
        {
-            case DATA_EVENT_STARTER:
-                m_uiPlayerGUID = uiGuid;
-                break;
+          case DATA_EVENT_STARTER:
+              m_uiPlayerGUID = uiGuid;
+              break;
        }
     }
 

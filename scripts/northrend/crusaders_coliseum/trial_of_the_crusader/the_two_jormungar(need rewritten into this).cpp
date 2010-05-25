@@ -36,7 +36,7 @@ void Aggro(Unit *who)
 
 	Unit *pTarget1 = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0);
 		m_creature->MonsterSay("Agro'ed!", LANG_UNIVERSAL, 0);
-		Creature *pAcidmaw = m_creature->SummonCreature(Acidmaw,538.347, 165.509, 394.6500, 5.431659,TEMPSUMMON_MANUAL_DESPAWN, 0);
+		Creature *pAcidmaw = m_creature->SummonCreature(Acidmaw,538.347f, 165.509f, 394.6500f, 5.431659f,TEMPSUMMON_MANUAL_DESPAWN, 0);
 		pAcidmaw->HandleEmoteCommand(Emerge);
 		pAcidmaw->AI()->AttackStart(pTarget1); 
 		flag = 1;

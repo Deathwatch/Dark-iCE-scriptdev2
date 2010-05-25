@@ -639,7 +639,7 @@ struct MANGOS_DLL_DECL boss_kiljadenAI : public Scripted_NoMovementAI
         if(((m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) <= 85) && !m_bPhase3)
         {      
             DoPlaySoundToSet(m_creature, SAY_KJ_PHASE3);
-            if(Unit* victim = SelectUnit(SELECT_TARGET_RANDOM,0)) 
+            if(Unit* victim = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 if (victim && (victim->GetTypeId() == TYPEID_PLAYER))
                     Sinister(((Player*)victim),0,4);
 			m_creature->MonsterYell("entering phase 3",LANG_UNIVERSAL,0);
@@ -660,7 +660,7 @@ struct MANGOS_DLL_DECL boss_kiljadenAI : public Scripted_NoMovementAI
         if(((m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) <= 55) && !m_bPhase4)
         {
             DoPlaySoundToSet(m_creature, SAY_KJ_PHASE4);
-            if(Unit* victim = SelectUnit(SELECT_TARGET_RANDOM,0)) 
+            if(Unit* victim = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 if (victim && (victim->GetTypeId() == TYPEID_PLAYER))
                     Sinister(((Player*)victim),4,8);
 			m_creature->MonsterYell("entering phase 4",LANG_UNIVERSAL,0);
@@ -677,7 +677,7 @@ struct MANGOS_DLL_DECL boss_kiljadenAI : public Scripted_NoMovementAI
         if(((m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) <= 25) && !m_bPhase5)
         {
             DoPlaySoundToSet(m_creature, SAY_KJ_PHASE5);
-            if(Unit* victim = SelectUnit(SELECT_TARGET_RANDOM,0)) 
+            if(Unit* victim = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 if (victim && (victim->GetTypeId() == TYPEID_PLAYER))
                     Sinister(((Player*)victim),8,12);
 			m_creature->MonsterYell("entering phase 5",LANG_UNIVERSAL,0);
@@ -731,7 +731,7 @@ struct MANGOS_DLL_DECL boss_kiljadenAI : public Scripted_NoMovementAI
         {
             for(uint8 i=0; i<5; ++i)
             {
-                Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0);
+                Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
                 m_uiFireBloomTarget[i] = target->GetGUID();
                 m_uiFireBloomCount = 0;
                 //DoCast(target, SPELL_FIREBLOOM, true);

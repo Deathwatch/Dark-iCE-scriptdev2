@@ -182,7 +182,7 @@ struct MANGOS_DLL_DECL boss_heiganAI : public ScriptedAI
 
             if (m_uiDistruptionTimer < uiDiff)
             {
-                //if(Unit* pPlayer = SelectUnit(SELECT_TARGET_RANDOM, 0))
+                //if(Unit* pPlayer = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 if(m_creature->getVictim())
                     m_creature->CastSpell(m_creature->getVictim(), SPELL_DISTRUPTION, false);
 

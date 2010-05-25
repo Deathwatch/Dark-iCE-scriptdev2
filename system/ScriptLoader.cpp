@@ -60,6 +60,7 @@ extern void AddSC_spell_scripts();
 extern void AddSC_blackrock_depths();                       //blackrock_depths
 extern void AddSC_boss_ambassador_flamelash();
 extern void AddSC_boss_anubshiah();
+extern void AddSC_boss_coren_direbrew();
 extern void AddSC_boss_draganthaurissan();
 extern void AddSC_boss_general_angerforge();
 extern void AddSC_boss_gorosh_the_dervish();
@@ -171,6 +172,7 @@ extern void AddSC_boss_eredar_twins();
 extern void AddSC_boss_muru_entropius();
 extern void AddSC_instance_sunwell_plateau();
 extern void AddSC_boss_ironaya();                           //uldaman
+extern void AddSC_boss_archaedas();
 extern void AddSC_uldaman();
 extern void AddSC_instance_uldaman();
 extern void AddSC_boss_akilzon();                           //zulaman
@@ -264,7 +266,6 @@ extern void AddSC_mob_anubisath_sentinel();
 extern void AddSC_instance_temple_of_ahnqiraj();
 extern void AddSC_zulfarrak();                              //zulfarrak
 extern void	AddSC_instance_wailing_caverns();				//wailing_caverns
-extern void	AddSC_wailing_caverns();
 
 extern void AddSC_ashenvale();
 extern void AddSC_azshara();
@@ -561,6 +562,7 @@ void AddScripts()
     AddSC_blackrock_depths();                               //blackrock_depths
     AddSC_boss_ambassador_flamelash();
     AddSC_boss_anubshiah();
+	AddSC_boss_coren_direbrew();
     AddSC_boss_draganthaurissan();
     AddSC_boss_general_angerforge();
     AddSC_boss_gorosh_the_dervish();
@@ -672,6 +674,7 @@ void AddScripts()
     AddSC_boss_muru_entropius();
     AddSC_instance_sunwell_plateau();
     AddSC_boss_ironaya();                                   //uldaman
+	AddSC_boss_archaedas();
     AddSC_uldaman();
     AddSC_instance_uldaman();
     AddSC_boss_akilzon();                                   //zulaman
@@ -760,8 +763,7 @@ void AddScripts()
     AddSC_mob_anubisath_sentinel();
     AddSC_instance_temple_of_ahnqiraj();
     AddSC_zulfarrak();                                      //zulfarrak
-    AddSC_instance_wailing_caverns();						//wailing_caverns
-    AddSC_wailing_caverns();
+	AddSC_instance_wailing_caverns();						//wailing_caverns
 
     AddSC_ashenvale();
     AddSC_azshara();

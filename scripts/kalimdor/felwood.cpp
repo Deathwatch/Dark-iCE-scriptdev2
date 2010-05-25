@@ -438,7 +438,7 @@ CreatureAI* GetAI_npc_kroshius(Creature* pCreature)
 #define SAY_END3       -1361005
 #define SAY_END4       -1361006
 
-double SpawnPoints[5][3]=
+double SpawnPoints_4261[5][3]=
 {
     {6172.33,-1276.82,374.6550},
     {6156.52,-1293.24,375.9467},
@@ -467,14 +467,14 @@ struct MANGOS_DLL_DECL npc_areiAI : public npc_escortAI
             case 10:
                 for (uint8 i = 0; i < 2 ; i++ )
                 {
-                    if (pCreature=m_creature->SummonCreature(C_TOXIC_HORROR,SpawnPoints[i][0],SpawnPoints[i][1],SpawnPoints[i][2],0,TEMPSUMMON_CORPSE_TIMED_DESPAWN,10000))
+                    if (pCreature=m_creature->SummonCreature(C_TOXIC_HORROR,SpawnPoints_4261[i][0],SpawnPoints_4261[i][1],SpawnPoints_4261[i][2],0,TEMPSUMMON_CORPSE_TIMED_DESPAWN,10000))
                         pCreature->AI()->AttackStart(m_creature);
                 }
                 break;
             case 23:
                 for (uint8 i = 2; i < 5 ; i++ )
                 {
-                    if (pCreature=m_creature->SummonCreature(C_IRONTREE_STOMPER,SpawnPoints[i][0],SpawnPoints[i][1],SpawnPoints[i][2],0,TEMPSUMMON_CORPSE_TIMED_DESPAWN,10000))
+                    if (pCreature=m_creature->SummonCreature(C_IRONTREE_STOMPER,SpawnPoints_4261[i][0],SpawnPoints_4261[i][1],SpawnPoints_4261[i][2],0,TEMPSUMMON_CORPSE_TIMED_DESPAWN,10000))
                         pCreature->AI()->AttackStart(m_creature);
                 }
                 break;

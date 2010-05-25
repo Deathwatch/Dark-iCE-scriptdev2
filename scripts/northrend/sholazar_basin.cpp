@@ -226,6 +226,7 @@ bool GossipSelect_npc_injured_oracle(Player* pPlayer, Creature* pCreature, uint3
         pPlayer->CLOSE_GOSSIP_MENU();
         if (npc_injured_oracleAI* pEscortAI = dynamic_cast<npc_injured_oracleAI*>(pCreature->AI()))
         {
+		    pCreature->RemoveAllAuras();
             pEscortAI->Start(true, false, pPlayer->GetGUID());
             pCreature->setFaction(FACTION_ESCORT_N_NEUTRAL_ACTIVE);
             DoScriptText(SAY_ESCORT_START, pCreature);

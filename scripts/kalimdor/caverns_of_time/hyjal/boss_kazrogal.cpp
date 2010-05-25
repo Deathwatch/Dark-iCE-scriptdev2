@@ -26,6 +26,8 @@ EndScriptData */
 #include "precompiled.h"
 #include "hyjal.h"
 
+#define SP_KazrogalMark        31447
+
 enum
 {
 	SPELL_CLEAVE	= 31436,
@@ -47,7 +49,7 @@ enum
 class MANGOS_DLL_DECL KazrogalMark : public Aura
 {
     public:
-        KazrogalMark(SpellEntry *spellInfo, uint32 eff, int32 *bp, Unit *target, Unit *caster) : Aura(spellInfo, eff, bp, target, caster, NULL)
+        KazrogalMark(const SpellEntry *spell, SpellEffectIndex eff, int32 *bp, Unit *target, Unit *caster) : Aura(spell, eff, bp, target, caster, NULL)
             {}
 };
 
@@ -117,8 +119,8 @@ struct MANGOS_DLL_DECL boss_kazrogalAI : public ScriptedAI
         SpellEntry *spellInfo = (SpellEntry *)GetSpellStore()->LookupEntry(SPELL_MARK);
         if (spellInfo)
 		{
-			std::list<HostilReference *> t_list = m_creature->getThreatManager().getThreatList();
-            for(std::list<HostilReference *>::iterator itr = t_list.begin(); itr!= t_list.end(); ++itr)
+			std::list<HostileReference *> t_list = m_creature->getThreatManager().getThreatList();
+            for(std::list<HostileReference *>::iterator itr = t_list.begin(); itr!= t_list.end(); ++itr)
             {
                 Unit *target = Unit::GetUnit(*m_creature, (*itr)->getUnitGuid());
                 if (target && target->GetTypeId() == TYPEID_PLAYER && target->getPowerType() == POWER_MANA)
@@ -128,7 +130,12 @@ struct MANGOS_DLL_DECL boss_kazrogalAI : public ScriptedAI
 						uint8 eff = spellInfo->Effect[i];
 						if (eff>=TOTAL_SPELL_EFFECTS)
 							continue;
-						target->AddAura(new KazrogalMark(spellInfo, i, NULL, target, target));
+						SpellEntry const *sp;
+                        int bp;
+                        sp = (SpellEntry *)GetSpellStore()->LookupEntry(SP_KazrogalMark);
+                        bp = 8;
+                        if(!target->HasAura(SP_KazrogalMark, EFFECT_INDEX_0))
+                            target->AddAura(new KazrogalMark(sp, EFFECT_INDEX_0, &bp, target, target));
 					}	
                 }
             }
@@ -138,7 +145,7 @@ struct MANGOS_DLL_DECL boss_kazrogalAI : public ScriptedAI
     void UpdateAI(const uint32 diff)
     {
         //Return since we have no target
-        if (!m_creature->SelectHostilTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
         if(CleaveTimer < diff)
@@ -159,8 +166,8 @@ struct MANGOS_DLL_DECL boss_kazrogalAI : public ScriptedAI
 
 		if(MarkBlastTimer < diff)
 		{
-			std::list<HostilReference *> t_list = m_creature->getThreatManager().getThreatList();
-			for(std::list<HostilReference *>::iterator itr = t_list.begin(); itr!= t_list.end(); ++itr)
+			std::list<HostileReference *> t_list = m_creature->getThreatManager().getThreatList();
+			for(std::list<HostileReference *>::iterator itr = t_list.begin(); itr!= t_list.end(); ++itr)
 			{
 				Unit *target = Unit::GetUnit(*m_creature, (*itr)->getUnitGuid());
 				if (target && target->GetTypeId() == TYPEID_PLAYER && target->getPowerType() == POWER_MANA)

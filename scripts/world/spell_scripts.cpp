@@ -227,7 +227,16 @@ enum
     FACTION_HOSTILE                     = 16,
 
     EMOTE_AGGRO                         = -1000551,
-    EMOTE_CREATE                        = -1000552
+    EMOTE_CREATE                        = -1000552,
+	
+	SPELL_GAVROK_RUNEBREAKER            = 47604,
+	NPC_FREED_GIANT                     = 26783,
+	NPC_WEAKENED_GIANT                  = 26872,
+	SAY_GIANT_FREED_0                   = -1999773,
+	SAY_GIANT_FREED_1                   = -1999772,
+	SAY_GIANT_FREED_2                   = -1999771,
+	SAY_GIANT_FREED_3                   = -1999770,
+	EMOTE_ZAPPING_FAILED                = -1999769
 };
 
 bool EffectAuraDummy_spell_aura_dummy_npc(const Aura* pAura, bool bApply)
@@ -564,6 +573,35 @@ bool EffectDummyCreature_spell_dummy_npc(Unit* pCaster, uint32 uiSpellId, SpellE
             }
             return true;
         }
+		case SPELL_GAVROK_RUNEBREAKER:
+		{
+		    if (uiEffIndex == EFFECT_INDEX_0 && pCaster->GetTypeId() == TYPEID_PLAYER)
+			{
+			    if (urand(0, 4) > 3)
+				{
+				    pCreatureTarget->UpdateEntry(NPC_FREED_GIANT);
+					pCreatureTarget->RemoveAllAuras();
+					pCreatureTarget->DeleteThreatList();
+					pCreatureTarget->CombatStop(true);
+					switch(urand(0, 3))
+					{
+					    case 0: DoScriptText(SAY_GIANT_FREED_0, pCreatureTarget); break;
+						case 1: DoScriptText(SAY_GIANT_FREED_1, pCreatureTarget); break;
+						case 2: DoScriptText(SAY_GIANT_FREED_2, pCreatureTarget); break;
+						case 3: DoScriptText(SAY_GIANT_FREED_3, pCreatureTarget); break;
+					}
+					((Player*)pCaster)->KilledMonsterCredit(NPC_FREED_GIANT, pCreatureTarget->GetGUID());
+					pCreatureTarget->ForcedDespawn(30000);
+				}
+                else
+                {
+                    pCreatureTarget->UpdateEntry(NPC_WEAKENED_GIANT);
+				    DoScriptText(EMOTE_ZAPPING_FAILED, pCreatureTarget);
+                    pCreatureTarget->AI()->AttackStart(pCaster);
+				}
+			}
+			return true;
+		}	
     }
 
     return false;

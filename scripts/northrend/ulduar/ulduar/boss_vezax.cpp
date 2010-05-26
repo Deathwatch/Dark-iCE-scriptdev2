@@ -22,7 +22,7 @@ SDCategory: Ulduar
 EndScriptData */
 
 #include "precompiled.h"
-#include "ulduar.h"
+#include "def_ulduar.h"
 
 // General Vezax Aura
 #define AURA_AURA_OF_DESPAIR       62692
@@ -64,7 +64,7 @@ EndScriptData */
 
 struct MANGOS_DLL_DECL boss_vezaxAI : public ScriptedAI
 {
-    boss_generalvezaxAI(Creature* pCreature) : ScriptedAI(pCreature) 
+    boss_vezaxAI(Creature* pCreature) : ScriptedAI(pCreature) 
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
@@ -138,21 +138,21 @@ struct MANGOS_DLL_DECL boss_vezaxAI : public ScriptedAI
 
         if (Searing_Flames_Timer < diff )
         {
-            if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(m_creature->getVictim(), SPELL_SEARING_FLAMES);
             Searing_Flames_Timer = 25000;
         }else Searing_Flames_Timer -= diff;
 
 		if (Shadow_Crash_Timer < diff )
         {
-            if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(m_creature->getVictim(), SPELL_SHADOW_CRASH);
             Shadow_Crash_Timer = 15000;
         }else Shadow_Crash_Timer -= diff;
 
 		if (Mark_of_the_Faceless_Timer < diff )
         {
-            if (Unit* target = SelectUnit(SELECT_TARGET_RANDOM,0))
+            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 DoCast(m_creature->getVictim(), SPELL_MARK_OF_THE_FACELESS);
             Mark_of_the_Faceless_Timer = 40000;
         }else Mark_of_the_Faceless_Timer -= diff;
@@ -172,9 +172,9 @@ struct MANGOS_DLL_DECL boss_vezaxAI : public ScriptedAI
 
 };
 
-CreatureAI* GetAI_boss_generalvezax(Creature* pCreature)
+CreatureAI* GetAI_boss_vezax(Creature* pCreature)
 {
-    return new boss_generalvezaxAI(pCreature);
+    return new boss_vezaxAI(pCreature);
 }
 
 struct MANGOS_DLL_DECL mob_saronite_vaporsrAI : public ScriptedAI
@@ -214,7 +214,7 @@ void AddSC_boss_vezax()
 
     newscript = new Script;
     newscript->Name = "boss_vezax";
-    newscript->GetAI = &GetAI_boss_generalvezax;
+    newscript->GetAI = &GetAI_boss_vezax;
     newscript->RegisterSelf();
 
     newscript = new Script;

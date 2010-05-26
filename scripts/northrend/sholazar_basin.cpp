@@ -30,6 +30,62 @@ EndContentData */
 #include "escort_ai.h"
 
 /*######
+## npc_avatar_of_freya
+######*/
+
+#define GOSSIP_FREYA_ITEM1 "I want to stop the Scourge as much as you do. How can I help?"
+#define GOSSIP_FREYA_ITEM2 "You can trust me. I am no friend of the Lich King's."
+#define GOSSIP_FREYA_ITEM3 "I will not fail."
+
+enum
+{
+	QUEST_FREYAS_PACT       =12621,
+	GOSSIP_TEXTID_FREYA1    =13303,
+	GOSSIP_TEXTID_FREYA2    =13304,
+	GOSSIP_TEXTID_FREYA3    =13305,
+
+	//AVATAR_OF_FREYA_CREDIT  =28482
+};
+
+bool GossipHello_npc_avatar_of_freya(Player* pPlayer, Creature* pCreature)
+{
+	if (pCreature->isQuestGiver())
+		 pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+	if (pPlayer->GetQuestStatus(QUEST_FREYAS_PACT) == QUEST_STATUS_INCOMPLETE)
+	{
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_FREYA_ITEM1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+		pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FREYA1, pCreature->GetGUID());
+		return true;
+	}
+	pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+	return true;
+}
+
+bool GossipSelect_npc_avatar_of_freya(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+	switch(uiAction)
+	{
+		case GOSSIP_ACTION_INFO_DEF+1:
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_FREYA_ITEM2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+			pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FREYA2, pCreature->GetGUID());
+			break;
+
+		case GOSSIP_ACTION_INFO_DEF+2:
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_FREYA_ITEM3, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+			pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FREYA3, pCreature->GetGUID());
+			break;
+		
+		case GOSSIP_ACTION_INFO_DEF+3:
+			 pPlayer->CLOSE_GOSSIP_MENU();
+
+		pPlayer->CompleteQuest(QUEST_FREYAS_PACT);
+		break;
+	}
+	return true;
+}
+
+/*######
 ## mob_rjr_target
 ######*/
 
@@ -352,4 +408,10 @@ void AddSC_sholazar_basin()
     newscript->pGossipHello = &GossipHello_npc_vekjik;
     newscript->pGossipSelect = &GossipSelect_npc_vekjik;
     newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "npc_avatar_of_freya";
+    newscript->pGossipHello = &GossipHello_npc_avatar_of_freya;
+    newscript->pGossipSelect = &GossipSelect_npc_avatar_of_freya;;
+    newscript->RegisterSelf();;
 }

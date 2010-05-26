@@ -107,10 +107,12 @@ struct MANGOS_DLL_DECL mob_vrykul_skeletonAI : public ScriptedAI
         m_creature->SetStandState(UNIT_STAND_STATE_STAND);
 
         if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+        {
             m_creature->GetMotionMaster()->MoveChase(pTarget);
+            m_creature->Attack(pTarget, true);
+        }
 
         DoResetThreat();
-        m_uiReviveTimer = 0;
     }
 
     void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
@@ -118,12 +120,6 @@ struct MANGOS_DLL_DECL mob_vrykul_skeletonAI : public ScriptedAI
         if (!m_pKeleseth || !m_pKeleseth->isAlive())
         {
             uiDamage = m_creature->GetHealth();
-            return;
-        }
-
-        if (m_uiReviveTimer)
-        {
-            uiDamage = 0;
             return;
         }
 
@@ -143,18 +139,16 @@ struct MANGOS_DLL_DECL mob_vrykul_skeletonAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff)
     {
+        if (m_uiReviveTimer <= uiDiff)
+        {
+            Revive();
+            m_uiReviveTimer = 9999999;
+        }
+        else
+            m_uiReviveTimer -= uiDiff;
+
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
-
-        if (m_uiReviveTimer)
-        {
-            if (m_uiReviveTimer <= uiDiff)
-                Revive();
-            else
-                m_uiReviveTimer -= uiDiff;
-
-            return;
-        }
 
         if (m_uiCastTimer < uiDiff)
         {
@@ -205,7 +199,7 @@ struct MANGOS_DLL_DECL boss_kelesethAI : public ScriptedAI
     void Reset() 
     {
         // timers need confirmation
-        m_uiFrostTombTimer = 20000;
+        m_uiFrostTombTimer = 7000;
         m_uiSummonTimer = 5000 ;
         m_uiShadowboltTimer = 0;
 
@@ -306,7 +300,7 @@ struct MANGOS_DLL_DECL boss_kelesethAI : public ScriptedAI
                 DoScriptText(EMOTE_FROST_TOMB, m_creature, pTombTarget);
             }
 
-            m_uiFrostTombTimer = 25000;
+            m_uiFrostTombTimer = 13000;
         }
         else
             m_uiFrostTombTimer -= uiDiff;

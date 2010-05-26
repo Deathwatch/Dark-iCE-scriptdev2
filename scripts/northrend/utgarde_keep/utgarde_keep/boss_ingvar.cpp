@@ -51,7 +51,7 @@ enum
     SPELL_STAGGERING_ROAR_H     = 59708,
 
     //phase 2
-    SPELL_DARK_SMASH_H          = 42723,
+    SPELL_DARK_SMASH            = 42723,
 
     SPELL_DREADFUL_ROAR         = 42729,
     SPELL_DREADFUL_ROAR_H       = 59734,
@@ -59,19 +59,18 @@ enum
     SPELL_WOE_STRIKE            = 42730,
     SPELL_WOE_STRIKE_H          = 59735,
 
-    SPELL_SHADOW_AXE            = 42748,
-    SPELL_SHADOW_AXE_PROC       = 42751,
-    SPELL_SHADOW_AXE_PROC_H     = 59720,
-
     //ressurection sequenze
     SPELL_FEIGN_DEATH           = 42795,
     SPELL_TRANSFORM             = 42796,
     SPELL_SCOURGE_RES_SUMMON    = 42863,                    //summones a dummy target
     SPELL_SCOURGE_RES_HEAL      = 42704,                    //heals max HP
     SPELL_SCOURGE_RES_BUBBLE    = 42862,                    //black bubble
-    SPELL_SCOURGE_RES_CHANNEL   = 42857                     //the whirl from annhylde
+    SPELL_SCOURGE_RES_CHANNEL   = 42857,                    //the whirl from annhylde
+    SPELL_SPOTLIGHT             = 62897                     //visual spotligth (not correct spell)
 };
 
+#define PHASE_1_DISPLAY_ID      21953     
+#define PHASE_2_DISPLAY_ID      26351
 /*######
 ## boss_ingvar
 ######*/
@@ -89,15 +88,25 @@ struct MANGOS_DLL_DECL boss_ingvarAI : public ScriptedAI
     bool m_bIsRegularMode;
 
     bool m_bIsResurrected;
+    bool m_bRescureInProgress;
 
     uint32 m_uiCleaveTimer;
     uint32 m_uiSmashTimer;
     uint32 m_uiStaggeringRoarTimer;
     uint32 m_uiEnrageTimer;
+    uint32 m_uiDreadfulRoarTimer;
+    uint32 m_uiDarkSmash;
+    uint32 m_uiWoeStrike;
+    uint32 m_uiSpotlightTimer;
+    uint32 m_uiRescureTimer;
+    uint32 m_uiRemoveBlackBubbleTimer;
 
     void Reset()
     {
         m_bIsResurrected = false;
+        m_bRescureInProgress = false;
+
+        m_creature->SetDisplayId(PHASE_1_DISPLAY_ID);
 
         m_uiCleaveTimer = urand(5000, 7000);
         m_uiSmashTimer = urand(8000, 15000);
@@ -110,8 +119,8 @@ struct MANGOS_DLL_DECL boss_ingvarAI : public ScriptedAI
         DoScriptText(m_bIsResurrected ? SAY_AGGRO_SECOND : SAY_AGGRO_FIRST, m_creature);
     }
 
-    //this need to be done when spell works
-    /*void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
+    
+    void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
     {
         if (m_bIsResurrected)
             return;
@@ -124,10 +133,14 @@ struct MANGOS_DLL_DECL boss_ingvarAI : public ScriptedAI
             m_creature->GetMotionMaster()->MoveIdle();
 
             DoScriptText(SAY_DEATH_FIRST, m_creature);
-
+            m_creature->RemoveAllAuras();
             m_creature->CastSpell(m_creature, SPELL_FEIGN_DEATH, true);
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+
+            m_bRescureInProgress = true;
+            m_uiSpotlightTimer = 4000;
         }
-    }*/
+    }
 
     void JustDied(Unit* pKiller)
     {
@@ -142,6 +155,35 @@ struct MANGOS_DLL_DECL boss_ingvarAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff)
     {
+        if (m_bRescureInProgress)
+        {
+            if (m_uiSpotlightTimer < uiDiff)
+            {
+                m_creature->SummonCreature(24068, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ() + 35, m_creature->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 16000);  
+                m_creature->CastSpell(m_creature, SPELL_SPOTLIGHT, true, 0, 0, ObjectGuid());
+                m_uiRescureTimer = 14000;
+                m_uiSpotlightTimer = 9999999;
+            }else m_uiSpotlightTimer -= uiDiff;
+
+            if (m_uiRescureTimer < uiDiff)
+            {
+                m_creature->RemoveAurasDueToSpell(SPELL_SPOTLIGHT, 0);
+                m_creature->RemoveAurasDueToSpell(SPELL_FEIGN_DEATH, 0);
+                m_creature->SetDisplayId(PHASE_2_DISPLAY_ID);
+                m_creature->SetHealth(m_creature->GetMaxHealth());
+                // m_creature->CastSpell(m_creature, SPELL_SCOURGE_RES_BUBBLE, true, 0, 0, ObjectGuid());
+                m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                m_bRescureInProgress = false;
+                m_bIsResurrected = true;
+                m_uiRescureTimer = 9999999;
+                m_uiDreadfulRoarTimer = 6000;
+                m_uiDarkSmash = 9000;
+                m_uiWoeStrike = 2000;
+            }else m_uiRescureTimer -= uiDiff;
+
+            return;
+        }
+
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
@@ -180,6 +222,32 @@ struct MANGOS_DLL_DECL boss_ingvarAI : public ScriptedAI
             else
                 m_uiEnrageTimer -= uiDiff;
         }
+        else
+        {
+            /*if (m_uiRemoveBlackBubbleTimer < uiDiff)
+            {
+                m_creature->RemoveAurasDueToSpell(SPELL_SCOURGE_RES_BUBBLE, 0);
+                m_uiRemoveBlackBubbleTimer = 9999999;
+            }else m_uiRemoveBlackBubbleTimer -= uiDiff; */
+            
+            if (m_uiDreadfulRoarTimer < uiDiff)
+            {
+                DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_DREADFUL_ROAR : SPELL_DREADFUL_ROAR_H);
+                m_uiDreadfulRoarTimer = 20000;
+            }else m_uiDreadfulRoarTimer -= uiDiff;
+
+            if (m_uiWoeStrike < uiDiff)
+            {
+                DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_WOE_STRIKE : SPELL_WOE_STRIKE_H);
+                m_uiWoeStrike = 20000;
+            }else m_uiWoeStrike -= uiDiff;
+
+            if (m_uiDarkSmash < uiDiff)
+            {
+                DoCastSpellIfCan(m_creature, SPELL_DARK_SMASH);
+                m_uiDarkSmash = 20000;
+            }else m_uiDarkSmash -= uiDiff;
+        }
 
         DoMeleeAttackIfReady();
     }
@@ -205,13 +273,36 @@ struct MANGOS_DLL_DECL npc_annhyldeAI : public ScriptedAI
 
     ScriptedInstance* m_pInstance;
     bool m_bIsRegularMode;
+    
+    uint32 SpeakTimer;
+    uint32 ChannelTimer;
+    Creature* m_pIngvar;
 
     void Reset()
     {
+        SpeakTimer = 1000;
+        ChannelTimer = 4000;
+        
+        m_creature->GetMotionMaster()->MoveIdle();
+        m_creature->GetMotionMaster()->Clear();
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+
+        m_pIngvar = m_pInstance->instance->GetCreature(m_pInstance->GetData64(NPC_INGVAR));
     }
 
     void UpdateAI(const uint32 uiDiff)
     {
+        if (SpeakTimer < uiDiff)
+        {
+            m_creature->MonsterYell("Rise in the name of the Lich King. Jaja der Lich King is allmächtig und so deswegen red ich da jetzt was damit die 10 sekunden vergehen. Tada jetzt könnt ihr weiterkämpfen.", 0, 0);      
+            SpeakTimer = 9999999;
+        }else SpeakTimer -= uiDiff;
+        
+        if (ChannelTimer < uiDiff)
+        {
+            m_creature->CastSpell(m_pIngvar, SPELL_SCOURGE_RES_CHANNEL, true, 0, 0, ObjectGuid());
+            ChannelTimer = 9999999;
+        }else ChannelTimer -= uiDiff;
     }
 };
 

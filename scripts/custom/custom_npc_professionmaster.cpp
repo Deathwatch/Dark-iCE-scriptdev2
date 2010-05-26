@@ -106,6 +106,7 @@ case 2000: //Secondary Skills
             pPlayer->ADD_GOSSIP_ITEM( 5, "First Aid."            , GOSSIP_SENDER_MAIN, 2002);
             pPlayer->ADD_GOSSIP_ITEM( 5, "Fishing."              , GOSSIP_SENDER_MAIN, 2003);
           //pPlayer->ADD_GOSSIP_ITEM( 5, "Riding."               , GOSSIP_SENDER_MAIN, 2004);
+			pPlayer->ADD_GOSSIP_ITEM( 5, "Archaeology."          , GOSSIP_SENDER_MAIN, 2005);
             pPlayer->ADD_GOSSIP_ITEM( 7, "<- Main Menu"          , GOSSIP_SENDER_MAIN, 3000);
 
 	pPlayer->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE,pCreature->GetGUID());
@@ -312,6 +313,19 @@ case 2003: // Fishing
 	}
 
 	pPlayer->UpdateSkill(356,(HNConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
+	pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
+	pPlayer->CLOSE_GOSSIP_MENU();
+break;
+
+case 2005: // Archaeology
+	if(!pPlayer->UpdateSkill(794,0))
+      {
+		pCreature->MonsterWhisper("You don't have this skill or you allready have the maximum skill value $C.", pPlayer->GetGUID());
+		GossipHello_custom_npc_professionmaster(pPlayer, pCreature);
+		return;
+	}
+
+	pPlayer->UpdateSkill(794,(HNConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
 	pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
 break;

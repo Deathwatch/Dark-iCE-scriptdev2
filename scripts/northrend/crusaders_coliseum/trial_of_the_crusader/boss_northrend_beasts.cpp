@@ -591,16 +591,19 @@ struct MANGOS_DLL_DECL boss_icehowlAI : public ScriptedAI
                  break;
                 }
         case 3: {
-                if (bsw->timedQuery(SPELL_TRAMPLE,uiDiff)) {
-                        if (pTarget && pTarget->isAlive() && (pTarget->IsWithinDistInMap(m_creature, 200.0f))) {
-                                    pTarget->GetPosition(fPosX, fPosY, fPosZ);
-                                    TrampleCasted = false;
-                                    MovementStarted = true;
-                                    m_creature->GetMotionMaster()->MovePoint(1, fPosX, fPosY, fPosZ);
-                                    DoScriptText(-1713508,m_creature);
-                                    bsw->doCast(SPELL_ADRENALINE);
-                                    stage = 4;
-        }                            }
+                if (bsw->timedQuery(SPELL_TRAMPLE,uiDiff))
+                {
+                        if (pTarget && pTarget->isAlive() && (pTarget->IsWithinDistInMap(m_creature, 200.0f)))
+                        {
+                            pTarget->GetPosition(fPosX, fPosY, fPosZ);
+                            TrampleCasted = false;
+                            MovementStarted = true;
+                            m_creature->GetMotionMaster()->MovePoint(1, fPosX, fPosY, fPosZ);
+                            DoScriptText(-1713508,m_creature);
+                            bsw->doCast(SPELL_ADRENALINE);
+                            stage = 4;
+                        }
+                }
                 break;
                 }
         case 4: {

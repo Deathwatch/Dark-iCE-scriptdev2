@@ -526,18 +526,18 @@ void AddScripts()
     AddSC_battleground();
 
     //custom
-	AddSC_custom_items();
-	AddSC_custom_gameobjects();
-	AddSC_custom_npc_buffmaster();
-	AddSC_custom_npc_guildmaster();
-	AddSC_custom_npc_professionmaster();
-	AddSC_custom_npc_renamecharacter();
-	AddSC_custom_npc_resetlevel();
-	AddSC_custom_npc_spellmaster();
-	AddSC_custom_npc_teleportmaster();
-	AddSC_custom_npc_titlemaster();
-	AddSC_custom_npc_tokenvendor();
-	AddSC_custom_script_training_dummy();
+    AddSC_custom_items();
+    AddSC_custom_gameobjects();
+    AddSC_custom_npc_buffmaster();
+    AddSC_custom_npc_guildmaster();
+    AddSC_custom_npc_professionmaster();
+    AddSC_custom_npc_renamecharacter();
+    AddSC_custom_npc_resetlevel();
+    AddSC_custom_npc_spellmaster();
+    AddSC_custom_npc_teleportmaster();
+    AddSC_custom_npc_titlemaster();
+    AddSC_custom_npc_tokenvendor();
+    AddSC_custom_script_training_dummy();
 
     //examples
     AddSC_example_creature();
@@ -592,7 +592,7 @@ void AddScripts()
     AddSC_boss_chromaggus();
     AddSC_boss_nefarian();
     AddSC_boss_victor_nefarius();
-	AddSC_instance_blackwing_lair();
+    AddSC_instance_blackwing_lair();
     AddSC_deadmines();                                      //deadmines
     AddSC_instance_deadmines();
     AddSC_boss_attumen();                                   //karazhan
@@ -666,12 +666,12 @@ void AddScripts()
     AddSC_instance_stratholme();
     AddSC_stratholme();
     AddSC_instance_sunken_temple();                         //sunken_temple
-	AddSC_sunken_temple();
+    AddSC_sunken_temple();
     AddSC_boss_brutallus();                                 //sunwell_plateau
     AddSC_boss_kalecgos();
-	AddSC_boss_felmyst();
-	AddSC_boss_eredar_twins();
-	AddSC_boss_muru_entropius();
+    AddSC_boss_felmyst();
+    AddSC_boss_eredar_twins();
+    AddSC_boss_muru_entropius();
     AddSC_instance_sunwell_plateau();
     AddSC_boss_ironaya();                                   //uldaman
 	AddSC_boss_archaedas();
@@ -809,7 +809,7 @@ void AddScripts()
     AddSC_northrend_beasts();
     AddSC_boss_jaraxxus();
     AddSC_boss_anubarak_trial();
-	AddSC_boss_faction_champions();
+    AddSC_boss_faction_champions();
     AddSC_twin_valkyr();
     AddSC_trial_of_the_crusader();
     AddSC_instance_trial_of_the_crusader();
@@ -826,7 +826,7 @@ void AddScripts()
     AddSC_boss_four_horsemen();
     AddSC_boss_faerlina();
     AddSC_boss_gluth();
-	AddSC_boss_thaddius();
+    AddSC_boss_thaddius();
     AddSC_howling_fjord();
     AddSC_boss_kelthuzad();
     AddSC_boss_loatheb();
@@ -845,7 +845,11 @@ void AddScripts()
 
     AddSC_boss_sartharion();                                //obsidian_sanctum
     AddSC_instance_obsidian_sanctum();
-    AddSC_instance_vault_of_archavon();                     //vault_of_archavon
+
+    AddSC_boss_halion();									//ruby_sanctum
+    AddSC_instance_ruby_sanctum();
+
+    AddSC_instance_vault_of_archavon();             		//vault_of_archavon
     AddSC_boss_koralon();
     AddSC_boss_emalon();
     AddSC_boss_archavon();
@@ -859,7 +863,7 @@ void AddScripts()
     AddSC_boss_maiden_of_grief();                           //Ulduar, halls_of_stone
     AddSC_boss_sjonnir();
     AddSC_halls_of_stone();
-	AddSC_boss_krystallus();
+    AddSC_boss_krystallus();
     AddSC_instance_halls_of_stone();
 
     AddSC_boss_algalon(); 									//ulduar
@@ -898,7 +902,7 @@ void AddScripts()
     AddSC_boss_zuramat();
     AddSC_boss_lavanthor();
     AddSC_violet_hold();
-	
+    
     AddSC_borean_tundra();
     AddSC_dalaran();
     AddSC_dragonblight();
@@ -908,7 +912,7 @@ void AddScripts()
     AddSC_storm_peaks();
     AddSC_zuldrak();
 
-	// IceCrown Citadel
+    // IceCrown Citadel
     AddSC_instance_icecrown_spire();                        // Spire
     AddSC_icecrown_spire();
     AddSC_icecrown_teleporter();
@@ -997,7 +1001,7 @@ void AddScripts()
     AddSC_boss_kaelthas();                                  //TK, the_eye
     AddSC_boss_void_reaver();
     AddSC_boss_high_astromancer_solarian();
-	AddSC_boss_alar();
+    AddSC_boss_alar();
     AddSC_instance_the_eye();
     AddSC_the_eye();
     AddSC_boss_gatewatcher_iron_hand();                     //TK, the_mechanar

@@ -644,7 +644,7 @@ struct MANGOS_DLL_DECL mob_deathcloudAI : public Scripted_NoMovementAI
 				{
 					if(!cImage->isDead())
 					{
-						if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+						if(Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
 							cImage->CastSpell(target, m_uiImageGUID[i][1], true);
 						//DoCastSpellIfCan(cImage->getVictim(),m_uiImageGUID[i][1],
 					}
@@ -755,7 +755,7 @@ struct MANGOS_DLL_DECL mob_felmyst_vapor_trailAI : public ScriptedAI
         }
 
         //despawn after 25 seconds
-        if(uint32(m_liveTimer) < diff)
+        if(m_liveTimer < diff)
         {
             m_creature->ForcedDespawn();
         } else m_liveTimer -= diff;

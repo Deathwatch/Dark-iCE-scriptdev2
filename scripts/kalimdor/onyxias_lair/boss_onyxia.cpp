@@ -281,6 +281,10 @@ struct MANGOS_DLL_DECL boss_onyxiaAI : public ScriptedAI
             {
                 if (m_creature->GetHealthPercent() < 65.0f)
                 {
+				
+				    m_creature->SetUInt32Value(UNIT_FIELD_BYTES_0, 50331648);
+					m_creature->SetUInt32Value(UNIT_FIELD_BYTES_1, 50331648);
+					
                     m_uiPhase = PHASE_BREATH;
 
                     SetCombatMovement(false);
@@ -304,6 +308,9 @@ struct MANGOS_DLL_DECL boss_onyxiaAI : public ScriptedAI
         {
             if (m_creature->GetHealthPercent() < 40.0f)
             {
+			    m_creature->SetUInt32Value(UNIT_FIELD_BYTES_0, 0);
+				m_creature->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
+				
                 m_uiPhase = PHASE_END;
                 DoScriptText(SAY_PHASE_3_TRANS, m_creature);
 

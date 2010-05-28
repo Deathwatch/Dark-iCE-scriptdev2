@@ -345,6 +345,10 @@ struct MANGOS_DLL_DECL boss_kologarnAI : public ScriptedAI
             if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_RIGHT_ARM))))
                 if (pTemp->isAlive())
                     pTemp->DealDamage(pTemp, pTemp->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
+					
+			GameObject* pGo = GetClosestGameObjectWithEntry(m_creature,m_bIsRegularMode ? 195046 : 195047,200.0f);
+            if (pGo)
+                m_pInstance->DoRespawnGameObject(pGo->GetGUID(),604800);			
         }
     }
 

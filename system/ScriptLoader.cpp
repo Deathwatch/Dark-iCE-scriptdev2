@@ -762,8 +762,8 @@ void AddScripts()
     AddSC_boss_twinemperors();
     AddSC_mob_anubisath_sentinel();
     AddSC_instance_temple_of_ahnqiraj();
+    AddSC_instance_wailing_caverns();                       // Wailing Caverns
     AddSC_zulfarrak();                                      //zulfarrak
-	AddSC_instance_wailing_caverns();						//wailing_caverns
 
     AddSC_ashenvale();
     AddSC_azshara();

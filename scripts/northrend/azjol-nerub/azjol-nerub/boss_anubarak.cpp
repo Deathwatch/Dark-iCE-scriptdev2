@@ -107,7 +107,7 @@ struct MANGOS_DLL_DECL boss_anubarakAI : public ScriptedAI
     void Aggro(Unit *pWho)
     {
         DoScriptText(SAY_AGGRO, m_creature);
-        
+
         if (m_pInstance)
             m_pInstance->SetData(TYPE_ANUBARAK, IN_PROGRESS);
     }
@@ -244,7 +244,7 @@ struct MANGOS_DLL_DECL boss_anubarakAI : public ScriptedAI
     void JustDied(Unit *pKiller)
     {
         DoScriptText(SAY_DEATH, m_creature);
-        
+       
         if (m_pInstance)
             m_pInstance->SetData(TYPE_ANUBARAK, DONE);
     }

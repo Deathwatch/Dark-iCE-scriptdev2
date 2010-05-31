@@ -191,6 +191,9 @@ struct MANGOS_DLL_DECL boss_krikthirAI : public ScriptedAI
             case 1: DoScriptText(SAY_SLAY_2, m_creature);break;
             case 2: DoScriptText(SAY_SLAY_3, m_creature);break;
         }
+
+        if (m_pInstance)
+            m_pInstance->SetData(TYPE_KRIKTHIR, DONE);
     }
 
     void UpdateAI(const uint32 uiDiff)

@@ -38,6 +38,7 @@ go_tablet_of_madness
 go_tablet_of_the_seven
 go_tele_to_dalaran_crystal
 go_tele_to_violet_stand
+go_foam_sword_rack
 EndContentData */
 
 #include "precompiled.h"
@@ -403,7 +404,22 @@ bool GOHello_go_blood_filled_orb(Player* pPlayer, GameObject* pGo)
 		
 	return false;
 }
-	
+
+/*######
+## go_foam_sword_rack
+######*/
+
+enum
+{
+    SPELL_CREATE_FOAM_SWORD    = 63384,
+};
+
+bool GOHello_go_foam_sword_rack(Player* pPlayer, GameObject* pGo)
+{
+    pPlayer->CastSpell(pPlayer,SPELL_CREATE_FOAM_SWORD,true);
+    return false;
+}
+
 void AddSC_go_scripts()
 {
     Script *newscript;
@@ -502,4 +518,9 @@ void AddSC_go_scripts()
 	newscript->Name = "go_blood_filled_orb";
 	newscript->pGOHello =           &GOHello_go_blood_filled_orb;
 	newscript->RegisterSelf();
+    
+    newscript = new Script;
+    newscript->Name = "go_foam_sword_rack";
+    newscript->pGOHello =           &GOHello_go_foam_sword_rack;
+    newscript->RegisterSelf();
 }

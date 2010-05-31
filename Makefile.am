@@ -224,6 +224,7 @@ scripts/eastern_kingdoms/sunwell_plateau/boss_eredar_twins.cpp \
 scripts/eastern_kingdoms/sunwell_plateau/boss_muru_entropius.cpp \
 scripts/eastern_kingdoms/sunwell_plateau/instance_sunwell_plateau.cpp \
 scripts/eastern_kingdoms/sunwell_plateau/sunwell_plateau.h \
+scripts/eastern_kingdoms/swamp_of_sorrows.cpp \
 scripts/eastern_kingdoms/uldaman/boss_archaedas.cpp \
 scripts/eastern_kingdoms/uldaman/boss_ironaya.cpp \
 scripts/eastern_kingdoms/uldaman/uldaman.cpp \

@@ -229,6 +229,10 @@ enum
     EMOTE_AGGRO                         = -1000551,
     EMOTE_CREATE                        = -1000552,
 	
+	SAY_SPECIMEN                        = -1000581,
+	NPC_NEXUS_DRAKE_HATCHLING           = 26127,
+	SPELL_RAELORASZ_FIREBALL            = 46704
+	
 	SPELL_GAVROK_RUNEBREAKER            = 47604,
 	NPC_FREED_GIANT                     = 26783,
 	NPC_WEAKENED_GIANT                  = 26872,
@@ -311,6 +315,27 @@ bool EffectAuraDummy_spell_aura_dummy_npc(const Aura* pAura, bool bApply)
 
             return true;
         }
+		case SPELL_RAELORASZ_FIREBALL:
+		{
+		   if (pAura->GetEffIndex() != EFFECT_INDEX_0)
+		       return true;
+			
+			if (Unit* pCaster = pAura->GetCaster())
+			    DoScriptText(SAY_SPECIMEN, pCaster);
+				
+			Unit* pTarget = pAura->GetTarget();
+			if (pTarget->GetTypeId() == TYPEID_UNIT)
+			{
+			    Creature* pCreature = (Creature*)pTarget;
+				
+				if (pCreature->GetEntry() == NPC_NEXUS_DRAKE_HATCHLING)
+				{
+				    pCreature->SetStandState(UNIT_STAND_STATE_SLEEP);
+					pCreature->ForcedDespawn(3000);
+				}
+			}
+			return true;
+		}	
     }
 
     return false;
@@ -609,7 +634,7 @@ bool EffectDummyCreature_spell_dummy_npc(Unit* pCaster, uint32 uiSpellId, SpellE
 
 void AddSC_spell_scripts()
 {
-    Script *newscript;
+    Script* newscript;
 
     newscript = new Script;
     newscript->Name = "spell_dummy_go";

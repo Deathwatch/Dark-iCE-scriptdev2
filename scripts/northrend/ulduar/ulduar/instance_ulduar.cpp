@@ -183,7 +183,7 @@ struct MANGOS_DLL_DECL instance_ulduar : public ScriptedInstance
             case 194441: mHodirFrozenDoorGUID = pGo->GetGUID(); break;
             case 194255: mAncientGateGUID = pGo->GetGUID(); break;
             case GO_KOLOGARN_BRIDGE:  m_uiKologarnBridgeGUID = pGo->GetGUID();
-                pGo->SetGoState(GO_STATE_READY);
+                pGo->SetGoState(GO_STATE_ACTIVE);
                 break;
         }
     }
@@ -223,7 +223,7 @@ struct MANGOS_DLL_DECL instance_ulduar : public ScriptedInstance
             case TYPE_KOLOGARN:
                 if(uiData == DONE) { DoRespawnGameObject(mKologarnCacheGUID, DAY);
                 if (GameObject* pBridge = instance->GetGameObject(m_uiKologarnBridgeGUID))
-                        pBridge->SetGoState(GO_STATE_ACTIVE);
+                        pBridge->SetGoState(GO_STATE_READY);
                 mEncounter[5] = uiData;
                 }
                 break;

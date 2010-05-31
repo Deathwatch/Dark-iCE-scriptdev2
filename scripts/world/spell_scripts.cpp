@@ -231,7 +231,7 @@ enum
 	
 	SAY_SPECIMEN                        = -1000581,
 	NPC_NEXUS_DRAKE_HATCHLING           = 26127,
-	SPELL_RAELORASZ_FIREBALL            = 46704
+	SPELL_RAELORASZ_FIREBALL            = 46704,
 	
 	SPELL_GAVROK_RUNEBREAKER            = 47604,
 	NPC_FREED_GIANT                     = 26783,

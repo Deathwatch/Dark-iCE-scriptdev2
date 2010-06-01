@@ -22,12 +22,264 @@ SDCategory: Storm Peaks
 EndScriptData */
 
 /* ContentData
+mob_saronite_mineslave
+mob_captive_mechagnome
+mob_lightning_forge_credit
 npc_loklira_the_crone
 npc_roxi_ramrocket
 npc_frostborn_scout
 EndContentData */
 
 #include "precompiled.h"
+
+/*######
+## mob_saronite_mine_slave (31397)
+######*/
+
+enum
+{
+    QUEST_SLAVES_TO_SARNOITE_A       = 13300, //Alliance version
+    SPELL_DESPAWN_SELF               = 43014,
+    NPC_SLAVES_TO_SARONITE_CREDIT    = 31866,
+    QUEST_SLAVES_TO_SARNOITE_H       = 13302,  //Horde version
+    SARONITE_SLAVE_TEXTID            = 14068,
+    SARONITE_SLAVE_TEXT1             = -1999000,
+    SARONITE_SLAVE_TEXT2             = -1999001,
+    SARONITE_SLAVE_TEXT3             = -1999002
+};
+
+#define GOSSIP_EVENT_FREE      "Go on, you're free. Get out of here!"
+
+bool GossipHello_mob_mine_slave(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->isQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if ( (pPlayer->GetQuestStatus(QUEST_SLAVES_TO_SARNOITE_A) == QUEST_STATUS_INCOMPLETE) ||
+        (pPlayer->GetQuestStatus(QUEST_SLAVES_TO_SARNOITE_H) == QUEST_STATUS_INCOMPLETE) )
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_EVENT_FREE, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+
+    pPlayer->SEND_GOSSIP_MENU(SARONITE_SLAVE_TEXTID, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_mob_mine_slave(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF)
+    {
+        pPlayer->CLOSE_GOSSIP_MENU();
+
+        switch (urand(0, 10))
+        {
+            case 0:
+                switch(urand(1, 3))
+                {
+                    case 1: DoScriptText(SARONITE_SLAVE_TEXT1, pCreature); break;
+                    case 2: DoScriptText(SARONITE_SLAVE_TEXT2, pCreature); break;
+                    case 3: DoScriptText(SARONITE_SLAVE_TEXT3, pCreature); break;
+                }
+                pCreature->CastSpell(pCreature, SPELL_DESPAWN_SELF, true);
+                break;
+
+            case 1:
+                pCreature->setFaction(16);
+                pCreature->AI()->AttackStart(pPlayer);
+                break;
+
+            default:
+                pPlayer->KilledMonsterCredit(NPC_SLAVES_TO_SARONITE_CREDIT, pCreature->GetGUID());
+                pCreature->CastSpell(pCreature, SPELL_DESPAWN_SELF, true);
+                break;
+        }
+    }
+    return true;
+}
+
+/*######
+## mob_captive_mechagnome
+######*/
+enum
+{
+    QUEST_SLAVES_OF_THE_STORMFORGED     = 12957,
+    SAY_FREED_1                         = -1999841,
+    SAY_FREED_2                         = -1999840,
+    SAY_FREED_3                         = -1999839,
+    SAY_FREED_4                         = -1999838,
+    SAY_FREED_5                         = -1999837,
+    NPC_HOGUR_COLLECTOR                 = 29962, // according to DB used as QuestCredit
+    POINT_ID                            = 1
+};
+
+float CaveEntrance[3] = {7833.33f, -99.26f, 881.51f};
+
+#define GOSSIP_ITEM_MECHAGNOME "I'm not a laborer. I'm here to free you from  servitude in the mines"
+
+struct MANGOS_DLL_DECL mob_captive_mechagnomeAI : public ScriptedAI
+{
+    mob_captive_mechagnomeAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
+
+    bool bFreed;
+    bool bSpoke;
+    bool bActed;
+    uint8 uiAction;
+    uint32 m_uiWaitTimer;
+    uint64 m_uiPlayerGUID;
+
+    void Reset() 
+    {
+        bFreed = false;
+        bSpoke = false;
+        bActed = false;
+        uiAction = 0;
+        m_uiWaitTimer = 2000;
+        m_uiPlayerGUID = 0;
+        m_creature->SetUInt32Value(UNIT_NPC_EMOTESTATE,EMOTE_STATE_WORK_MINING);
+    }
+
+    void MovementInform(uint32 uiType, uint32 uiPointId)
+    {
+        if (uiType != POINT_MOTION_TYPE)
+            return;
+
+        if (uiPointId == POINT_ID)
+            m_creature->ForcedDespawn();
+    }
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        if (bFreed)
+        {
+            Player* pPlayer = (Player*)Unit::GetUnit((*m_creature),m_uiPlayerGUID);
+            if (!pPlayer)
+            {
+                Reset();
+                return;
+            }
+
+            if (m_uiWaitTimer <= uiDiff)
+            {
+                if (!bSpoke)
+                {   
+                    m_creature->SetUInt32Value(UNIT_NPC_EMOTESTATE,EMOTE_STATE_NONE);
+                    if (pPlayer->GetQuestStatus(QUEST_SLAVES_OF_THE_STORMFORGED) == QUEST_STATUS_INCOMPLETE)
+                        pPlayer->KilledMonsterCredit(NPC_HOGUR_COLLECTOR,m_creature->GetGUID());
+
+                    uiAction = urand(0, 3);
+                    switch (uiAction)
+                    {
+                        case 0: DoScriptText(urand(0, 1) ? SAY_FREED_2 : SAY_FREED_4,m_creature,pPlayer); break;
+                        case 1: DoScriptText(SAY_FREED_5,m_creature,pPlayer); break;
+                        case 2: DoScriptText(SAY_FREED_1,m_creature,pPlayer); break;
+                        case 3: DoScriptText(SAY_FREED_3,m_creature,pPlayer); break;
+                    }
+                    m_uiWaitTimer = 3000;
+                    bSpoke = true;
+                    return;
+                }
+
+                if (!bActed)
+                {
+                    switch(uiAction)
+                    {
+                        // case walking out of cavern
+                        case 0:        
+                            float x, y, z, o;
+                            o = m_creature->GetOrientation();
+                            ((o >= M_PI)? o -= M_PI : o += M_PI);
+                            m_creature->GetNearPoint(m_creature, x, y, z, m_creature->GetObjectSize(), INTERACTION_DISTANCE, o);
+                            m_creature->GetMotionMaster()->MovePoint(POINT_ID, x, y, z);
+                            break;
+                        // case returning to work
+                        case 1:
+                            Reset();
+                            return;
+                        // case shuting down (despawning)
+                        case 2:
+                            m_creature->ForcedDespawn();
+                            break;
+                        // case following player. needs fourther reasearch if creature is assisting in combat
+                        case 3:
+                            m_creature->GetMotionMaster()->MoveFollow(pPlayer,PET_FOLLOW_DIST, PET_FOLLOW_ANGLE + urand(0,2)*M_PI/2);
+                            break;
+                    }
+                    bActed = true;
+                    bFreed = false;
+                }
+            }else m_uiWaitTimer -= uiDiff;
+        }
+
+        // if uiAction == 3 (following) and passed cave entrance
+        if (m_creature->GetDistance(CaveEntrance[0],CaveEntrance[1],CaveEntrance[2]) < INTERACTION_DISTANCE)
+            m_creature->ForcedDespawn();
+    }
+
+};
+
+CreatureAI* GetAI_mob_captive_mechagnome(Creature* pCreature)
+{
+    return new mob_captive_mechagnomeAI(pCreature);
+}
+
+bool GossipHello_mob_captive_mechagnome(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(QUEST_SLAVES_OF_THE_STORMFORGED) == QUEST_STATUS_INCOMPLETE)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_MECHAGNOME, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+        pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+        return true;
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_mob_captive_mechagnome(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    switch(uiAction)
+    {
+        case GOSSIP_ACTION_INFO_DEF+1:
+            pPlayer->CLOSE_GOSSIP_MENU();
+            //pCreature->HandleEmoteCommand(EMOTE_STATE_NONE);
+            ((mob_captive_mechagnomeAI*)pCreature->AI())->m_uiPlayerGUID = pPlayer->GetGUID();
+            ((mob_captive_mechagnomeAI*)pCreature->AI())->bFreed = true;
+            break;
+    }
+    return true;
+}
+
+/*######
+## mob_lightning_forge_credit
+######*/
+enum
+{
+    QUEST_DESTROY_FORGES        = 12988,
+    SPELL_BOULDERCRAGS_BOMB     = 56275,
+    SPELL_EXPLOSION             = 59687
+};
+
+struct MANGOS_DLL_DECL mob_lightning_forge_creditAI : public ScriptedAI
+{
+    mob_lightning_forge_creditAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
+
+    void Reset() {}
+
+    void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
+    {
+        if (!pCaster || !pSpell || pCaster->GetTypeId() != TYPEID_PLAYER || pSpell->Id != SPELL_BOULDERCRAGS_BOMB)
+            return;
+
+        DoCast(m_creature,SPELL_EXPLOSION,true);
+
+        if (((Player*)pCaster)->GetQuestStatus(QUEST_DESTROY_FORGES) == QUEST_STATUS_INCOMPLETE)
+            ((Player*)pCaster)->KilledMonsterCredit(m_creature->GetEntry(),m_creature->GetGUID());
+    }
+
+};
+
+CreatureAI* GetAI_mob_lightning_forge_credit(Creature* pCreature)
+{
+    return new mob_lightning_forge_creditAI(pCreature);
+}
 
 /*######
 ## npc_frostborn_scout
@@ -251,11 +503,10 @@ bool GossipSelect_npc_roxi_ramrocket(Player* pPlayer, Creature* pCreature, uint3
 
 enum
 {
-    QUEST_THEY_TOOK_OUR_MEN    = 12843,
-    NPC_GOBLIN_PRISONER     = 29466,
-    SPELL_DESPAWN_SELF      = 43014,
-    SAY_THANKS_1            = -1999778,
-    SAY_THANKS_2            = -1999777
+    QUEST_THEY_TOOK_OUR_MEN     = 12843,
+    NPC_GOBLIN_PRISONER         = 29466,
+    SAY_THANKS_1                = -1999778,
+    SAY_THANKS_2                = -1999777
 };
 
 bool GOHello_go_rusty_cage(Player* pPlayer, GameObject* pGo)
@@ -277,8 +528,26 @@ void AddSC_storm_peaks()
     Script* newscript;
 
     newscript = new Script;
+    newscript->Name = "mob_mine_slave";
+    newscript->pGossipHello =  &GossipHello_mob_mine_slave;
+    newscript->pGossipSelect = &GossipSelect_mob_mine_slave;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
     newscript->Name = "go_rusty_cage";
     newscript->pGOHello = &GOHello_go_rusty_cage;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "mob_captive_mechagnome";
+    newscript->GetAI = &GetAI_mob_captive_mechagnome;
+    newscript->pGossipHello = &GossipHello_mob_captive_mechagnome;
+    newscript->pGossipSelect = &GossipSelect_mob_captive_mechagnome;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "mob_lightning_forge_credit";
+    newscript->GetAI = &GetAI_mob_lightning_forge_credit;
     newscript->RegisterSelf();
 
     newscript = new Script;

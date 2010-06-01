@@ -422,6 +422,25 @@ bool GOHello_go_foam_sword_rack(Player* pPlayer, GameObject* pGo)
     return false;
 }
 
+/*######
+## Quest 1126: Hive in the Tower
+######*/
+
+enum eHives
+{
+    QUEST_HIVE_IN_THE_TOWER                       = 9544,
+    NPC_HIVE_AMBUSHER                             = 13301
+};
+
+bool GOHello_go_hive_pod(Player *pPlayer, GameObject *pGO)
+{
+    pPlayer->SendLoot(pGO->GetGUID(), LOOT_CORPSE);
+    pGO->SummonCreature(NPC_HIVE_AMBUSHER,pGO->GetPositionX()+1,pGO->GetPositionY(),pGO->GetPositionZ(),pGO->GetAngle(pPlayer),TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 60000);
+    pGO->SummonCreature(NPC_HIVE_AMBUSHER,pGO->GetPositionX(),pGO->GetPositionY()+1,pGO->GetPositionZ(),pGO->GetAngle(pPlayer),TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 60000);
+    return true;
+}
+
+
 void AddSC_go_scripts()
 {
     Script *newscript;
@@ -525,4 +544,10 @@ void AddSC_go_scripts()
     newscript->Name = "go_foam_sword_rack";
     newscript->pGOHello =           &GOHello_go_foam_sword_rack;
     newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "go_hive_pod";
+    newscript->pGOHello = &GOHello_go_hive_pod;
+    newscript->RegisterSelf();
+
 }

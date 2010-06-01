@@ -213,7 +213,7 @@ if (phase == 1)
 
 if (spell1_phase1_Timer <= diff)
 {
-DoCastSpellIfCan(SelectUnit(SELECT_TARGET_RANDOM, 0), 70372);
+DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0), 70372);
 spell1_phase1_Timer = 60000+rand()%40000;
 } else spell1_phase1_Timer -= diff;
 
@@ -225,19 +225,19 @@ spell2_phase1_Timer = 30000+rand()%20000;
 
 if (spell3_phase1_Timer <= diff)
 {
-DoCastSpellIfCan(SelectUnit(SELECT_TARGET_RANDOM, 0), 70358);
+DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0), 70358);
 spell3_phase1_Timer = 90000+rand()%10000;
 } else spell3_phase1_Timer -= diff;
 
 if (spell4_phase1_Timer <= diff)
 {
-DoCastSpellIfCan(SelectUnit(SELECT_TARGET_RANDOM, 0), 70541);
+DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0), 70541);
 spell4_phase1_Timer = 20000+rand()%20000;
 } else spell4_phase1_Timer -= diff;
 
 if (spell5_phase1_Timer <= diff)
 {
-DoCastSpellIfCan(SelectUnit(SELECT_TARGET_RANDOM, 0), 70337);
+DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0), 70337);
 spell5_phase1_Timer = 40000+rand()%60000;
 } else spell5_phase1_Timer -= diff;
 
@@ -253,19 +253,19 @@ if (phase == 2)
 
 if (spell1_phase2_Timer <= diff)
 {
-DoCastSpellIfCan(SelectUnit(SELECT_TARGET_RANDOM, 0), 69037);
+DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0), 69037);
 spell1_phase2_Timer = 80000+rand()%20000;
 } else spell1_phase2_Timer -= diff;
 
 if (spell2_phase2_Timer <= diff)
 {
-DoCastSpellIfCan(SelectUnit(SELECT_TARGET_RANDOM, 0), 74352);
+DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0), 74352);
 spell2_phase2_Timer = 50000+rand()%50000;
 } else spell2_phase2_Timer -= diff;
 
 if (spell3_phase2_Timer <= diff)
 {
-DoCastSpellIfCan(SelectUnit(SELECT_TARGET_RANDOM, 0), 70541);
+DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0), 70541);
 spell3_phase2_Timer = 50000+rand()%50000;
 } else spell3_phase2_Timer -= diff;
 
@@ -293,7 +293,7 @@ spell1_phase3_Timer = 40000+rand()%20000;
 
 if (spell2_phase3_Timer <= diff)
 {
-DoCastSpellIfCan(SelectUnit(SELECT_TARGET_RANDOM, 0), 69409);
+DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0), 69409);
 spell2_phase3_Timer = 40000+rand()%20000;
 } else spell2_phase3_Timer -= diff;
 }
@@ -303,13 +303,13 @@ if (phase == 4)
 
 if (spell1_phase4_Timer <= diff)
 {
-DoCastSpellIfCan(SelectUnit(SELECT_TARGET_RANDOM, 0), 68980);
+DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0), 68980);
 spell1_phase4_Timer = 20000+rand()%40000;
 } else spell1_phase4_Timer -= diff;
 
 if (spell2_phase4_Timer <= diff)
 {
-DoCastSpellIfCan(SelectUnit(SELECT_TARGET_RANDOM, 0), 70498);
+DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0), 70498);
 spell2_phase4_Timer = 20000+rand()%20000;
 } else spell2_phase4_Timer -= diff;
 

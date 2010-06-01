@@ -26,21 +26,6 @@ EndScriptData */
 #include "def_spire.h"
 
 #define FIGHT_START "We are ready, Tirion."
-enum
-{
-//NPCS
-LICH_KING = 35697,
-TIRION = 38995,
-//Yells
-SAY_INTRO1 = -1999926, // SoundID: 17349 (Lich King)
-SAY_INTRO2 = -1999927, // SoundID: 17390 (Tirion)
-SAY_INTRO3 = -1999928, // SoundID: 17350 (Lich King)
-SAY_INTRO4 = -1999929, // SoundID: 17391 (Tirion)
-SAY_AGGRO = -1999931, // SoundID: 17351 (Lich King)
-
-//Tirion
-NPC_TIRION = 38995, //Used throughout the fight
-};
 struct ScriptPointMove
 {
 uint32 uiCreatureEntry;
@@ -64,10 +49,10 @@ bool Talk;
 }
 static Yells []=
 {
-{SAY_INTRO1, LICH_KING, 14500, 0, true},
-{SAY_INTRO2, TIRION, 8500, 0, true},
-{SAY_INTRO3, LICH_KING, 25000, 1, true},
-{SAY_INTRO4, TIRION, 5800, 22, true},
+{SAY_INTRO1, NPC_LICH_KING, 14500, 0, true},
+{SAY_INTRO2, NPC_TIRION, 8500, 0, true},
+{SAY_INTRO3, NPC_LICH_KING, 25000, 1, true},
+{SAY_INTRO4, NPC_TIRION, 5800, 22, true},
 };
 struct MANGOS_DLL_DECL npc_tirion_guideAI : public ScriptedAI
 {

@@ -8,7 +8,6 @@
 
 enum
 {
-
     TYPE_TELEPORT               = 0,
     TYPE_MARROWGAR              = 1,
     TYPE_DEATHWHISPER           = 2,
@@ -119,7 +118,12 @@ enum
     TYPE_DIFFICULTY             = 1001,
     DATA_BLOOD_COUNCIL_HEALTH   = 1002,
     DESPAWN_TIME                = 300000,
-
+    
+    SAY_INTRO1 = -1999926, // SoundID: 17349 (Lich King)
+    SAY_INTRO2 = -1999927, // SoundID: 17390 (Tirion)
+    SAY_INTRO3 = -1999928, // SoundID: 17350 (Lich King)
+    SAY_INTRO4 = -1999929, // SoundID: 17391 (Tirion)
+    SAY_AGGRO  = -1999931, // SoundID: 17351 (Lich King)
 };
 
 #endif

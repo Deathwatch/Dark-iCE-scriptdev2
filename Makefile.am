@@ -646,12 +646,12 @@ EXTRA_DIST = \
 	Scripts/sc_defines.cpp \
 	Scripts/sc_defines.h \
 	scriptdev2.conf.dist \
-	hellscream.conf.dist
+	darkice.conf.dist
 
 ## Additional files to install
 sysconf_DATA = \
 	scriptdev2.conf.dist \
-	hellscream.conf.dist
+	darkice.conf.dist
 
 install-data-hook:
 	@list='$(sysconf_DATA)'; for p in $$list; do \

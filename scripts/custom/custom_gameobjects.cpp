@@ -1,4 +1,4 @@
-/* Copyright (C) 2009 - 2010 Hellscream Network <http://www.hellscreamwow.com/>
+/* Copyright (C) 2009 - 2010 Project Dark-iCE <http://projectdarkice.clanice.com/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -19,7 +19,7 @@ SDName: custom_gameobjects
 SD%Complete: 100
 SDComment: Containts different custom GameObjects. Check the code to know what they do. (Don't forget to apply SQL files!)
 SDCategory: Game Objects
-SDAuthor: Darkiss @ Hellscream Network <http://www.hellscreamwow.com/>
+SDAuthor: Darkiss @ Hellscream Network <http://www.hellscream-wow.com/>
 EndScriptData */
 
 #include "precompiled.h"

@@ -1,4 +1,4 @@
-/* Copyright (C) 2009 - 2010 Hellscream Network <http://www.hellscreamwow.com/>
+/* Copyright (C) 2009 - 2010 Project Dark-iCE <http://projectdarkice.clanice.com/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -19,23 +19,23 @@ SDName: custom_npc_tokenvendor
 SD%Complete: 100
 SDComment: Token Vendor - Allows various tokens to be exchanged for extras.
 SDCategory: NPC
-SDAuthor: Darkrulerz @ Hellscream Network <http://www.hellscreamwow.com/>
-SDModifier: Darkiss @ Hellscream Network <http://www.hellscreamwow.com/>
+SDAuthor: Darkrulerz @ Project Dark-iCE <http://projectdarkice.clanice.com/>
+SDModifier: Darkiss @ Hellscream Network <http://www.hellscream-wow.com/>
 WOWVersion: 3.3.2
 EndScriptData */
 
 #include "precompiled.h"
 #include "../../../../shared/Config/Config.h"
-#include "../../hn_config.h"
+#include "../../darkice_config.h"
  
 bool GossipHello_custom_npc_tokenvendor(Player* pPlayer, Creature* pCreature)
 {
-    Config HNConfig;
-	if(!HNConfig.SetSource(_HELLSCREAM_CONFIG,true))
-		error_log("HN: Unable to open configuration file");
+    Config DARKICEConfig;
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+		error_log("DARKICE: Unable to open configuration file");
 
     pPlayer->ADD_GOSSIP_ITEM( 5, "Exchange 25 BOJ to 10 Gold" , GOSSIP_SENDER_MAIN, 2000);
-    if(pPlayer->getLevel() < (HNConfig.GetFloatDefault("TokenVendor.MaxLevel",0)))
+    if(pPlayer->getLevel() < (DARKICEConfig.GetFloatDefault("TokenVendor.MaxLevel",0)))
     pPlayer->ADD_GOSSIP_ITEM( 5, "40 BOJ Exchange 1 Level" , GOSSIP_SENDER_MAIN, 3000);
     pPlayer->ADD_GOSSIP_ITEM( 5, "20 BOJ Exchange 36 Slot Bag" , GOSSIP_SENDER_MAIN, 4000);
 	pPlayer->ADD_GOSSIP_ITEM(5,"5 BOJ Exchange 1 Buff Spell" ,GOSSIP_SENDER_MAIN,5000);

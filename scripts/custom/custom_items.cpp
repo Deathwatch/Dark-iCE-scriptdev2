@@ -1,4 +1,4 @@
-/* Copyright (C) 2009 - 2010 Hellscream Network <http://www.hellscreamwow.com/>
+/* Copyright (C) 2009 - 2010 Project Dark-iCE <http://projectdarkice.clanice.com/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -19,19 +19,19 @@ SDName: custom_items
 SD%Complete: 100
 SDComment: Containts different custom Items. Check the code to know what they do. (Don't forget to apply SQL files!)
 SDCategory: Item
-SDAuthor: Darkiss @ Hellscream Network <http://www.hellscreamwow.com/>
+SDAuthor: Darkiss @ Hellscream Network <http://www.hellscream-wow.com/>
 EndScriptData */
 
 #include "precompiled.h"
 #include "../../../../shared/Config/Config.h"
-#include "../../hn_config.h"
+#include "../../darkice_config.h"
 
 // Talent Points Giving Item
 bool ItemUse_custom_item_talentstone(Player* pPlayer, Item* pItem, const SpellCastTargets &pTargets)
 {
-    Config HNConfig;
-	if(!HNConfig.SetSource(_HELLSCREAM_CONFIG,true))
-		error_log("HN: Unable to open configuration file");
+    Config DARKICEConfig;
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+		error_log("DARKICE: Unable to open configuration file");
 
     if ((pPlayer->isInCombat()) || (pPlayer->isInFlight()) || (pPlayer->isDead()))
     {
@@ -41,7 +41,7 @@ bool ItemUse_custom_item_talentstone(Player* pPlayer, Item* pItem, const SpellCa
 	else
     {
 	pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
-    pPlayer->SetFreeTalentPoints(pPlayer->GetFreeTalentPoints()+(HNConfig.GetFloatDefault("Item_TalentPointStoneAddTalents",0)));
+    pPlayer->SetFreeTalentPoints(pPlayer->GetFreeTalentPoints()+(DARKICEConfig.GetFloatDefault("Item_TalentPointStoneAddTalents",0)));
     pPlayer->SendTalentsInfoData(false);
     return true;
     }
@@ -50,11 +50,11 @@ bool ItemUse_custom_item_talentstone(Player* pPlayer, Item* pItem, const SpellCa
 // Cooldown Removing Item
 bool ItemUse_custom_item_cooldownremover(Player* pPlayer, Item* pItem, const SpellCastTargets &pTargets)
 {
-    Config HNConfig;
-	if(!HNConfig.SetSource(_HELLSCREAM_CONFIG,true))
-		error_log("HN: Unable to open configuration file");
+    Config DARKICEConfig;
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+		error_log("DARKICE: Unable to open configuration file");
 		
-    bool CooldownRemoverInfinte = HNConfig.GetBoolDefault("Item_CooldownRemoverInfinte", true);
+    bool CooldownRemoverInfinte = DARKICEConfig.GetBoolDefault("Item_CooldownRemoverInfinte", true);
 
     if(CooldownRemoverInfinte)
     {
@@ -86,9 +86,9 @@ bool ItemUse_custom_item_invinciblemount(Player* pPlayer, Item* pItem, const Spe
 // Level Giving Item
 bool ItemUse_custom_item_levelplayer(Player* pPlayer, Item* pItem, const SpellCastTargets &pTargets)
 {
-    Config HNConfig;
-	if(!HNConfig.SetSource(_HELLSCREAM_CONFIG,true))
-		error_log("HN: Unable to open configuration file");
+    Config DARKICEConfig;
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+		error_log("DARKICE: Unable to open configuration file");
 
     if ((pPlayer->isInCombat()) || (pPlayer->isInFlight()) || (pPlayer->isDead()))
     {
@@ -96,10 +96,10 @@ bool ItemUse_custom_item_levelplayer(Player* pPlayer, Item* pItem, const SpellCa
         return false;
     }
 
-    if((pPlayer->getLevel()) < (HNConfig.GetFloatDefault("LevelUpItemSafeLevel",0)))
+    if((pPlayer->getLevel()) < (DARKICEConfig.GetFloatDefault("LevelUpItemSafeLevel",0)))
     {
 	    pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
-        pPlayer->GiveLevel(+(HNConfig.GetFloatDefault("LevelUpItemAddLevel",0)));
+        pPlayer->GiveLevel(+(DARKICEConfig.GetFloatDefault("LevelUpItemAddLevel",0)));
 		return true;
     }
     else
@@ -128,9 +128,9 @@ bool ItemUse_custom_item_metamorphosisspell(Player* pPlayer, Item* pItem, const 
 // Banker NPC Summoning Item
 bool ItemUse_custom_item_summonbanker(Player* pPlayer, Item* pItem, const SpellCastTargets &pTargets)
 {
-    Config HNConfig;
-	if(!HNConfig.SetSource(_HELLSCREAM_CONFIG,true))
-		error_log("HN: Unable to open configuration file");
+    Config DARKICEConfig;
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+		error_log("DARKICE: Unable to open configuration file");
 
     if ((pPlayer->isInCombat()) || (pPlayer->isInFlight()) || (pPlayer->isDead()))
     {
@@ -140,7 +140,7 @@ bool ItemUse_custom_item_summonbanker(Player* pPlayer, Item* pItem, const SpellC
 	else
     {
 		pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
-        pPlayer->SummonCreature((HNConfig.GetFloatDefault("Item_SummonBankerEntryID",0)),pPlayer->GetPositionX(), pPlayer->GetPositionY()+5, pPlayer->GetPositionZ(), 0,TEMPSUMMON_TIMED_DESPAWN,60000);
+        pPlayer->SummonCreature((DARKICEConfig.GetFloatDefault("Item_SummonBankerEntryID",0)),pPlayer->GetPositionX(), pPlayer->GetPositionY()+5, pPlayer->GetPositionZ(), 0,TEMPSUMMON_TIMED_DESPAWN,60000);
     return true;
     }
 }
@@ -148,9 +148,9 @@ bool ItemUse_custom_item_summonbanker(Player* pPlayer, Item* pItem, const SpellC
 // Tele NPC Summoning Item
 bool ItemUse_custom_item_summontelenpc(Player* pPlayer, Item* pItem, const SpellCastTargets &pTargets)
 {
-    Config HNConfig;
-	if(!HNConfig.SetSource(_HELLSCREAM_CONFIG,true))
-		error_log("HN: Unable to open configuration file");
+    Config DARKICEConfig;
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+		error_log("DARKICE: Unable to open configuration file");
 
     if ((pPlayer->isInCombat()) || (pPlayer->isInFlight()) || (pPlayer->isDead()))
     {
@@ -160,7 +160,7 @@ bool ItemUse_custom_item_summontelenpc(Player* pPlayer, Item* pItem, const Spell
 	else
     {
 		pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
-        pPlayer->SummonCreature((HNConfig.GetFloatDefault("Item_SummonTeleportMasterEntryID",0)), pPlayer->GetPositionX() ,pPlayer->GetPositionY()+5, pPlayer->GetPositionZ(), 0,TEMPSUMMON_TIMED_DESPAWN,60000);
+        pPlayer->SummonCreature((DARKICEConfig.GetFloatDefault("Item_SummonTeleportMasterEntryID",0)), pPlayer->GetPositionX() ,pPlayer->GetPositionY()+5, pPlayer->GetPositionZ(), 0,TEMPSUMMON_TIMED_DESPAWN,60000);
         return true;
     }
 }

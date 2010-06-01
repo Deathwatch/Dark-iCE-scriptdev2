@@ -1,4 +1,4 @@
-/* Copyright (C) 2009 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2009 - 2010 Project Dark-iCE <http://projectdarkice.clanice.com/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -20,7 +20,7 @@ SD%Complete: 100
 SDComment: Teleporter
 SDCategory: NPC
 SDAuthor: Nicolai Dutka @ <http://nicolaidutka.archongames.com>
-SDModifier: Darkiss @ Hellscream Network <http://www.hellscreamwow.com/>
+SDModifier: Darkiss @ Hellscream Network <http://www.hellscream-wow.com/>
 EndScriptData */
 
 #include "precompiled.h"

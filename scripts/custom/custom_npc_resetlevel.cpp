@@ -1,4 +1,4 @@
-/* Copyright (C) 2009 - 2010 Hellscream Network <http://www.hellscreamwow.com/>
+/* Copyright (C) 2009 - 2010 Project Dark-iCE <http://projectdarkice.clanice.com/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -19,18 +19,18 @@ SDName: custom_npc_resetlevel
 SD%Complete: 100
 SDComment: Level Reseter with rewards.
 SDCategory: NPC
-SDAuthor: Darkiss @ Hellscream Network <http://www.hellscreamwow.com/>
+SDAuthor: Darkiss @ Hellscream Network <http://www.hellscream-wow.com/>
 EndScriptData */
 
 #include "precompiled.h"
 #include "../../../../shared/Config/Config.h"
-#include "../../hn_config.h"
+#include "../../darkice_config.h"
 
 bool GossipHello_custom_npc_resetlevel(Player* pPlayer, Creature* pCreature)
 {
-	Config HNConfig;
-	if(!HNConfig.SetSource(_HELLSCREAM_CONFIG,true))
-		error_log("HN: Unable to open configuration file");
+	Config DARKICEConfig;
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+		error_log("DARKICE: Unable to open configuration file");
 
     pPlayer->ADD_GOSSIP_ITEM(0, "Do you want to reset your character ?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
     pPlayer->ADD_GOSSIP_ITEM(0, "You're not interested.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
@@ -41,9 +41,9 @@ bool GossipHello_custom_npc_resetlevel(Player* pPlayer, Creature* pCreature)
 
 bool GossipSelect_custom_npc_resetlevel(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    Config HNConfig;
-	if(!HNConfig.SetSource(_HELLSCREAM_CONFIG,true))
-		error_log("HN: Unable to open configuration file");
+    Config DARKICEConfig;
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+		error_log("DARKICE: Unable to open configuration file");
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF+2)
     {
@@ -53,18 +53,18 @@ bool GossipSelect_custom_npc_resetlevel(Player* pPlayer, Creature* pCreature, ui
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF+1)
 	{
-		if (pPlayer->getLevel() == (HNConfig.GetFloatDefault("ResetMaster.ResetMinimumLevel",0)))
+		if (pPlayer->getLevel() == (DARKICEConfig.GetFloatDefault("ResetMaster.ResetMinimumLevel",0)))
 		{
-        	Config HNConfig;
-        	if(!HNConfig.SetSource(_HELLSCREAM_CONFIG,true))
-       		error_log("HN: Unable to open configuration file");
+        	Config DARKICEConfig;
+        	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+       		error_log("DARKICE: Unable to open configuration file");
 
 			pCreature->MonsterWhisper("You have been reset!", pPlayer->GetGUID());
 			pPlayer->CLOSE_GOSSIP_MENU();
-			pPlayer->ModifyMoney(+(HNConfig.GetFloatDefault("ResetMaster.ResetAddMoney",0)));
-			pPlayer->SetLevel((HNConfig.GetFloatDefault("ResetMaster.LevelAfterReset",0)));
+			pPlayer->ModifyMoney(+(DARKICEConfig.GetFloatDefault("ResetMaster.ResetAddMoney",0)));
+			pPlayer->SetLevel((DARKICEConfig.GetFloatDefault("ResetMaster.LevelAfterReset",0)));
 		}
-		if (pPlayer->getLevel() < (HNConfig.GetFloatDefault("ResetMaster.ResetMinimumLevel",0)))
+		if (pPlayer->getLevel() < (DARKICEConfig.GetFloatDefault("ResetMaster.ResetMinimumLevel",0)))
 		{
 			pCreature->MonsterWhisper("Your level is too low or too high to reset!", pPlayer->GetGUID());
 			pPlayer->CLOSE_GOSSIP_MENU();

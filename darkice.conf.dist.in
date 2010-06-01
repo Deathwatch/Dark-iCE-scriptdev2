@@ -1,9 +1,9 @@
 ################################################################################################
-# Hellscream Configuration file
+# Project Dark-iCE Configuration file
 # This file must be placed within the directory which holds mangosd.conf and realmd.conf
 # or the scripts will not work as they should.
 ################################################################################################
-ConfVersion=2010050701
+ConfVersion=2010060101
 
 ################################################################################################
 # Info:

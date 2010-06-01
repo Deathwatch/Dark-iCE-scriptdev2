@@ -43,7 +43,7 @@ enum
 
     NPC_MURADIN                 = 36948,
 
-    NPC_TIRION                  = 38995,
+    
 
     NPC_STINKY                  = 37025,
     NPC_PRECIOUS                = 37217,

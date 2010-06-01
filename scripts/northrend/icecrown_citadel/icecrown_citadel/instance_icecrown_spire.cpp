@@ -547,10 +547,6 @@ struct MANGOS_DLL_DECL instance_icecrown_spire : public ScriptedInstance
              case TYPE_EVENT_TIMER:   return m_auiEventTimer;
              case TYPE_EVENT_NPC:     switch (m_auiEvent) 
                                          {
-                                          case 1:
-                                                 return NPC_TIRION;
-                                                 break;
-
                                           case 2:
                                                  return NPC_LICH_KING;
                                                  break;

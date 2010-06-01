@@ -1,4 +1,4 @@
-/* Copyright (C) 2009 - 2010 Hellscream Network <http://www.hellscreamwow.com/>
+/* Copyright (C) 2009 - 2010 Project Dark-iCE <http://projectdarkice.clanice.com/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -19,21 +19,21 @@ SDName: custom_npc_professionmaster
 SD%Complete: 100
 SDComment: Profession Master. Allows profession skills increasement.
 SDCategory: NPC
-SDAuthor: Darkiss @ Hellscream Network <http://www.hellscreamwow.com/>
+SDAuthor: Darkiss @ Hellscream Network <http://www.hellscream-wow.com/>
 EndScriptData */
 
 #include "precompiled.h"
 #include "../../../../shared/Config/Config.h"
-#include "../../hn_config.h"
+#include "../../darkice_config.h"
 
 bool GossipHello_custom_npc_professionmaster(Player* pPlayer, Creature* pCreature)
 {
-	Config HNConfig;
-	if(!HNConfig.SetSource(_HELLSCREAM_CONFIG,true))
-		error_log("HN: Unable to open configuration file");
+	Config DARKICEConfig;
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+		error_log("DARKICE: Unable to open configuration file");
 
-	bool ProfessionsEnabled = HNConfig.GetBoolDefault("ProfessionMaster.ProfessionsEnabled", true);
-	bool SecondarySkillsEnabled = HNConfig.GetBoolDefault("ProfessionMaster.SecondarySkillsEnabled", true);
+	bool ProfessionsEnabled = DARKICEConfig.GetBoolDefault("ProfessionMaster.ProfessionsEnabled", true);
+	bool SecondarySkillsEnabled = DARKICEConfig.GetBoolDefault("ProfessionMaster.SecondarySkillsEnabled", true);
 
     if (pPlayer->GetTeam() == ALLIANCE)
 	{
@@ -66,15 +66,15 @@ if (pPlayer->isInCombat())
 	return;
 }
 
-	Config HNConfig;
-	if(!HNConfig.SetSource(_HELLSCREAM_CONFIG,true))
-		error_log("HN: Unable to open configuration file");
+	Config DARKICEConfig;
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+		error_log("DARKICE: Unable to open configuration file");
 
-	bool ProfessionsEnabled = HNConfig.GetBoolDefault("ProfessionMaster.ProfessionsEnabled", true);
-	bool SecondarySkillsEnabled = HNConfig.GetBoolDefault("ProfessionMaster.SecondarySkillsEnabled", true);
+	bool ProfessionsEnabled = DARKICEConfig.GetBoolDefault("ProfessionMaster.ProfessionsEnabled", true);
+	bool SecondarySkillsEnabled = DARKICEConfig.GetBoolDefault("ProfessionMaster.SecondarySkillsEnabled", true);
 
 //Mony Check
-if (pPlayer->GetMoney() < (HNConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)))
+if (pPlayer->GetMoney() < (DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)))
 {
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->MonsterWhisper("You don't have enough money.", pPlayer->GetGUID());
@@ -141,8 +141,8 @@ case 1001: // Alchemy
 		return;
 	}
 
-	pPlayer->UpdateSkill(171,(HNConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
-	pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
+	pPlayer->UpdateSkill(171,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
+	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
 break;
 
@@ -154,8 +154,8 @@ case 1002: // Blacksmithing
 		return;
 	}
 
-	pPlayer->UpdateSkill(164,(HNConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
-	pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
+	pPlayer->UpdateSkill(164,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
+	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
 break;
 
@@ -167,8 +167,8 @@ case 1003: // Enchanting
 		return;
 	}
 
-	pPlayer->UpdateSkill(333,(HNConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
-	pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
+	pPlayer->UpdateSkill(333,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
+	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
 break;
 
@@ -180,8 +180,8 @@ case 1004: // Engineering
 		return;
 	}
 
-	pPlayer->UpdateSkill(202,(HNConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
-	pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
+	pPlayer->UpdateSkill(202,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
+	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
 break;
 
@@ -193,8 +193,8 @@ case 1005: // Herbalism
 		return;
 	}
 
-	pPlayer->UpdateSkill(182,(HNConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
-	pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
+	pPlayer->UpdateSkill(182,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
+	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
 break;
 
@@ -206,8 +206,8 @@ case 1006: // Inscription
 		return;
 	}
 
-	pPlayer->UpdateSkill(773,(HNConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
-	pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
+	pPlayer->UpdateSkill(773,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
+	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
 break;
 
@@ -219,8 +219,8 @@ case 1007: // Jewelcrafting
 		return;
 	}
 
-	pPlayer->UpdateSkill(755,(HNConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
-	pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
+	pPlayer->UpdateSkill(755,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
+	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
 break;
 
@@ -232,8 +232,8 @@ case 1008: // Leatherworking
 		return;
 	}
 
-	pPlayer->UpdateSkill(165,(HNConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
-	pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
+	pPlayer->UpdateSkill(165,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
+	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
 break;
 
@@ -245,8 +245,8 @@ case 1009: // Mining
 		return;
 	}
 
-	pPlayer->UpdateSkill(186,(HNConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
-	pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
+	pPlayer->UpdateSkill(186,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
+	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
 break;
 
@@ -258,8 +258,8 @@ case 1010: // Skinning
 		return;
 	}
 
-	pPlayer->UpdateSkill(393,(HNConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
-	pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
+	pPlayer->UpdateSkill(393,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
+	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
 break;
 
@@ -271,8 +271,8 @@ case 1011: // Tailoring
 		return;
 	}
 
-	pPlayer->UpdateSkill(197,(HNConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
-	pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
+	pPlayer->UpdateSkill(197,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
+	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
 break;
 
@@ -286,8 +286,8 @@ case 2001: // Cooking
 		return;
 	}
 
-	pPlayer->UpdateSkill(185,(HNConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
-	pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
+	pPlayer->UpdateSkill(185,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
+	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
 break;
 
@@ -299,8 +299,8 @@ case 2002: // First Aid
 		return;
 	}
 
-	pPlayer->UpdateSkill(129,(HNConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
-	pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
+	pPlayer->UpdateSkill(129,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
+	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
 break;
 
@@ -312,8 +312,8 @@ case 2003: // Fishing
 		return;
 	}
 
-	pPlayer->UpdateSkill(356,(HNConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
-	pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
+	pPlayer->UpdateSkill(356,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
+	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
 break;
 
@@ -325,8 +325,8 @@ case 2005: // Archaeology
 		return;
 	}
 
-	pPlayer->UpdateSkill(794,(HNConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
-	pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
+	pPlayer->UpdateSkill(794,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
+	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
 break;
 

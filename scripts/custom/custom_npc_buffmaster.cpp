@@ -1,4 +1,4 @@
-/* Copyright (C) 2009 - 2010 Hellscream Network <http://www.hellscreamwow.com/>
+/* Copyright (C) 2009 - 2010 Project Dark-iCE <http://projectdarkice.clanice.com/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -19,24 +19,24 @@ SDName: custom_npc_buffmaster
 SD%Complete: 100
 SDComment: Buff Master - Buffs characters with various buffs.
 SDCategory: NPC
-SDAuthor: Darkiss @ Hellscream Network <http://www.hellscreamwow.com/>
+SDAuthor: Darkiss @ Hellscream Network <http://www.hellscream-wow.com/>
 EndScriptData */
 
 #include "precompiled.h"
 #include "../../../../shared/Config/Config.h"
-#include "../../hn_config.h"
+#include "../../darkice_config.h"
 
 bool GossipHello_custom_npc_buffmaster(Player* pPlayer, Creature* pCreature)
 {
-    Config HNConfig;
-	if(!HNConfig.SetSource(_HELLSCREAM_CONFIG,true))
-		error_log("HN: Unable to open configuration file");
+    Config DARKICEConfig;
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+		error_log("DARKICE: Unable to open configuration file");
 
-	bool SmallBuffsEnabled = HNConfig.GetBoolDefault("BuffsMaster.SmallBuffsEnabled", true);
-	bool GreatBuffsEnabled = HNConfig.GetBoolDefault("BuffsMaster.GreatBuffsEnabled", true);
-	bool GameMasterBuffsEnabled = HNConfig.GetBoolDefault("BuffsMaster.GameMasterBuffsEnabled", true);
-	bool PlayerToolsEnabled = HNConfig.GetBoolDefault("BuffsMaster.PlayerToolsEnabled", true);
-	bool GoldSpellEnabled = HNConfig.GetBoolDefault("BuffsMaster.GoldSpellEnabled", false);
+	bool SmallBuffsEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.SmallBuffsEnabled", true);
+	bool GreatBuffsEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.GreatBuffsEnabled", true);
+	bool GameMasterBuffsEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.GameMasterBuffsEnabled", true);
+	bool PlayerToolsEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.PlayerToolsEnabled", true);
+	bool GoldSpellEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.GoldSpellEnabled", false);
 
     if (pPlayer->GetTeam() == ALLIANCE)
 	{
@@ -76,18 +76,18 @@ if (pPlayer->isInCombat())
 	return;
 }
 
-    Config HNConfig;
-	if(!HNConfig.SetSource(_HELLSCREAM_CONFIG,true))
-		error_log("HN: Unable to open configuration file");
+    Config DARKICEConfig;
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+		error_log("DARKICE: Unable to open configuration file");
 
-	bool SmallBuffsEnabled = HNConfig.GetBoolDefault("BuffsMaster.SmallBuffsEnabled", true);
-	bool GreatBuffsEnabled = HNConfig.GetBoolDefault("BuffsMaster.GreatBuffsEnabled", true);
-	bool GameMasterBuffsEnabled = HNConfig.GetBoolDefault("BuffsMaster.GameMasterBuffsEnabled", true);
-	bool PlayerToolsEnabled = HNConfig.GetBoolDefault("BuffsMaster.PlayerToolsEnabled", true);
-	bool GoldSpellEnabled = HNConfig.GetBoolDefault("BuffsMaster.GoldSpellEnabled", false);
+	bool SmallBuffsEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.SmallBuffsEnabled", true);
+	bool GreatBuffsEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.GreatBuffsEnabled", true);
+	bool GameMasterBuffsEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.GameMasterBuffsEnabled", true);
+	bool PlayerToolsEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.PlayerToolsEnabled", true);
+	bool GoldSpellEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.GoldSpellEnabled", false);
 
 //Mony Check
-if (pPlayer->GetMoney() < (HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)))
+if (pPlayer->GetMoney() < (DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)))
 {
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->MonsterWhisper("You don't have enough money.", pPlayer->GetGUID());
@@ -186,67 +186,67 @@ break;
 case 1001: // Buff me Mark of the Wild
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,48469,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 1010: // Buff me Amplify Magic
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,43017,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 1015: // Buff me Arcane Intellect
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,42995,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 1020: // Buff me Dalaran Intellect
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,61024,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 1025: // Buff me Dampen Magic
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,43015,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 1030: // Buff me Blessing of Kings
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,20217,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 1035: // Buff me Blessing of Might
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,48932,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 1040: // Buff me Blessing of Wisdom
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,48936,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 1045: // Buff me Divine Spirit
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,48073,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 1050: // Buff me Power Word: Fortitude
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,48161,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 1055: // Buff me Shadow Protection
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,48169,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 //////////////////////////////////////////////////Great Buff///////////////////////////////////////////////////////////////
@@ -254,61 +254,61 @@ break;
 case 2001: // Buff me Gift of the Wild
     pPlayer->CLOSE_GOSSIP_MENU();
     pPlayer->CastSpell(pPlayer,48470,true);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 2005: // Buff me Arcane Brilliance
     pPlayer->CLOSE_GOSSIP_MENU();
     pPlayer->CastSpell(pPlayer,43002,true);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 2010: // Buff me Dalaran Brilliance
     pPlayer->CLOSE_GOSSIP_MENU();
     pPlayer->CastSpell(pPlayer,61316,true);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 2015: // Buff me Greater Blessing of Kings
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,25898,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 2020: // Buff me Greater Blessing of Might
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,48934,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 2025: // Buff me Greater Blessing of Sanctuary
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,25899,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 2030: // Buff me Greater Blessing of Wisdom
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,48938,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 2035: // Buff me Prayer of Fortitude
     pPlayer->CLOSE_GOSSIP_MENU();
     pPlayer->CastSpell(pPlayer,48162,true);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 2040: // Buff me Prayer of Shadow Protection
     pPlayer->CLOSE_GOSSIP_MENU();
     pPlayer->CastSpell(pPlayer,48170,true);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 2045: // Buff me Prayer of Spirit
     pPlayer->CLOSE_GOSSIP_MENU();
     pPlayer->CastSpell(pPlayer,48074,true);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 //////////////////////////////////////////////////GM Buff///////////////////////////////////////////////////////////////
@@ -316,55 +316,55 @@ break;
 case 3001: // Buff me Agamaggan's Agility
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,17013,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 3005: // Buff me Agamaggan's Strength
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,16612,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 3010: // Buff me Armor Magic
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,58453,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 3015: // Buff me Armor Penetration
     pPlayer->CLOSE_GOSSIP_MENU();
     pPlayer->CastSpell(pPlayer,34106,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 3020: // Buff me Increased Stamina
     pPlayer->CLOSE_GOSSIP_MENU();
     pPlayer->CastSpell(pPlayer,25661,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 3025: // Buff me Razorhide
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,16610,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 3030: // Buff me Rising Spirit
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,10767,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 3035: // Buff me Spirit of the Wind
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,16618,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 3040: // Buff me Wisdom of Agamaggan
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,7764,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 //////////////////////////////////////////////////Player Tools///////////////////////////////////////////////////////////////
@@ -377,31 +377,31 @@ break;
 case 4005://Give me Soul Shards
     pPlayer->CLOSE_GOSSIP_MENU();
     pPlayer->CastSpell(pPlayer,24827,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 4010: // Heal me please
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->CastSpell(pPlayer,38588,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 4015: // Heal me and party members Please
     pPlayer->CLOSE_GOSSIP_MENU();
     pPlayer->CastSpell(pPlayer,53251,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 4020: // Conjure Refreshment
     pPlayer->CLOSE_GOSSIP_MENU();
     pPlayer->CastSpell(pPlayer,42956,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
 case 4025: // Conjure Mana Gem
     pPlayer->CLOSE_GOSSIP_MENU();
     pPlayer->CastSpell(pPlayer,42985,false);
-    pPlayer->ModifyMoney(-(HNConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
+    pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)));
 break;
 
  pPlayer->CLOSE_GOSSIP_MENU();

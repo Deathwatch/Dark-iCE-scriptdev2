@@ -1,4 +1,4 @@
-/* Copyright (C) 2009 - 2010 Hellscream Network <http://www.hellscreamwow.com/>
+/* Copyright (C) 2009 - 2010 Project Dark-iCE <http://projectdarkice.clanice.com/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -19,12 +19,12 @@ SDName: custom_npc_spelltrainer
 SD%Complete: 100
 SDComment: Spell Trainer - One-Click spell teacher.
 SDCategory: NPC
-SDAuthor: Darkiss @ Hellscream Network <http://www.hellscreamwow.com/>
+SDAuthor: Darkiss @ Hellscream Network <http://www.hellscream-wow.com/>
 EndScriptData */
 
 #include "precompiled.h"
 #include "../../../../shared/Config/Config.h"
-#include "../../hn_config.h"
+#include "../../darkice_config.h"
 
 #define MSG_COMBAT				"You are in combat!"
 #define MSG_LEARNED_SPELL	    "Congratulations, you've learned all of your class spells!"
@@ -45,14 +45,14 @@ EndScriptData */
 
 bool GossipHello_custom_npc_spellmaster(Player* pPlayer, Creature* pCreature)
 {
-    Config HNConfig;
-	if(!HNConfig.SetSource(_HELLSCREAM_CONFIG,true))
-		error_log("HN: Unable to open configuration file");
+    Config DARKICEConfig;
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+		error_log("DARKICE: Unable to open configuration file");
 		
-	bool MaxOutWeaponSkills = HNConfig.GetBoolDefault("Spellmaster.MaxOutWeaponSkills", true);
-	bool MaxOutRidingSkills = HNConfig.GetBoolDefault("Spellmaster.MaxOutRidingSkills", true);
+	bool MaxOutWeaponSkills = DARKICEConfig.GetBoolDefault("Spellmaster.MaxOutWeaponSkills", true);
+	bool MaxOutRidingSkills = DARKICEConfig.GetBoolDefault("Spellmaster.MaxOutRidingSkills", true);
 
-	if(pPlayer->getLevel() > (HNConfig.GetFloatDefault("SpellMaster.MinimumLevel",0)))
+	if(pPlayer->getLevel() > (DARKICEConfig.GetFloatDefault("SpellMaster.MinimumLevel",0)))
 	{
 		// Warrior Spells
 		if(pPlayer->getClass() == CLASS_WARRIOR)

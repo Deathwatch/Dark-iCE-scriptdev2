@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009-2010 Hellscream Network <http://www.hellscreamwow.com/>
+ * Copyright (C) 2009-2010 Project Dark-iCE <http://projectdarkice.clanice.com/>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,15 +16,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef HN_CONFIG_H
-#define HN_CONFIG_H
+#ifndef DARKICE_CONFIG_H
+#define DARKICE_CONFIG_H
 
 #include "Platform/CompilerDefs.h"
 #include "revision.h"
 
 // Format is YYYYMMDDRR where RR is the change in the conf file
 // for that day.
-#define HN_CONF_VERSION    2010050701
+#define DARKICE_CONF_VERSION    2010060101
 
 #ifdef WIN32
   #define MANGOS_DLL_EXPORT extern "C" __declspec(dllexport)
@@ -49,10 +49,10 @@
   #else
     #define _FULLVERSION _VERSION " (Win32)"
   #endif
-  #define _HELLSCREAM_CONFIG  "hellscream.conf"
+  #define _DARKICE_CONFIG  "darkice.conf"
 #else
   #define _FULLVERSION _VERSION " (Unix)"
-  #define _HELLSCREAM_CONFIG  SYSCONFDIR"hellscream.conf"
+  #define _DARKICE_CONFIG  SYSCONFDIR "darkice.conf"
 #endif
 
 #endif

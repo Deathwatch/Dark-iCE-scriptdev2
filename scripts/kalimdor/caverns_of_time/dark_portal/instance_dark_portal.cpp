@@ -93,7 +93,7 @@ struct MANGOS_DLL_DECL instance_dark_portal : public ScriptedInstance
         DoUpdateWorldState(WORLD_STATE_BM_RIFT,0);
     }
 
-    bool IsEncounterInProgress()const
+    bool IsEncounterInProgress()
     {
         if (GetData(TYPE_MEDIVH) == IN_PROGRESS)
             return true;

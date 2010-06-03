@@ -377,6 +377,7 @@ extern void AddSC_boss_mimiron();
 extern void AddSC_boss_razorscale();
 extern void AddSC_boss_thorim();
 extern void AddSC_boss_xt002();
+extern void AddSC_boss_vezax();
 extern void AddSC_boss_yogg_saron();
 extern void AddSC_instance_ulduar();
 extern void AddSC_ulduar_teleport();
@@ -881,6 +882,7 @@ void AddScripts()
     AddSC_boss_mimiron();
     AddSC_boss_razorscale();
     AddSC_boss_thorim();
+	AddSC_boss_vezax();
     AddSC_boss_xt002();
     AddSC_boss_yogg_saron();
     AddSC_instance_ulduar();

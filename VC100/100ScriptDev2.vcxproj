@@ -399,6 +399,7 @@
     <ClCompile Include="..\scripts\eastern_kingdoms\zulgurub\boss_venoxis.cpp" />
     <ClCompile Include="..\scripts\eastern_kingdoms\zulgurub\boss_wushoolay.cpp" />
     <ClCompile Include="..\scripts\eastern_kingdoms\zulgurub\instance_zulgurub.cpp" />
+    <ClCompile Include="..\scripts\eastern_kingdoms\swamp_of_sorrows.cpp" />
     <ClCompile Include="..\scripts\examples\example_creature.cpp" />
     <ClCompile Include="..\scripts\examples\example_escort.cpp" />
     <ClCompile Include="..\scripts\examples\example_gossip_codebox.cpp" />

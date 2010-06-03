@@ -1346,7 +1346,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\scripts\kalimdor\felwood.cpp"
+					RelativePath="..\scripts\kalimdor\felwood.cpp"					
 					>
 				</File>
 				<File
@@ -1355,6 +1355,10 @@
 				</File>
 				<File
 					RelativePath="..\scripts\kalimdor\moonglade.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\scripts\kalimdor\dutor.cpp"
 					>
 				</File>
 				<File

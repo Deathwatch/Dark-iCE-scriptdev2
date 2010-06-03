@@ -54,7 +54,7 @@ bool GossipHello_ulduar_teleporter(Player *player, Creature *creature)
     {
     player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Teleport to the Shattered Walkway", GOSSIP_SENDER_MAIN, WALKWAY);
     };
-    if(pInstance->GetData(TYPE_MIMIRON_TP) == IN_PROGRESS)
+    if(pInstance->GetData(TYPE_KOLOGARN) == IN_PROGRESS)
     {
     player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Teleport to the Spark of Imagination", GOSSIP_SENDER_MAIN, SPARK);
     };

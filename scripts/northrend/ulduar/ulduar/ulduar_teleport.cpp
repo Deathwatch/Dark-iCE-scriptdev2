@@ -54,10 +54,6 @@ bool GossipHello_ulduar_teleporter(Player *player, Creature *creature)
     {
     player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Teleport to the Shattered Walkway", GOSSIP_SENDER_MAIN, WALKWAY);
     };
-    if(pInstance->GetData(TYPE_AURIAYA) == DONE)
-    {
-    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Teleport to the Conservatory of Life", GOSSIP_SENDER_MAIN, CONSERVATORY);
-    };
     if(pInstance->GetData(TYPE_MIMIRON_TP) == IN_PROGRESS)
     {
     player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Teleport to the Spark of Imagination", GOSSIP_SENDER_MAIN, SPARK);
@@ -94,9 +90,6 @@ bool GossipSelect_ulduar_teleporter(Player *player, Creature *creature, uint32 s
         player->CLOSE_GOSSIP_MENU(); break;
     case WALKWAY:
         player->TeleportTo(603, 1859.45f, -24.1f, 448.9f, 0); 
-        player->CLOSE_GOSSIP_MENU(); break;
-    case CONSERVATORY:
-        player->TeleportTo(603, 2086.27f, -24.3134f, 421.239f, 0);
         player->CLOSE_GOSSIP_MENU(); break;
     case SPARK:
         player->TeleportTo(603, 2536.87f, 2569.15f, 412.304f, 0);

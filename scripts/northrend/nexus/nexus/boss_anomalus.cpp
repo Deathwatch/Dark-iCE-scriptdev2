@@ -60,11 +60,11 @@ const float spawnRiftPos[6][4] =
 {
     {651.117859f, -297.122864f, -9.365547f, 2.490881f},
 	{639.771423f, -313.002563f, -9.475847f, 1.706268f},
-	{626.450684f, -305.178284f, -9.443430f, 0.944431f},
-	{620.875549f, -281.674042f, -9.030414f, 5.905006f},
+    {626.450684f, -305.178284f, -9.443430f, 0.944431f},
+    {620.875549f, -281.674042f, -9.030414f, 5.905006f},
 	{634.398743f, -266.216400f, -8.448195f, 4.909906f},
-	{652.564819f, -273.689362f, -8.751000f, 3.887317f}
-};	
+    {652.564819f, -273.689362f, -8.751000f, 3.887317f}
+};
 
 /*######
 ## boss_anomalus
@@ -83,18 +83,22 @@ struct MANGOS_DLL_DECL boss_anomalusAI : public ScriptedAI
     bool m_bIsRegularMode;
 
     bool   m_bChaoticRift;
-	bool   m_briftActive;
+    bool   m_briftActive;
     uint32 m_uiSparkTimer;
     uint32 m_uiCreateRiftTimer;
     uint64 m_uiChaoticRiftGUID;
 
+    std::list<uint64> m_uiRiftGUIDList;
+
     void Reset()
     {
         m_bChaoticRift = false;
-		m_briftActive = false;
+        m_briftActive = false;
         m_uiSparkTimer = 5000;
         m_uiCreateRiftTimer = 25000;
         m_uiChaoticRiftGUID = 0;
+
+        DespawnRifts();
     }
 
     void Aggro(Unit* pWho)
@@ -108,6 +112,8 @@ struct MANGOS_DLL_DECL boss_anomalusAI : public ScriptedAI
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_ANOMALUS, DONE);
+
+        DespawnRifts();
     }
 
     void KilledUnit(Unit* pVictim)
@@ -135,7 +141,7 @@ struct MANGOS_DLL_DECL boss_anomalusAI : public ScriptedAI
                 m_creature->RemoveAurasDueToSpell(SPELL_RIFT_SHIELD);
 
             m_uiChaoticRiftGUID = 0;
-			m_briftActive = false;
+            m_briftActive = false;
         }
     }
 
@@ -143,10 +149,30 @@ struct MANGOS_DLL_DECL boss_anomalusAI : public ScriptedAI
     {
         int randPos = urand(0, 5);
 
-        Creature* pRift = m_creature->SummonCreature(NPC_CHAOTIC_RIFT, spawnRiftPos[randPos][0], spawnRiftPos[randPos][1], spawnRiftPos[randPos][2], spawnRiftPos[randPos][3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000);
-        DoScriptText(EMOTE_OPEN_RIFT, m_creature);
+        Creature* pRift = NULL;
+
+        if (pRift = m_creature->SummonCreature(NPC_CHAOTIC_RIFT, spawnRiftPos[randPos][0], spawnRiftPos[randPos][1], spawnRiftPos[randPos][2], spawnRiftPos[randPos][3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000))
+        {
+            DoScriptText(EMOTE_OPEN_RIFT, m_creature);
+            m_uiRiftGUIDList.push_back(pRift->GetGUID());
+        }
 
         return pRift?pRift->GetGUID():0;
+    }
+
+    void DespawnRifts()
+    {
+        if (!m_uiRiftGUIDList.empty() && m_pInstance)
+        {
+            for(std::list<uint64>::iterator itr = m_uiRiftGUIDList.begin(); itr != m_uiRiftGUIDList.end(); ++itr)
+            {
+                if (Creature* pRift = m_pInstance->instance->GetCreature(*itr))
+                {
+                    if (pRift->isAlive())
+                        pRift->ForcedDespawn();
+                }
+            }
+        }
     }
 
     void UpdateAI(const uint32 uiDiff)
@@ -165,19 +191,20 @@ struct MANGOS_DLL_DECL boss_anomalusAI : public ScriptedAI
             m_bChaoticRift = true;
             return;
         }
-
-         if (!m_briftActive)
+        
+        if (!m_briftActive)
         {
             if (m_uiCreateRiftTimer < uiDiff)
             {
-			    CreateRiftAtRandomPoint();
-				if (!urand(0, 1))
-				    DoScriptText(SAY_SHIELD, m_creature);
-					
-				DoScriptText(EMOTE_SHIELD, m_creature);
-				DoCastSpellIfCan(m_creature, SPELL_RIFT_SHIELD);
-				m_uiCreateRiftTimer = 25000;
-			}else m_uiCreateRiftTimer -= uiDiff;		
+                CreateRiftAtRandomPoint();
+                if (!urand(0, 1))
+                    DoScriptText(SAY_SHIELD, m_creature);
+
+                DoScriptText(EMOTE_SHIELD, m_creature);
+                DoCastSpellIfCan(m_creature, SPELL_RIFT_SHIELD);
+                m_briftActive = true;
+                m_uiCreateRiftTimer = 25000;
+            }else m_uiCreateRiftTimer -= uiDiff;
         }
 
         if (m_uiSparkTimer < uiDiff)

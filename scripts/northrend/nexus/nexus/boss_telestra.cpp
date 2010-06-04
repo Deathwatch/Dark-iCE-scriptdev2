@@ -101,8 +101,12 @@ struct MANGOS_DLL_DECL boss_telestraAI : public ScriptedAI
         m_uiGravityWellTimer = urand(15000, 25000);
         SetEquipmentSlots(true);
         m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+		}
+		
+		void JustReachedHome()
+		{
         if (m_pInstance)
-            m_pInstance->SetData(TYPE_TELESTRA, NOT_STARTED);
+            m_pInstance->SetData(TYPE_TELESTRA, FAIL);
     }
 
     void AttackStart(Unit* pWho)

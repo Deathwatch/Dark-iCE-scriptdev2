@@ -1864,6 +1864,10 @@
     <ClCompile Include="..\scripts\northrend\ruby_sanctum\instance_ruby_sanctum.cpp">
       <Filter>scripts\northrend\ruby_sanctum</Filter>
     </ClCompile>
+    <ClCompile Include="..\scripts\eastern_kingdoms\swamp_of_sorrows.cpp" />
+    <ClCompile Include="..\scripts\kalimdor\durotar.cpp">
+      <Filter>scripts\kalimdor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\base\escort_ai.h">

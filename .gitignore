@@ -70,3 +70,4 @@ patches-*
 bin/*
 *.ncb
 *.suo
+*.sdf

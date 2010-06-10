@@ -222,6 +222,7 @@ scripts/eastern_kingdoms/sunken_temple/sunken_temple.cpp \
 scripts/eastern_kingdoms/sunwell_plateau/boss_brutallus.cpp \
 scripts/eastern_kingdoms/sunwell_plateau/boss_kalecgos.cpp \
 scripts/eastern_kingdoms/sunwell_plateau/boss_felmyst.cpp \
+scripts/eastern_kingdoms/sunwell_plateau/boss_kiljaeden.cpp \
 scripts/eastern_kingdoms/sunwell_plateau/boss_eredar_twins.cpp \
 scripts/eastern_kingdoms/sunwell_plateau/boss_muru_entropius.cpp \
 scripts/eastern_kingdoms/sunwell_plateau/instance_sunwell_plateau.cpp \
@@ -267,6 +268,7 @@ scripts/kalimdor/bloodmyst_isle.cpp \
 scripts/kalimdor/boss_azuregos.cpp \
 scripts/kalimdor/darkshore.cpp \
 scripts/kalimdor/desolace.cpp \
+scripts/kalimdor/durotar.cpp \
 scripts/kalimdor/dustwallow_marsh.cpp \
 scripts/kalimdor/felwood.cpp \
 scripts/kalimdor/feralas.cpp \
@@ -284,6 +286,10 @@ scripts/kalimdor/ungoro_crater.cpp \
 scripts/kalimdor/winterspring.cpp \
 scripts/kalimdor/blackfathom_deeps/blackfathom_deeps.h \
 scripts/kalimdor/blackfathom_deeps/instance_blackfathom_deeps.cpp \
+scripts/kalimdor/caverns_of_time/culling_of_stratholme/boss_lord_epoch.cpp \
+scripts/kalimdor/caverns_of_time/culling_of_stratholme/boss_malganis.cpp \
+scripts/kalimdor/caverns_of_time/culling_of_stratholme/boss_meathook.cpp \
+scripts/kalimdor/caverns_of_time/culling_of_stratholme/boss_salramm.cpp \
 scripts/kalimdor/caverns_of_time/culling_of_stratholme/culling_of_stratholme.cpp \
 scripts/kalimdor/caverns_of_time/culling_of_stratholme/def_culling_of_stratholme.h \
 scripts/kalimdor/caverns_of_time/culling_of_stratholme/instance_culling_of_stratholme.cpp \
@@ -373,6 +379,7 @@ scripts/northrend/crusaders_coliseum/trial_of_the_crusader/boss_jaraxxus.cpp \
 scripts/northrend/crusaders_coliseum/trial_of_the_crusader/boss_northrend_beasts.cpp \
 scripts/northrend/crusaders_coliseum/trial_of_the_crusader/boss_twin_valkyr.cpp \
 "scripts/northrend/crusaders_coliseum/trial_of_the_crusader/gormok_the_impaler(needs to be writen into this).cpp" \
+scripts/northrend/crusaders_coliseum/trial_of_the_crusader/instance_trial_of_the_crusader.h \
 scripts/northrend/crusaders_coliseum/trial_of_the_crusader/instance_trial_of_the_crusader.cpp \
 "scripts/northrend/crusaders_coliseum/trial_of_the_crusader/the_two_jormungar(need rewritten into this).cpp" \
 scripts/northrend/crusaders_coliseum/trial_of_the_crusader/trial_of_the_crusader.cpp \
@@ -436,6 +443,9 @@ scripts/northrend/naxxramas/boss_sapphiron.cpp \
 scripts/northrend/naxxramas/boss_thaddius.cpp \
 scripts/northrend/naxxramas/naxxramas.h \
 scripts/northrend/naxxramas/instance_naxxramas.cpp \
+scripts/northrend/nexus/eye_of_eternity/boss_malygos.cpp \
+scripts/northrend/nexus/eye_of_eternity/eye_of_eternity.h \
+scripts/northrend/nexus/eye_of_eternity/instance_eye_of_eternity.cpp \
 scripts/northrend/nexus/nexus/boss_anomalus.cpp \
 scripts/northrend/nexus/nexus/boss_keristrasza.cpp \
 scripts/northrend/nexus/nexus/boss_ormorok.cpp \

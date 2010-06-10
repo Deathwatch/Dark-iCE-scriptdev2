@@ -712,7 +712,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
     void DespawnCreatures(uint32 entry, float distance, bool discs = false)
     {
         //Because vehicles cant be found by GetCreatureListWithEntryInGrid()
-/*        if(discs)
+        if(discs)
         {
             if(m_lDiscGUIDList.empty())
                 return;
@@ -728,7 +728,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
             m_lDiscGUIDList.clear();
             return;
         }
-*/
+		
         std::list<Creature*> m_pCreatures;
         GetCreatureListWithEntryInGrid(m_pCreatures, m_creature, entry, distance);
 

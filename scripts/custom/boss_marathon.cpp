@@ -1800,12 +1800,12 @@ struct MANGOS_DLL_DECL boss_marathon_finalAI: public ScriptedAI
 						m_creature->GetMotionMaster()->MoveIdle();
 						m_creature->MonsterYell("Smazte se v pekle!",LANG_UNIVERSAL,0);
 						++shadowvlak_counter;
-						DoCast(m_creature,52535,true);
+						DoCastSpellIfCan(m_creature,52535,true);
 					}
 					if(shadowvlak_counter > 0 && shadowvlak_counter < 28)
 					{
 						++shadowvlak_counter;
-						m_creature->CastSpell(SelectUnit(SELECT_TARGET_RANDOM,0),38628,true);
+						m_creature->CastSpell(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0),38628,true);
 						spell1_timer = 100;
 					}
 					if(shadowvlak_counter == 28)
@@ -1927,7 +1927,7 @@ struct MANGOS_DLL_DECL boss_marathon_finalAI: public ScriptedAI
 			{
 				if(spell1_timer <= diff)
 				{
-					Unit* randomunit = SelectUnit(SELECT_TARGET_RANDOM,0);
+					Unit* randomunit = m_creature(SELECT_TARGET_RANDOM,0);
 					if(randomunit)
 					{
 						float x,y,z;
@@ -1948,7 +1948,7 @@ struct MANGOS_DLL_DECL boss_marathon_finalAI: public ScriptedAI
 				{
 					if(!m_creature->IsNonMeleeSpellCasted(false))
 					{
-						m_creature->CastSpell(SelectUnit(SELECT_TARGET_RANDOM,0),64016,false);
+						m_creature->CastSpell(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0),64016,false);
 						spell3_timer = 10000;
 					}
 				} else spell3_timer -= diff;
@@ -1957,7 +1957,7 @@ struct MANGOS_DLL_DECL boss_marathon_finalAI: public ScriptedAI
 				{
 					if(!m_creature->IsNonMeleeSpellCasted(false))
 					{
-						m_creature->CastSpell(SelectUnit(SELECT_TARGET_RANDOM,0),41168,false);
+						m_creature->CastSpell(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0),41168,false);
 						silence_timer = 30000;
 					}
 				} else silence_timer -= diff;
@@ -2115,13 +2115,13 @@ struct MANGOS_DLL_DECL npc_final_channelerAI: public ScriptedAI
 
 		if(drain_timer < diff)
 		{
-			m_creature->CastSpell(SelectUnit(SELECT_TARGET_RANDOM,0),44294,false);
+			m_creature->CastSpell(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0),44294,false);
 			drain_timer = 50000;
 		} else drain_timer -= diff;
 
 		if(drain_timer < diff+40000 && drain_timer > 30000)
 		{
-			m_creature->CastSpell(SelectUnit(SELECT_TARGET_RANDOM,0),46153,false);
+			m_creature->CastSpell(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0),46153,false);
 			drain_timer = 5000;
 		}
 
@@ -2281,15 +2281,15 @@ struct MANGOS_DLL_DECL npc_final_skeletonAI: public ScriptedAI
 			switch(m_creature->GetEntry())
 			{
 			case 99941:
-				m_creature->CastSpell(SelectUnit(SELECT_TARGET_RANDOM,0),28333,false);
+				m_creature->CastSpell(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0),28333,false);
 				cast_timer = 10000;
 				break;
 			case 99942:
-				m_creature->CastSpell(SelectUnit(SELECT_TARGET_RANDOM,0),34356,false);
+				m_creature->CastSpell(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0),34356,false);
 				cast_timer = 10000;
 				break;
 			case 99943:
-				m_creature->CastSpell(SelectUnit(SELECT_TARGET_RANDOM,0),46887,false);
+				m_creature->CastSpell(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0),46887,false);
 				cast_timer = 5000;
 				break;
 			}
@@ -2407,7 +2407,7 @@ struct MANGOS_DLL_DECL boss_bahamut_evilAI: public ScriptedAI
 
 		if(volley_timer < diff)
 		{
-			m_creature->CastSpell(SelectUnit(SELECT_TARGET_RANDOM,0),25586,false);
+			m_creature->CastSpell(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0),25586,false);
 			volley_timer = 3000;
 		} else volley_timer -= diff;
 

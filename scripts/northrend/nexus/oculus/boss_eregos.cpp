@@ -103,13 +103,13 @@ struct MANGOS_DLL_DECL boss_eregosAI: public ScriptedAI
 
 		if(ArcaneBarrageTimer <= diff)
 		{
-			if(DoCastSpellIfCan(SelectUnit(SELECT_TARGET_RANDOM,0),m_bIsRegularMode?SPELL_ARCANE_BARRAGE:SPELL_ARCANE_BARRAGE_H) == CAST_OK)
+			if(DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0),m_bIsRegularMode?SPELL_ARCANE_BARRAGE:SPELL_ARCANE_BARRAGE_H) == CAST_OK)
 				ArcaneBarrageTimer = urand(2000,3000);
 		} else ArcaneBarrageTimer -= diff;
 
 		if(ArcaneVolleyTimer <= diff)
 		{
-			if(DoCastSpellIfCan(SelectUnit(SELECT_TARGET_RANDOM,0),m_bIsRegularMode?SPELL_ARCANE_VOLLEY:SPELL_ARCANE_VOLLEY_H) == CAST_OK)
+			if(DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0),m_bIsRegularMode?SPELL_ARCANE_VOLLEY:SPELL_ARCANE_VOLLEY_H) == CAST_OK)
 				ArcaneVolleyTimer = urand(5000,6000);
 		} else ArcaneVolleyTimer -= diff;
 

@@ -169,7 +169,7 @@ struct MANGOS_DLL_DECL vanocni_bossAI: public ScriptedAI
 		if(m_creature->GetHealth() < (m_creature->GetMaxHealth()/4)*3)
 		{
 			m_creature->InterruptNonMeleeSpells(false);
-			DoCast(m_creature,SPELL_ICE_NOVA_P2);
+			DoCastSpellIfCan(m_creature,SPELL_ICE_NOVA_P2);
 			specialrem = 6000;
 			special = true;
 			m_creature->MonsterYell("Santa Claus, Deda mraz, Jezisek.. co to znamena?",LANG_UNIVERSAL,NULL);
@@ -180,7 +180,7 @@ struct MANGOS_DLL_DECL vanocni_bossAI: public ScriptedAI
 		{
 			if(visual_apply <= diff)
 			{
-				DoCast(m_creature,SPELL_FROST_SPHERE);
+				DoCastSpellIfCan(m_creature,SPELL_FROST_SPHERE);
 				visual_apply = 0;
 			} else visual_apply -= diff;
 		}
@@ -223,7 +223,7 @@ struct MANGOS_DLL_DECL vanocni_bossAI: public ScriptedAI
 		{
 			if(!m_creature->IsNonMeleeSpellCasted(false))
 			{
-				DoCast(SelectUnit(SELECT_TARGET_RANDOM,0),SPELL_SNOWBLIND);
+				DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0),SPELL_SNOWBLIND);
 				snowblind_timer = urand(5000,8000);
 			}
 		} else snowblind_timer -= diff;
@@ -326,7 +326,7 @@ struct MANGOS_DLL_DECL vanocni_bossAI: public ScriptedAI
 					souls[i] = m_creature->SummonCreature(NPC_SOULIMAGE,0,0,0,0,TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT,40000);
 					if(souls[i])
 					{
-						souls[i]->AI()->AttackStart(SelectUnit(SELECT_TARGET_RANDOM,0));
+						souls[i]->AI()->AttackStart(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0));
 						souls[i]->CastSpell(souls[i],SPELL_MINION_AURA_VIS,false);
 					}
 				}

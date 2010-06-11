@@ -80,7 +80,7 @@ struct MANGOS_DLL_DECL boss_pvpAI : public ScriptedAI
 		if(m_uiSpellFelFireballTimer < uiDiff)
 		{
 			if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-				DoCast(target, SPELL_FELFIREBALL);
+				DoCastSpellIfCan(target, SPELL_FELFIREBALL);
 				
 				m_uiSpellFelFireballTimer = urand(10000, 12000);
 		}
@@ -89,7 +89,7 @@ struct MANGOS_DLL_DECL boss_pvpAI : public ScriptedAI
 
 		if(m_uiSpellFrostBurnTimer < uiDiff)
 		{
-			DoCast(m_creature->getVictim(), SPELL_FROSTBURN);
+			DoCastSpellIfCan(m_creature->getVictim(), SPELL_FROSTBURN);
 			
 			m_uiSpellFrostBurnTimer     = urand(28000, 30000);
 		}
@@ -100,7 +100,7 @@ struct MANGOS_DLL_DECL boss_pvpAI : public ScriptedAI
 		if(m_uiSpellSonicBoomTimer < uiDiff)
 		{
 			if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-				DoCast(target, SPELL_SONICBOOM);
+				DoCastSpellIfCan(target, SPELL_SONICBOOM);
 				
 				m_uiSpellSonicBoomTimer = urand(4000, 4500);
 		}
@@ -112,7 +112,7 @@ struct MANGOS_DLL_DECL boss_pvpAI : public ScriptedAI
 
 			if(m_uiSpellNetherpowerTimer < uiDiff)
 			{
-				DoCast(m_creature, SPELL_NETHERPOWER);
+				DoCastSpellIfCan(m_creature, SPELL_NETHERPOWER);
 
 			    m_uiSpellNetherpowerTimer = urand(7000, 9000);
 			}
@@ -121,7 +121,7 @@ struct MANGOS_DLL_DECL boss_pvpAI : public ScriptedAI
 
 			if(m_uiSpellShadowBlastTimer < uiDiff)
 			{
-				DoCast(m_creature, SPELL_SHADOWBLAST);
+				DoCastSpellIfCan(m_creature, SPELL_SHADOWBLAST);
 			    m_uiSpellShadowBlastTimer   = urand(22000, 24000);
 			}
 			else
@@ -131,12 +131,12 @@ struct MANGOS_DLL_DECL boss_pvpAI : public ScriptedAI
 			if(m_creature->GetHealth()*100 / m_creature->GetMaxHealth() == 79 || m_creature->GetHealth()*100 / m_creature->GetMaxHealth() == 19)
 			{
 				DoScriptText(SAY_OVERLOAD, m_creature);
-				DoCast(m_creature, SPELL_OVERLOAD);
+				DoCastSpellIfCan(m_creature, SPELL_OVERLOAD);
 			}
 
 			if(m_uiPhase == PHASE_THREE && m_uiSpellFrenzyTimer < uiDiff)
 			{
-				DoCast(m_creature, SPELL_FRENZY);
+				DoCastSpellIfCan(m_creature, SPELL_FRENZY);
 
 			    m_uiSpellFrenzyTimer      = urand(20000, 22000);
 			}
@@ -145,7 +145,7 @@ struct MANGOS_DLL_DECL boss_pvpAI : public ScriptedAI
 
 			if(m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 10 && m_uiSpellFrenzyTimer < uiDiff)
 			{
-				DoCast(m_creature, SPELL_FRENZY);
+				DoCastSpellIfCan(m_creature, SPELL_FRENZY);
 
 				m_uiSpellFrenzyTimer = (10000,12000);
 			}
@@ -158,7 +158,7 @@ struct MANGOS_DLL_DECL boss_pvpAI : public ScriptedAI
 			if(m_creature->GetHealth()*100 / m_creature->GetMaxHealth() < 60 && m_uiPhase == PHASE_ONE)
 			{
 				DoScriptText(SAY_OVERLOAD, m_creature);
-				DoCast(m_creature, SPELL_OVERLOAD);
+				DoCastSpellIfCan(m_creature, SPELL_OVERLOAD);
 
 				m_uiPhase = PHASE_TWO;
 
@@ -180,12 +180,12 @@ struct MANGOS_DLL_DECL boss_pvpAI : public ScriptedAI
 				if(m_creature->GetHealth()*100 / m_creature->GetMaxHealth() == 40)
 				{
 					DoScriptText(SAY_OVERLOAD, m_creature);
-					DoCast(m_creature, SPELL_OVERLOAD);
+					DoCastSpellIfCan(m_creature, SPELL_OVERLOAD);
 				}
 
 				if(m_uiSpellHealTimer < uiDiff)
 				{
-					DoCast(m_creature, SPELL_HEAL);
+					DoCastSpellIfCan(m_creature, SPELL_HEAL);
 
 					m_uiSpellHealTimer = urand(12000, 13000);
 				}
@@ -194,7 +194,7 @@ struct MANGOS_DLL_DECL boss_pvpAI : public ScriptedAI
 
 				if(m_uiSpellDivineShieldTimer < uiDiff)
 				{
-					DoCast(m_creature, SPELL_DIVINESHIELD);
+					DoCastSpellIfCan(m_creature, SPELL_DIVINESHIELD);
 
 					m_uiSpellDivineShieldTimer = urand(30000, 31000);
 				}
@@ -204,7 +204,7 @@ struct MANGOS_DLL_DECL boss_pvpAI : public ScriptedAI
 				if(m_uiSpellBallLightningTimer < uiDiff)
 				{
 					if(Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-					DoCast(pTarget, SPELL_BALLLIGHTNING);
+					DoCastSpellIfCan(pTarget, SPELL_BALLLIGHTNING);
 				
 					m_uiSpellBallLightningTimer = urand(17000, 19000);
 				}

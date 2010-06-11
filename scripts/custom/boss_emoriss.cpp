@@ -74,7 +74,7 @@ struct MANGOS_DLL_DECL boss_emorissAI : public ScriptedAI
 	void Aggro(Unit* pWho)
 	{
 		DoScriptText(SAY_AGGRO, m_creature);
-		DoCast(m_creature, SHROUDOFSARROW);
+		DoCastSpellIfCan(m_creature, SHROUDOFSARROW);
 	}
 
 	void KilledUnit(Unit* pVictim)
@@ -102,7 +102,7 @@ struct MANGOS_DLL_DECL boss_emorissAI : public ScriptedAI
 		{
 			if(Drainmana_Timer < uiDiff)
 			{
-				DoCast(m_creature->getVictim(), DRAINMANA);
+				DoCastSpellIfCan(m_creature->getVictim(), DRAINMANA);
 				Drainmana_Timer		= 52000;
 			}
 			else
@@ -110,7 +110,7 @@ struct MANGOS_DLL_DECL boss_emorissAI : public ScriptedAI
 
 			if(Tailsmash_Timer < uiDiff)
 			{
-				DoCast(m_creature, TAILSMASH);
+				DoCastSpellIfCan(m_creature, TAILSMASH);
 				Tailsmash_Timer		= urand(38000, 39000);
 			}
 			else
@@ -118,7 +118,7 @@ struct MANGOS_DLL_DECL boss_emorissAI : public ScriptedAI
 
 			if(Shadowbreath_Timer < uiDiff)
 			{
-				DoCast(m_creature->getVictim(), SHADOWBREATH);
+				DoCastSpellIfCan(m_creature->getVictim(), SHADOWBREATH);
 				Shadowbreath_Timer	= 20000;
 			}
 			else
@@ -126,7 +126,7 @@ struct MANGOS_DLL_DECL boss_emorissAI : public ScriptedAI
 
 			if(Strongcleave_Timer < uiDiff)
 			{
-				DoCast(m_creature->getVictim(), STRONGCLEAVE);
+				DoCastSpellIfCan(m_creature->getVictim(), STRONGCLEAVE);
 				Strongcleave_Timer	= 25000;
 			}
 			else
@@ -134,7 +134,7 @@ struct MANGOS_DLL_DECL boss_emorissAI : public ScriptedAI
 
 			if(Corruptingblight_Timer < uiDiff)
 			{
-				DoCast(m_creature->getVictim(), CORRUPTINGBLIGHT);
+				DoCastSpellIfCan(m_creature->getVictim(), CORRUPTINGBLIGHT);
 				Corruptingblight_Timer	= 15500;
 				DoScriptText(SAY_CORRUPTINGBLIGHT, m_creature);
 			}
@@ -212,7 +212,7 @@ struct MANGOS_DLL_DECL boss_emorissAI : public ScriptedAI
 
 			if(Reflection_Timer < uiDiff)
 			{
-				DoCast(m_creature,REFLECTION);
+				DoCastSpellIfCan(m_creature,REFLECTION);
 				Reflection_Timer = 10000;
 			}
 			else
@@ -220,7 +220,7 @@ struct MANGOS_DLL_DECL boss_emorissAI : public ScriptedAI
 
 			if(Drainmana_Timer < uiDiff)
 			{
-				DoCast(m_creature->getVictim(), DRAINMANA);
+				DoCastSpellIfCan(m_creature->getVictim(), DRAINMANA);
 				Drainmana_Timer		= 53000;
 			}
 			else
@@ -229,7 +229,7 @@ struct MANGOS_DLL_DECL boss_emorissAI : public ScriptedAI
 			if(Shadowbolt_Timer < uiDiff)
 			{
 				if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-				DoCast(target,SHADOWBOLT);
+				DoCastSpellIfCan(target,SHADOWBOLT);
 
 				Shadowbolt_Timer	= urand(13000, 14000);
 			}
@@ -259,7 +259,7 @@ struct MANGOS_DLL_DECL boss_emorissAI : public ScriptedAI
 
 			if(Drainmana_Timer < uiDiff)
 			{
-				DoCast(m_creature->getVictim(), DRAINMANA);
+				DoCastSpellIfCan(m_creature->getVictim(), DRAINMANA);
 				Drainmana_Timer		= 43500;
 			}
 			else
@@ -267,7 +267,7 @@ struct MANGOS_DLL_DECL boss_emorissAI : public ScriptedAI
 			
 			if(Shadowbreath_Timer < uiDiff)
 			{
-				DoCast(m_creature->getVictim(), SHADOWBREATH);
+				DoCastSpellIfCan(m_creature->getVictim(), SHADOWBREATH);
 				Shadowbreath_Timer	= 20000;
 			}
 			else
@@ -275,7 +275,7 @@ struct MANGOS_DLL_DECL boss_emorissAI : public ScriptedAI
 
 			if(Strongcleave_Timer < uiDiff)
 			{
-				DoCast(m_creature->getVictim(), STRONGCLEAVE);
+				DoCastSpellIfCan(m_creature->getVictim(), STRONGCLEAVE);
 				Strongcleave_Timer	= 35000;
 			}
 			else
@@ -283,7 +283,7 @@ struct MANGOS_DLL_DECL boss_emorissAI : public ScriptedAI
 
 			if(Blisteringcold_Timer < uiDiff)
 			{
-				DoCast(m_creature->getVictim(), BLISTERINGCOLD);
+				DoCastSpellIfCan(m_creature->getVictim(), BLISTERINGCOLD);
 				Blisteringcold_Timer = urand(46000, 48000);
 			}
 			else
@@ -291,7 +291,7 @@ struct MANGOS_DLL_DECL boss_emorissAI : public ScriptedAI
 
 			if(Corruptingblight_Timer < uiDiff)
 			{
-				DoCast(m_creature->getVictim(), CORRUPTINGBLIGHT);
+				DoCastSpellIfCan(m_creature->getVictim(), CORRUPTINGBLIGHT);
 				Corruptingblight_Timer	= 15500;
 				DoScriptText(SAY_CORRUPTINGBLIGHT, m_creature);
 			}
@@ -302,7 +302,7 @@ struct MANGOS_DLL_DECL boss_emorissAI : public ScriptedAI
 			{
 		   		berserk = true;
 				DoScriptText(SAY_AGGRO, m_creature);
-				DoCast(m_creature,SPELL_BERSERK);
+				DoCastSpellIfCan(m_creature,SPELL_BERSERK);
 			}	
 					
 		}

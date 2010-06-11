@@ -82,7 +82,7 @@ struct MANGOS_DLL_DECL boss_razorAI : public ScriptedAI
         {
 			if (m_uiFlameBreathTimer < uiDiff)
 			{
-				DoCast(m_creature->getVictim(), SPELL_FLAMEBREATH);
+				DoCastSpellIfCan(m_creature->getVictim(), SPELL_FLAMEBREATH);
 				m_uiFlameBreathTimer = urand(10000, 20000);
 			}
 			else
@@ -90,7 +90,7 @@ struct MANGOS_DLL_DECL boss_razorAI : public ScriptedAI
 
 			if (m_uiSpellHatedGroundTimer < uiDiff)
 			{
-				DoCast(m_creature->getVictim(), SPELL_HATEDGROUND);
+				DoCastSpellIfCan(m_creature->getVictim(), SPELL_HATEDGROUND);
 				m_uiSpellHatedGroundTimer = urand(15000, 18000);
 			}
 			else
@@ -99,7 +99,7 @@ struct MANGOS_DLL_DECL boss_razorAI : public ScriptedAI
 			if (m_uiSpellApocalypseTimer < uiDiff)
 			{
 				DoScriptText(SAY_APOCALYPSE, m_creature);
-				DoCast(m_creature->getVictim(), SPELL_APOCALYPSE);
+				DoCastSpellIfCan(m_creature->getVictim(), SPELL_APOCALYPSE);
 			    m_uiSpellApocalypseTimer = urand(60000, 70000);
 			}
 			else
@@ -107,7 +107,7 @@ struct MANGOS_DLL_DECL boss_razorAI : public ScriptedAI
 				
 			/*if (m_uiSpellCleaveTimer < uiDiff)
 			{
-				DoCast(m_creature->getVictim(), SPELL_CLEAVE);
+				DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE);
 			    m_uiSpellCleaveTimer = urand(8000, 10000);
 			}
 			else
@@ -116,7 +116,7 @@ struct MANGOS_DLL_DECL boss_razorAI : public ScriptedAI
 			if (m_uiSpellPyroblastTimer < uiDiff)
 			{
 				if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-                            DoCast(target, SPELL_PYROBLAST);
+                            DoCastSpellIfCan(target, SPELL_PYROBLAST);
 						
 						m_uiSpellPyroblastTimer = urand(10000, 11000);
 			}
@@ -126,7 +126,7 @@ struct MANGOS_DLL_DECL boss_razorAI : public ScriptedAI
 			if (m_uiSpellFearTimer < uiDiff)
 			{
 				if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-                        DoCast(target, SPELL_FEAR);
+                        DoCastSpellIfCan(target, SPELL_FEAR);
 						
 						m_uiSpellFearTimer = urand(13000, 14000);
 			}
@@ -137,7 +137,7 @@ struct MANGOS_DLL_DECL boss_razorAI : public ScriptedAI
 			{
 				if (m_uiSpellEnrageTimer < uiDiff)
 				{
-				DoCast(m_creature->getVictim(), SPELL_ENRAGE);
+				DoCastSpellIfCan(m_creature->getVictim(), SPELL_ENRAGE);
 				m_uiSpellEnrageTimer = 15000;
 				}
 				else
@@ -145,7 +145,7 @@ struct MANGOS_DLL_DECL boss_razorAI : public ScriptedAI
 
 				if (m_uiSpellBoneStormTimer < uiDiff)
 				{
-					DoCast(m_creature, SPELL_BONESTORM);
+					DoCastSpellIfCan(m_creature, SPELL_BONESTORM);
 					m_uiSpellBoneStormTimer = urand(15000, 16000);
 				}
 				else
@@ -178,7 +178,7 @@ struct MANGOS_DLL_DECL boss_razorAI : public ScriptedAI
 
 			if (m_uiSpellHealTimer < uiDiff)
 			{
-				DoCast(m_creature, SPELL_HEAL);
+				DoCastSpellIfCan(m_creature, SPELL_HEAL);
 				m_uiSpellHealTimer = urand(8000,11000);
 			}
 			else
@@ -186,7 +186,7 @@ struct MANGOS_DLL_DECL boss_razorAI : public ScriptedAI
 			
 			if (m_uiSpellShockwaveTimer < uiDiff)
 			{
-				DoCast(m_creature->getVictim(), SPELL_SHOCKWAVE);
+				DoCastSpellIfCan(m_creature->getVictim(), SPELL_SHOCKWAVE);
 				m_uiSpellShockwaveTimer = urand(11000, 13000);
 			}
 			else
@@ -194,7 +194,7 @@ struct MANGOS_DLL_DECL boss_razorAI : public ScriptedAI
 
 			if (m_uiSpellBoneStormTimer < uiDiff)
 			{
-				DoCast(m_creature, SPELL_BONESTORM);
+				DoCastSpellIfCan(m_creature, SPELL_BONESTORM);
 				m_uiSpellBoneStormTimer = urand(15000, 16000);
 			}
 			else

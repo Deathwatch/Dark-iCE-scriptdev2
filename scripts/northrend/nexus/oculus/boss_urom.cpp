@@ -262,13 +262,13 @@ struct MANGOS_DLL_DECL boss_uromAI: public ScriptedAI
 		{
 			if(FrostBombTimer <= diff)
 			{
-				if(DoCastSpellIfCan(SelectUnit(SELECT_TARGET_RANDOM,0), SPELL_FROSTBOMB) == CAST_OK)
+				if(DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0), SPELL_FROSTBOMB) == CAST_OK)
 					FrostBombTimer = urand(40000,50000);
 			} else FrostBombTimer -= diff;
 
 			if(TimeBombTimer <= diff)
 			{
-				TimeBomb = SelectUnit(SELECT_TARGET_RANDOM,0);
+				TimeBomb = m_creature(SELECT_TARGET_RANDOM,0);
 				if(DoCastSpellIfCan(TimeBomb, m_bIsRegularMode? SPELL_TIMEBOMB : SPELL_TIMEBOMB_H) == CAST_OK)
 				{
 					TimeBombDetonateTimer = 6000;

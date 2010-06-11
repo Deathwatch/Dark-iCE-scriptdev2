@@ -126,7 +126,7 @@ struct MANGOS_DLL_DECL boss_drakos_the_interrogatorAI : public ScriptedAI
                 for (i = 0; i <= 4; i++)
                 {
                         Unit* Player = NULL;
-                        Player = SelectUnit(SELECT_TARGET_TOPAGGRO, i);
+                        Player = m_creature(SELECT_TARGET_TOPAGGRO, i);
                         if (Player)
                         {
                                 Player->NearTeleportTo(x, y, z, 1);

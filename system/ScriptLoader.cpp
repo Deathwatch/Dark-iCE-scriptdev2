@@ -353,7 +353,6 @@ extern void AddSC_instance_ruby_sanctum();
 extern void AddSC_instance_vault_of_archavon();             //vault_of_archavon
 extern void AddSC_boss_toravon();
 extern void AddSC_boss_koralon();
-extern void AddSC_boss_toravon();
 extern void AddSC_boss_emalon();
 extern void AddSC_boss_archavon();
 extern void AddSC_boss_bjarngrim();                         //Ulduar, halls_of_lightning

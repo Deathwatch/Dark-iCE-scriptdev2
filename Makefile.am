@@ -454,6 +454,12 @@ scripts/northrend/nexus/nexus/boss_telestra.cpp \
 "scripts/northrend/nexus/nexus/commander_stoutbeard(needs heroic mode).cpp" \
 scripts/northrend/nexus/nexus/nexus.h \
 scripts/northrend/nexus/nexus/instance_nexus.cpp \
+scripts/northrend/nexus/oculus/boss_drakos.cpp \
+scripts/northrend/nexus/oculus/boss_eregos.cpp \
+scripts/northrend/nexus/oculus/boss_urom.cpp \
+scripts/northrend/nexus/oculus/boss_varos.cpp \
+scripts/northrend/nexus/oculus/instance_oculus.cpp \
+scripts/northrend/nexus/oculus/oculus.h \
 scripts/northrend/obsidian_sanctum/boss_sartharion.cpp \
 scripts/northrend/obsidian_sanctum/instance_obsidian_sanctum.cpp \
 scripts/northrend/obsidian_sanctum/obsidian_sanctum.h \

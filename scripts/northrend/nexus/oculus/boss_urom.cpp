@@ -268,7 +268,7 @@ struct MANGOS_DLL_DECL boss_uromAI: public ScriptedAI
 
 			if(TimeBombTimer <= diff)
 			{
-				TimeBomb = m_creature(SELECT_TARGET_RANDOM,0);
+				TimeBomb = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0);
 				if(DoCastSpellIfCan(TimeBomb, m_bIsRegularMode? SPELL_TIMEBOMB : SPELL_TIMEBOMB_H) == CAST_OK)
 				{
 					TimeBombDetonateTimer = 6000;

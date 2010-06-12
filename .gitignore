@@ -67,6 +67,7 @@ patches-*
 #
 # VS binaries output
 #
+ipch/*
 bin/*
 *.ncb
 *.suo

@@ -1864,7 +1864,9 @@
     <ClCompile Include="..\scripts\northrend\ruby_sanctum\instance_ruby_sanctum.cpp">
       <Filter>scripts\northrend\ruby_sanctum</Filter>
     </ClCompile>
-    <ClCompile Include="..\scripts\eastern_kingdoms\swamp_of_sorrows.cpp" />
+    <ClCompile Include="..\scripts\eastern_kingdoms\swamp_of_sorrows.cpp">
+      <Filter>scripts\eastern_kingdoms</Filter>
+    </ClCompile>
     <ClCompile Include="..\scripts\kalimdor\durotar.cpp">
       <Filter>scripts\kalimdor</Filter>
     </ClCompile>
@@ -2055,7 +2057,6 @@
     </ClInclude>
     <ClInclude Include="..\config.h" />
     <ClInclude Include="..\ScriptMgr.h" />
-    <ClInclude Include="..\scripts\kalimdor\wailing_caverns\wailing_caverns.h" />
     <ClInclude Include="..\include\sc_boss_spell_worker.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -2109,6 +2110,9 @@
     </ClInclude>
     <ClInclude Include="..\scripts\northrend\ruby_sanctum\ruby_sanctum.h">
       <Filter>scripts\northrend\ruby_sanctum</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\kalimdor\wailing_caverns\wailing_caverns.h">
+      <Filter>scripts\kalimdor\wailing_caverns</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

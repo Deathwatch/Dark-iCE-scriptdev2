@@ -1870,6 +1870,21 @@
     <ClCompile Include="..\scripts\kalimdor\durotar.cpp">
       <Filter>scripts\kalimdor</Filter>
     </ClCompile>
+    <ClCompile Include="..\scripts\northrend\nexus\oculus\boss_drakos.cpp">
+      <Filter>scripts\northrend\nexus\oculus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\northrend\nexus\oculus\boss_eregos.cpp">
+      <Filter>scripts\northrend\nexus\oculus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\northrend\nexus\oculus\boss_urom.cpp">
+      <Filter>scripts\northrend\nexus\oculus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\northrend\nexus\oculus\boss_varos.cpp">
+      <Filter>scripts\northrend\nexus\oculus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\northrend\nexus\oculus\instance_oculus.cpp">
+      <Filter>scripts\northrend\nexus\oculus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\base\escort_ai.h">
@@ -2113,6 +2128,9 @@
     </ClInclude>
     <ClInclude Include="..\scripts\kalimdor\wailing_caverns\wailing_caverns.h">
       <Filter>scripts\kalimdor\wailing_caverns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\northrend\nexus\oculus\oculus.h">
+      <Filter>scripts\northrend\nexus\oculus</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

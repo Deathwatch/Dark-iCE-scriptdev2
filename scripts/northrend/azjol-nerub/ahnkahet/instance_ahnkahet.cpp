@@ -55,7 +55,7 @@ struct MANGOS_DLL_DECL instance_ahnkahet : public ScriptedInstance
         switch(pCreature->GetEntry())
         {
             case NPC_ELDER_NADOX:         m_uiElderNadoxGUID = pCreature->GetGUID();        break;
-            case NPC_TALADARAN:           m_uiTaladaramGUID = pCreature->GetGUID();         break;
+            case NPC_TALADARAM:           m_uiTaladaramGUID = pCreature->GetGUID();         break;
             case NPC_JEDOGA_SHADOWSEEKER: m_uiJedogaShadowseekerGUID = pCreature->GetGUID();break;
             case NPC_JEDOGA_CONTROLLER:   m_uiJedogaControllerGUID = pCreature->GetGUID();  break;
         }
@@ -187,7 +187,7 @@ struct MANGOS_DLL_DECL instance_ahnkahet : public ScriptedInstance
         {
             case NPC_ELDER_NADOX:
                 return m_uiElderNadoxGUID;
-            case NPC_TALADARAN:
+            case NPC_TALADARAM:
                 return m_uiTaladaramGUID;
             case NPC_JEDOGA_SHADOWSEEKER:
                 return m_uiJedogaShadowseekerGUID;

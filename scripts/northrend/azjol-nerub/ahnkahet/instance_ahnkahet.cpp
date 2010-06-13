@@ -32,10 +32,11 @@ struct MANGOS_DLL_DECL instance_ahnkahet : public ScriptedInstance
     std::string strInstData;
 
     uint64 m_uiElderNadoxGUID;
-    uint64 m_uiJedogaShadowseekerGUID;
-    uint64 m_uiTaldaramGUID;
     uint64 m_uiTaldaramDoorGUID;
     uint64 m_uiTaldaramVortexGUID;
+    uint64 m_uiTaladaramGUID;
+    uint64 m_uiJedogaShadowseekerGUID;
+    uint64 m_uiJedogaControllerGUID;
     uint8 m_uiDevicesActivated;
 
     void Initialize()
@@ -44,7 +45,6 @@ struct MANGOS_DLL_DECL instance_ahnkahet : public ScriptedInstance
 
         m_uiElderNadoxGUID = 0;
         m_uiJedogaShadowseekerGUID = 0;
-        m_uiTaldaramGUID = 0;
         m_uiTaldaramDoorGUID = 0;
         m_uiTaldaramVortexGUID = 0;
         m_uiDevicesActivated = 0;
@@ -54,9 +54,10 @@ struct MANGOS_DLL_DECL instance_ahnkahet : public ScriptedInstance
     {
         switch(pCreature->GetEntry())
         {
-            case NPC_ELDER_NADOX:         m_uiElderNadoxGUID = pCreature->GetGUID();         break;
-            case NPC_JEDOGA_SHADOWSEEKER: m_uiJedogaShadowseekerGUID = pCreature->GetGUID(); break;
-            case NPC_TALDARAM:            m_uiTaldaramGUID = pCreature->GetGUID(); break;
+            case NPC_ELDER_NADOX:         m_uiElderNadoxGUID = pCreature->GetGUID();        break;
+            case NPC_TALADARAN:           m_uiTaladaramGUID = pCreature->GetGUID();         break;
+            case NPC_JEDOGA_SHADOWSEEKER: m_uiJedogaShadowseekerGUID = pCreature->GetGUID();break;
+            case NPC_JEDOGA_CONTROLLER:   m_uiJedogaControllerGUID = pCreature->GetGUID();  break;
         }
     }
 
@@ -186,8 +187,12 @@ struct MANGOS_DLL_DECL instance_ahnkahet : public ScriptedInstance
         {
             case NPC_ELDER_NADOX:
                 return m_uiElderNadoxGUID;
+            case NPC_TALADARAN:
+                return m_uiTaladaramGUID;
             case NPC_JEDOGA_SHADOWSEEKER:
                 return m_uiJedogaShadowseekerGUID;
+            case NPC_JEDOGA_CONTROLLER:
+                return m_uiJedogaControllerGUID;
         }
         return 0;
     }

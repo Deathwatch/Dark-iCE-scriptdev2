@@ -20,6 +20,7 @@ SD%Complete: 90%
 SDComment: 
 SDCategory: Ahn'kahet
 SDAuthor: ScrappyDoo (c) Andeeria
+* do not open before fixing spell initialized as uint64!! (uint64 m_uiImageGUID[5][2])
 EndScriptData */
 
 /* ToDo
@@ -43,7 +44,7 @@ enum Spells
 {
     SPELL_FLY                       = 57941,
     SPELL_FLY_H                     = 59974,
-	SPELL_BOLT                      = 57942,
+    SPELL_BOLT                      = 57942,
     SPELL_BOLT_H                    = 59975,
     SPELL_SHIVER                    = 57949,
     SPELL_SHIVER_DMG                = 57952,
@@ -176,23 +177,23 @@ struct MANGOS_DLL_DECL boss_volazjAI : public ScriptedAI
             for(uint8 i=0; i<5; ++i)
             {
                 Unit* pImage = Unit::GetUnit((*m_creature), m_uiImageGUID[i][0]);
-				if(pImage && pImage->isAlive())
-					if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-						pImage->CastSpell(target, m_uiImageGUID[i][1], true);
+                if(pImage && pImage->isAlive())
+                    if(Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                        pImage->CastSpell(target, m_uiImageGUID[i][1], true);
             }
             m_uiImageCastTimer = 8000;
         }else m_uiImageCastTimer -= uiDiff;
 
-        if((m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) <= 66 && m_uiPhase < 2)
+        if(m_creature->GetHealthPercent() <= 66.0f && m_uiPhase < 2)
             SwitchPhase(2);
 
-        if((m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) <= 33 && m_uiPhase < 3)
+        if(m_creature->GetHealthPercent() <= 33.0f && m_uiPhase < 3)
             SwitchPhase(3);
         
         if(m_uiFlyTimer < uiDiff)
         {
             if(m_creature->getVictim())
-                m_creature->CastSpell(m_creature->getVictim(), m_bIsRegularMode ? SPELL_FLY : SPELL_FLY_H, false);
+                DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_FLY : SPELL_FLY_H, false);
             m_uiFlyTimer = urand(10000,15000);
         }else m_uiFlyTimer -= uiDiff;
 
@@ -205,9 +206,9 @@ struct MANGOS_DLL_DECL boss_volazjAI : public ScriptedAI
 
         if(m_uiShiverTimer < uiDiff)
         {
-            if(Unit* pPlayer = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                if(pPlayer->isAlive())
-                    pPlayer->CastSpell(pPlayer, m_bIsRegularMode ? SPELL_SHIVER_DMG : SPELL_SHIVER_DMG_H, true);
+            if(Unit* pUnit = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+                if(pUnit->isAlive())
+                    pUnit->CastSpell(pUnit, m_bIsRegularMode ? SPELL_SHIVER_DMG : SPELL_SHIVER_DMG_H, true);
             m_uiShiverTimer = urand(8000,12000);
         }else m_uiShiverTimer -= uiDiff;
 

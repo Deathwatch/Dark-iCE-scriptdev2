@@ -27,7 +27,7 @@ libmangosscript_la_SOURCES = \
 ScriptMgr.cpp \
 ScriptMgr.h \
 config.h \
-hn_config.h \
+darkice_config.h \
 base/escort_ai.cpp \
 base/escort_ai.h \
 base/follower_ai.cpp \

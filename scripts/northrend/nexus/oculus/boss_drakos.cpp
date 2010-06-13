@@ -27,9 +27,9 @@ enum
 	EMOTE_MAGIC_PULL           = -1595012
 };
  
-struct MANGOS_DLL_DECL boss_drakos_the_interrogatorAI : public ScriptedAI
+struct MANGOS_DLL_DECL boss_drakosAI : public ScriptedAI
 {
-        boss_drakos_the_interrogatorAI(Creature* pCreature) : ScriptedAI(pCreature)
+        boss_drakosAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
@@ -219,9 +219,9 @@ struct MANGOS_DLL_DECL boss_drakos_the_interrogatorAI : public ScriptedAI
     }
 };
  
-CreatureAI* GetAI_boss_drakos_the_interrogator(Creature* pCreature)
+CreatureAI* GetAI_boss_drakos(Creature* pCreature)
 {
-    return new boss_drakos_the_interrogatorAI(pCreature);
+    return new boss_drakosAI(pCreature);
 }
 
 enum
@@ -391,13 +391,13 @@ bool GossipSelect_npc_dragon_giver(Player* pPlayer, Creature* pCreature, uint32 
 	return true;
 }
 
-void AddSC_boss_drakos_the_interrogator()
+void AddSC_boss_drakos()
 {
     Script *newscript;
 
     newscript = new Script;
-    newscript->Name = "boss_drakos_the_interrogator";
-    newscript->GetAI = &GetAI_boss_drakos_the_interrogator;
+    newscript->Name = "boss_drakos";
+    newscript->GetAI = &GetAI_boss_drakos;
     newscript->RegisterSelf();
 
     newscript = new Script;

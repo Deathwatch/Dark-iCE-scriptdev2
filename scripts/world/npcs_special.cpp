@@ -2210,7 +2210,21 @@ struct MANGOS_DLL_DECL npc_rune_blade : public ScriptedAI
             if (Unit *target = m_creature->GetUnit(*owner,guid))
                 if (!target->IsFriendlyTo(owner))
                     m_creature->Attack(target,true);
+        
+		SetCombatMovement(true);
+    }
 
+    void UpdateAI(const uint32 diff)
+    {
+        if (!owner) return;
+
+        if (!m_creature->getVictim())
+        {
+            if (owner->getVictim())
+                AttackStart(owner->getVictim());
+        }
+
+        DoMeleeAttackIfReady();
     }
 };
 CreatureAI* GetAI_npc_rune_blade(Creature* pCreature)

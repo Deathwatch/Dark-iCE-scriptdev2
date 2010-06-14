@@ -24,7 +24,7 @@
 
 // Format is YYYYMMDDRR where RR is the change in the conf file
 // for that day.
-#define DARKICE_CONF_VERSION    2010060101
+#define DARKICE_CONF_VERSION    2010060701
 
 #ifdef WIN32
   #define MANGOS_DLL_EXPORT extern "C" __declspec(dllexport)

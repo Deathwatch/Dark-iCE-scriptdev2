@@ -37,11 +37,6 @@ bool GossipHello_custom_npc_renamecharacter(Player* pPlayer, Creature* pCreature
 
 bool GossipSelect_custom_npc_renamecharacter(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    if (uiAction == GOSSIP_ACTION_INFO_DEF+2)
-    {
-        pCreature->MonsterWhisper("Mh ok. See you around!", pPlayer->GetGUID());
-        pPlayer->CLOSE_GOSSIP_MENU();
-    }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF+1)
     {
@@ -50,6 +45,12 @@ bool GossipSelect_custom_npc_renamecharacter(Player* pPlayer, Creature* pCreatur
 		SD2Database.PExecute("UPDATE characters.characters SET at_login = at_login | '1' WHERE guid = '%u'", pPlayer->GetGUIDLow());
 		pPlayer->CLOSE_GOSSIP_MENU();
 	}
+
+	if (uiAction == GOSSIP_ACTION_INFO_DEF+2)
+    {
+        pCreature->MonsterWhisper("Mh ok. See you around!", pPlayer->GetGUID());
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
 
     return true;
 }

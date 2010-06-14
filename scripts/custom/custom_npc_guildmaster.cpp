@@ -20,6 +20,7 @@ SD%Complete: 100
 SDComment: Guildmaster - Used for Guild Halls
 SDCategory: NPC
 SDAuthor: Darkiss @ Hellscream Network <http://www.hellscream-wow.com/>
+SDTodo: Revamp this script.
 EndScriptData */
 
 #include "precompiled.h"

@@ -71,16 +71,17 @@ bool ItemUse_custom_item_cooldownremover(Player* pPlayer, Item* pItem, const Spe
 // Invicible Mount Teaching Item
 bool ItemUse_custom_item_invinciblemount(Player* pPlayer, Item* pItem, const SpellCastTargets &pTargets)
 {
-        if ((pPlayer->isInCombat()) || (pPlayer->isInFlight()) || (pPlayer->isDead()))
-        {
-			pPlayer->SendEquipError(EQUIP_ERR_NOT_IN_COMBAT, pItem, NULL);
-			return false;
-        }
+	if ((pPlayer->isInCombat()) || (pPlayer->isInFlight()) || (pPlayer->isDead()))
+	{
+		pPlayer->SendEquipError(EQUIP_ERR_NOT_IN_COMBAT, pItem, NULL);
+		return false;
+	}
+	else
+	{
 		pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
-        {
-            pPlayer->learnSpell(72284, false);
-            return true;
-        }  
+		pPlayer->learnSpell(72284, false);
+		return true;
+	}  
 }
 
 // Level Giving Item
@@ -95,18 +96,20 @@ bool ItemUse_custom_item_levelplayer(Player* pPlayer, Item* pItem, const SpellCa
         pPlayer->SendEquipError(EQUIP_ERR_NOT_IN_COMBAT, pItem, NULL);
         return false;
     }
-
-    if((pPlayer->getLevel()) < (DARKICEConfig.GetFloatDefault("LevelUpItemSafeLevel",0)))
-    {
-	    pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
-        pPlayer->GiveLevel(+(DARKICEConfig.GetFloatDefault("LevelUpItemAddLevel",0)));
-		return true;
-    }
-    else
-    {
-        pPlayer->SendEquipError(EQUIP_ERR_NOT_IN_COMBAT, pItem, NULL);
-        return false;
-    }
+	else
+	{
+		if((pPlayer->getLevel()) <= (DARKICEConfig.GetFloatDefault("LevelUpItemSafeLevel",0)))
+		{
+			pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
+			pPlayer->GiveLevel(+(DARKICEConfig.GetFloatDefault("LevelUpItemAddLevel",0)));
+			return true;
+		}
+		else
+		{
+			pPlayer->SendEquipError(EQUIP_ERR_NOT_IN_COMBAT, pItem, NULL);
+			return false;
+		}
+	}
 }
 
 // Metamorphosis Teaching Item
@@ -141,7 +144,7 @@ bool ItemUse_custom_item_summonbanker(Player* pPlayer, Item* pItem, const SpellC
     {
 		pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
         pPlayer->SummonCreature((DARKICEConfig.GetFloatDefault("Item_SummonBankerEntryID",0)),pPlayer->GetPositionX(), pPlayer->GetPositionY()+5, pPlayer->GetPositionZ(), 0,TEMPSUMMON_TIMED_DESPAWN,60000);
-    return true;
+		return true;
     }
 }
 

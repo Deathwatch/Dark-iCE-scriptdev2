@@ -20,6 +20,7 @@ SD%Complete: 100
 SDComment: Profession Master. Allows profession skills increasement.
 SDCategory: NPC
 SDAuthor: Darkiss @ Hellscream Network <http://www.hellscream-wow.com/>
+SDTodo: Add ability to learn spells without trainers. (All-in-one)
 EndScriptData */
 
 #include "precompiled.h"
@@ -58,7 +59,7 @@ return true;
 void SendDefaultMenu_custom_npc_professionmaster(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
 
-// Not allow in combat
+//Combat Check
 if (pPlayer->isInCombat())
 {
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -69,17 +70,17 @@ if (pPlayer->isInCombat())
 	Config DARKICEConfig;
 	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
 		error_log("DARKICE: Unable to open configuration file");
-
-	bool ProfessionsEnabled = DARKICEConfig.GetBoolDefault("ProfessionMaster.ProfessionsEnabled", true);
-	bool SecondarySkillsEnabled = DARKICEConfig.GetBoolDefault("ProfessionMaster.SecondarySkillsEnabled", true);
-
-//Mony Check
+        
+//Money Check
 if (pPlayer->GetMoney() < (DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)))
 {
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->MonsterWhisper("You don't have enough money.", pPlayer->GetGUID());
 	return;
 }
+
+	bool ProfessionsEnabled = DARKICEConfig.GetBoolDefault("ProfessionMaster.ProfessionsEnabled", true);
+	bool SecondarySkillsEnabled = DARKICEConfig.GetBoolDefault("ProfessionMaster.SecondarySkillsEnabled", true);
 
 switch(uiAction)
 {
@@ -106,7 +107,7 @@ case 2000: //Secondary Skills
             pPlayer->ADD_GOSSIP_ITEM( 5, "First Aid."            , GOSSIP_SENDER_MAIN, 2002);
             pPlayer->ADD_GOSSIP_ITEM( 5, "Fishing."              , GOSSIP_SENDER_MAIN, 2003);
           //pPlayer->ADD_GOSSIP_ITEM( 5, "Riding."               , GOSSIP_SENDER_MAIN, 2004);
-			pPlayer->ADD_GOSSIP_ITEM( 5, "Archaeology."          , GOSSIP_SENDER_MAIN, 2005);
+		  //pPlayer->ADD_GOSSIP_ITEM( 5, "Archaeology."          , GOSSIP_SENDER_MAIN, 2005);
             pPlayer->ADD_GOSSIP_ITEM( 7, "<- Main Menu"          , GOSSIP_SENDER_MAIN, 3000);
 
 	pPlayer->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE,pCreature->GetGUID());
@@ -135,199 +136,229 @@ break;
 
 case 1001: // Alchemy
 	if(!pPlayer->UpdateSkill(171,0))
-      {
+	{
 		pCreature->MonsterWhisper("You don't have this skill or you allready have the maximum skill value $C.", pPlayer->GetGUID());
 		GossipHello_custom_npc_professionmaster(pPlayer, pCreature);
 		return;
 	}
-
+	else
+	{
 	pPlayer->UpdateSkill(171,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
 	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
+	}
 break;
 
 case 1002: // Blacksmithing
 	if(!pPlayer->UpdateSkill(164,0))
-      {
+	{
 		pCreature->MonsterWhisper("You don't have this skill or you allready have the maximum skill value $C.", pPlayer->GetGUID());
 		GossipHello_custom_npc_professionmaster(pPlayer, pCreature);
 		return;
 	}
-
+	else
+	{
 	pPlayer->UpdateSkill(164,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
 	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
+	}
 break;
 
 case 1003: // Enchanting
 	if(!pPlayer->UpdateSkill(333,0))
-      {
+	{
 		pCreature->MonsterWhisper("You don't have this skill or you allready have the maximum skill value $C.", pPlayer->GetGUID());
 		GossipHello_custom_npc_professionmaster(pPlayer, pCreature);
 		return;
 	}
-
+	else
+	{
 	pPlayer->UpdateSkill(333,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
 	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
+	}
 break;
 
 case 1004: // Engineering
 	if(!pPlayer->UpdateSkill(202,0))
-      {
+	{
 		pCreature->MonsterWhisper("You don't have this skill or you allready have the maximum skill value $C.", pPlayer->GetGUID());
 		GossipHello_custom_npc_professionmaster(pPlayer, pCreature);
 		return;
 	}
-
+	else
+	{
 	pPlayer->UpdateSkill(202,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
 	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
+	}
 break;
 
 case 1005: // Herbalism
 	if(!pPlayer->UpdateSkill(182,0))
-      {
+	{
 		pCreature->MonsterWhisper("You don't have this skill or you allready have the maximum skill value $C.", pPlayer->GetGUID());
 		GossipHello_custom_npc_professionmaster(pPlayer, pCreature);
 		return;
 	}
-
+	else
+	{
 	pPlayer->UpdateSkill(182,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
 	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
+	}
 break;
 
 case 1006: // Inscription
 	if(!pPlayer->UpdateSkill(773,0))
-      {
+	{
 		pCreature->MonsterWhisper("You don't have this skill or you allready have the maximum skill value $C.", pPlayer->GetGUID());
 		GossipHello_custom_npc_professionmaster(pPlayer, pCreature);
 		return;
 	}
-
+	else
+	{
 	pPlayer->UpdateSkill(773,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
 	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
+	}
 break;
 
 case 1007: // Jewelcrafting
 	if(!pPlayer->UpdateSkill(755,0))
-      {
+	{
 		pCreature->MonsterWhisper("You don't have this skill or you allready have the maximum skill value $C.", pPlayer->GetGUID());
 		GossipHello_custom_npc_professionmaster(pPlayer, pCreature);
 		return;
 	}
-
+	else
+	{
 	pPlayer->UpdateSkill(755,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
 	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
+	}
 break;
 
 case 1008: // Leatherworking
 	if(!pPlayer->UpdateSkill(165,0))
-      {
+	{
 		pCreature->MonsterWhisper("You don't have this skill or you allready have the maximum skill value $C.", pPlayer->GetGUID());
 		GossipHello_custom_npc_professionmaster(pPlayer, pCreature);
 		return;
 	}
-
+	else
+	{
 	pPlayer->UpdateSkill(165,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
 	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
+	}
 break;
 
 case 1009: // Mining
 	if(!pPlayer->UpdateSkill(186,0))
-      {
+	{
 		pCreature->MonsterWhisper("You don't have this skill or you allready have the maximum skill value $C.", pPlayer->GetGUID());
 		GossipHello_custom_npc_professionmaster(pPlayer, pCreature);
 		return;
 	}
-
+	else
+	{
 	pPlayer->UpdateSkill(186,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
 	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
+	}
 break;
 
 case 1010: // Skinning
 	if(!pPlayer->UpdateSkill(393,0))
-      {
+	{
 		pCreature->MonsterWhisper("You don't have this skill or you allready have the maximum skill value $C.", pPlayer->GetGUID());
 		GossipHello_custom_npc_professionmaster(pPlayer, pCreature);
 		return;
 	}
-
+	else
+	{
 	pPlayer->UpdateSkill(393,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
 	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
+	}
 break;
 
 case 1011: // Tailoring
 	if(!pPlayer->UpdateSkill(197,0))
-      {
+	{
 		pCreature->MonsterWhisper("You don't have this skill or you allready have the maximum skill value $C.", pPlayer->GetGUID());
 		GossipHello_custom_npc_professionmaster(pPlayer, pCreature);
 		return;
 	}
-
+	else
+	{
 	pPlayer->UpdateSkill(197,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
 	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
+	}
 break;
 
 //////////////////////////////////////////////////Secondary Skills///////////////////////////////////////////////////////////////
 
 case 2001: // Cooking
 	if(!pPlayer->UpdateSkill(185,0))
-      {
+	{
 		pCreature->MonsterWhisper("You don't have this skill or you allready have the maximum skill value $C.", pPlayer->GetGUID());
 		GossipHello_custom_npc_professionmaster(pPlayer, pCreature);
 		return;
 	}
-
+	else
+	{
 	pPlayer->UpdateSkill(185,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
 	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
+	}
 break;
 
 case 2002: // First Aid
 	if(!pPlayer->UpdateSkill(129,0))
-      {
+	{
 		pCreature->MonsterWhisper("You don't have this skill or you allready have the maximum skill value $C.", pPlayer->GetGUID());
 		GossipHello_custom_npc_professionmaster(pPlayer, pCreature);
 		return;
 	}
-
+	else
+	{
 	pPlayer->UpdateSkill(129,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
 	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
+	}
 break;
 
 case 2003: // Fishing
 	if(!pPlayer->UpdateSkill(356,0))
-      {
+	{
 		pCreature->MonsterWhisper("You don't have this skill or you allready have the maximum skill value $C.", pPlayer->GetGUID());
 		GossipHello_custom_npc_professionmaster(pPlayer, pCreature);
 		return;
 	}
-
+	else
+	{
 	pPlayer->UpdateSkill(356,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
 	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
+	}
 break;
 
 case 2005: // Archaeology
 	if(!pPlayer->UpdateSkill(794,0))
-      {
+	{
 		pCreature->MonsterWhisper("You don't have this skill or you allready have the maximum skill value $C.", pPlayer->GetGUID());
 		GossipHello_custom_npc_professionmaster(pPlayer, pCreature);
 		return;
 	}
-
+	else
+	{
 	pPlayer->UpdateSkill(794,(DARKICEConfig.GetFloatDefault("ProfessionMaster.AddSkillPoints",0)));
 	pPlayer->ModifyMoney(-(DARKICEConfig.GetFloatDefault("ProfessionMaster.SkillPointCost",0)));
 	pPlayer->CLOSE_GOSSIP_MENU();
+	}
 break;
 
  pPlayer->CLOSE_GOSSIP_MENU();

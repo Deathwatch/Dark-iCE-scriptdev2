@@ -45,12 +45,6 @@ bool GossipSelect_custom_npc_resetlevel(Player* pPlayer, Creature* pCreature, ui
 	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
 		error_log("DARKICE: Unable to open configuration file");
 
-    if (uiAction == GOSSIP_ACTION_INFO_DEF+2)
-    {
-        pCreature->MonsterWhisper("Mh ok. See you around!", pPlayer->GetGUID());
-        pPlayer->CLOSE_GOSSIP_MENU();
-    }
-
     if (uiAction == GOSSIP_ACTION_INFO_DEF+1)
 	{
 		if (pPlayer->getLevel() == (DARKICEConfig.GetFloatDefault("ResetMaster.ResetMinimumLevel",0)))
@@ -64,12 +58,18 @@ bool GossipSelect_custom_npc_resetlevel(Player* pPlayer, Creature* pCreature, ui
 			pPlayer->ModifyMoney(+(DARKICEConfig.GetFloatDefault("ResetMaster.ResetAddMoney",0)));
 			pPlayer->SetLevel((DARKICEConfig.GetFloatDefault("ResetMaster.LevelAfterReset",0)));
 		}
-		if (pPlayer->getLevel() < (DARKICEConfig.GetFloatDefault("ResetMaster.ResetMinimumLevel",0)))
+		else
 		{
 			pCreature->MonsterWhisper("Your level is too low or too high to reset!", pPlayer->GetGUID());
 			pPlayer->CLOSE_GOSSIP_MENU();
 		}
 	}
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF+2)
+    {
+        pCreature->MonsterWhisper("Mh ok. See you around!", pPlayer->GetGUID());
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
 	
     return true;
 }

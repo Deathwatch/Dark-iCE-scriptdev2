@@ -43,8 +43,8 @@ bool GOHello_custom_gameobject_deception_orb(Player* pPlayer, GameObject* pGo)
 bool GOHello_custom_gameobject_morph(Player* pPlayer, GameObject* pGo)
 {
     uint16 display_id;
-    uint32 select = urand(0, 55);
-    switch(select)
+    uint32 displayID = urand(0, 55);
+    switch(displayID)
     {
         case 0: display_id = 6374;			// Morph's into a Black Drake
             break;
@@ -171,58 +171,58 @@ bool GOHello_custom_gameobject_morph(Player* pPlayer, GameObject* pGo)
 	}
 }
 
-// Transformer
-bool GOHello_custom_gameobject_transform(Player* pPlayer, GameObject* pGo)
+// Spellmachine
+bool GOHello_custom_gameobject_spellmachine(Player* pPlayer, GameObject* pGo)
 {
-    uint32 spellId;
-    uint32 select = urand(0, 17);
-    switch(select)
+    uint32 spell_id;
+    uint32 spellID = urand(0, 17);
+    switch(spellID)
     {
-        case 0: spellId = 8213; 	// Cast Spell: Flip Out (Transforms)
+        case 0: spell_id = 8213; 	// Cast Spell: Flip Out (Transforms)
             break;
-        case 1: spellId = 30167; 	// Cast Spell: Red Ogre Costume (Transforms)
+        case 1: spell_id = 30167; 	// Cast Spell: Red Ogre Costume (Transforms)
             break;
-        case 2: spellId = 44755;	// Cast Spell: Snowflakes (Adds snow to the character)
+        case 2: spell_id = 44755;	// Cast Spell: Snowflakes (Adds snow to the character)
             break;
-        case 3: spellId = 16591; 	// Cast Spell: Noggenfogger Elixir (Transforms into a Skelleton)
+        case 3: spell_id = 16591; 	// Cast Spell: Noggenfogger Elixir (Transforms into a Skelleton)
             break;
-        case 4: spellId = 16593; 	// Cast Spell: Noggenfogger Elixir (Makes you light...)
+        case 4: spell_id = 16593; 	// Cast Spell: Noggenfogger Elixir (Makes you light...)
             break;
-        case 5: spellId = 16595; 	// Cast Spell: Noggenfogger Elixir (Shrinks)
+        case 5: spell_id = 16595; 	// Cast Spell: Noggenfogger Elixir (Shrinks)
             break;
-        case 6: spellId = 39542; 	// Cast Spell: Blessing of O'ros (You feel good...)
+        case 6: spell_id = 39542; 	// Cast Spell: Blessing of O'ros (You feel good...)
             break;
-        case 7: spellId = 59395; 	// Cast Spell: Abomination Hook (Inflicts 150 Physical damage and pulls the target to the caster.)
+        case 7: spell_id = 59395; 	// Cast Spell: Abomination Hook (Inflicts 150 Physical damage and pulls the target to the caster.)
             break;
-        case 8: spellId = 43944;	// Cast Spell: Beer Goggles (Everyone is attractive...)
+        case 8: spell_id = 43944;	// Cast Spell: Beer Goggles (Everyone is attractive...)
             break;
-        case 9: spellId = 42156; 	// Cast Spell: Beer Goggles (Everyone is a lil bit more attractive... xD)
+        case 9: spell_id = 42156; 	// Cast Spell: Beer Goggles (Everyone is a lil bit more attractive... xD)
             break;
-        case 10: spellId = 51413; 	// Cast Spell: Barreled! (You can't see!)
+        case 10: spell_id = 51413; 	// Cast Spell: Barreled! (You can't see!)
             break;
-        case 11: spellId = 52627; 	// Cast Spell: Arrow in Face (Headshot ?!)
+        case 11: spell_id = 52627; 	// Cast Spell: Arrow in Face (Headshot ?!)
             break;
-        case 12: spellId = 64580; 	// Cast Spell: Algalon Event Beam Climax (Poof!)
+        case 12: spell_id = 64580; 	// Cast Spell: Algalon Event Beam Climax (Poof!)
             break;
-        case 13: spellId = 23002; 	// Cast Spell: Alert! (Your presence was revealed by an Alarm-o-Bot!)
+        case 13: spell_id = 23002; 	// Cast Spell: Alert! (Your presence was revealed by an Alarm-o-Bot!)
             break;
-        case 14: spellId = 54932; 	// Cast Spell: Aerial Leap (Nothing to see here, move along.)
+        case 14: spell_id = 54932; 	// Cast Spell: Aerial Leap (Nothing to see here, move along.)
             break;
-        case 15: spellId = 72770;	// Cast Spell: Abracadaver! (Summons a Cadaver that will protect you for 1 min.)
+        case 15: spell_id = 72770;	// Cast Spell: Abracadaver! (Summons a Cadaver that will protect you for 1 min.)
             break;
-        case 16: spellId = 26680; 	// Cast Spell: Adored (You have received a gift of adoration!)
+        case 16: spell_id = 26680; 	// Cast Spell: Adored (You have received a gift of adoration!)
             break;
-        case 17: spellId = 46433; 	// Cast Spell: Ahune Spank Knockback and Snow (Lol ?)
+        case 17: spell_id = 46433; 	// Cast Spell: Ahune Spank Knockback and Snow (Lol ?)
             break;
     }
-    if (pPlayer->HasAura(spellId))
+    if (pPlayer->HasAura(spell_id))
 	{
-        pPlayer->RemoveAurasDueToSpell(spellId);
+        pPlayer->RemoveAurasDueToSpell(spell_id);
 		return true;
 	}
     else
 	{
-        pPlayer->CastSpell(pPlayer, spellId, true);
+        pPlayer->CastSpell(pPlayer, spell_id, true);
 		return true;
 	}
 }
@@ -249,8 +249,8 @@ void AddSC_custom_gameobjects()
     newscript->RegisterSelf();
 
     newscript                   = new Script;
-    newscript->Name             = "custom_gameobject_transform";
-    newscript->pGOHello         = &GOHello_custom_gameobject_transform;
+    newscript->Name             = "custom_gameobject_spellmachine";
+    newscript->pGOHello         = &GOHello_custom_gameobject_spellmachine;
     newscript->RegisterSelf();
 
 	newscript                   = new Script;

@@ -3,7 +3,7 @@
 # This file must be placed within the directory which holds mangosd.conf and realmd.conf
 # or the scripts will not work as they should.
 ################################################################################################
-ConfVersion=2010060101
+ConfVersion=2010060701
 
 ################################################################################################
 # Info:
@@ -118,19 +118,20 @@ LevelUpItemSafeLevel = 75
 LevelUpItemAddLevel = 5
 
 ################################################################################################
-# Spellmaster.MaxOutWeaponSkills
-#	          Default:	0 (no)
-#						1 (yes)
-# 
-# If for some reason players dont start with maxed out weapon skills (if you've configured that
-# in the mangos.conf file), enable this. They'll be able to max out their weapon skills from the
-# Spellmaster NPC.
+# Spellmaster
+#	          .LearnAllLanguages = 1        # Define if learning all languages is enabled or not.
 #
-# Spellmaster.MaxOutRidingSkills
-#	          Default:	0 (no)
-#						1 (yes)
-# 
-# Enable this if you wish to learn Artisan and Cold Weather Riding.
+#	          .MaxOutLanguageSkills = 1     # Define if maxing out languages is enabled or not.
+#
+#	          .LearnAllWeapons = 1          # Define if learning all weapons is enabled or not.
+#
+#	          .MaxOutWeaponSkills = 1       # Define if maxing out weapon skills is enabled or not.
+#
+#	          .MaxOutRidingSkills = 1       # Define if learning Artisian and Cold Weather flying
+#                                               is enabled or not. (Automatically max out riding)
 ################################################################################################
-Spellmaster.MaxOutWeaponSkills = 0
-Spellmaster.MaxOutRidingSkills = 0
+Spellmaster.LearnAllLanguages = 1
+Spellmaster.MaxOutLanguageSkills = 1
+Spellmaster.LearnAllWeapons = 1
+Spellmaster.MaxOutWeaponSkills = 1
+Spellmaster.MaxOutRidingSkills = 1

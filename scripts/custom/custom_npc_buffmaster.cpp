@@ -69,6 +69,7 @@ return true;
 void SendDefaultMenu_custom_npc_buffmaster(Player* pPlayer, Creature* pCreature, uint32 uiAction)
 {
 
+//Combat Check
 if (pPlayer->isInCombat())
 {
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -79,20 +80,20 @@ if (pPlayer->isInCombat())
     Config DARKICEConfig;
 	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
 		error_log("DARKICE: Unable to open configuration file");
-
-	bool SmallBuffsEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.SmallBuffsEnabled", true);
-	bool GreatBuffsEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.GreatBuffsEnabled", true);
-	bool GameMasterBuffsEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.GameMasterBuffsEnabled", true);
-	bool PlayerToolsEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.PlayerToolsEnabled", true);
-	bool GoldSpellEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.GoldSpellEnabled", false);
-
-//Mony Check
+        
+//Money Check
 if (pPlayer->GetMoney() < (DARKICEConfig.GetFloatDefault("BuffsMaster.BuffCost",0)))
 {
     pPlayer->CLOSE_GOSSIP_MENU();
     pCreature->MonsterWhisper("You don't have enough money.", pPlayer->GetGUID());
 	return;
 }
+
+	bool SmallBuffsEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.SmallBuffsEnabled", true);
+	bool GreatBuffsEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.GreatBuffsEnabled", true);
+	bool GameMasterBuffsEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.GameMasterBuffsEnabled", true);
+	bool PlayerToolsEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.PlayerToolsEnabled", true);
+	bool GoldSpellEnabled = DARKICEConfig.GetBoolDefault("BuffsMaster.GoldSpellEnabled", false);
 
 switch(uiAction)
 {

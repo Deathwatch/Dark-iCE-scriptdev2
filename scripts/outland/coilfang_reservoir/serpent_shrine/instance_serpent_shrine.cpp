@@ -63,7 +63,8 @@ struct MANGOS_DLL_DECL instance_serpentshrine_cavern : public ScriptedInstance
         m_uiKarathressEvent_Starter = 0;
     }
 
-    bool IsEncounterInProgress()const
+    bool IsEncounterInProgress() const
+
     {
         for(uint8 i = 0; i < MAX_ENCOUNTER; ++i)
             if (m_auiEncounter[i] == IN_PROGRESS)

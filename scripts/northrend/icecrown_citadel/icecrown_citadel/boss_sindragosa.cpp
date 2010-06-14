@@ -262,6 +262,8 @@ struct MANGOS_DLL_DECL boss_sindragosaAI : public ScriptedAI
                     MovementStarted = true;
                     SetCombatMovement(false);
                     bsw->doCast(SPELL_FLY_VISUAL);
+                    m_creature->SetUInt32Value(UNIT_FIELD_BYTES_0, 50331648);
+                    m_creature->SetUInt32Value(UNIT_FIELD_BYTES_1, 50331648);
                     m_creature->GetMotionMaster()->MovePoint(1, SpawnLoc[1].x, SpawnLoc[1].y, SpawnLoc[1].z);
                     m_creature->HandleEmoteCommand(EMOTE_ONESHOT_FLY_SIT_GROUND_UP);
                     m_creature->AddSplineFlag(SPLINEFLAG_FLYING);
@@ -275,6 +277,7 @@ struct MANGOS_DLL_DECL boss_sindragosaAI : public ScriptedAI
             case 3: 
                           stage = 4;
                           IceBlock();
+                          m_creature->SetOrientation(3.1f);
             break;
             case 4: 
                     if (bsw->timedQuery(SPELL_FROST_BOMB, diff))
@@ -300,6 +303,8 @@ struct MANGOS_DLL_DECL boss_sindragosaAI : public ScriptedAI
                            SetCombatMovement(true);
                            m_creature->GetMotionMaster()->MoveChase(m_creature->getVictim());
                            bsw->doRemove(SPELL_FLY_VISUAL);
+                           m_creature->SetUInt32Value(UNIT_FIELD_BYTES_0, 0);
+                           m_creature->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
                            m_creature->RemoveSplineFlag(SPLINEFLAG_FLYING);
                           };
             break;
@@ -342,10 +347,12 @@ struct MANGOS_DLL_DECL mob_ice_tombAI : public ScriptedAI
     mob_ice_tombAI(Creature *pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
+        bsw = new BossSpellWorker(this);
         Reset();
     }
 
     ScriptedInstance *m_pInstance;
+    BossSpellWorker* bsw;
     Unit* pVictim;
 
     void Reset()
@@ -365,24 +372,24 @@ struct MANGOS_DLL_DECL mob_ice_tombAI : public ScriptedAI
     void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
     {
         if (uiDamage > m_creature->GetHealth())
-            if (pVictim) pVictim->RemoveAurasDueToSpell(SPELL_ICY_TOMB);
+            if (pVictim) bsw->doRemove(SPELL_ICY_TOMB,pVictim);
     }
 
     void KilledUnit(Unit* _Victim)
     {
-        if (pVictim) pVictim->RemoveAurasDueToSpell(SPELL_ICY_TOMB);
+        if (pVictim) bsw->doRemove(SPELL_ICY_TOMB,pVictim);
     }
 
     void JustDied(Unit* Killer)
     {
-        if (pVictim) pVictim->RemoveAurasDueToSpell(SPELL_ICY_TOMB);
+        if (pVictim) bsw->doRemove(SPELL_ICY_TOMB,pVictim);
     }
 
     void UpdateAI(const uint32 uiDiff)
     {
         if(m_pInstance && m_pInstance->GetData(TYPE_SINDRAGOSA) != IN_PROGRESS)
         {
-        if (pVictim) pVictim->RemoveAurasDueToSpell(SPELL_ICY_TOMB);
+        if (pVictim) bsw->doRemove(SPELL_ICY_TOMB,pVictim);
             m_creature->ForcedDespawn();
         }
 
@@ -415,7 +422,9 @@ struct MANGOS_DLL_DECL mob_frost_bombAI : public ScriptedAI
         boom_timer = 9000;
         finita = false;
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-        m_creature->SetDisplayId(15880);
+//        m_creature->SetDisplayId(15880);
+        m_creature->SetDisplayId(22523);
+//        m_creature->SetDisplayId(19075);
     }
 
     void AttackStart(Unit *pWho)

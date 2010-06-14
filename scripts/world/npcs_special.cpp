@@ -2334,26 +2334,6 @@ struct MANGOS_DLL_DECL mob_mirror_imageAI : public ScriptedAI
 CreatureAI* GetAI_mob_mirror_image(Creature* pCreature)
 {
     return new mob_mirror_imageAI(pCreature);
-        SetCombatMovement(true);
-    }
-
-    void UpdateAI(const uint32 diff)
-    {
-        if (!owner) return;
-
-        if (!m_creature->getVictim())
-        {
-            if (owner->getVictim())
-                AttackStart(owner->getVictim());
-        }
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-CreatureAI* GetAI_npc_rune_blade(Creature* pCreature)
-{
-    return new npc_rune_blade(pCreature);
 }
 
 void AddSC_npcs_special()

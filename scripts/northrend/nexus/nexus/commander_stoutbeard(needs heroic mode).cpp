@@ -18,7 +18,7 @@
 SDName: Boss Commander Stoutbeard
 SD%Complete: 95%
 SDComment:  Only Horde Heroic
-SDCategory:
+SDCategory: /dev/ FallenangelX
 Script Data End */
 
 #include "precompiled.h"

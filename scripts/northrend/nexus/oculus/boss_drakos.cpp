@@ -1,5 +1,5 @@
 // the Oculus: Drakos the Interrogator
-// by Oj
+// by Oj  /dev/ FallenangelX
 
 #include "precompiled.h"
 #include "oculus.h"

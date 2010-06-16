@@ -268,7 +268,7 @@ struct MANGOS_DLL_DECL mob_lightning_forge_creditAI : public ScriptedAI
         if (!pCaster || !pSpell || pCaster->GetTypeId() != TYPEID_PLAYER || pSpell->Id != SPELL_BOULDERCRAGS_BOMB)
             return;
 
-        DoCast(m_creature,SPELL_EXPLOSION,true);
+        DoCastSpellIfCan(m_creature,SPELL_EXPLOSION,true);
 
         if (((Player*)pCaster)->GetQuestStatus(QUEST_DESTROY_FORGES) == QUEST_STATUS_INCOMPLETE)
             ((Player*)pCaster)->KilledMonsterCredit(m_creature->GetEntry(),m_creature->GetGUID());

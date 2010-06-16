@@ -194,7 +194,7 @@ struct MANGOS_DLL_DECL boss_anetheronAI : public ScriptedAI
 
         if(VampiricAuraTimer < diff)
 		{
-			DoCast(m_creature, SPELL_VAMPIRIC_AURA); 
+			DoCastSpellIfCan(m_creature, SPELL_VAMPIRIC_AURA); 
 			VampiricAuraTimer = 10000+rand()%5000;                                              //youtube timer
 		}VampiricAuraTimer -= diff;
 
@@ -217,7 +217,7 @@ struct MANGOS_DLL_DECL boss_anetheronAI : public ScriptedAI
 		if(!Enraged)
 			if(EnrageTimer < diff)
 			{
-				DoCast(m_creature, SPELL_ENRAGE);
+				DoCastSpellIfCan(m_creature, SPELL_ENRAGE);
 				Enraged = true;
 			}EnrageTimer -= diff;
 
@@ -262,7 +262,7 @@ struct MANGOS_DLL_DECL mob_towering_infernalAI : public ScriptedAI
 
 		if(!Immolation)
 		{
-			DoCast(m_creature, SPELL_IMMOLATION);
+			DoCastSpellIfCan(m_creature, SPELL_IMMOLATION);
 			Immolation = true;
 		}
 
@@ -270,7 +270,7 @@ struct MANGOS_DLL_DECL mob_towering_infernalAI : public ScriptedAI
 		{
 			if (Creature* Anetheron = (Creature*)Unit::GetUnit(*m_creature, m_pInstance->GetData64(DATA_ANETHERON)))
 				if (m_creature->IsWithinDistInMap(Anetheron, 10.0f) && Anetheron->isAlive() && Anetheron->HasAura(SPELL_VAMPIRIC_AURA))
-					DoCast(m_creature, SPELL_VAMPIRIC_AURA);
+					DoCastSpellIfCan(m_creature, SPELL_VAMPIRIC_AURA);
 			Immolation_Timer = 1000;
 		}Immolation_Timer -= diff;
 

@@ -158,7 +158,7 @@ struct MANGOS_DLL_DECL boss_erekemAI : public ScriptedAI
         if (m_uiEarthShield_Timer < uiDiff)
         {
             m_creature->InterruptNonMeleeSpells(false);
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_EARTH_SHIELD_H : SPELL_EARTH_SHIELD);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_EARTH_SHIELD_H : SPELL_EARTH_SHIELD);
             m_uiEarthShield_Timer = urand(15000, 20000);
         }
         else m_uiEarthShield_Timer -= uiDiff;
@@ -167,7 +167,7 @@ struct MANGOS_DLL_DECL boss_erekemAI : public ScriptedAI
         {
             m_creature->InterruptNonMeleeSpells(false);
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                DoCast(pTarget, SPELL_EARTH_SHOCK);
+                DoCastSpellIfCan(pTarget, SPELL_EARTH_SHOCK);
             m_uiEarthShock_Timer = urand(12000, 17000);
         }
         else m_uiEarthShock_Timer -= uiDiff;
@@ -175,7 +175,7 @@ struct MANGOS_DLL_DECL boss_erekemAI : public ScriptedAI
         if (m_uiChainHeal_Timer < uiDiff)
         {
             //m_creature->InterruptNonMeleeSpells(false);
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_CHAIN_HEAL_H : SPELL_CHAIN_HEAL);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_CHAIN_HEAL_H : SPELL_CHAIN_HEAL);
             m_uiChainHeal_Timer = urand(5000, 25000);
         }
         else m_uiChainHeal_Timer -= uiDiff;
@@ -183,7 +183,7 @@ struct MANGOS_DLL_DECL boss_erekemAI : public ScriptedAI
         if (m_uiBreakBonds_Timer < uiDiff)
         {
             m_creature->InterruptNonMeleeSpells(false);
-            DoCast(m_creature, SPELL_BREAK_BONDS);
+            DoCastSpellIfCan(m_creature, SPELL_BREAK_BONDS);
             m_uiBreakBonds_Timer = urand(25000, 30000);
         }
         else m_uiBreakBonds_Timer -= uiDiff;
@@ -193,7 +193,7 @@ struct MANGOS_DLL_DECL boss_erekemAI : public ScriptedAI
             if (m_uiLightningBolt_Timer < uiDiff)
             {
                 if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                    DoCast(pTarget, SPELL_LIGHTNING_BOLT);
+                    DoCastSpellIfCan(pTarget, SPELL_LIGHTNING_BOLT);
                 m_uiLightningBolt_Timer = 2000;
             }
             else m_uiLightningBolt_Timer -= uiDiff;
@@ -202,7 +202,7 @@ struct MANGOS_DLL_DECL boss_erekemAI : public ScriptedAI
         {
             if (m_uiStormstrike_Timer < uiDiff)
             {
-                DoCast(m_creature->getVictim(), SPELL_STORMSTRIKE);
+                DoCastSpellIfCan(m_creature->getVictim(), SPELL_STORMSTRIKE);
                 m_uiStormstrike_Timer = 1000;
             }
             else m_uiStormstrike_Timer -= uiDiff;
@@ -292,21 +292,21 @@ struct MANGOS_DLL_DECL mob_erekem_guardAI : public ScriptedAI
 
         if (m_uiGushingWound_Timer < uiDiff)
         {
-            DoCast(m_creature->getVictim(), SPELL_GUSHING_WOUND);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_GUSHING_WOUND);
             m_uiGushingWound_Timer = urand(30000, 32000);
         }
         else m_uiGushingWound_Timer -= uiDiff;
 
         if (m_uiHowlingScreech_Timer < uiDiff)
         {
-            DoCast(m_creature, SPELL_HOWLING_SCREECH);
+            DoCastSpellIfCan(m_creature, SPELL_HOWLING_SCREECH);
             m_uiHowlingScreech_Timer = urand(24000, 30000);
         }
         else m_uiHowlingScreech_Timer -= uiDiff;
 
         if (m_uiStrike_Timer < uiDiff)
         {
-            DoCast(m_creature->getVictim(), SPELL_STRIKE);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_STRIKE);
             m_uiStrike_Timer = urand(15000, 16000);
         }
         else m_uiStrike_Timer -= uiDiff;

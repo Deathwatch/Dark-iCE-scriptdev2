@@ -160,7 +160,7 @@ struct MANGOS_DLL_DECL boss_kalecgosAI : public ScriptedAI
             {
                 damage = 0;
                 m_bBanished = true;
-                DoCast(m_creature, SPELL_BANISH, true);
+                DoCastSpellIfCan(m_creature, SPELL_BANISH, true);
                 m_creature->GetMotionMaster()->MoveIdle();
             }
             else

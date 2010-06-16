@@ -149,7 +149,7 @@ struct MANGOS_DLL_DECL boss_tharonjaAI : public ScriptedAI
         {
             if (CurseOfLife_Timer < uiDiff)
             {
-                DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_CURSE_OF_LIFE : H_SPELL_CURSE_OF_LIFE);
+                DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_CURSE_OF_LIFE : H_SPELL_CURSE_OF_LIFE);
                 CurseOfLife_Timer = urand (5000, 10000);
             }else CurseOfLife_Timer -= uiDiff;
 
@@ -158,9 +158,9 @@ struct MANGOS_DLL_DECL boss_tharonjaAI : public ScriptedAI
                 switch(urand(0, 1))
                 {
                     case 0: 
-                        DoCast(m_creature->getVictim(),  m_bIsRegularMode ? SPELL_SHADOW_VOLLEY : H_SPELL_SHADOW_VOLLEY);
+                        DoCastSpellIfCan(m_creature->getVictim(),  m_bIsRegularMode ? SPELL_SHADOW_VOLLEY : H_SPELL_SHADOW_VOLLEY);
                     case 1: 
-                        DoCast(m_creature->getVictim(),  m_bIsRegularMode ? SPELL_RAIN_OF_FIRE : H_SPELL_RAIN_OF_FIRE);
+                        DoCastSpellIfCan(m_creature->getVictim(),  m_bIsRegularMode ? SPELL_RAIN_OF_FIRE : H_SPELL_RAIN_OF_FIRE);
                 }
                 SkeletonSpells_Timer = urand (5000, 10000);
             }else SkeletonSpells_Timer -= uiDiff;
@@ -192,14 +192,14 @@ struct MANGOS_DLL_DECL boss_tharonjaAI : public ScriptedAI
         {
             if (PhaseChangeTimer < uiDiff)
             {
-                DoCast(m_creature, SPELL_RETURN_FLESH);
+                DoCastSpellIfCan(m_creature, SPELL_RETURN_FLESH);
                 PhaseChangeTimer = PHASE_CHANGE_REAL;
                 Phase = PHASE_INTOSKELETON;
             }else PhaseChangeTimer -= uiDiff;
 
             if (PoisonCloud_Timer < uiDiff)
             {
-                DoCast(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0),  m_bIsRegularMode ? SPELL_POISON_CLOUD : H_SPELL_POSION_CLOUD);
+                DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0),  m_bIsRegularMode ? SPELL_POISON_CLOUD : H_SPELL_POSION_CLOUD);
                 PoisonCloud_Timer = 10000;
             }else PoisonCloud_Timer -= uiDiff;
 
@@ -210,9 +210,9 @@ struct MANGOS_DLL_DECL boss_tharonjaAI : public ScriptedAI
                     case 0:
                     case 1:
                     case 2:
-                        DoCast(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0),  m_bIsRegularMode ? SPELL_LIGHTNING_BREATH : H_SPELL_LIGHTNING_BREATH);
+                        DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0),  m_bIsRegularMode ? SPELL_LIGHTNING_BREATH : H_SPELL_LIGHTNING_BREATH);
                     case 3: 
-                        DoCast(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0),  m_bIsRegularMode ? SPELL_EYE_BEAM : SPELL_EYE_BEAM);
+                        DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0),  m_bIsRegularMode ? SPELL_EYE_BEAM : SPELL_EYE_BEAM);
                 }
                 FleshSpells_Timer = 1500;
             }else FleshSpells_Timer -= uiDiff;
@@ -222,7 +222,7 @@ struct MANGOS_DLL_DECL boss_tharonjaAI : public ScriptedAI
         {
             if (PhaseChangeTimer < uiDiff)
             {
-                DoCast(m_creature, SPELL_DECAY_FLESH);
+                DoCastSpellIfCan(m_creature, SPELL_DECAY_FLESH);
                 m_creature->SetDisplayId(27072);
                 PhaseChangeTimer = PHASE_CHANGE_SKELETON;
                 Phase = PHASE_SKELETON;

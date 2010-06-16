@@ -18,7 +18,7 @@
 SDName: Boss_Patchwerk
 SD%Complete: 100
 SDComment:
-SDCategory: Naxxramas
+SDCategory: Naxxramas /dev/FallenAngelX
 EndScriptData */
 
 #include "precompiled.h"
@@ -125,7 +125,7 @@ struct MANGOS_DLL_DECL boss_patchwerkAI : public ScriptedAI
         }
 
         if (pTarget)
-            DoCast(pTarget, m_bIsRegularMode ? SPELL_HATEFULSTRIKE : SPELL_HATEFULSTRIKE_H);
+            DoCastSpellIfCan(pTarget, m_bIsRegularMode ? SPELL_HATEFULSTRIKE : SPELL_HATEFULSTRIKE_H);
     }
 
     void UpdateAI(const uint32 uiDiff)
@@ -147,7 +147,7 @@ struct MANGOS_DLL_DECL boss_patchwerkAI : public ScriptedAI
         {
             if (m_creature->GetHealth()*20 < m_creature->GetMaxHealth())
             {
-                DoCast(m_creature, SPELL_ENRAGE);
+                DoCastSpellIfCan(m_creature, SPELL_ENRAGE);
                 DoScriptText(EMOTE_ENRAGE, m_creature);
                 m_bEnraged = true;
             }
@@ -158,7 +158,7 @@ struct MANGOS_DLL_DECL boss_patchwerkAI : public ScriptedAI
         {
             if (m_uiBerserkTimer < uiDiff)
             {
-                DoCast(m_creature, SPELL_BERSERK);
+                DoCastSpellIfCan(m_creature, SPELL_BERSERK);
                 DoScriptText(EMOTE_BERSERK, m_creature);
                 m_bBerserk = true;
             }
@@ -170,7 +170,7 @@ struct MANGOS_DLL_DECL boss_patchwerkAI : public ScriptedAI
             // Slimebolt - casted only while Berserking to prevent kiting
             if (m_uiSlimeboltTimer < uiDiff)
             {
-                DoCast(m_creature->getVictim(), SPELL_SLIMEBOLT);
+                DoCastSpellIfCan(m_creature->getVictim(), SPELL_SLIMEBOLT);
                 m_uiSlimeboltTimer = 5000;
             }
             else

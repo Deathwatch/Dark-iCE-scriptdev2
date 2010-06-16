@@ -104,13 +104,13 @@ struct MANGOS_DLL_DECL mob_magma_ragerAI : public ScriptedAI
 	{
         if (Fire_Blast_Timer < diff)
         {
-            DoCast(m_creature, SPELL_FIRE_BLAST);
+            DoCastSpellIfCan(m_creature, SPELL_FIRE_BLAST);
             Fire_Blast_Timer = 10000;
         }else Fire_Blast_Timer -= diff;
 
         if (Superheated_Winds_Timer < diff)
         {
-            DoCast(m_creature, SPELL_SUPERHEATED_WINDS);
+            DoCastSpellIfCan(m_creature, SPELL_SUPERHEATED_WINDS);
             Superheated_Winds_Timer = 15000;
         }else Superheated_Winds_Timer -= diff;   
 	}

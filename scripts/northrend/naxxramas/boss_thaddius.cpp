@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: Boss_Thaddius
 SD%Complete: 50
-SDComment: Dev Phase
+SDComment: Dev Phase /dev/FallenAngelX
 SDCategory: Naxxramas
 EndScriptData */
 
@@ -309,7 +309,7 @@ struct MANGOS_DLL_DECL boss_thaddiusAI : public ScriptedAI
 
         if (!m_bIsBerserk && m_uiBerserkTimer < uiDiff)
         {
-            DoCast(m_creature, SPELL_BERSERK);
+            DoCastSpellIfCan(m_creature, SPELL_BERSERK);
             m_bIsBerserk = true;
         }else m_uiBerserkTimer -= uiDiff;
 

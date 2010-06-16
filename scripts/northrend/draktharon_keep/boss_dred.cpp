@@ -108,28 +108,28 @@ struct MANGOS_DLL_DECL boss_dredAI : public ScriptedAI
         //Fearsome Roar
         if (FearsomeRoar_Timer < uiDiff)
         {
-            DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_FEARSOME_ROAR : H_SPELL_FEARSOME_ROAR, true);
+            DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_FEARSOME_ROAR : H_SPELL_FEARSOME_ROAR, true);
             FearsomeRoar_Timer = 15000;
         }else FearsomeRoar_Timer -= uiDiff;
 
         //Piercing Slash
         if (PiercingSlash_Timer < uiDiff)
         {    
-            DoCast(m_creature->getVictim(), SPELL_PIERCING_SLASH, true);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_PIERCING_SLASH, true);
             PiercingSlash_Timer = urand(20000, 25000);
         }else PiercingSlash_Timer -= uiDiff;
 
         //Mangling Slash
         if (ManglingSlash_Timer < uiDiff)
         {    
-            DoCast(m_creature->getVictim(), SPELL_MANGLING_SLASH, true);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_MANGLING_SLASH, true);
             ManglingSlash_Timer = urand(20000, 25000);
         }else ManglingSlash_Timer -= uiDiff;
 
         //Mangling Slash
         if (GrievousBite_Timer < uiDiff)
         {    
-            DoCast(m_creature->getVictim(), SPELL_GRIEVOUS_BITE, true);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_GRIEVOUS_BITE, true);
             GrievousBite_Timer = urand(20000, 25000);
         }else GrievousBite_Timer -= uiDiff;
 
@@ -146,7 +146,7 @@ struct MANGOS_DLL_DECL boss_dredAI : public ScriptedAI
         //Bellowing Roar
         if (BellowingRoar_Timer < uiDiff)
         {    
-            DoCast(m_creature, SPELL_BELLOWING_ROAR);
+            DoCastSpellIfCan(m_creature, SPELL_BELLOWING_ROAR);
             BellowingRoar_Timer = 60000;
         }else BellowingRoar_Timer -= uiDiff;
 

@@ -149,7 +149,7 @@ struct MANGOS_DLL_DECL boss_azgalorAI : public ScriptedAI
         {
 			if(m_creature->getVictim())
 			{
-				DoCast(m_creature->getVictim(), SPELL_CLEAVE);
+				DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE);
 				CleaveTimer = 10000;
 			}
         }CleaveTimer -= diff;
@@ -165,7 +165,7 @@ struct MANGOS_DLL_DECL boss_azgalorAI : public ScriptedAI
 
 			if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
 			{
-				DoCast(target, SPELL_RAIN, false);
+				DoCastSpellIfCan(target, SPELL_RAIN, false);
 				target->CastSpell(target, SPELL_FLAMES, false);
 				RainTimer = 20000+rand()%15000;
 			}								
@@ -173,7 +173,7 @@ struct MANGOS_DLL_DECL boss_azgalorAI : public ScriptedAI
 
         if(HowlTimer < diff)
 		{
-			DoCast(m_creature, SPELL_HOWL); 
+			DoCastSpellIfCan(m_creature, SPELL_HOWL); 
 			HowlTimer = 15000+rand()%5000;                                            
 		}HowlTimer -= diff;
 
@@ -190,7 +190,7 @@ struct MANGOS_DLL_DECL boss_azgalorAI : public ScriptedAI
 
 		if(EnrageTimer < diff)
 		{
-			DoCast(m_creature, SPELL_ENRAGE);
+			DoCastSpellIfCan(m_creature, SPELL_ENRAGE);
 			EnrageTimer = 300000;
 		}EnrageTimer -= diff;
 

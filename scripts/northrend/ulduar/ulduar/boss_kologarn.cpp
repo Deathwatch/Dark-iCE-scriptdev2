@@ -90,7 +90,7 @@ struct MANGOS_DLL_DECL mob_ulduar_rubbleAI : public ScriptedAI
             if (!die)
             {
                 uiDamage = 0;
-                DoCast(m_creature, SPELL_RUMBLE);
+                DoCastSpellIfCan(m_creature, SPELL_RUMBLE);
                 Death_Timer = 500;
                 die = true;
             }
@@ -105,7 +105,7 @@ struct MANGOS_DLL_DECL mob_ulduar_rubbleAI : public ScriptedAI
 
         if (Stone_Nova_Timer < diff && !die)
         {
-            DoCast(m_creature, SPELL_STONE_NOVA);
+            DoCastSpellIfCan(m_creature, SPELL_STONE_NOVA);
             Stone_Nova_Timer = urand(7000, 9000);
         }else Stone_Nova_Timer -= diff;
 
@@ -141,7 +141,7 @@ struct MANGOS_DLL_DECL boss_kologarn_left_armAI : public ScriptedAI
     {
         Shockwave_Timer = 30000;
         Addcount = 0;
-        DoCast(m_creature, SPELL_ARM_VISUAL);
+        DoCastSpellIfCan(m_creature, SPELL_ARM_VISUAL);
     }
 
     void Aggro(Unit* pWho)
@@ -182,7 +182,7 @@ struct MANGOS_DLL_DECL boss_kologarn_left_armAI : public ScriptedAI
 
         if (Shockwave_Timer < diff)
         {
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_SHOCKWAVE : SPELL_SHOCKWAVE_H);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_SHOCKWAVE : SPELL_SHOCKWAVE_H);
             Shockwave_Timer = 30000;
         }else Shockwave_Timer -= diff;
     }
@@ -224,7 +224,7 @@ struct MANGOS_DLL_DECL boss_kologarn_right_armAI : public ScriptedAI
         gripdmg = 0;
         freedmg = 0;
         grip = false;
-        DoCast(m_creature, SPELL_ARM_VISUAL);
+        DoCastSpellIfCan(m_creature, SPELL_ARM_VISUAL);
     }
 
     void Aggro(Unit* pWho)
@@ -287,7 +287,7 @@ struct MANGOS_DLL_DECL boss_kologarn_right_armAI : public ScriptedAI
         {
             //stone grip emote
             if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0)){
-                //DoCast(target, m_bIsRegularMode ? SPELL_STONE_GRIP : SPELL_STONE_GRIP_H);
+                //DoCastSpellIfCan(target, m_bIsRegularMode ? SPELL_STONE_GRIP : SPELL_STONE_GRIP_H);
                 GripTarget = target->GetGUID();
                 grip = true;
                 gripdmg = 0;
@@ -389,12 +389,12 @@ struct MANGOS_DLL_DECL boss_kologarnAI : public ScriptedAI
         if (Spell_Timer < diff)
         {
             if (right && left)
-                DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_OVERHEAD_SMASH : SPELL_OVERHEAD_SMASH_H);
+                DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_OVERHEAD_SMASH : SPELL_OVERHEAD_SMASH_H);
             else
                 if (!right && !left)
-                    DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_STONE_SHOUT : SPELL_STONE_SHOUT_H);
+                    DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_STONE_SHOUT : SPELL_STONE_SHOUT_H);
                 else
-                    DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_ONE_ARMED_SMASH : SPELL_ONE_ARMED_SMASH_H);
+                    DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_ONE_ARMED_SMASH : SPELL_ONE_ARMED_SMASH_H);
             Spell_Timer = 20000;
         }else Spell_Timer -= diff;   
 
@@ -429,7 +429,7 @@ struct MANGOS_DLL_DECL boss_kologarnAI : public ScriptedAI
                     respawnright = 60000;
                 }
             if (!m_creature->IsWithinDistInMap(m_creature->getVictim(), 10))
-                DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_PETRIFYING_BREATH : SPELL_PETRIFYING_BREATH_H);
+                DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_PETRIFYING_BREATH : SPELL_PETRIFYING_BREATH_H);
             Check_Timer = 500;
         }else Check_Timer -= diff;
 

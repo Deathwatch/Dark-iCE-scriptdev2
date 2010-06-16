@@ -19,7 +19,7 @@ SDName: Boss_Amanitar
 SD%Complete: 90%
 SDComment:
 SDCategory: Ahn'kahet
-SDAuthor: ScrappyDoo (c) Andeeria
+SDAuthor: ScrappyDoo (c) Andeeria /dev/ FallenangelX
 EndScriptData */
 
 #include "precompiled.h"

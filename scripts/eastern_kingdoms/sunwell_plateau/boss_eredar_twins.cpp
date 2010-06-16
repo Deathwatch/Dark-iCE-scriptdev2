@@ -257,13 +257,13 @@ struct MANGOS_DLL_DECL boss_alythessAI : public ScriptedAI
 			if(!bSacrolashDead)
 			{
 				bAlythessDead = true;
-				DoCast(m_creature, SPELL_BANISH, true);
+				DoCastSpellIfCan(m_creature, SPELL_BANISH, true);
 				m_creature->SetVisibility(VISIBILITY_OFF);
 				m_bIsBanished = true;
 
 				if (Unit* Sacrolash = Unit::GetUnit(*m_creature, pInstance->GetData64(DATA_SACROLASH)))
 				{
-					DoCast(Sacrolash,SPELL_EMPOWER,true);
+					DoCastSpellIfCan(Sacrolash,SPELL_EMPOWER,true);
 					Sacrolash->SetHealthPercent(100);
 					DoScriptText(YELL_ALYTHESS_EMPOWER,Sacrolash);
 					DoPlaySoundToSet(Sacrolash,SOUND_ALY_EMPOWER);
@@ -285,7 +285,7 @@ struct MANGOS_DLL_DECL boss_alythessAI : public ScriptedAI
         if(m_uiEnrageTimer < diff && !m_bIsEnraged)
         {
             DoScriptText(YELL_ALYTHESS_BERSERK, m_creature);
-            DoCast(m_creature, SPELL_TWINS_ENRAGE);
+            DoCastSpellIfCan(m_creature, SPELL_TWINS_ENRAGE);
 			DoPlaySoundToSet(m_creature,SOUND_ALY_BERSERK);
             m_bIsEnraged = true;
         }else m_uiEnrageTimer -= diff;
@@ -367,7 +367,7 @@ struct MANGOS_DLL_DECL boss_alythessAI : public ScriptedAI
 		// pyrogenics 100% alythess' self buff
         if(m_uiPyrogenicsTimer < diff)
         {
-            DoCast(m_creature, SPELL_PYROGENICS);
+            DoCastSpellIfCan(m_creature, SPELL_PYROGENICS);
             m_uiPyrogenicsTimer = 35000;
         }else m_uiPyrogenicsTimer -= diff;
 
@@ -573,12 +573,12 @@ struct MANGOS_DLL_DECL boss_sacrolashAI : public ScriptedAI
 			if(!bAlythessDead)
 			{
 				bSacrolashDead = true;
-				DoCast(m_creature, SPELL_BANISH, true);
+				DoCastSpellIfCan(m_creature, SPELL_BANISH, true);
 				m_creature->SetVisibility(VISIBILITY_OFF);
 				m_bIsBanished = true;
 				if (Unit* Alythess = Unit::GetUnit(*m_creature, pInstance->GetData64(DATA_ALYTHESS)))
 				{
-					DoCast(Alythess,SPELL_EMPOWER,true);
+					DoCastSpellIfCan(Alythess,SPELL_EMPOWER,true);
 					Alythess->SetHealthPercent(100);
 					DoScriptText(YELL_SACROLASH_EMPOWER,Alythess);
 					DoPlaySoundToSet(Alythess,SOUND_SAC_EMPOWER);
@@ -590,7 +590,7 @@ struct MANGOS_DLL_DECL boss_sacrolashAI : public ScriptedAI
 		if(m_uiEnrageTimer < diff && !m_bIsEnraged)
         {
 			DoScriptText(YELL_SACROLASH_BERSERK, m_creature);
-            DoCast(m_creature, SPELL_TWINS_ENRAGE);
+            DoCastSpellIfCan(m_creature, SPELL_TWINS_ENRAGE);
             m_bIsEnraged = true;
         }else m_uiEnrageTimer -= diff;
 		
@@ -617,7 +617,7 @@ struct MANGOS_DLL_DECL boss_sacrolashAI : public ScriptedAI
 
 						victim->CastSpell(victim, SPELL_DARK_TOUCHED, false);
 
-						DoCast(victim,SPELL_DARK_STRIKE,true);	
+						DoCastSpellIfCan(victim,SPELL_DARK_STRIKE,true);	
                     }
                 }   
 				m_bIsBladesDone = false;

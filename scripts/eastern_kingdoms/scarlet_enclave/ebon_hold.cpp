@@ -701,13 +701,13 @@ struct MANGOS_DLL_DECL npc_koltira_deathweaverAI : public npc_escortAI
             case 2:
                 m_creature->SetStandState(UNIT_STAND_STATE_STAND);
                 //m_creature->UpdateEntry(NPC_KOLTIRA_ALT); //unclear if we must update or not
-                DoCast(m_creature, SPELL_KOLTIRA_TRANSFORM);
+                DoCastSpellIfCan(m_creature, SPELL_KOLTIRA_TRANSFORM);
                 break;
             case 3:
                 SetEscortPaused(true);
                 m_creature->SetStandState(UNIT_STAND_STATE_KNEEL);
                 DoScriptText(SAY_BREAKOUT2, m_creature);
-                DoCast(m_creature, SPELL_ANTI_MAGIC_ZONE);  // cast again that makes bubble up
+                DoCastSpellIfCan(m_creature, SPELL_ANTI_MAGIC_ZONE);  // cast again that makes bubble up
                 break;
             case 4:
                 SetRun(true);
@@ -1024,25 +1024,25 @@ struct MANGOS_DLL_DECL npc_unworthy_initiateAI : public ScriptedAI
 
             if (m_uiBloodStrike_Timer < uiDiff)
             {
-                DoCast(m_creature->getVictim(),SPELL_BLOOD_STRIKE);
+                DoCastSpellIfCan(m_creature->getVictim(),SPELL_BLOOD_STRIKE);
                 m_uiBloodStrike_Timer = 9000;
             }else m_uiBloodStrike_Timer -= uiDiff;
 
             if (m_uiDeathCoil_Timer < uiDiff)
             {
-                DoCast(m_creature->getVictim(),SPELL_DEATH_COIL);
+                DoCastSpellIfCan(m_creature->getVictim(),SPELL_DEATH_COIL);
                 m_uiDeathCoil_Timer = 8000;
             }else m_uiDeathCoil_Timer -= uiDiff;
 
             if (m_uiIcyTouch_Timer < uiDiff)
             {
-                DoCast(m_creature->getVictim(),SPELL_ICY_TOUCH);
+                DoCastSpellIfCan(m_creature->getVictim(),SPELL_ICY_TOUCH);
                 m_uiIcyTouch_Timer = 8000;
             }else m_uiIcyTouch_Timer -= uiDiff;
 
             if (m_uiPlagueStrike_Timer < uiDiff)
             {
-                DoCast(m_creature->getVictim(),SPELL_PLAGUE_STRIKE);
+                DoCastSpellIfCan(m_creature->getVictim(),SPELL_PLAGUE_STRIKE);
                 m_uiPlagueStrike_Timer = 8000;
             }else m_uiPlagueStrike_Timer -= uiDiff;
 
@@ -1326,25 +1326,25 @@ struct MANGOS_DLL_DECL mob_dark_rider_of_acherusAI : public ScriptedAI
     {
         if (uiBlood_strike_timer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_BLOOD_STRIKE);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_BLOOD_STRIKE);
             uiBlood_strike_timer = 5000 + rand()%1000;
         }else uiBlood_strike_timer -= diff;
 
         if (uiIcy_touch_timer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_ICY_TOUCH);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_ICY_TOUCH);
             uiIcy_touch_timer = 6000 + rand()%1000;
         }else uiIcy_touch_timer -= diff;
 
         if (uiPlague_strike_timer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_PLAGUE_STRIKE2);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_PLAGUE_STRIKE2);
             uiPlague_strike_timer = 12000 + rand()%1000;
         }else uiPlague_strike_timer -= diff;
 
         if (uiThrow_timer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_THROW);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_THROW);
             uiThrow_timer = 10000 + rand()%1000;
         }else uiThrow_timer -= diff;
 
@@ -1546,7 +1546,7 @@ struct MANGOS_DLL_DECL mob_high_inquisitor_valrothAI : public ScriptedAI
     void Aggro(Unit* who)
     {
         DoScriptText(SAY_VALROTH2, m_creature);
-        DoCast(who, SPELL_VALROTH_SMITE);
+        DoCastSpellIfCan(who, SPELL_VALROTH_SMITE);
     }
 
     void UpdateAI(const uint32 diff)
@@ -1554,21 +1554,21 @@ struct MANGOS_DLL_DECL mob_high_inquisitor_valrothAI : public ScriptedAI
         if (uiRenew_timer < diff)
         {
             Shout();
-            DoCast(m_creature, SPELL_RENEW);
+            DoCastSpellIfCan(m_creature, SPELL_RENEW);
             uiRenew_timer = 1000 + rand()%5000;
         }else uiRenew_timer -= diff;
 
         if (uiInquisitor_Penance_timer < diff)
         {
             Shout();
-            DoCast(m_creature->getVictim(), SPELL_INQUISITOR_PENANCE);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_INQUISITOR_PENANCE);
             uiInquisitor_Penance_timer = 2000 + rand()%5000;
         }else uiInquisitor_Penance_timer -= diff;
 
         if (uiValroth_Smite_timer < diff)
         {
             Shout();
-            DoCast(m_creature->getVictim(), SPELL_VALROTH_SMITE);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_VALROTH_SMITE);
             uiValroth_Smite_timer = 1000 + rand()%5000;
         }else uiValroth_Smite_timer -= diff;
 
@@ -2075,7 +2075,7 @@ struct MANGOS_DLL_DECL npc_highlord_darion_mograineAI : public npc_escortAI
                 break;
             case 2:
                 m_creature->AddSplineFlag(SPLINEFLAG_WALKMODE);
-                DoCast(m_creature, SPELL_THE_LIGHT_OF_DAWN);
+                DoCastSpellIfCan(m_creature, SPELL_THE_LIGHT_OF_DAWN);
                 break;
             case 3:
             {
@@ -2190,7 +2190,7 @@ struct MANGOS_DLL_DECL npc_highlord_darion_mograineAI : public npc_escortAI
 
                     case 4: // summon ghoul
                         // Dunno whats the summon spell, so workaround
-                        DoCast(m_creature, 33271); // shack effect
+                        DoCastSpellIfCan(m_creature, 33271); // shack effect
                         uiPhase_timer = 500;
                         if (uiSummon_counter < ENCOUNTER_GHOUL_NUMBER)
                         {
@@ -2210,7 +2210,7 @@ struct MANGOS_DLL_DECL npc_highlord_darion_mograineAI : public npc_escortAI
                         break;
 
                     case 5: // summon abomination
-                        DoCast(m_creature, 33271); // shack effect
+                        DoCastSpellIfCan(m_creature, 33271); // shack effect
                         uiPhase_timer = 500;
                         if (uiSummon_counter < ENCOUNTER_ABOMINATION_NUMBER)
                         {
@@ -2230,7 +2230,7 @@ struct MANGOS_DLL_DECL npc_highlord_darion_mograineAI : public npc_escortAI
                         break;
 
                     case 6: // summon warrior
-                        DoCast(m_creature, 33271); // shack effect
+                        DoCastSpellIfCan(m_creature, 33271); // shack effect
                         uiPhase_timer = 500;
                         if (uiSummon_counter < ENCOUNTER_WARRIOR_NUMBER)
                         {
@@ -2250,7 +2250,7 @@ struct MANGOS_DLL_DECL npc_highlord_darion_mograineAI : public npc_escortAI
                         break;
 
                     case 7: // summon warrior
-                        DoCast(m_creature, 33271); // shack effect
+                        DoCastSpellIfCan(m_creature, 33271); // shack effect
                         uiPhase_timer = 500;
                         if (uiSummon_counter < ENCOUNTER_BEHEMOTH_NUMBER)
                         {
@@ -2476,7 +2476,7 @@ struct MANGOS_DLL_DECL npc_highlord_darion_mograineAI : public npc_escortAI
 
                     case 33: // Darion supports to jump to lich king here
 // disable              if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), uiLichKingGUID)))
-//  because mangos          DoCast(m_creature, SPELL_MOGRAINE_CHARGE); // jumping charge
+//  because mangos          DoCastSpellIfCan(m_creature, SPELL_MOGRAINE_CHARGE); // jumping charge
 //   doesn't make it looks well, so workarounds, Darion charges, looks better
                         m_creature->SetSpeedRate(MOVE_RUN, 3.0f);
                         m_creature->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
@@ -2879,31 +2879,31 @@ struct MANGOS_DLL_DECL npc_highlord_darion_mograineAI : public npc_escortAI
         {
             if (uiAnti_magic_zone < diff)
             {
-                DoCast(m_creature, SPELL_ANTI_MAGIC_ZONE1);
+                DoCastSpellIfCan(m_creature, SPELL_ANTI_MAGIC_ZONE1);
                 uiAnti_magic_zone = 25000 + rand()%5000;
             }else uiAnti_magic_zone -= diff;
 
             if (uiDeath_strike < diff)
             {
-                DoCast(m_creature->getVictim(), SPELL_DEATH_STRIKE);
+                DoCastSpellIfCan(m_creature->getVictim(), SPELL_DEATH_STRIKE);
                 uiDeath_strike = 5000 + rand()%5000;
             }else uiDeath_strike -= diff;
 
             if (uiDeath_embrace < diff)
             {
-                DoCast(m_creature->getVictim(), SPELL_DEATH_EMBRACE);
+                DoCastSpellIfCan(m_creature->getVictim(), SPELL_DEATH_EMBRACE);
                 uiDeath_embrace = 5000 + rand()%5000;
             }else uiDeath_embrace -= diff;
 
             if (uiIcy_touch < diff)
             {
-                DoCast(m_creature->getVictim(), SPELL_ICY_TOUCH1);
+                DoCastSpellIfCan(m_creature->getVictim(), SPELL_ICY_TOUCH1);
                 uiIcy_touch = 5000 + rand()%5000;
             }else uiIcy_touch -= diff;
 
             if (uiUnholy_blight < diff)
             {
-                DoCast(m_creature->getVictim(), SPELL_UNHOLY_BLIGHT);
+                DoCastSpellIfCan(m_creature->getVictim(), SPELL_UNHOLY_BLIGHT);
                 uiUnholy_blight = 5000 + rand()%5000;
             }else uiUnholy_blight -= diff;
 

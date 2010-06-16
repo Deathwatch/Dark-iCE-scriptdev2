@@ -140,7 +140,7 @@ struct MANGOS_DLL_DECL boss_salrammAI : public ScriptedAI
 		if (ShadowBolt_Timer < diff)
 		{
 			if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-				DoCast(target, m_bIsHeroic ? SPELL_SB_H : SPELL_SB_N);
+				DoCastSpellIfCan(target, m_bIsHeroic ? SPELL_SB_H : SPELL_SB_N);
 
             ShadowBolt_Timer = 5300;
         }
@@ -150,7 +150,7 @@ struct MANGOS_DLL_DECL boss_salrammAI : public ScriptedAI
 		if (Flesh_Timer < diff)
         {
             if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                DoCast(target,SPELL_FLESH);
+                DoCastSpellIfCan(target,SPELL_FLESH);
 
             Flesh_Timer = 7300;
         }
@@ -160,7 +160,7 @@ struct MANGOS_DLL_DECL boss_salrammAI : public ScriptedAI
 		if (Steal_Timer < diff)
         {
             if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                DoCast(target,SPELL_STEAL);
+                DoCastSpellIfCan(target,SPELL_STEAL);
 			
 			switch(rand()%3)
 			{

@@ -18,7 +18,7 @@
 SDName: Boss_Anomalus
 SD%Complete: 50%
 SDComment: TODO: remove hacks, add support for rift charging
-SDCategory: Nexus
+SDCategory: Nexus  /dev/ FallenangelX
 EndScriptData */
 
 #include "precompiled.h"

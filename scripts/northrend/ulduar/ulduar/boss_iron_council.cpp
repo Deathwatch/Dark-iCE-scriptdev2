@@ -86,7 +86,7 @@ struct MANGOS_DLL_DECL mob_rune_of_powerAI : public ScriptedAI
         Death_Timer = 60000;
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-        DoCast(m_creature,  AURA_RUNE_OF_POWER);
+        DoCastSpellIfCan(m_creature,  AURA_RUNE_OF_POWER);
     }
 
     void UpdateAI(const uint32 diff)
@@ -139,7 +139,7 @@ struct MANGOS_DLL_DECL mob_ulduar_lightning_elementalAI : public ScriptedAI
         {
             if (m_creature->IsWithinDistInMap(m_creature->getVictim(), 15))
             {
-                DoCast(m_creature, m_bIsRegularMode ? SPELL_LIGHTNING_BLAST : SPELL_LIGHTNING_BLAST_H);
+                DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_LIGHTNING_BLAST : SPELL_LIGHTNING_BLAST_H);
                 explode = true;
                 Death_Timer = 1000;
             }
@@ -178,7 +178,7 @@ struct MANGOS_DLL_DECL mob_rune_of_summoningAI : public ScriptedAI
         summonnum = 0;
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-        DoCast(m_creature,  AURA_RUNE_OF_SUMMONING);
+        DoCastSpellIfCan(m_creature,  AURA_RUNE_OF_SUMMONING);
     }
 
     void UpdateAI(const uint32 diff)
@@ -273,7 +273,7 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
                     if (pTemp->isAlive() && pTemp->HasAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0))
                         pTemp->GetAura(SPELL_SUPERCHARGE,EFFECT_INDEX_0)->modStackAmount(+1);
             }else
-                DoCast(m_creature, SPELL_SUPERCHARGE);
+                DoCastSpellIfCan(m_creature, SPELL_SUPERCHARGE);
             die_delay = 500;
             die = true;
         }
@@ -356,7 +356,7 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
 
         if (Chain_Lightning_Timer < diff && !tendrils)
         {
-            DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_CHAIN_LIGHTNING : SPELL_CHAIN_LIGHTNING_H);
+            DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_CHAIN_LIGHTNING : SPELL_CHAIN_LIGHTNING_H);
             Chain_Lightning_Timer = 2000;
         }else Chain_Lightning_Timer -= diff;   
 
@@ -364,7 +364,7 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
         {
             //overload emote
             m_creature->CastStop();
-            DoCast(m_creature, SPELL_OVERLOAD);
+            DoCastSpellIfCan(m_creature, SPELL_OVERLOAD);
             Overload_Timer = 40000;
         }else Overload_Timer -= diff;  
 
@@ -374,7 +374,7 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
                 if (spell->m_spellInfo->Id == (m_bIsRegularMode ? SPELL_CHAIN_LIGHTNING : SPELL_CHAIN_LIGHTNING_H))
                     m_creature->CastStop();
 
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_LIGHTNING_WHIRL : SPELL_LIGHTNING_WHIRL_H);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_LIGHTNING_WHIRL : SPELL_LIGHTNING_WHIRL_H);
             Whirl_Timer = 10000;
         }else Whirl_Timer -= diff;
 
@@ -384,7 +384,7 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
             {
                 //tendrils emote (?)
                 m_creature->CastStop();
-                DoCast(m_creature, LIGHTNING_TENDRILS_VISUAL);
+                DoCastSpellIfCan(m_creature, LIGHTNING_TENDRILS_VISUAL);
                 if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
                 {
                     m_creature->AddThreat(pTarget,0.0f);
@@ -397,7 +397,7 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
                 Tendrils_Change = 5000;
             } else
             {
-                DoCast(m_creature, m_bIsRegularMode ? SPELL_LIGHTNING_TENDRILS : SPELL_LIGHTNING_TENDRILS_H);
+                DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_LIGHTNING_TENDRILS : SPELL_LIGHTNING_TENDRILS_H);
                 Tendrils_start_Timer = 90000;
             }
         }else Tendrils_start_Timer -= diff;
@@ -438,7 +438,7 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
         if (Enrage_Timer < diff && !enrage)
         {
             m_creature->CastStop();
-            DoCast(m_creature, SPELL_BERSERK);
+            DoCastSpellIfCan(m_creature, SPELL_BERSERK);
             enrage = true;
         }else Enrage_Timer -= diff;
 
@@ -555,7 +555,7 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
                     if (pTemp->isAlive() && pTemp->HasAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0))
                         pTemp->GetAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0)->modStackAmount(+1);
             }else
-                DoCast(m_creature, SPELL_SUPERCHARGE);
+                DoCastSpellIfCan(m_creature, SPELL_SUPERCHARGE);
             die_delay = 500;
             die = true;
         }
@@ -638,7 +638,7 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
 
         if (Shield_Timer < diff)
         {
-            DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_SHIELD : SPELL_SHIELD_H);
+            DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_SHIELD : SPELL_SHIELD_H);
             Shield_Timer = 50000;
         }else Shield_Timer -= diff;   
 
@@ -649,19 +649,19 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
                 case 0:
                     if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
                         if (pTemp->isAlive())
-                            DoCast(pTemp, SPELL_RUNE_OF_POWER);
+                            DoCastSpellIfCan(pTemp, SPELL_RUNE_OF_POWER);
                         else
-                            DoCast(m_creature, SPELL_RUNE_OF_POWER);
+                            DoCastSpellIfCan(m_creature, SPELL_RUNE_OF_POWER);
                 break;
                 case 1:
                     if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
                         if (pTemp->isAlive())
-                            DoCast(pTemp, SPELL_RUNE_OF_POWER);
+                            DoCastSpellIfCan(pTemp, SPELL_RUNE_OF_POWER);
                         else
-                            DoCast(m_creature, SPELL_RUNE_OF_POWER);
+                            DoCastSpellIfCan(m_creature, SPELL_RUNE_OF_POWER);
                 break;
                 case 2:
-                    DoCast(m_creature, SPELL_RUNE_OF_POWER);
+                    DoCastSpellIfCan(m_creature, SPELL_RUNE_OF_POWER);
                 break;
             }
             Rune_Power_Timer = 55000;
@@ -670,7 +670,7 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
         if (Rune_Death_Timer < diff && supercharge1)
         {
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-                DoCast(pTarget, m_bIsRegularMode ? SPELL_RUNE_OF_DEATH : SPELL_RUNE_OF_DEATH_H);
+                DoCastSpellIfCan(pTarget, m_bIsRegularMode ? SPELL_RUNE_OF_DEATH : SPELL_RUNE_OF_DEATH_H);
             Rune_Death_Timer = 60000;
         }else Rune_Death_Timer -= diff;
 
@@ -678,7 +678,7 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
         {
             m_creature->CastStop();
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-                DoCast(pTarget, SPELL_RUNE_OF_SUMMONING);
+                DoCastSpellIfCan(pTarget, SPELL_RUNE_OF_SUMMONING);
             Rune_Summon_Timer = 30000;
         }else Rune_Summon_Timer -= diff;
 
@@ -692,7 +692,7 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
         if (Enrage_Timer < diff && !enrage)
         {
             m_creature->CastStop();
-            DoCast(m_creature, SPELL_BERSERK);
+            DoCastSpellIfCan(m_creature, SPELL_BERSERK);
             enrage = true;
         }else Enrage_Timer -= diff;
 
@@ -800,7 +800,7 @@ struct MANGOS_DLL_DECL boss_steelbreakerAI : public ScriptedAI
     void KilledUnit(Unit* pVictim)
     {
         if (supercharge2)
-            DoCast(m_creature, SPELL_ELECTRICAL_CHARGE);
+            DoCastSpellIfCan(m_creature, SPELL_ELECTRICAL_CHARGE);
     }
 
     void DamageTaken(Unit* pDoneBy, uint32& uiDamage)
@@ -819,7 +819,7 @@ struct MANGOS_DLL_DECL boss_steelbreakerAI : public ScriptedAI
                     if (pTemp->isAlive() && pTemp->HasAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0))
                         pTemp->GetAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0)->modStackAmount(+1);
             }else
-                DoCast(m_creature, SPELL_SUPERCHARGE);
+                DoCastSpellIfCan(m_creature, SPELL_SUPERCHARGE);
             die_delay = 500;
             die = true;
         }
@@ -879,7 +879,7 @@ struct MANGOS_DLL_DECL boss_steelbreakerAI : public ScriptedAI
         if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
             if (pTemp->isAlive() && !pTemp->getVictim())
                 pTemp->AI()->AttackStart(pWho);
-        DoCast(m_creature, m_bIsRegularMode ? SPELL_HIGH_VOLTAGE : SPELL_HIGH_VOLTAGE_H, true);
+        DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_HIGH_VOLTAGE : SPELL_HIGH_VOLTAGE_H, true);
         if (m_pInstance)
             m_pInstance->SetData(TYPE_IRON_COUNCIL, IN_PROGRESS);
     }
@@ -903,21 +903,21 @@ struct MANGOS_DLL_DECL boss_steelbreakerAI : public ScriptedAI
 
         if (Fusion_Punch_Timer < diff)
         {
-            DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_FUSION_PUNCH : SPELL_FUSION_PUNCH_H);
+            DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_FUSION_PUNCH : SPELL_FUSION_PUNCH_H);
             Fusion_Punch_Timer = 20000;
         }else Fusion_Punch_Timer -= diff;
 
         if (Static_Disruption_Timer < diff && supercharge1)
         {
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,1))
-                DoCast(pTarget, m_bIsRegularMode ? SPELL_STATIC_DISRUPTION : SPELL_STATIC_DISRUPTION_H);
+                DoCastSpellIfCan(pTarget, m_bIsRegularMode ? SPELL_STATIC_DISRUPTION : SPELL_STATIC_DISRUPTION_H);
             Static_Disruption_Timer = 60000;
         }else Static_Disruption_Timer -= diff;
 
         if (Power_Timer < diff && supercharge2)
         {
             m_creature->CastStop();
-            DoCast(m_creature->getVictim(), SPELL_POWER);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_POWER);
             MeltTarget = m_creature->getVictim()->GetGUID();
             Power_Timer = m_bIsRegularMode ? 65000 : 35000;
             Meltdown_Timer = m_bIsRegularMode ? 60500 : 30500;
@@ -940,7 +940,7 @@ struct MANGOS_DLL_DECL boss_steelbreakerAI : public ScriptedAI
         if (Enrage_Timer < diff && !enrage)
         {
             m_creature->CastStop();
-            DoCast(m_creature, SPELL_BERSERK);
+            DoCastSpellIfCan(m_creature, SPELL_BERSERK);
             enrage = true;
         }else Enrage_Timer -= diff;
 

@@ -19,7 +19,7 @@ SDName: Boss_Gluth
 SD%Complete: 70
 SDComment: 
 SDCategory: Naxxramas
-SDAuthor: ScrappyDoo (c) Andeeria
+SDAuthor: ScrappyDoo (c) Andeeria /dev/FallenAngelX
 EndScriptData */
 
 /*ToDo
@@ -150,7 +150,7 @@ struct MANGOS_DLL_DECL boss_gluthAI : public ScriptedAI
         // Berserk
         if (m_uiBerserkTimer < uiDiff)
         {
-            DoCast(m_creature, SPELL_BERSERK, true);
+            DoCastSpellIfCan(m_creature, SPELL_BERSERK, true);
             m_uiBerserkTimer = MINUTE*5*IN_MILLISECONDS;
         }else m_uiBerserkTimer -= uiDiff;
 

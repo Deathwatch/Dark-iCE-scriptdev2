@@ -89,25 +89,25 @@ struct MANGOS_DLL_DECL boss_drektharAI : public ScriptedAI
 
         if (WhirlwindTimer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_WHIRLWIND);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_WHIRLWIND);
             WhirlwindTimer =  (8+rand()%10)*1000;
         }else WhirlwindTimer -= diff;
 
         if (Whirlwind2Timer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_WHIRLWIND2);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_WHIRLWIND2);
             Whirlwind2Timer = (7+rand()%18)*1000;
         }else Whirlwind2Timer -= diff;
 
         if (KnockdownTimer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_KNOCKDOWN);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_KNOCKDOWN);
             KnockdownTimer = (10+rand()%5)*1000;
         }else KnockdownTimer -= diff;
 
         if (FrenzyTimer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_FRENZY);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_FRENZY);
             FrenzyTimer = (20+rand()%5)*1000;
         }else FrenzyTimer -= diff;
 

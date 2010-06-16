@@ -19,7 +19,7 @@ SDName: Boss_Taldaram
 SD%Complete: 80%
 SDAuthor: Tassadar
 SDComment: Timers, maybe wrong orb behavior
-SDCategory: Ahn'kahet
+SDCategory: Ahn'kahet /dev/ FallenangelX
 EndScriptData */
 
 #include "precompiled.h"

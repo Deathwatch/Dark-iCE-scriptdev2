@@ -19,7 +19,7 @@ SDName: Boss_Maexxna
 SD%Complete: 90
 SDComment:
 SDCategory: Naxxramas
-SDAuthor: ScrappyDoo (c) Andeeria
+SDAuthor: ScrappyDoo (c) Andeeria /dev/FallenAngelX
 EndScriptData */
 
 #include "precompiled.h"
@@ -161,7 +161,7 @@ struct MANGOS_DLL_DECL boss_maexxnaAI : public ScriptedAI
 
         if(m_bEnraged)
             if(m_bIsRegularMode ? !m_creature->HasAura(SPELL_FRENZY) : !m_creature->HasAura(H_SPELL_FRENZY))
-                DoCast(m_creature, m_bIsRegularMode ? SPELL_FRENZY : H_SPELL_FRENZY);
+                DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_FRENZY : H_SPELL_FRENZY);
 
         // Web Wrap
         if (m_uiWebWrapTimer < uiDiff)
@@ -217,7 +217,7 @@ struct MANGOS_DLL_DECL boss_maexxnaAI : public ScriptedAI
 
             /*
             if(m_creature)
-                DoCast(m_creature, SPELL_SUMMON_SPIDERLING);
+                DoCastSpellIfCan(m_creature, SPELL_SUMMON_SPIDERLING);
                 */
             m_uiSummonSpiderlingTimer = 31000;
         }
@@ -228,7 +228,7 @@ struct MANGOS_DLL_DECL boss_maexxnaAI : public ScriptedAI
         if (!m_bEnraged && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 30)
         {
             if(m_creature)
-                DoCast(m_creature, m_bIsRegularMode ? SPELL_FRENZY : H_SPELL_FRENZY);
+                DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_FRENZY : H_SPELL_FRENZY);
             m_bEnraged = true;
         }
 

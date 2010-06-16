@@ -1,5 +1,5 @@
 // the Oculus: Varos Cloudstrider
-// by Oj
+// by Oj  /dev/ FallenangelX
  
 #include "precompiled.h"
  

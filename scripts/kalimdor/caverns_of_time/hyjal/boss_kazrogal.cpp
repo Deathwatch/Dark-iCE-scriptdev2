@@ -151,13 +151,13 @@ struct MANGOS_DLL_DECL boss_kazrogalAI : public ScriptedAI
         if(CleaveTimer < diff)
         {
 			if(m_creature->getVictim())
-				DoCast(m_creature->getVictim(), SPELL_CLEAVE);
+				DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE);
             CleaveTimer = 6000+rand()%15000;
         }else CleaveTimer -= diff;
 
         if(WarStompTimer < diff)
         {
-            DoCast(m_creature, SPELL_WARSTOMP);
+            DoCastSpellIfCan(m_creature, SPELL_WARSTOMP);
             WarStompTimer = 60000;
         }else WarStompTimer -= diff;
 

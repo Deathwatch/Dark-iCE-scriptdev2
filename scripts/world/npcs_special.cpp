@@ -1777,7 +1777,7 @@ struct MANGOS_DLL_DECL npc_valkyr_battle_maidenAI : public ScriptedAI
                     break;
                 case 2:
                     m_creature->HandleEmoteCommand(EMOTE_ONESHOT_CUSTOMSPELL01);
-                    DoCast(plr, SPELL_REVIVE, true);
+                    DoCastSpellIfCan(plr, SPELL_REVIVE, true);
                     m_creature->MonsterWhisper(VALK_WHISPER, plr->GetGUID());
                     FlyBackTimer = 5000;
                     break;
@@ -2151,7 +2151,7 @@ struct MANGOS_DLL_DECL npc_snake_trap_serpentsAI : public ScriptedAI
                         spell = SPELL_MIND_NUMBING_POISON;
                     else
                         spell = SPELL_CRIPPLING_POISON;
-                    DoCast(m_creature->getVictim(), spell);
+                    DoCastSpellIfCan(m_creature->getVictim(), spell);
                 }
 
                 SpellTimer = urand(3000, 5000);
@@ -2159,7 +2159,7 @@ struct MANGOS_DLL_DECL npc_snake_trap_serpentsAI : public ScriptedAI
             else if (m_creature->GetEntry() == MOB_VENOM_SNIKE ) //Venomous Snake - 19833
             {
                 if (urand(0,1) == 0) //80% chance to cast
-                    DoCast(m_creature->getVictim(), SPELL_DEADLY_POISON);
+                    DoCastSpellIfCan(m_creature->getVictim(), SPELL_DEADLY_POISON);
                 SpellTimer = urand(2500, 4500);
             }
         }

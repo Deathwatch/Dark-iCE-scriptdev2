@@ -71,25 +71,25 @@ struct MANGOS_DLL_DECL boss_balindaAI : public ScriptedAI
 
         if (ArcaneExplosionTimer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_ARCANE_EXPLOSION);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_ARCANE_EXPLOSION);
             ArcaneExplosionTimer =  (10+rand()%5)*1000;
         }else ArcaneExplosionTimer -= diff;
 
         if (ConeofcoldTimer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_CONE_OF_COLD);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_CONE_OF_COLD);
             ConeofcoldTimer = (10+rand()%10)*1000;
         }else ConeofcoldTimer -= diff;
 
         if (FireboltTimer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_FIREBALL);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_FIREBALL);
             FireboltTimer = (5+rand()%4)*1000;
         }else FireboltTimer -= diff;
 
         if (FrostboltTimer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_FROSTBOLT);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_FROSTBOLT);
             FrostboltTimer = (4+rand()%8)*1000;
         }else FrostboltTimer -= diff;
 

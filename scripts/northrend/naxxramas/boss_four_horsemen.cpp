@@ -19,7 +19,7 @@ SDName: Boss_Four_Horsemen
 SD%Complete: 70
 SDComment: Lady Blaumeux, Thane Korthazz, Sir Zeliek, Baron Rivendare
 SDCategory: Naxxramas
-SDAuthor: ScrappyDoo (c) Andeeria
+SDAuthor: ScrappyDoo (c) Andeeria /dev/FallenAngelX
 EndScriptData */
 
 /* ToDo
@@ -207,13 +207,13 @@ struct MANGOS_DLL_DECL boss_lady_blaumeuxAI : public ScriptedAI
         // Shield Wall - All 4 horsemen will shield wall at 50% hp and 20% hp for 20 seconds
         if (m_bIsShieldWall1 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 50)
         {
-            DoCast(m_creature,SPELL_SHIELDWALL);
+            DoCastSpellIfCan(m_creature,SPELL_SHIELDWALL);
             m_bIsShieldWall1 = false;
         }
 
         if (m_bIsShieldWall2 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 20)
         {
-            DoCast(m_creature,SPELL_SHIELDWALL);
+            DoCastSpellIfCan(m_creature,SPELL_SHIELDWALL);
             m_bIsShieldWall2 = false;
         }
 
@@ -303,13 +303,13 @@ struct MANGOS_DLL_DECL boss_rivendare_naxxAI : public ScriptedAI
         // Shield Wall - All 4 horsemen will shield wall at 50% hp and 20% hp for 20 seconds
         if (m_bIsShieldWall1 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 50)
         {
-            DoCast(m_creature,SPELL_SHIELDWALL);
+            DoCastSpellIfCan(m_creature,SPELL_SHIELDWALL);
             m_bIsShieldWall1 = false;
         }
 
         if (m_bIsShieldWall2 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 20)
         {
-            DoCast(m_creature,SPELL_SHIELDWALL);
+            DoCastSpellIfCan(m_creature,SPELL_SHIELDWALL);
             m_bIsShieldWall2 = false;
         }
 
@@ -386,13 +386,13 @@ struct MANGOS_DLL_DECL boss_thane_korthazzAI : public ScriptedAI
         // Shield Wall - All 4 horsemen will shield wall at 50% hp and 20% hp for 20 seconds
         if (m_bIsShieldWall1 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 50)
         {
-            DoCast(m_creature,SPELL_SHIELDWALL);
+            DoCastSpellIfCan(m_creature,SPELL_SHIELDWALL);
             m_bIsShieldWall1 = false;
         }
 
         if (m_bIsShieldWall2 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 20)
         {
-            DoCast(m_creature,SPELL_SHIELDWALL);
+            DoCastSpellIfCan(m_creature,SPELL_SHIELDWALL);
             m_bIsShieldWall2 = false;
         }
 
@@ -502,13 +502,13 @@ struct MANGOS_DLL_DECL boss_sir_zeliekAI : public ScriptedAI
         // Shield Wall - All 4 horsemen will shield wall at 50% hp and 20% hp for 20 seconds
         if (m_bIsShieldWall1 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 50)
         {
-            DoCast(m_creature,SPELL_SHIELDWALL);
+            DoCastSpellIfCan(m_creature,SPELL_SHIELDWALL);
             m_bIsShieldWall1 = false;
         }
 
         if (m_bIsShieldWall2 && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 20)
         {
-            DoCast(m_creature,SPELL_SHIELDWALL);
+            DoCastSpellIfCan(m_creature,SPELL_SHIELDWALL);
             m_bIsShieldWall2 = false;
         }
 

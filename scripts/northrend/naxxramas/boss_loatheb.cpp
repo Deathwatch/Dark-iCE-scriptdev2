@@ -19,7 +19,7 @@ SDName: Boss_Loatheb
 SD%Complete: 90
 SDComment:
 SDCategory: Naxxramas
-SDAuthor: ScrappyDoo (c) Andeeria
+SDAuthor: ScrappyDoo (c) Andeeria /dev/FallenAngelX
 EndScriptData */
 
 #include "precompiled.h"
@@ -104,7 +104,7 @@ struct MANGOS_DLL_DECL boss_loathebAI : public ScriptedAI
 
         if(!m_bIsEnrage && m_uiEnrage2Timer < uiDiff)
         {
-            DoCast(m_creature, SPELL_BERSERK);
+            DoCastSpellIfCan(m_creature, SPELL_BERSERK);
             m_bIsEnrage = true;
         }else m_uiEnrage2Timer -= uiDiff;
 

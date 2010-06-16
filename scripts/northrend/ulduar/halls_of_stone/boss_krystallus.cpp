@@ -110,7 +110,7 @@ struct MANGOS_DLL_DECL boss_krystallusAI : public ScriptedAI
         if (m_uiToss_Timer < uiDiff)
         {
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                DoCast(pTarget, m_bIsRegularMode ? SPELL_BOULDER_TOSS_H : SPELL_BOULDER_TOSS);
+                DoCastSpellIfCan(pTarget, m_bIsRegularMode ? SPELL_BOULDER_TOSS_H : SPELL_BOULDER_TOSS);
             m_uiToss_Timer = 9000 + rand()%6000;
         }
         else
@@ -119,7 +119,7 @@ struct MANGOS_DLL_DECL boss_krystallusAI : public ScriptedAI
         if (m_uiSpike_Timer < uiDiff)
         {
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                DoCast(pTarget, SPELL_GROUND_SPIKE);
+                DoCastSpellIfCan(pTarget, SPELL_GROUND_SPIKE);
             m_uiSpike_Timer = 12000 + rand()%5000;
         }
         else
@@ -127,7 +127,7 @@ struct MANGOS_DLL_DECL boss_krystallusAI : public ScriptedAI
 
         if (m_uiStomp_Timer < uiDiff)
         {
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_STOMP_H : SPELL_STOMP);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_STOMP_H : SPELL_STOMP);
             m_uiStomp_Timer = 20000 + rand()%9000;
         }
         else
@@ -135,7 +135,7 @@ struct MANGOS_DLL_DECL boss_krystallusAI : public ScriptedAI
 
         if (m_uiSlam_Timer < uiDiff)
         {
-            DoCast(m_creature, SPELL_GROUND_SLAM);
+            DoCastSpellIfCan(m_creature, SPELL_GROUND_SLAM);
             m_bIsSlam = true;
             m_uiShatter_Timer = 10000;
             m_uiSlam_Timer = 15000 + rand()%3000;
@@ -147,7 +147,7 @@ struct MANGOS_DLL_DECL boss_krystallusAI : public ScriptedAI
         {
             if (m_uiShatter_Timer < uiDiff)
             {
-                DoCast(m_creature, m_bIsRegularMode ? SPELL_SHATTER_H : SPELL_SHATTER);
+                DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_SHATTER_H : SPELL_SHATTER);
                 m_bIsSlam = false;
                 m_uiShatter_Timer = 0;
             }

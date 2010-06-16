@@ -18,7 +18,7 @@
 SDName: Boss_Nadox
 SD%Complete: 90%
 SDComment: TODO: some more research on guardian aura needed, BroodRage needs core and db support
-SDCategory: Ahn'kahet
+SDCategory: Ahn'kahet /dev/ FallenangelX
 EndScriptData */
 
 #include "precompiled.h"

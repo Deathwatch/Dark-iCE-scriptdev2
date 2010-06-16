@@ -111,7 +111,7 @@ struct MANGOS_DLL_DECL boss_hodirAI : public ScriptedAI
         if(FrozenBlowsTimer < diff)
         {
             DoPlaySoundToSet(m_creature, SOUND_FROZEN_BLOWS);
-            DoCast(m_creature, Regular ? SP_FROZEN_BLOWS : H_SP_FROZEN_BLOWS);
+            DoCastSpellIfCan(m_creature, Regular ? SP_FROZEN_BLOWS : H_SP_FROZEN_BLOWS);
             FrozenBlowsTimer = 60000;
         }
         else FrozenBlowsTimer -= diff;
@@ -119,14 +119,14 @@ struct MANGOS_DLL_DECL boss_hodirAI : public ScriptedAI
         if(FreezeTimer < diff)
         {
             Unit *target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
-            if(target) DoCast(target, SP_FREEZE);
+            if(target) DoCastSpellIfCan(target, SP_FREEZE);
             FreezeTimer = 60000;
         }
         else FreezeTimer -= diff;
 
         if(EnrageTimer < diff)
         {
-            DoCast(m_creature, SP_ENRAGE);
+            DoCastSpellIfCan(m_creature, SP_ENRAGE);
             EnrageTimer = 30000;
         }
         else EnrageTimer -= diff;

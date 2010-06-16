@@ -153,7 +153,7 @@ struct MANGOS_DLL_DECL boss_xevozzAI : public ScriptedAI
 
         if (m_uiArcaneBarrageVolley_Timer < uiDiff)
         {
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_ARCANE_BARRAGE_VOLLEY_H : SPELL_ARCANE_BARRAGE_VOLLEY);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_ARCANE_BARRAGE_VOLLEY_H : SPELL_ARCANE_BARRAGE_VOLLEY);
             m_uiArcaneBarrageVolley_Timer = urand(20000, 22000);
         }
         else m_uiArcaneBarrageVolley_Timer -= uiDiff;
@@ -161,7 +161,7 @@ struct MANGOS_DLL_DECL boss_xevozzAI : public ScriptedAI
         if (m_uiArcaneBuffet_Timer)
             if (m_uiArcaneBuffet_Timer < uiDiff)
             {
-                DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_ARCANE_BUFFET_H : SPELL_ARCANE_BUFFET);
+                DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_ARCANE_BUFFET_H : SPELL_ARCANE_BUFFET);
                 m_uiArcaneBuffet_Timer = 0;
             }
             else m_uiArcaneBuffet_Timer -= uiDiff;
@@ -169,7 +169,7 @@ struct MANGOS_DLL_DECL boss_xevozzAI : public ScriptedAI
         if (m_uiSummonEtherealSphere_Timer < uiDiff)
         {
             DoScriptText(SAY_SPAWN, m_creature);
-            DoCast(m_creature, SPELL_SUMMON_ETHEREAL_SPHERE_1);
+            DoCastSpellIfCan(m_creature, SPELL_SUMMON_ETHEREAL_SPHERE_1);
             if (m_bIsRegularMode) // extra one for heroic
                 m_creature->SummonCreature(NPC_ETHEREAL_SPHERE, m_creature->GetPositionX()-5+rand()%10, m_creature->GetPositionY()-5+rand()%10, m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 40000);
 
@@ -235,9 +235,9 @@ struct MANGOS_DLL_DECL mob_ethereal_sphereAI : public ScriptedAI
                 {
                     float fDistance = m_creature->GetDistance2d(pXevozz);
                     if (fDistance <= 3)
-                        DoCast(pXevozz, m_bIsRegularMode ? SPELL_ARCANE_POWER_H : SPELL_ARCANE_POWER);
+                        DoCastSpellIfCan(pXevozz, m_bIsRegularMode ? SPELL_ARCANE_POWER_H : SPELL_ARCANE_POWER);
                     else
-                        DoCast(m_creature, 35845);
+                        DoCastSpellIfCan(m_creature, 35845);
                 }
             }
             m_uiRangeCheck_Timer = 1000;
@@ -246,7 +246,7 @@ struct MANGOS_DLL_DECL mob_ethereal_sphereAI : public ScriptedAI
 
         if (m_uiSummonPlayers_Timer < uiDiff)
         {
-            DoCast(m_creature, SPELL_SUMMON_PLAYERS); // not working right
+            DoCastSpellIfCan(m_creature, SPELL_SUMMON_PLAYERS); // not working right
 
             Map* pMap = m_creature->GetMap();
             if (pMap && pMap->IsDungeon())

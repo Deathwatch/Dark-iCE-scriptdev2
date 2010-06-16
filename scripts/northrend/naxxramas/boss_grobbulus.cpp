@@ -19,7 +19,7 @@ SDName: Boss_Grobbulus
 SD%Complete: 90
 SDComment:
 SDCategory: Naxxramas
-SDAuthor: ScrappyDoo (c) Andeeria
+SDAuthor: ScrappyDoo (c) Andeeria /dev/FallenAngelX
 EndScriptData */
 
 /* ToDo
@@ -88,7 +88,7 @@ struct MANGOS_DLL_DECL boss_grobbulusAI : public ScriptedAI
 
         if (!m_bIsBerserk && m_uiBerserkTimer < uiDiff)
         {
-            DoCast(m_creature, SPELL_BERSERK);
+            DoCastSpellIfCan(m_creature, SPELL_BERSERK);
             m_bIsBerserk = true;
         }else m_uiBerserkTimer -= uiDiff;
 

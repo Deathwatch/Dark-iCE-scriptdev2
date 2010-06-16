@@ -19,7 +19,7 @@ SDName: Boss_Noth
 SD%Complete: 90%
 SDComment:
 SDCategory: Naxxramas
-SDAuthot: ScrappyDoo (c) Andeeria
+SDAuthot: ScrappyDoo (c) Andeeria /dev/FallenAngelX
 EndScriptData */
 
 #include "precompiled.h"
@@ -190,8 +190,8 @@ struct MANGOS_DLL_DECL boss_nothAI : public ScriptedAI
             if (m_uiBlinkTimer < uiDiff)
             {
                 
-                DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_CRIPPLE : SPELL_CRIPPLE_H);
-                //DoCast(m_creature, SPELL_BLINK);
+                DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_CRIPPLE : SPELL_CRIPPLE_H);
+                //DoCastSpellIfCan(m_creature, SPELL_BLINK);
                 m_creature->GetMap()->CreatureRelocation(m_creature, m_creature->GetPositionX()+urand(5,15), m_creature->GetPositionY()+urand(5,15), m_creature->GetPositionZ(), 0);
                 if(Unit* pPlayer = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                     m_creature->AI()->AttackStart(pPlayer);

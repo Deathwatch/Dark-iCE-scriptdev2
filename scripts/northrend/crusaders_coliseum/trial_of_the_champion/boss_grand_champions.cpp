@@ -192,19 +192,19 @@ struct MANGOS_DLL_DECL mob_toc5_warriorAI : public ScriptedAI
 
         if (Mortal_Strike_Timer < diff)
         {
-            DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_MORTAL_STRIKE : SPELL_MORTAL_STRIKE_H);
+            DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_MORTAL_STRIKE : SPELL_MORTAL_STRIKE_H);
             Mortal_Strike_Timer = 6000;
         }else Mortal_Strike_Timer -= diff;  
 
         if (Rolling_Throw_Timer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_ROLLING_THROW);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_ROLLING_THROW);
             Rolling_Throw_Timer = 30000;
         }else Rolling_Throw_Timer -= diff;
 
         if (Bladestorm_Timer < diff)
         {
-            DoCast(m_creature, SPELL_BLADESTORM);
+            DoCastSpellIfCan(m_creature, SPELL_BLADESTORM);
             Bladestorm_Timer = 90000;
         }else Bladestorm_Timer -= diff;
 
@@ -212,7 +212,7 @@ struct MANGOS_DLL_DECL mob_toc5_warriorAI : public ScriptedAI
         {
             if (!m_creature->IsWithinDistInMap(m_creature->getVictim(), 8) && m_creature->IsWithinDistInMap(m_creature->getVictim(), 25) && Intercept_Cooldown < diff)
             {
-                DoCast(m_creature->getVictim(), SPELL_INTERCEPT);
+                DoCastSpellIfCan(m_creature->getVictim(), SPELL_INTERCEPT);
                 Intercept_Cooldown = 15000;
             }
             intercept_check = 1000;
@@ -361,26 +361,26 @@ struct MANGOS_DLL_DECL mob_toc5_mageAI : public ScriptedAI
 
         if (Fireball_Timer < diff)
         {
-            DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_FIREBALL : SPELL_FIREBALL_H);
+            DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_FIREBALL : SPELL_FIREBALL_H);
             Fireball_Timer = 3000;
         }else Fireball_Timer -= diff;  
 
         if (Blast_Wave_Timer < diff)
         {
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_BLAST_WAVE : SPELL_BLAST_WAVE_H);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_BLAST_WAVE : SPELL_BLAST_WAVE_H);
             Blast_Wave_Timer = 20000;
         }else Blast_Wave_Timer -= diff;
 
         if (Haste_Timer < diff)
         {
-            DoCast(m_creature, SPELL_HASTE);
+            DoCastSpellIfCan(m_creature, SPELL_HASTE);
             Haste_Timer = 10000;
         }else Haste_Timer -= diff;
 
         if (Polymorph_Timer < diff)
         {
             if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-                DoCast(target, m_bIsRegularMode ? SPELL_POLYMORPH : SPELL_POLYMORPH_H);
+                DoCastSpellIfCan(target, m_bIsRegularMode ? SPELL_POLYMORPH : SPELL_POLYMORPH_H);
             Polymorph_Timer = m_bIsRegularMode ? 20000 : 15000;
         }else Polymorph_Timer -= diff;
         
@@ -526,13 +526,13 @@ struct MANGOS_DLL_DECL mob_toc5_shamanAI : public ScriptedAI
 
         if (Chain_Lightning_Timer < diff)
         {
-            DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_CHAIN_LIGHTNING : SPELL_CHAIN_LIGHTNING_H);
+            DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_CHAIN_LIGHTNING : SPELL_CHAIN_LIGHTNING_H);
             Chain_Lightning_Timer = 10000;
         }else Chain_Lightning_Timer -= diff;  
 
         if (Hex_Timer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_HEX_OF_MENDING);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_HEX_OF_MENDING);
             Hex_Timer = 20000;
         }else Hex_Timer -= diff;
 
@@ -555,13 +555,13 @@ struct MANGOS_DLL_DECL mob_toc5_shamanAI : public ScriptedAI
                     mob3_health = 100;
             if (mob1_health < mob2_health && mob1_health < mob3_health && mob1_health < 70)
                 if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_CHAMPION_1))))
-                    DoCast(pTemp, m_bIsRegularMode ? SPELL_HEALING_WAVE : SPELL_HEALING_WAVE_H);
+                    DoCastSpellIfCan(pTemp, m_bIsRegularMode ? SPELL_HEALING_WAVE : SPELL_HEALING_WAVE_H);
             if (mob1_health > mob2_health && mob2_health < mob3_health && mob2_health < 70)
                 if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_CHAMPION_2))))
-                    DoCast(pTemp, m_bIsRegularMode ? SPELL_HEALING_WAVE : SPELL_HEALING_WAVE_H);
+                    DoCastSpellIfCan(pTemp, m_bIsRegularMode ? SPELL_HEALING_WAVE : SPELL_HEALING_WAVE_H);
             if (mob3_health < mob2_health && mob1_health > mob3_health && mob3_health < 70)
                 if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_CHAMPION_3))))
-                    DoCast(pTemp, m_bIsRegularMode ? SPELL_HEALING_WAVE : SPELL_HEALING_WAVE_H);
+                    DoCastSpellIfCan(pTemp, m_bIsRegularMode ? SPELL_HEALING_WAVE : SPELL_HEALING_WAVE_H);
             Healing_Wave_Timer = 8000;
         }else Healing_Wave_Timer -= diff;
 
@@ -572,23 +572,23 @@ struct MANGOS_DLL_DECL mob_toc5_shamanAI : public ScriptedAI
                 case 0:
                     if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_CHAMPION_1))))
                         if (pTemp->isAlive())
-                            DoCast(pTemp, SPELL_EARTH_SHIELD);
+                            DoCastSpellIfCan(pTemp, SPELL_EARTH_SHIELD);
                         else
-                            DoCast(m_creature, SPELL_EARTH_SHIELD);
+                            DoCastSpellIfCan(m_creature, SPELL_EARTH_SHIELD);
                 break;
                 case 1:
                     if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_CHAMPION_2))))
                         if (pTemp->isAlive())
-                            DoCast(pTemp, SPELL_EARTH_SHIELD);
+                            DoCastSpellIfCan(pTemp, SPELL_EARTH_SHIELD);
                         else
-                            DoCast(m_creature, SPELL_EARTH_SHIELD);
+                            DoCastSpellIfCan(m_creature, SPELL_EARTH_SHIELD);
                 break;
                 case 2:
                     if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_CHAMPION_3))))
                         if (pTemp->isAlive())
-                            DoCast(pTemp, SPELL_EARTH_SHIELD);
+                            DoCastSpellIfCan(pTemp, SPELL_EARTH_SHIELD);
                         else
-                            DoCast(m_creature, SPELL_EARTH_SHIELD);
+                            DoCastSpellIfCan(m_creature, SPELL_EARTH_SHIELD);
                 break;
             }
             Earth_Shield_Timer = 25000;
@@ -752,21 +752,21 @@ struct MANGOS_DLL_DECL mob_toc5_hunterAI : public ScriptedAI
 
         if (Shoot_Timer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_SHOOT);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_SHOOT);
             Shoot_Timer = 3000;
         }else Shoot_Timer -= diff;  
 
         if (Multi_Shot_Timer < diff)
         {
             m_creature->CastStop(SPELL_SHOOT);
-            DoCast(m_creature->getVictim(), SPELL_MULTI_SHOT);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_MULTI_SHOT);
             Multi_Shot_Timer = 10000;
         }else Multi_Shot_Timer -= diff;
 
         if (Lightning_Arrows_Timer < diff)
         {
             m_creature->CastStop(SPELL_SHOOT);
-            DoCast(m_creature, SPELL_LIGHTNING_ARROWS);
+            DoCastSpellIfCan(m_creature, SPELL_LIGHTNING_ARROWS);
             Lightning_Arrows_Timer = 25000;
         }else Lightning_Arrows_Timer -= diff;
 
@@ -774,7 +774,7 @@ struct MANGOS_DLL_DECL mob_toc5_hunterAI : public ScriptedAI
         {
             if (m_creature->IsWithinDistInMap(m_creature->getVictim(), 5) && Disengage_Cooldown == 0)
             {
-                DoCast(m_creature, SPELL_DISENGAGE);
+                DoCastSpellIfCan(m_creature, SPELL_DISENGAGE);
                 Disengage_Cooldown = 15000;
             }
             disengage_check = 1000;
@@ -916,20 +916,20 @@ struct MANGOS_DLL_DECL mob_toc5_rogueAI : public ScriptedAI
 
         if (Eviscerate_Timer < diff)
         {
-            DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_EVISCERATE : SPELL_EVISCERATE_H);
+            DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_EVISCERATE : SPELL_EVISCERATE_H);
             Eviscerate_Timer = 10000;
         }else Eviscerate_Timer -= diff;  
 
         if (FoK_Timer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_FAN_OF_KNIVES);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_FAN_OF_KNIVES);
             FoK_Timer = 7000;
         }else FoK_Timer -= diff;
 
         if (Poison_Timer < diff)
         {
             if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-                DoCast(m_creature, SPELL_POISON_BOTTLE);
+                DoCastSpellIfCan(m_creature, SPELL_POISON_BOTTLE);
             Poison_Timer = m_bIsRegularMode ? 10000 : 5000;
         }else Poison_Timer -= diff;
         

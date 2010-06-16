@@ -18,7 +18,7 @@
 SDName: Boss_Keristrasza
 SD%Complete: 65%
 SDComment: timers tuning, add achievement
-SDCategory: Nexus
+SDCategory: Nexus  /dev/ FallenangelX
 EndScriptData */
 
 #include "precompiled.h"

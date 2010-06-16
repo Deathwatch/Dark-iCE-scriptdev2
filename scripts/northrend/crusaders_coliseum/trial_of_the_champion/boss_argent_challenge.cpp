@@ -126,13 +126,13 @@ struct MANGOS_DLL_DECL boss_eadricAI : public ScriptedAI
 
         if (Vengeance_Timer < diff)
         {
-            DoCast(m_creature, SPELL_VENGEANCE);
+            DoCastSpellIfCan(m_creature, SPELL_VENGEANCE);
             Vengeance_Timer = 12000;
         }else Vengeance_Timer -= diff;  
 
         if (Radiance_Timer < diff)
         {
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_RADIANCE : SPELL_RADIANCE_H);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_RADIANCE : SPELL_RADIANCE_H);
             Radiance_Timer = 20000;
         }else Radiance_Timer -= diff;
 
@@ -140,7 +140,7 @@ struct MANGOS_DLL_DECL boss_eadricAI : public ScriptedAI
         {
 			if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
 			{
-				DoCast(target, SPELL_HAMMER_OF_JUSTICE);
+				DoCastSpellIfCan(target, SPELL_HAMMER_OF_JUSTICE);
 				HammerTarget = target->GetGUID();
 			}
             Hammer_Timer = m_bIsRegularMode ? 40000 : 15000;
@@ -149,7 +149,7 @@ struct MANGOS_DLL_DECL boss_eadricAI : public ScriptedAI
         if (Hammer_Dmg_Timer < diff)
         {
             if (Unit* pHammerTarget = Unit::GetUnit(*m_creature, HammerTarget))
-                DoCast(pHammerTarget, SPELL_HAMMER);
+                DoCastSpellIfCan(pHammerTarget, SPELL_HAMMER);
             Hammer_Dmg_Timer = 50000;
         }
         else Hammer_Dmg_Timer -= diff;
@@ -245,7 +245,7 @@ struct MANGOS_DLL_DECL boss_paletressAI : public ScriptedAI
         if (Smite_Timer < diff)
         {
 			if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-				DoCast(target, m_bIsRegularMode ? SPELL_SMITE : SPELL_SMITE_H);
+				DoCastSpellIfCan(target, m_bIsRegularMode ? SPELL_SMITE : SPELL_SMITE_H);
             Smite_Timer = 2000;
         }else Smite_Timer -= diff;  
 
@@ -253,7 +253,7 @@ struct MANGOS_DLL_DECL boss_paletressAI : public ScriptedAI
         {
 			m_creature->CastStop(m_bIsRegularMode ? SPELL_SMITE : SPELL_SMITE_H);
 			if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-				DoCast(target, m_bIsRegularMode ? SPELL_HOLY_FIRE : SPELL_HOLY_FIRE_H);
+				DoCastSpellIfCan(target, m_bIsRegularMode ? SPELL_HOLY_FIRE : SPELL_HOLY_FIRE_H);
             Holy_Fire_Timer = m_bIsRegularMode ? 10000 : 7000;
         }else Holy_Fire_Timer -= diff;
 
@@ -266,12 +266,12 @@ struct MANGOS_DLL_DECL boss_paletressAI : public ScriptedAI
                 case 0:
                     if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_MEMORY))))
                         if (pTemp->isAlive())
-                            DoCast(pTemp, m_bIsRegularMode ? SPELL_RENEW : SPELL_RENEW_H);
+                            DoCastSpellIfCan(pTemp, m_bIsRegularMode ? SPELL_RENEW : SPELL_RENEW_H);
                         else
-                            DoCast(pTemp, m_bIsRegularMode ? SPELL_RENEW : SPELL_RENEW_H);
+                            DoCastSpellIfCan(pTemp, m_bIsRegularMode ? SPELL_RENEW : SPELL_RENEW_H);
                 break;
                 case 1:
-                    DoCast(m_creature, m_bIsRegularMode ? SPELL_RENEW : SPELL_RENEW_H);
+                    DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_RENEW : SPELL_RENEW_H);
                 break;
             }
             Renew_Timer = 25000;
@@ -281,7 +281,7 @@ struct MANGOS_DLL_DECL boss_paletressAI : public ScriptedAI
         {
             m_creature->CastStop(m_bIsRegularMode ? SPELL_SMITE : SPELL_SMITE_H);
             m_creature->CastStop(m_bIsRegularMode ? SPELL_HOLY_FIRE : SPELL_HOLY_FIRE_H);
-            DoCast(m_creature, SPELL_HOLY_NOVA);
+            DoCastSpellIfCan(m_creature, SPELL_HOLY_NOVA);
             switch(urand(0, 24))
             {
                 case 0:
@@ -468,7 +468,7 @@ struct MANGOS_DLL_DECL boss_paletressAI : public ScriptedAI
         {
             m_creature->CastStop(m_bIsRegularMode ? SPELL_SMITE : SPELL_SMITE_H);
             m_creature->CastStop(m_bIsRegularMode ? SPELL_HOLY_FIRE : SPELL_HOLY_FIRE_H);
-            DoCast(m_creature, SPELL_SHIELD);
+            DoCastSpellIfCan(m_creature, SPELL_SHIELD);
             shielded = true;
             Shield_Check = 1000;
         }else Shield_Delay -= diff;
@@ -523,20 +523,20 @@ struct MANGOS_DLL_DECL mob_toc5_memoryAI : public ScriptedAI
         if (Old_Wounds_Timer < diff)
         {
 			if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-				DoCast(target, m_bIsRegularMode ? SPELL_OLD_WOUNDS : SPELL_OLD_WOUNDS_H);
+				DoCastSpellIfCan(target, m_bIsRegularMode ? SPELL_OLD_WOUNDS : SPELL_OLD_WOUNDS_H);
             Old_Wounds_Timer = 10000;
         }else Old_Wounds_Timer -= diff;  
 
         if (Fear_Timer < diff)
         {
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_FEAR : SPELL_FEAR_H);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_FEAR : SPELL_FEAR_H);
             Fear_Timer = 40000;
         }else Fear_Timer -= diff; 
 
         if (Shadows_Timer < diff)
         {
 			if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,1))
-				DoCast(target, m_bIsRegularMode ? SPELL_SHADOWS : SPELL_SHADOWS_H);
+				DoCastSpellIfCan(target, m_bIsRegularMode ? SPELL_SHADOWS : SPELL_SHADOWS_H);
             Shadows_Timer = 10000;
         }else Shadows_Timer -= diff; 
         

@@ -19,7 +19,7 @@ SDName: Boss_Heigan
 SD%Complete: 0
 SDComment: 
 SDCategory: Naxxramas
-SDAuthor: ScrappyDoo (c) Andeeria
+SDAuthor: ScrappyDoo (c) Andeeria /dev/FallenAngelX
 EndScriptData */
 
 /*

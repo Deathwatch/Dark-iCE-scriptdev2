@@ -69,14 +69,14 @@ struct MANGOS_DLL_DECL boss_algalonAI : public ScriptedAI
 
         if(QuantumStrikeTimer < diff)
         {
-            DoCast(m_creature->getVictim(), Regular ? SP_QUANTUM_STRIKE : H_SP_QUANTUM_STRIKE);
+            DoCastSpellIfCan(m_creature->getVictim(), Regular ? SP_QUANTUM_STRIKE : H_SP_QUANTUM_STRIKE);
             QuantumStrikeTimer = 4000 + rand()%10000;
         }
         else QuantumStrikeTimer -= diff;
 
         if(EnrageTimer < diff)
         {
-            DoCast(m_creature, SP_ENRAGE, true);
+            DoCastSpellIfCan(m_creature, SP_ENRAGE, true);
             EnrageTimer = 30000;
         }
         else EnrageTimer -= diff;

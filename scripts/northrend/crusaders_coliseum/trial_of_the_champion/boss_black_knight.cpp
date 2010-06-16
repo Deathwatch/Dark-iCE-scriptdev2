@@ -83,23 +83,23 @@ struct MANGOS_DLL_DECL mob_toc5_risen_ghoulAI : public ScriptedAI
             if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_BLACK_KNIGHT))))
                 if (pTemp->isAlive())
                     if ((pTemp->GetHealth()*100 / pTemp->GetMaxHealth()) < 25)
-                        DoCast(m_creature, m_bIsRegularMode ? SPELL_EXPLODE : SPELL_EXPLODE_H);
+                        DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_EXPLODE : SPELL_EXPLODE_H);
             if (m_creature->IsWithinDistInMap(m_creature->getVictim(), 4))
             {
-                DoCast(m_creature->getVictim(), SPELL_CLAW);
+                DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLAW);
                 if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,1))
                     m_creature->AI()->AttackStart(target);
                 Attack = 2500;
             }else
             if (m_creature->IsWithinDistInMap(m_creature->getVictim(), 30))
             {
-                DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_LEAP : SPELL_LEAP_H);
+                DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_LEAP : SPELL_LEAP_H);
                 Attack = 2500;
             }
         }else Attack -= diff;
 
         if ((m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 25)
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_EXPLODE : SPELL_EXPLODE_H);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_EXPLODE : SPELL_EXPLODE_H);
         
         DoMeleeAttackIfReady();
     }
@@ -226,7 +226,7 @@ struct MANGOS_DLL_DECL boss_black_knightAI : public ScriptedAI
         phase1 = false;
         phase2 = true;
         phase3 = false;
-        DoCast(m_creature, SPELL_ARMY);
+        DoCastSpellIfCan(m_creature, SPELL_ARMY);
         Plague_Strike_Timer = 14000;
         Icy_Touch_Timer = 12000;
         Obliterate_Timer = 18000;
@@ -251,26 +251,26 @@ struct MANGOS_DLL_DECL boss_black_knightAI : public ScriptedAI
 
         if (Plague_Strike_Timer < diff && !phase3)
         {
-            DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_PLAGUE_STRIKE : SPELL_PLAGUE_STRIKE_H);
+            DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_PLAGUE_STRIKE : SPELL_PLAGUE_STRIKE_H);
             Plague_Strike_Timer = 10500;
         }else Plague_Strike_Timer -= diff;  
 
         if (Icy_Touch_Timer < diff && !phase3)
         {
-            DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_ICY_TOUCH : SPELL_ICY_TOUCH_H);
+            DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_ICY_TOUCH : SPELL_ICY_TOUCH_H);
             Icy_Touch_Timer = 10000;
         }else Icy_Touch_Timer -= diff;
 
         if (Obliterate_Timer < diff && !phase3)
         {
-            DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_OBLITERATE : SPELL_OBLITERATE_H);
+            DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_OBLITERATE : SPELL_OBLITERATE_H);
             Obliterate_Timer = 11000;
         }else Obliterate_Timer -= diff;
 
         if (Choke_Timer < diff && phase1)
         {
 			if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,1))
-				DoCast(m_creature->getVictim(), SPELL_CHOKE);
+				DoCastSpellIfCan(m_creature->getVictim(), SPELL_CHOKE);
 			Choke_Timer = m_bIsRegularMode ? 15000 : 10000;
         }else Choke_Timer -= diff;
 
@@ -286,13 +286,13 @@ struct MANGOS_DLL_DECL boss_black_knightAI : public ScriptedAI
         if (Mark_Timer < diff && phase3)
         {
 			if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,1))
-				DoCast(target, SPELL_MARK);
+				DoCastSpellIfCan(target, SPELL_MARK);
 			Mark_Timer = m_bIsRegularMode ? 15000 : 10000;
         }else Mark_Timer -= diff;
 
         if (Death_Timer < diff && phase3)
         {
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_DEATH : SPELL_DEATH_H);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_DEATH : SPELL_DEATH_H);
             Death_Timer = 3500;
         }else Death_Timer -= diff;
         

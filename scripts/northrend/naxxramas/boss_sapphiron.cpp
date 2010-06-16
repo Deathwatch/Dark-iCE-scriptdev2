@@ -19,7 +19,7 @@ SDName: Boss_Sapphiron
 SD%Complete: 90
 SDComment: 
 SDCategory: Naxxramas
-SDAuthor: ScrappyDoo (c) Andeeria
+SDAuthor: ScrappyDoo (c) Andeeria /dev/FallenangelX
 EndScriptData */
 
 /*ToDo

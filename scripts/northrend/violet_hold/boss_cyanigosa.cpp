@@ -81,7 +81,7 @@ struct MANGOS_DLL_DECL boss_cyanigosaAI : public ScriptedAI
     void Aggro(Unit* pWho)
     {
         DoScriptText(SAY_AGGRO, m_creature);
-        DoCast(m_creature, SPELL_CYANIGOSA_TRANSFORM);
+        DoCastSpellIfCan(m_creature, SPELL_CYANIGOSA_TRANSFORM);
     }
 
     void UpdateAI(const uint32 uiDiff)
@@ -92,7 +92,7 @@ struct MANGOS_DLL_DECL boss_cyanigosaAI : public ScriptedAI
 
         if (m_uiUncontrollableEnergy_Timer < uiDiff)
         {
-            DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_UNCONTROLLABLE_ENERGY_H : SPELL_UNCONTROLLABLE_ENERGY);
+            DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_UNCONTROLLABLE_ENERGY_H : SPELL_UNCONTROLLABLE_ENERGY);
             m_uiUncontrollableEnergy_Timer = urand(15000, 16000);
         }
         else
@@ -101,7 +101,7 @@ struct MANGOS_DLL_DECL boss_cyanigosaAI : public ScriptedAI
         if (m_uiManaDestruction_Timer < uiDiff)
         {
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                DoCast(pTarget, SPELL_MANA_DESTRUCTION);
+                DoCastSpellIfCan(pTarget, SPELL_MANA_DESTRUCTION);
             m_uiManaDestruction_Timer = urand(8000, 13000);
         }
         else
@@ -110,7 +110,7 @@ struct MANGOS_DLL_DECL boss_cyanigosaAI : public ScriptedAI
         if (m_uiBlizzard_Timer < uiDiff)
         {
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                DoCast(pTarget, m_bIsRegularMode ? SPELL_BLIZZARD_H : SPELL_BLIZZARD);
+                DoCastSpellIfCan(pTarget, m_bIsRegularMode ? SPELL_BLIZZARD_H : SPELL_BLIZZARD);
             m_uiBlizzard_Timer = urand(20000, 25000);
         }
         else
@@ -118,7 +118,7 @@ struct MANGOS_DLL_DECL boss_cyanigosaAI : public ScriptedAI
 
         if (m_uiArcaneVacuum_Timer < uiDiff)
         {
-            DoCast(m_creature, SPELL_ARCANE_VACUM);
+            DoCastSpellIfCan(m_creature, SPELL_ARCANE_VACUM);
             DoResetThreat();
             m_uiArcaneVacuum_Timer = urand(28000, 33000);
         }
@@ -127,7 +127,7 @@ struct MANGOS_DLL_DECL boss_cyanigosaAI : public ScriptedAI
 
         if (m_uiTailSweep_Timer < uiDiff)
         {
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_TAIL_SWEEP_H : SPELL_TAIL_SWEEP);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_TAIL_SWEEP_H : SPELL_TAIL_SWEEP);
             m_uiTailSweep_Timer = urand(10000, 11000);
         }
         else

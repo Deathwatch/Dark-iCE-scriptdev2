@@ -154,9 +154,9 @@ struct MANGOS_DLL_DECL boss_novosAI : public ScriptedAI
                 switch(urand(0, 1))
                 {
                     case 0: 
-                        DoCast(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0),  m_bIsRegularMode ? SPELL_WRATH_OF_MISERY : H_SPELL_WRATH_OF_MISERY);
+                        DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0),  m_bIsRegularMode ? SPELL_WRATH_OF_MISERY : H_SPELL_WRATH_OF_MISERY);
                     case 1: 
-                        DoCast(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0),  m_bIsRegularMode ? SPELL_BLIZZARD : H_SPELL_BLIZZARD);
+                        DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0),  m_bIsRegularMode ? SPELL_BLIZZARD : H_SPELL_BLIZZARD);
                 }
                 SpecialCast_Timer = urand(10000, 15000);
             }else ArcaneBlast_Timer -= uiDiff;
@@ -164,7 +164,7 @@ struct MANGOS_DLL_DECL boss_novosAI : public ScriptedAI
             //Regual cast - frostbolt
             if (Cast_Timer < uiDiff && ArcaneBlast_Timer > uiDiff && SpecialCast_Timer > uiDiff)
             {
-                DoCast(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0),  m_bIsRegularMode ? SPELL_FROSTBOLT : H_SPELL_FROSTBOLT);
+                DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0),  m_bIsRegularMode ? SPELL_FROSTBOLT : H_SPELL_FROSTBOLT);
                 Cast_Timer = 1000;
             }else Cast_Timer -= uiDiff;
             
@@ -193,7 +193,7 @@ struct MANGOS_DLL_DECL boss_novosAI : public ScriptedAI
         if (m_creature->getVictim() && Start_Check == 1)
         {
             EnterPhase1();
-            DoCast(m_creature, SPELL_ARCANE_FIELD);
+            DoCastSpellIfCan(m_creature, SPELL_ARCANE_FIELD);
             Start_Check = 0;
         }
         
@@ -277,7 +277,7 @@ struct MANGOS_DLL_DECL crystal_channelAI : public ScriptedAI
             Creature* pNovos =  GetClosestCreatureWithEntry(m_creature, NPC_NOVOS, 85.0f);
             if (Creature* pTarget = GetClosestCreatureWithEntry(m_creature, NPC_CRYSTAL_CHANNEL_TARGET , 85.0f))
                 if (((boss_novosAI*)pNovos->AI())->Phase1 == true)
-                    DoCast(pTarget, SPELL_EFFECT, true);
+                    DoCastSpellIfCan(pTarget, SPELL_EFFECT, true);
                 else
                     pTarget->ForcedDespawn();
             Check_Timer = 1000;
@@ -312,7 +312,7 @@ struct MANGOS_DLL_DECL risen_shadowcasterAI : public ScriptedAI
     {
         if (Check_Timer < uiDiff)
         {
-            DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_SHADOW_BOLT : H_SPELL_SHADOW_BOLT);
+            DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_SHADOW_BOLT : H_SPELL_SHADOW_BOLT);
             Check_Timer = 1000;
         }else Check_Timer -= uiDiff;
     }

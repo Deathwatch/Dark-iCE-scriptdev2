@@ -19,7 +19,7 @@ SDName: Boss_Jedoga
 SD%Complete: 95%
 SDComment:
 SDCategory: Ahn'kahet
-SDAuthor: ScrappyDoo (c) Andeeria
+SDAuthor: ScrappyDoo (c) Andeeria /dev/ FallenangelX
 EndScriptData 
 DELETE FROM creature_addon WHERE guid = 131953;
 

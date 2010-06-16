@@ -19,7 +19,7 @@ SDName: Boss_Razuvious
 SD%Complete: 90%
 SDComment: Hardmode Playable
 SDCategory: Naxxramas
-SDAuthor: ScrappyDoo (c) Andeeria
+SDAuthor: ScrappyDoo (c) Andeeria /dev/FallenAngelX
 EndScriptData */
 
 /* ToDo

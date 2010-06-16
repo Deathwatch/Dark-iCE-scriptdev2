@@ -152,7 +152,7 @@ struct MANGOS_DLL_DECL boss_zuramatAI : public ScriptedAI
 
         if (m_uiShroudDarkness_Timer < uiDiff)
         {
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_SHROUD_OF_DARKNESS_H : SPELL_SHROUD_OF_DARKNESS);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_SHROUD_OF_DARKNESS_H : SPELL_SHROUD_OF_DARKNESS);
             m_uiShroudDarkness_Timer = urand(7000, 8000);
         }
         else m_uiShroudDarkness_Timer -= uiDiff;
@@ -160,7 +160,7 @@ struct MANGOS_DLL_DECL boss_zuramatAI : public ScriptedAI
         if (m_uiVoidShift_Timer < uiDiff)
         {
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                DoCast(pTarget, m_bIsRegularMode ? SPELL_VOID_SHIFT_H : SPELL_VOID_SHIFT);
+                DoCastSpellIfCan(pTarget, m_bIsRegularMode ? SPELL_VOID_SHIFT_H : SPELL_VOID_SHIFT);
             m_uiVoidShift_Timer = urand(10000, 11000);
         }
         else m_uiVoidShift_Timer -= uiDiff;
@@ -209,9 +209,9 @@ struct MANGOS_DLL_DECL mob_zuramat_sentryAI : public ScriptedAI
 
     void Reset()
     {
-        //DoCast(m_creature, m_bIsRegularMode ? SPELL_VOID_SENTRY_AURA_H : SPELL_VOID_SENTRY_AURA); ??
+        //DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_VOID_SENTRY_AURA_H : SPELL_VOID_SENTRY_AURA); ??
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-        DoCast(m_creature, m_bIsRegularMode ? SPELL_SHADOW_BOLT_VOLLEY_H : SPELL_SHADOW_BOLT_VOLLEY);
+        DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_SHADOW_BOLT_VOLLEY_H : SPELL_SHADOW_BOLT_VOLLEY);
     }
 };
 

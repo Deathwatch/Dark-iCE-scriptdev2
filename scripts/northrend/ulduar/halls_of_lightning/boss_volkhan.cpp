@@ -198,7 +198,7 @@ struct MANGOS_DLL_DECL boss_volkhanAI : public ScriptedAI
 
         if(!m_bCanShatter && m_uiGolemsGUID[0][1] == 1 && m_uiGolemsGUID[1][1] == 1 && m_uiGolemsGUID[2][1] == 1) 
         {
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_SHATTERING_STOMP_N : SPELL_SHATTERING_STOMP_H);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_SHATTERING_STOMP_N : SPELL_SHATTERING_STOMP_H);
             m_uiShatterTimer = 3000;
             m_bCanShatter = true;
         }
@@ -342,7 +342,7 @@ struct MANGOS_DLL_DECL mob_molten_golemAI : public ScriptedAI
 
         if (m_uiBlast_Timer < uiDiff)
         {
-            DoCast(m_creature, SPELL_BLAST_WAVE);
+            DoCastSpellIfCan(m_creature, SPELL_BLAST_WAVE);
             m_uiBlast_Timer = 20000;
         }
         else
@@ -351,7 +351,7 @@ struct MANGOS_DLL_DECL mob_molten_golemAI : public ScriptedAI
         if (m_uiImmolation_Timer < uiDiff)
         {
             if(m_creature->getVictim())
-                DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_IMMOLATION_STRIKE_N : SPELL_IMMOLATION_STRIKE_H);
+                DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_IMMOLATION_STRIKE_N : SPELL_IMMOLATION_STRIKE_H);
             m_uiImmolation_Timer = 5000;
         }
         else

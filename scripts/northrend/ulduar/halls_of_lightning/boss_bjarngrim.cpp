@@ -243,7 +243,7 @@ struct MANGOS_DLL_DECL boss_bjarngrimAI : public ScriptedAI
                 if (m_uiReflection_Timer < uiDiff)
                 {
                     if(m_creature)
-                        DoCast(m_creature, SPELL_SPELL_REFLECTION);
+                        DoCastSpellIfCan(m_creature, SPELL_SPELL_REFLECTION);
                     m_uiReflection_Timer = urand(8000, 9000);
                 }
                 else
@@ -252,7 +252,7 @@ struct MANGOS_DLL_DECL boss_bjarngrimAI : public ScriptedAI
                 if (m_uiKnockAway_Timer < uiDiff)
                 {
                     if(m_creature)
-                        DoCast(m_creature, SPELL_KNOCK_AWAY);
+                        DoCastSpellIfCan(m_creature, SPELL_KNOCK_AWAY);
                     m_uiKnockAway_Timer = urand(20000, 21000);
                 }
                 else
@@ -261,7 +261,7 @@ struct MANGOS_DLL_DECL boss_bjarngrimAI : public ScriptedAI
                 if (m_uiPummel_Timer < uiDiff)
                 {
                     if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                        DoCast(target, SPELL_PUMMEL);
+                        DoCastSpellIfCan(target, SPELL_PUMMEL);
                     m_uiPummel_Timer = urand(10000, 11000);
                 }
                 else
@@ -270,7 +270,7 @@ struct MANGOS_DLL_DECL boss_bjarngrimAI : public ScriptedAI
                 if (m_uiIronform_Timer < uiDiff)
                 {
                     if(m_creature)
-                        DoCast(m_creature, SPELL_IRONFORM);
+                        DoCastSpellIfCan(m_creature, SPELL_IRONFORM);
                     m_uiIronform_Timer = urand(25000, 26000);
                 }
                 else
@@ -284,7 +284,7 @@ struct MANGOS_DLL_DECL boss_bjarngrimAI : public ScriptedAI
                 {
                     if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                     //not much point is this, better random target and more often?
-                        DoCast(target, SPELL_INTERCEPT);
+                        DoCastSpellIfCan(target, SPELL_INTERCEPT);
                     m_uiIntercept_Timer = urand(45000, 46000);
                 }
                 else
@@ -293,7 +293,7 @@ struct MANGOS_DLL_DECL boss_bjarngrimAI : public ScriptedAI
                 if (m_uiWhirlwind_Timer < uiDiff)
                 {
                     if(m_creature)
-                        DoCast(m_creature, SPELL_WHIRLWIND);
+                        DoCastSpellIfCan(m_creature, SPELL_WHIRLWIND);
                     m_uiWhirlwind_Timer = urand(10000, 11000);
                 }
                 else
@@ -302,7 +302,7 @@ struct MANGOS_DLL_DECL boss_bjarngrimAI : public ScriptedAI
                 if (m_uiCleave_Timer < uiDiff)
                 {
                     if(m_creature->getVictim())
-                        DoCast(m_creature->getVictim(), SPELL_CLEAVE);
+                        DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE);
                     m_uiCleave_Timer = urand(8000, 9000);
                 }
                 else
@@ -315,7 +315,7 @@ struct MANGOS_DLL_DECL boss_bjarngrimAI : public ScriptedAI
                 if (m_uiMortalStrike_Timer < uiDiff)
                 {
                     if(m_creature->getVictim())
-                        DoCast(m_creature->getVictim(), SPELL_MORTAL_STRIKE);
+                        DoCastSpellIfCan(m_creature->getVictim(), SPELL_MORTAL_STRIKE);
                     m_uiMortalStrike_Timer = urand(20000, 21000);
                 }
                 else
@@ -324,7 +324,7 @@ struct MANGOS_DLL_DECL boss_bjarngrimAI : public ScriptedAI
                 if (m_uiSlam_Timer < uiDiff)
                 {
                     if(m_creature->getVictim())
-                        DoCast(m_creature->getVictim(), SPELL_SLAM);
+                        DoCastSpellIfCan(m_creature->getVictim(), SPELL_SLAM);
                     m_uiSlam_Timer = urand(15000, 16000);
                 }
                 else
@@ -372,7 +372,7 @@ struct MANGOS_DLL_DECL mob_stormforged_lieutenantAI : public ScriptedAI
         if (m_uiArcWeld_Timer < uiDiff)
         {
             if(m_creature->getVictim())
-                //DoCast(m_creature->getVictim(), SPELL_ARC_WELD);
+                //DoCastSpellIfCan(m_creature->getVictim(), SPELL_ARC_WELD);
             m_uiArcWeld_Timer = urand(20000, 21000);
         }
         else

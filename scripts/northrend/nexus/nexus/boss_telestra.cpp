@@ -21,7 +21,7 @@ SDComment:
 * script depend on database spell support and eventAi for clones. transition to phase 2 also not fully implemented
 * hacked unitfalgs and equipment slots
 * hacked spell gravity well - MaNGOS does not support effect #145
-SDCategory: Nexus
+SDCategory: Nexus /dev/ FallenangelX
 EndScriptData */
 
 #include "precompiled.h"

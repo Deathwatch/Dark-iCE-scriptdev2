@@ -217,7 +217,7 @@ struct MANGOS_DLL_DECL boss_felmystAI : public ScriptedAI
             m_pInstance->SetData(TYPE_FELMYST, NOT_STARTED);
 
         if(!m_creature->HasAura(SPELL_SUNWELLRADIANCE_AURA))
-			DoCast(m_creature, SPELL_SUNWELLRADIANCE_AURA);
+			DoCastSpellIfCan(m_creature, SPELL_SUNWELLRADIANCE_AURA);
     }
  
     void Aggro(Unit *who)

@@ -39,7 +39,7 @@ struct MANGOS_DLL_DECL boss_vezaxAI : public ScriptedAI
     void Aggro(Unit *who) 
     {
         if(pInstance) pInstance->SetData(TYPE_VEZAX, IN_PROGRESS);
-        DoCast(NULL, SP_AURA_OF_DESPAIR, true);
+        DoCastSpellIfCan(NULL, SP_AURA_OF_DESPAIR, true);
     }
 
     void JustDied(Unit *killer)
@@ -54,14 +54,14 @@ struct MANGOS_DLL_DECL boss_vezaxAI : public ScriptedAI
 
         /*if(FlamesTimer < diff)
         {
-            DoCast(m_creature->getVictim(), SP_SEARING_FLAMES);
+            DoCastSpellIfCan(m_creature->getVictim(), SP_SEARING_FLAMES);
             FlamesTimer = 10000 + rand()%10000;
         }
         else FlamesTimer -= diff; */
 
         if(EnrageTimer < diff)
         {
-            DoCast(m_creature, SP_BERSERK);
+            DoCastSpellIfCan(m_creature, SP_BERSERK);
             EnrageTimer = 30000;
         }
         else EnrageTimer -= diff;

@@ -157,7 +157,7 @@ struct MANGOS_DLL_DECL boss_lord_epochAI : public ScriptedAI
 		if (Course_Timer < diff)
         {
             if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                DoCast(target, SPELL_COURSE);
+                DoCastSpellIfCan(target, SPELL_COURSE);
 
             Course_Timer = 9300;
         }
@@ -167,7 +167,7 @@ struct MANGOS_DLL_DECL boss_lord_epochAI : public ScriptedAI
 		if (Spike_Timer < diff)
         {
 
-            DoCast(m_creature->getVictim(),m_bIsHeroic ? SPELL_SPIKE_H : SPELL_SPIKE_N);
+            DoCastSpellIfCan(m_creature->getVictim(),m_bIsHeroic ? SPELL_SPIKE_H : SPELL_SPIKE_N);
 
             Spike_Timer = 5300;
         }
@@ -177,7 +177,7 @@ struct MANGOS_DLL_DECL boss_lord_epochAI : public ScriptedAI
 		if (Stop_Timer < diff)
         {
             if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                DoCast(target, SPELL_TIME_STOP);
+                DoCastSpellIfCan(target, SPELL_TIME_STOP);
 
 			Stop_Timer = 21300;
         }
@@ -187,7 +187,7 @@ struct MANGOS_DLL_DECL boss_lord_epochAI : public ScriptedAI
 		if (Warp_Timer < diff)
         {
             if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-               DoCast(target, SPELL_TIME_WARP);
+               DoCastSpellIfCan(target, SPELL_TIME_WARP);
 			
 			switch(rand()%3)
 			{

@@ -106,13 +106,13 @@ struct MANGOS_DLL_DECL mob_pummelerAI : public ScriptedAI
             switch(urand(0, 2))
             {
                 case 0:
-                    DoCast(m_creature->getVictim(), SPELL_CLEAVE);
+                    DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE);
                 break;
                 case 1:
-                    DoCast(m_creature->getVictim(), SPELL_TRAMPLE);
+                    DoCastSpellIfCan(m_creature->getVictim(), SPELL_TRAMPLE);
                 break;
                 case 2:
-                    DoCast(m_creature->getVictim(), SPELL_UPPERCUT);
+                    DoCastSpellIfCan(m_creature->getVictim(), SPELL_UPPERCUT);
                 break;
             }
             Spell_Timer = urand(15000, 25000);
@@ -141,7 +141,7 @@ struct MANGOS_DLL_DECL mob_boombotAI : public ScriptedAI
         if (uiDamage > m_creature->GetHealth())
 		{
             uiDamage = 0;
-            DoCast(m_creature, SPELL_BOOM);
+            DoCastSpellIfCan(m_creature, SPELL_BOOM);
         }
     }
 
@@ -149,7 +149,7 @@ struct MANGOS_DLL_DECL mob_boombotAI : public ScriptedAI
     {
         //If we are within range melee the target
         if (m_creature->IsWithinDistInMap(m_creature->getVictim(), ATTACK_DISTANCE))
-            DoCast(m_creature, SPELL_BOOM);
+            DoCastSpellIfCan(m_creature, SPELL_BOOM);
     }
 
     void UpdateAI(const uint32 diff)
@@ -186,7 +186,7 @@ struct MANGOS_DLL_DECL mob_xtheartAI : public ScriptedAI
     {
 		SetCombatMovement(false);
         Exposed_Timer = 36000;
-        DoCast(m_creature, SPELL_EXPOSED_HEART);
+        DoCastSpellIfCan(m_creature, SPELL_EXPOSED_HEART);
         heartdamage = 0;
     }
 
@@ -236,7 +236,7 @@ struct MANGOS_DLL_DECL mob_life_spark_AI : public ScriptedAI
     
     void EnterCombat(Unit* who)
     {
-		DoCast(m_creature, m_bIsRegularMode ? SPELL_STATIC_CHARGED : SPELL_STATIC_CHARGED_H);
+		DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_STATIC_CHARGED : SPELL_STATIC_CHARGED_H);
     }
 
 	void UpdateAI(const uint32 diff)
@@ -248,7 +248,7 @@ struct MANGOS_DLL_DECL mob_life_spark_AI : public ScriptedAI
 				break;
 			case 1:
 			case 2:
-				DoCast(m_creature->getVictim(), SPELL_SHOCK);
+				DoCastSpellIfCan(m_creature->getVictim(), SPELL_SHOCK);
 				break;
 		}
 	}
@@ -521,7 +521,7 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
         {
             if (Unit* pTemp = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1))
 			{
-                DoCast(pTemp, m_bIsRegularMode ? SPELL_LIGHT_BOMB : SPELL_LIGHT_BOMB_H);
+                DoCastSpellIfCan(pTemp, m_bIsRegularMode ? SPELL_LIGHT_BOMB : SPELL_LIGHT_BOMB_H);
 				targetLightBomb = pTemp;
 			}
 			else
@@ -534,7 +534,7 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
         {
             if (Unit* pTemp = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1))
 			{
-                DoCast(pTemp, m_bIsRegularMode ? SPELL_GRAVITY_BOMB : SPELL_GRAVITY_BOMB_H);
+                DoCastSpellIfCan(pTemp, m_bIsRegularMode ? SPELL_GRAVITY_BOMB : SPELL_GRAVITY_BOMB_H);
 				targetGravityBomb = pTemp;
 			}
 			else
@@ -545,14 +545,14 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
 
         if (Tanctrum_Timer < diff && !phase2)
         {
-            DoCast(m_creature, SPELL_TANCTRUM);
+            DoCastSpellIfCan(m_creature, SPELL_TANCTRUM);
             DoScriptText(SAY_TANCTRUM, m_creature);
             Tanctrum_Timer = 40000;
         }else Tanctrum_Timer -= diff;
 
         if (Enrage_Timer < diff && !enrage && !phase2)
         {
-            DoCast(m_creature, SPELL_ENRAGE);
+            DoCastSpellIfCan(m_creature, SPELL_ENRAGE);
             if (m_creature->HasAura(SPELL_ENRAGE))
             {
                 enrage = true;
@@ -578,7 +578,7 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
             add4 = false;
             add_summon_delay = 5000;
             DoScriptText(SAY_HEART_OPEN, m_creature);
-            DoCast(m_creature, SPELL_STUN);
+            DoCastSpellIfCan(m_creature, SPELL_STUN);
             m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             m_creature->SummonCreature(NPC_HEART, 0.0f, 0.0f, 0.0f, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 36000);
         }
@@ -594,7 +594,7 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
             add4 = false;
             add_summon_delay = 5000;
             DoScriptText(SAY_HEART_OPEN, m_creature);
-            DoCast(m_creature, SPELL_STUN);
+            DoCastSpellIfCan(m_creature, SPELL_STUN);
             m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             m_creature->SummonCreature(NPC_HEART, 0.0f, 0.0f, 0.0f, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 36000);
         }
@@ -610,7 +610,7 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
             add4 = false;
             add_summon_delay = 5000;
             DoScriptText(SAY_HEART_OPEN, m_creature);
-            DoCast(m_creature, SPELL_STUN);
+            DoCastSpellIfCan(m_creature, SPELL_STUN);
             m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             m_creature->SummonCreature(NPC_HEART, 0.0f, 0.0f, 0.0f, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 36000);
         }
@@ -686,7 +686,7 @@ struct MANGOS_DLL_DECL boss_xt002AI : public ScriptedAI
 			{
 				if(targetGravityBomb && targetGravityBomb->IsInWorld())
 				{
-					DoCast(targetGravityBomb, SPELL_VOID_ZONE);
+					DoCastSpellIfCan(targetGravityBomb, SPELL_VOID_ZONE);
 					if(targetGravityBomb->isDead())
 						nerfgravity = false;
 					targetGravityBomb = NULL;

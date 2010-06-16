@@ -169,7 +169,7 @@ struct MANGOS_DLL_DECL boss_sjonnirAI : public ScriptedAI
         if (m_uiChainLightning_Timer < uiDiff)
         {
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                DoCast(pTarget, m_bIsRegularMode ? SPELL_CHAIN_LIGHTING_H : SPELL_CHAIN_LIGHTING);
+                DoCastSpellIfCan(pTarget, m_bIsRegularMode ? SPELL_CHAIN_LIGHTING_H : SPELL_CHAIN_LIGHTING);
             m_uiChainLightning_Timer = 10000 + rand()%5000;
         }
         else
@@ -177,7 +177,7 @@ struct MANGOS_DLL_DECL boss_sjonnirAI : public ScriptedAI
 
         if (m_uiLightningShield_Timer < uiDiff)
         {
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_LIGHTING_SHIELD_H : SPELL_LIGHTING_SHIELD);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_LIGHTING_SHIELD_H : SPELL_LIGHTING_SHIELD);
             m_uiLightningShield_Timer = 20000 + rand()%5000;
         }
         else
@@ -185,7 +185,7 @@ struct MANGOS_DLL_DECL boss_sjonnirAI : public ScriptedAI
 
         if (m_uiStaticCharge_Timer < uiDiff)
         {
-            DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_STATIC_CHARGE_H : SPELL_STATIC_CHARGE);
+            DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_STATIC_CHARGE_H : SPELL_STATIC_CHARGE);
             m_uiStaticCharge_Timer = 20000 + rand()%5000;
         }
         else
@@ -195,7 +195,7 @@ struct MANGOS_DLL_DECL boss_sjonnirAI : public ScriptedAI
         {
             if (m_creature->IsNonMeleeSpellCasted(false))
                 m_creature->InterruptNonMeleeSpells(false);
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_LIGHTING_RING_H : SPELL_LIGHTING_RING);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_LIGHTING_RING_H : SPELL_LIGHTING_RING);
             m_uiLightningRing_Timer = 30000 + rand()%5000;
         }
         else
@@ -219,7 +219,7 @@ struct MANGOS_DLL_DECL boss_sjonnirAI : public ScriptedAI
 
         if (!m_bIsFrenzy && m_uiFrenzy_Timer < uiDiff)
         {
-            DoCast(m_creature, SPELL_FRENZY);
+            DoCastSpellIfCan(m_creature, SPELL_FRENZY);
             m_bIsFrenzy = true;
             m_uiFrenzy_Timer = 0;
         }

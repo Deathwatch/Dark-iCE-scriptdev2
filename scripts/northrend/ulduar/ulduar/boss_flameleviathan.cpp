@@ -94,14 +94,14 @@ struct MANGOS_DLL_DECL boss_flame_leviathan : public ScriptedAI
 
         if(FlameVentsTimer < diff)
         {
-            DoCast(m_creature->getVictim(), SP_FLAME_VENTS);
+            DoCastSpellIfCan(m_creature->getVictim(), SP_FLAME_VENTS);
             FlameVentsTimer = 30000 + rand()%20000;
         }
         else FlameVentsTimer -= diff;
 
         if(BatteringRamTimer < diff)
         {
-            DoCast(m_creature->getVictim(), SP_BATTERING_RAM);
+            DoCastSpellIfCan(m_creature->getVictim(), SP_BATTERING_RAM);
             BatteringRamTimer = 25000 + rand()%15000;
         }
         else BatteringRamTimer -= diff;

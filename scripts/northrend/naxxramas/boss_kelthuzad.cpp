@@ -19,7 +19,7 @@ SDName: Boss_KelThuzud
 SD%Complete: 80
 SDComment:
 SDCategory: Naxxramas
-SDAuthor: ScrappyDoo (c) Andeeria
+SDAuthor: ScrappyDoo (c) Andeeria /dev/FallenAngelX
 EndScriptData */
 
 /* To Do
@@ -315,7 +315,7 @@ struct MANGOS_DLL_DECL boss_kelthuzadAI : public ScriptedAI
                     DoScriptText(SAY_CHAIN2, m_creature);
 
                 //3 razy
-				//DoCast(m_creature->getVictim(),SPELL_CHAINS_OF_KELTHUZAD);
+				//DoCastSpellIfCan(m_creature->getVictim(),SPELL_CHAINS_OF_KELTHUZAD);
 
                 m_uiChainsOfKelthuzadTimer = 90000;
             }else m_uiChainsOfKelthuzadTimer -= uiDiff;
@@ -382,7 +382,7 @@ struct MANGOS_DLL_DECL mob_shadowfissureAI : public Scripted_NoMovementAI
 
     void Reset() 
     { 
-        DoCast(m_creature, SPELL_ARCANE_FORM, true); // missing  original visual efect
+        DoCastSpellIfCan(m_creature, SPELL_ARCANE_FORM, true); // missing  original visual efect
         m_uiVoidBlastTimer  = 5000; 
     }
 

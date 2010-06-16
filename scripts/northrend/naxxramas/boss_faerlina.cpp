@@ -19,7 +19,7 @@ SDName: Boss_Faerlina
 SD%Complete: 90
 SDComment:
 SDCategory: Naxxramas
-SDAuthor: ScrappyDoo (c) Andeeria
+SDAuthor: ScrappyDoo (c) Andeeria /dev/FallenAngelX
 EndScriptData */
 
 #include "precompiled.h"
@@ -189,7 +189,7 @@ struct MANGOS_DLL_DECL boss_faerlinaAI : public ScriptedAI
         if (m_uiEnrageTimer < uiDiff)
         {
             if(m_creature)
-                DoCast(m_creature, SPELL_ENRAGE);
+                DoCastSpellIfCan(m_creature, SPELL_ENRAGE);
             m_uiEnrageTimer = urand(30000,50000);
         }
         else 

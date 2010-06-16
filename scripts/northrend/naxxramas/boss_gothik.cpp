@@ -19,7 +19,7 @@ SDName: Boss_Gothik
 SD%Complete: 90
 SDComment:  
 SDCategory: Naxxramas
-SDAuthor: ScrappyDoo (c) Andeeria
+SDAuthor: ScrappyDoo (c) Andeeria /dev/FallenAngelX
 EndScriptData */
 
 #include "precompiled.h"

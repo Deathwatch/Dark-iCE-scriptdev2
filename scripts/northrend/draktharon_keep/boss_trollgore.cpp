@@ -118,14 +118,14 @@ struct MANGOS_DLL_DECL boss_trollgoreAI : public ScriptedAI
         // Crush
         if (Crush_Timer < uiDiff)
         {
-            DoCast(m_creature->getVictim(), SPELL_CRUSH);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_CRUSH);
             Crush_Timer = 10000;
         }else Crush_Timer -= uiDiff;
 
         // Infected Wound
         if (InfectedWound_Timer < uiDiff)
         {
-            DoCast(m_creature->getVictim(), SPELL_CRUSH);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_CRUSH);
             InfectedWound_Timer = 30000;
         }else InfectedWound_Timer -= uiDiff;
 
@@ -147,7 +147,7 @@ struct MANGOS_DLL_DECL boss_trollgoreAI : public ScriptedAI
         //Corpse Explosion
         if (CorpseExplode_Timer < uiDiff)
         {
-            //DoCast(m_creature->getVictim(),  m_bIsRegularMode ? SPELL_CORPSE_EXPLODE : H_SPELL_CORPSE_EXPLODE);
+            //DoCastSpellIfCan(m_creature->getVictim(),  m_bIsRegularMode ? SPELL_CORPSE_EXPLODE : H_SPELL_CORPSE_EXPLODE);
         
             if (Creature* pCorpse = GetClosestCreatureWithEntry(m_creature, NPC_DRAKKARI_INVADER, 85.0f))
             {

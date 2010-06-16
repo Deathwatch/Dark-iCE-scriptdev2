@@ -18,7 +18,7 @@
 SDName: Boss_Ormorok
 SD%Complete: 50%
 SDComment: TODO: Correct timers. Research how spikes work, and attempt code it properly from mangos side.
-SDCategory: Nexus
+SDCategory: Nexus  /dev/ FallenangelX
 EndScriptData */
 
 #include "precompiled.h"

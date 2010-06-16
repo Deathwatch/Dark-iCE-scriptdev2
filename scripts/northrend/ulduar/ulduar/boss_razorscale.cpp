@@ -159,7 +159,7 @@ struct MANGOS_DLL_DECL mob_devouring_flame_targetAI : public ScriptedAI
     {
         Death_Timer = 25500;
         m_creature->SetDisplayId(11686);
-        DoCast(m_creature,  m_bIsRegularMode ? AURA_DEVOURING_FLAME : AURA_DEVOURING_FLAME_H);
+        DoCastSpellIfCan(m_creature,  m_bIsRegularMode ? AURA_DEVOURING_FLAME : AURA_DEVOURING_FLAME_H);
 		SetCombatMovement(false);
     }
 
@@ -210,10 +210,10 @@ struct MANGOS_DLL_DECL mob_dark_rune_watcherAI : public ScriptedAI
             switch(urand(0, 1))
             {
                 case 0:
-                    DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_LIGHTNING_BOLT : SPELL_LIGHTNING_BOLT_H);
+                    DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_LIGHTNING_BOLT : SPELL_LIGHTNING_BOLT_H);
                 break;
                 case 1:
-                    DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_CHAIN_LIGHTNING : SPELL_CHAIN_LIGHTNING_H);
+                    DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_CHAIN_LIGHTNING : SPELL_CHAIN_LIGHTNING_H);
                 break;
             }
             Spell_Timer = urand(7000, 11000);
@@ -257,13 +257,13 @@ struct MANGOS_DLL_DECL mob_dark_rune_sentinelAI : public ScriptedAI
 
         if (Whirl_Timer < diff)
         {
-            DoCast(m_creature, SPELL_WHIRLWIND);
+            DoCastSpellIfCan(m_creature, SPELL_WHIRLWIND);
             Whirl_Timer = urand(10000, 15000);
         }else Whirl_Timer -= diff;
 
         if (Shout_Timer < diff)
         {
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_BATTLE_SHOUT : SPELL_BATTLE_SHOUT_H);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_BATTLE_SHOUT : SPELL_BATTLE_SHOUT_H);
             Shout_Timer = 30000;
         }else Shout_Timer -= diff;
         
@@ -304,7 +304,7 @@ struct MANGOS_DLL_DECL mob_dark_rune_guardianAI : public ScriptedAI
 
         if (Stormstrike_Timer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_STORMSTRIKE);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_STORMSTRIKE);
             Stormstrike_Timer = urand(7000, 13000);
         }else Stormstrike_Timer -= diff;
         
@@ -428,14 +428,14 @@ struct MANGOS_DLL_DECL boss_razorscaleAI : public ScriptedAI
         if (Fireball_Timer < diff && airphase && !grounded)
         {
             if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                DoCast(target, m_bIsRegularMode ? SPELL_FIREBALL : SPELL_FIREBALL_H);
+                DoCastSpellIfCan(target, m_bIsRegularMode ? SPELL_FIREBALL : SPELL_FIREBALL_H);
             Fireball_Timer = 2000;
         }else Fireball_Timer -= diff;   
 
         if (Devouring_Flame_Timer < diff && !grounded)
         {
             if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                DoCast(target, DEVOURING_FLAME_VISUAL);
+                DoCastSpellIfCan(target, DEVOURING_FLAME_VISUAL);
             Devouring_Flame_Timer = 12000;
         }else Devouring_Flame_Timer -= diff;  
 
@@ -495,7 +495,7 @@ struct MANGOS_DLL_DECL boss_razorscaleAI : public ScriptedAI
 
         if (Berserk_Timer < diff && !berserk)
         {
-            DoCast(m_creature, SPELL_BERSERK);
+            DoCastSpellIfCan(m_creature, SPELL_BERSERK);
             berserk = true;
         }else Berserk_Timer -= diff;
 
@@ -512,21 +512,21 @@ struct MANGOS_DLL_DECL boss_razorscaleAI : public ScriptedAI
 
         if (Stun_Timer < diff && grounded)
         {
-            DoCast(m_creature, SPELL_STUN);
+            DoCastSpellIfCan(m_creature, SPELL_STUN);
             Stun_Timer = 60000;
         }else Stun_Timer -= diff;
 
         if (Ground_Cast < diff && grounded)
         {
             m_creature->RemoveAurasDueToSpell(SPELL_STUN);
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_FLAME_BREATH : SPELL_FLAME_BREATH_H);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_FLAME_BREATH : SPELL_FLAME_BREATH_H);
             Ground_Cast = 10000;
             Ground_Knockback = 1000;
         }else Ground_Cast -= diff;
 
         if (Ground_Knockback < diff && grounded)
         {
-            DoCast(m_creature, SPELL_WING_BUFFET);
+            DoCastSpellIfCan(m_creature, SPELL_WING_BUFFET);
             Ground_Knockback = 10000;
         }else Ground_Knockback -= diff;
 
@@ -559,19 +559,19 @@ struct MANGOS_DLL_DECL boss_razorscaleAI : public ScriptedAI
 
         if (Fuse_Armor_Timer < diff && !airphase)
         {
-            DoCast(m_creature->getVictim(), SPELL_FUSE_ARMOR);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_FUSE_ARMOR);
             Fuse_Armor_Timer = 13000;
         }else Fuse_Armor_Timer -= diff;
 
         if (Flame_Buffet_Timer < diff && !airphase)
         {
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_FLAME_BUFFET : SPELL_FLAME_BUFFET_H);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_FLAME_BUFFET : SPELL_FLAME_BUFFET_H);
             Flame_Buffet_Timer = 13000;
         }else Flame_Buffet_Timer -= diff;
 
         if (Flame_Breath_Timer < diff && !airphase)
         {
-            DoCast(m_creature, m_bIsRegularMode ? SPELL_FLAME_BREATH : SPELL_FLAME_BREATH_H);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_FLAME_BREATH : SPELL_FLAME_BREATH_H);
             Flame_Breath_Timer = 14000;
         }else Flame_Breath_Timer -= diff;
 

@@ -109,14 +109,14 @@ struct MANGOS_DLL_DECL boss_lavanthorAI : public ScriptedAI
 
         if (m_uiCauterizingFlames_Timer < uiDiff)
         {
-            DoCast(m_creature, SPELL_CAUTERIZING_FLAMES);
+            DoCastSpellIfCan(m_creature, SPELL_CAUTERIZING_FLAMES);
             m_uiCauterizingFlames_Timer = urand(40000, 41000);
         }
         else m_uiCauterizingFlames_Timer -= uiDiff;
 
         if (m_uiFirebolt_Timer < uiDiff)
         {
-            DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_FIREBOLT_H : SPELL_FIREBOLT);
+            DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_FIREBOLT_H : SPELL_FIREBOLT);
             m_uiFirebolt_Timer = urand(10000, 11000);
         }
         else m_uiFirebolt_Timer -= uiDiff;
@@ -126,10 +126,10 @@ struct MANGOS_DLL_DECL boss_lavanthorAI : public ScriptedAI
             switch (urand(0, 1))
             {
                 case 0:
-                    DoCast(m_creature, m_bIsRegularMode ? SPELL_FLAME_BREATH_H : SPELL_FLAME_BREATH);
+                    DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_FLAME_BREATH_H : SPELL_FLAME_BREATH);
                     break;
                 case 1:
-                    DoCast(m_creature, m_bIsRegularMode ? SPELL_LAVA_BURN_H : SPELL_LAVA_BURN);
+                    DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_LAVA_BURN_H : SPELL_LAVA_BURN);
                     break;
             }
             m_uiFlameBreath_Timer = urand(15000, 16000);

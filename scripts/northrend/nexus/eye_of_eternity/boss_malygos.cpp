@@ -795,7 +795,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
         {
             //m_creature->StopMoving();
             SetCombatMovement(true);
-            DoCast(m_creature, SPELL_BERSERK, true);
+            DoCastSpellIfCan(m_creature, SPELL_BERSERK, true);
             m_uiEnrageTimer = 600000;
             m_creature->SetSpeedRate(MOVE_FLIGHT, 3.5f, true);
             m_creature->SetSpeedRate(MOVE_RUN, 3.5f, true);
@@ -815,7 +815,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
                     
                     if(m_uiVortexPhase == 1 || m_uiVortexPhase == 11){
                         if(m_uiVortexPhase == 1)
-                            DoCast(m_creature, SPELL_VORTEX_DUMMY);
+                            DoCastSpellIfCan(m_creature, SPELL_VORTEX_DUMMY);
                         m_uiTimer = 300;
                     }else
                         m_uiTimer = 500;
@@ -851,7 +851,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
             //Arcane Breath
             if(m_uiArcaneBreathTimer <= uiDiff)
             {
-                DoCast(m_creature, m_bIsRegularMode ? SPELL_ARCANE_BREATH : SPELL_ARCANE_BREATH_H);
+                DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_ARCANE_BREATH : SPELL_ARCANE_BREATH_H);
                 m_uiArcaneBreathTimer = 15000 + urand(3000, 8000);
             }else m_uiArcaneBreathTimer -= uiDiff;
 
@@ -920,7 +920,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
                 DoScriptText(SAY_ARCANE_PULSE, m_creature);
                 DoScriptText(SAY_ARCANE_PULSE_WARN, m_creature);
                 if(pTrigger)
-                    DoCast(pTrigger, SPELL_SURGE_OF_POWER_BREATH);
+                    DoCastSpellIfCan(pTrigger, SPELL_SURGE_OF_POWER_BREATH);
 
                 m_uiDeepBreathTimer = 60000;
             }else m_uiDeepBreathTimer -= uiDiff;
@@ -1037,7 +1037,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
                 float victim_threat = m_creature->getThreatManager().getThreat(m_creature->getVictim());
                 DoResetThreat();
                 m_creature->AddThreat(pTarget, victim_threat);
-                DoCast(pTarget, m_bIsRegularMode ? SPELL_SURGE_OF_POWER : SPELL_SURGE_OF_POWER_H);
+                DoCastSpellIfCan(pTarget, m_bIsRegularMode ? SPELL_SURGE_OF_POWER : SPELL_SURGE_OF_POWER_H);
                 DoScriptText(SAY_SURGE_OF_POWER, m_creature);
                 m_uiSurgeOfPowerTimer = 16000+rand()%15000;
             }else m_uiSurgeOfPowerTimer -= uiDiff;	
@@ -1341,7 +1341,7 @@ struct MANGOS_DLL_DECL mob_scion_of_eternityAI : public ScriptedAI
             {
                 int32 bpoints0 = m_bIsRegularMode ? int32(BP_BARRAGE0) : int32(BP_BARRAGE0_H);
                 m_creature->CastCustomSpell(pTarget, SPELL_ARCANE_BARRAGE, &bpoints0, 0, 0, false);  
-                //DoCast(pTarget, SPELL_ARCANE_BARRAGE);  // this spell is not right :/
+                //DoCastSpellIfCan(pTarget, SPELL_ARCANE_BARRAGE);  // this spell is not right :/
             }
             m_uiArcaneBarrageTimer = 3000 + rand()%19000;
         }else m_uiArcaneBarrageTimer -= uiDiff;

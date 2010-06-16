@@ -18,7 +18,7 @@
 SDName: Boss Commander Kolurg
 SD%Complete: 95%
 SDComment:  Only Alliance Heroic
-SDCategory:
+SDCategory: /dev/ FallenangelX
 Script Data End */
 
 #include "precompiled.h"

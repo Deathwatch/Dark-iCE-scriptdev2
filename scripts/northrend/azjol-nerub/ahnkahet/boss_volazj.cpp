@@ -19,7 +19,7 @@ SDName: Boss_Volazj
 SD%Complete: 90%
 SDComment: 
 SDCategory: Ahn'kahet
-SDAuthor: ScrappyDoo (c) Andeeria
+SDAuthor: ScrappyDoo (c) Andeeria /dev/ FallenangelX
 * do not open before fixing spell initialized as uint64!! (uint64 m_uiImageGUID[5][2])
 EndScriptData */
 

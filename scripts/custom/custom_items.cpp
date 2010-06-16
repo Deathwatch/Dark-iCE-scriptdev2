@@ -98,10 +98,10 @@ bool ItemUse_custom_item_levelplayer(Player* pPlayer, Item* pItem, const SpellCa
     }
 	else
 	{
-		if((pPlayer->getLevel()) < (DARKICEConfig.GetFloatDefault("LevelUpItemSafeLevel",0)))
+		if((pPlayer->getLevel()) <= (DARKICEConfig.GetFloatDefault("LevelUpItemSafeLevel",0)))
 		{
 			pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
-			pPlayer->GiveLevel(+(DARKICEConfig.GetFloatDefault("LevelUpItemAddLevel",0)));
+			pPlayer->GiveLevel((pPlayer->getLevel())+(DARKICEConfig.GetFloatDefault("LevelUpItemAddLevel",0)));
 			return true;
 		}
 		else

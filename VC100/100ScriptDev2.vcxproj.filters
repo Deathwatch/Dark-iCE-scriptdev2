@@ -2074,6 +2074,7 @@
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\config.h" />
+	<ClInclude Include="..\revision.h" />
     <ClInclude Include="..\ScriptMgr.h" />
     <ClInclude Include="..\include\sc_boss_spell_worker.h">
       <Filter>include</Filter>

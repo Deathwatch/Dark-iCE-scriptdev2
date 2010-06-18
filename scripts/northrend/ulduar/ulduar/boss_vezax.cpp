@@ -206,7 +206,7 @@ struct MANGOS_DLL_DECL boss_vezaxAI : public ScriptedAI
             if(m_uiSearingFlames_Timer < diff)
             {
                 m_creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_INTERRUPT_CAST, false);
-                DoCast(m_creature, SPELL_SEARING_FLAMES);
+                DoCastSpellIfCan(m_creature, SPELL_SEARING_FLAMES);
                 m_uiSearingFlames_Timer = urand(6,9)*IN_MILLISECONDS;
                 m_uiImmunity = 2*IN_MILLISECONDS;
                 SearingFlames = true;
@@ -227,7 +227,7 @@ struct MANGOS_DLL_DECL boss_vezaxAI : public ScriptedAI
         // Summon Vapors
         if(m_uiSummonVapors_Timer < diff && Vapors_Count < 6)
         {
-            DoCast(m_creature, SPELL_SUMMON_SARONITE_VAPORS);
+            DoCastSpellIfCan(m_creature, SPELL_SUMMON_SARONITE_VAPORS);
             m_uiSummonVapors_Timer = 30*IN_MILLISECONDS;
             Vapors_Count++;
             if(Vapors_Count == 6 && !VaporKilled)
@@ -244,7 +244,7 @@ struct MANGOS_DLL_DECL boss_vezaxAI : public ScriptedAI
         if(m_uiShadowCrash_Timer < diff)
         {
             if(Unit* target = TargetRandomPreferRanged())
-                DoCast(target, SPELL_SHADOW_CRASH);
+                DoCastSpellIfCan(target, SPELL_SHADOW_CRASH);
             m_uiShadowCrash_Timer = urand(20,25)*IN_MILLISECONDS;
         }else m_uiShadowCrash_Timer -= diff;
 
@@ -252,21 +252,21 @@ struct MANGOS_DLL_DECL boss_vezaxAI : public ScriptedAI
         if(m_uiMarkOfFaceless_Timer < diff)
         {
             if(Unit* target = TargetRandomPreferRanged())
-                DoCast(target, SPELL_MARK_OF_FACELESS);
+                DoCastSpellIfCan(target, SPELL_MARK_OF_FACELESS);
             m_uiMarkOfFaceless_Timer = urand(10,45)*IN_MILLISECONDS;
         }else m_uiMarkOfFaceless_Timer -= diff;
 
         // Surge Of Darkness
         if(m_uiSurgeOfDarkness_Timer < diff)
         {
-            DoCast(m_creature, SPELL_SURGE_OF_DARKNESS);
+            DoCastSpellIfCan(m_creature, SPELL_SURGE_OF_DARKNESS);
             m_uiSurgeOfDarkness_Timer = urand(60,70)*IN_MILLISECONDS;		
         }else m_uiSurgeOfDarkness_Timer -= diff;
 
         // Enrage
         if(m_uiEnrage_Timer < diff)
         {
-            DoCast(m_creature, SPELL_ENRAGE);
+            DoCastSpellIfCan(m_creature, SPELL_ENRAGE);
             m_uiEnrage_Timer = IN_MILLISECONDS;
         }else m_uiEnrage_Timer -= diff;
 
@@ -314,7 +314,7 @@ struct MANGOS_DLL_DECL boss_saroniteanimusAI : public ScriptedAI
         // Profound Darkness
         if(m_uiProfoundDarkness_Timer < diff)
         {
-            DoCast(m_creature, SPELL_PROFOUND_DARKNESS);
+            DoCastSpellIfCan(m_creature, SPELL_PROFOUND_DARKNESS);
             m_uiProfoundDarkness_Timer = 1500;
         }else m_uiProfoundDarkness_Timer -= diff;
 

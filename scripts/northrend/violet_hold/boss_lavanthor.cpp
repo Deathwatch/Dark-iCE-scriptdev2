@@ -55,22 +55,23 @@ struct MANGOS_DLL_DECL boss_lavanthorAI : public ScriptedAI
 
     void Reset()
     {
+        if (!m_pInstance) return;
         m_uiCauterizingFlames_Timer = urand(40000, 41000);
         m_uiFlameBreath_Timer = urand(15000, 16000);
         m_uiFirebolt_Timer = urand(10000, 11000);
         MovementStarted = false;
 
-        if (m_pInstance)
-            m_pInstance->SetData(TYPE_LAVANTHOR, NOT_STARTED);
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-
+        m_pInstance->SetData(TYPE_LAVANTHOR, NOT_STARTED);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
     }
 
     void Aggro(Unit* pWho)
     {
-        if (m_pInstance)
-            m_pInstance->SetData(TYPE_LAVANTHOR, IN_PROGRESS);
+        if (!m_pInstance) return;
+        m_pInstance->SetData(TYPE_LAVANTHOR, IN_PROGRESS);
+        m_creature->GetMotionMaster()->MovementExpired();
+        SetCombatMovement(true);
     }
 
     void AttackStart(Unit* pWho)
@@ -93,30 +94,47 @@ struct MANGOS_DLL_DECL boss_lavanthorAI : public ScriptedAI
         }
     }
 
+    void StartMovement(uint32 id)
+    {
+        m_creature->GetMotionMaster()->MovePoint(id, PortalLoc[id].x, PortalLoc[id].y, PortalLoc[id].z);
+        m_creature->AddSplineFlag(SPLINEFLAG_WALKMODE);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        MovementStarted = true;
+        m_creature->SetInCombatWithZone();
+    }
+
+    void MovementInform(uint32 type, uint32 id)
+    {
+        if (type != POINT_MOTION_TYPE || !MovementStarted) return;
+        if (id == 0 )
+        {
+            MovementStarted = false;
+            m_creature->GetMotionMaster()->MovementExpired();
+            SetCombatMovement(true);
+            m_creature->SetInCombatWithZone();
+        }
+    }
+
     void UpdateAI(const uint32 uiDiff)
     {
         if (m_pInstance->GetData(TYPE_LAVANTHOR) == SPECIAL && !MovementStarted)
-		{
-			m_creature->GetMotionMaster()->MovePoint(0, PortalLoc[0].x, PortalLoc[0].y, PortalLoc[0].z);
-			m_creature->AddSplineFlag(SPLINEFLAG_WALKMODE);
-			m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-			m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-			MovementStarted = true;
-        }
+            StartMovement(0);
+
         //Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
         if (m_uiCauterizingFlames_Timer < uiDiff)
         {
-            DoCastSpellIfCan(m_creature, SPELL_CAUTERIZING_FLAMES);
+            DoCast(m_creature, SPELL_CAUTERIZING_FLAMES);
             m_uiCauterizingFlames_Timer = urand(40000, 41000);
         }
         else m_uiCauterizingFlames_Timer -= uiDiff;
 
         if (m_uiFirebolt_Timer < uiDiff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_FIREBOLT_H : SPELL_FIREBOLT);
+            DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_FIREBOLT_H : SPELL_FIREBOLT);
             m_uiFirebolt_Timer = urand(10000, 11000);
         }
         else m_uiFirebolt_Timer -= uiDiff;
@@ -126,10 +144,10 @@ struct MANGOS_DLL_DECL boss_lavanthorAI : public ScriptedAI
             switch (urand(0, 1))
             {
                 case 0:
-                    DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_FLAME_BREATH_H : SPELL_FLAME_BREATH);
+                    DoCast(m_creature, m_bIsRegularMode ? SPELL_FLAME_BREATH_H : SPELL_FLAME_BREATH);
                     break;
                 case 1:
-                    DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_LAVA_BURN_H : SPELL_LAVA_BURN);
+                    DoCast(m_creature, m_bIsRegularMode ? SPELL_LAVA_BURN_H : SPELL_LAVA_BURN);
                     break;
             }
             m_uiFlameBreath_Timer = urand(15000, 16000);

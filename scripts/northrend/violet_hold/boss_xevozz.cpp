@@ -87,11 +87,12 @@ struct MANGOS_DLL_DECL boss_xevozzAI : public ScriptedAI
 
     void Aggro(Unit* pWho)
     {
+        if (!m_pInstance) return;
+
         DoScriptText(SAY_AGGRO, m_creature);
-
-        if (m_pInstance)
-            m_pInstance->SetData(TYPE_XEVOZZ, IN_PROGRESS);
-
+        m_pInstance->SetData(TYPE_XEVOZZ, IN_PROGRESS);
+        m_creature->GetMotionMaster()->MovementExpired();
+        SetCombatMovement(true);
     }
 
     void AttackStart(Unit* pWho)
@@ -136,16 +137,32 @@ struct MANGOS_DLL_DECL boss_xevozzAI : public ScriptedAI
         }
     }
 
+    void StartMovement(uint32 id)
+    {
+        m_creature->GetMotionMaster()->MovePoint(id, PortalLoc[id].x, PortalLoc[id].y, PortalLoc[id].z);
+        m_creature->AddSplineFlag(SPLINEFLAG_WALKMODE);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        MovementStarted = true;
+        m_creature->SetInCombatWithZone();
+    }
+
+    void MovementInform(uint32 type, uint32 id)
+    {
+        if (type != POINT_MOTION_TYPE || !MovementStarted) return;
+        if (id == 0)
+        {
+            MovementStarted = false;
+            m_creature->GetMotionMaster()->MovementExpired();
+            SetCombatMovement(true);
+            m_creature->SetInCombatWithZone();
+        }
+    }
+
     void UpdateAI(const uint32 uiDiff)
     {
         if (m_pInstance->GetData(TYPE_XEVOZZ) == SPECIAL && !MovementStarted)
-		{
-			m_creature->GetMotionMaster()->MovePoint(0, PortalLoc[0].x, PortalLoc[0].y, PortalLoc[0].z);
-			m_creature->AddSplineFlag(SPLINEFLAG_WALKMODE);
-			m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-			m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-			MovementStarted = true;
-        }
+            StartMovement(0);
 
         //Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
@@ -153,7 +170,7 @@ struct MANGOS_DLL_DECL boss_xevozzAI : public ScriptedAI
 
         if (m_uiArcaneBarrageVolley_Timer < uiDiff)
         {
-            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_ARCANE_BARRAGE_VOLLEY_H : SPELL_ARCANE_BARRAGE_VOLLEY);
+            DoCast(m_creature, m_bIsRegularMode ? SPELL_ARCANE_BARRAGE_VOLLEY_H : SPELL_ARCANE_BARRAGE_VOLLEY);
             m_uiArcaneBarrageVolley_Timer = urand(20000, 22000);
         }
         else m_uiArcaneBarrageVolley_Timer -= uiDiff;
@@ -161,7 +178,7 @@ struct MANGOS_DLL_DECL boss_xevozzAI : public ScriptedAI
         if (m_uiArcaneBuffet_Timer)
             if (m_uiArcaneBuffet_Timer < uiDiff)
             {
-                DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_ARCANE_BUFFET_H : SPELL_ARCANE_BUFFET);
+                DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_ARCANE_BUFFET_H : SPELL_ARCANE_BUFFET);
                 m_uiArcaneBuffet_Timer = 0;
             }
             else m_uiArcaneBuffet_Timer -= uiDiff;
@@ -169,7 +186,7 @@ struct MANGOS_DLL_DECL boss_xevozzAI : public ScriptedAI
         if (m_uiSummonEtherealSphere_Timer < uiDiff)
         {
             DoScriptText(SAY_SPAWN, m_creature);
-            DoCastSpellIfCan(m_creature, SPELL_SUMMON_ETHEREAL_SPHERE_1);
+            DoCast(m_creature, SPELL_SUMMON_ETHEREAL_SPHERE_1);
             if (m_bIsRegularMode) // extra one for heroic
                 m_creature->SummonCreature(NPC_ETHEREAL_SPHERE, m_creature->GetPositionX()-5+rand()%10, m_creature->GetPositionY()-5+rand()%10, m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 40000);
 
@@ -235,9 +252,9 @@ struct MANGOS_DLL_DECL mob_ethereal_sphereAI : public ScriptedAI
                 {
                     float fDistance = m_creature->GetDistance2d(pXevozz);
                     if (fDistance <= 3)
-                        DoCastSpellIfCan(pXevozz, m_bIsRegularMode ? SPELL_ARCANE_POWER_H : SPELL_ARCANE_POWER);
+                        DoCast(pXevozz, m_bIsRegularMode ? SPELL_ARCANE_POWER_H : SPELL_ARCANE_POWER);
                     else
-                        DoCastSpellIfCan(m_creature, 35845);
+                        DoCast(m_creature, 35845);
                 }
             }
             m_uiRangeCheck_Timer = 1000;
@@ -246,7 +263,7 @@ struct MANGOS_DLL_DECL mob_ethereal_sphereAI : public ScriptedAI
 
         if (m_uiSummonPlayers_Timer < uiDiff)
         {
-            DoCastSpellIfCan(m_creature, SPELL_SUMMON_PLAYERS); // not working right
+            DoCast(m_creature, SPELL_SUMMON_PLAYERS); // not working right
 
             Map* pMap = m_creature->GetMap();
             if (pMap && pMap->IsDungeon())

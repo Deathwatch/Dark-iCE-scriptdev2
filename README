@@ -22,6 +22,23 @@ If you want compile this branch on Windows, please convert Makefile to your c++ 
 
 Editor/Rewriter and Overseer: FallenAngelX
 
+::Quick_Out_Look::
+
+This SD2 repo has been built by collecting,editting,writing and just flat out hours and hours of headaching
+and purely time consuming work for us to bring you the player the best SD2 for The DARK-iCE Project as we stride
+for the same goals as our core and database
+
+please if you have anything to commit or report  please open an issue 
+
+::DARK_iCE Core::
+http://github.com/Darkrulerz/Core
+
+::DARK_iCE DataBase::
+http://github.com/Darkrulerz/Database
+
+::DARK_iCE Website::
+http://projectdarkice.clanice.com/index.php
+
 In this repository you will find the  best scripts on and around GiT:
 
 - many scripts from Insider42,official SD2,FalleAngelX
@@ -35,10 +52,15 @@ In this repository you will find the  best scripts on and around GiT:
 - Halls of reflection (partially, by rsa)
 - Icecrown Citadel (by rsa)
 - Ruby Sanctum (by notagain)
-- A Few NPC special (by rsa, Tasssadar)
+- A Few Special NPCs  (by rsa, Tasssadar, FallenAngelX)
 - Oculus (by cmaranec,OJ,FallenAngelX)
-- Alot of Custom Stuff (by Darkiss)
+- Alot of Custom Stuff (by Darkiss, Varoius Authors)
 - Nexus (by Trinity port in by Janu)
+- Guards (by YtDB Dev Team)
+- Alterac Valley (by Selector)
+- SunWell Plateau (by OrangeVirus,DarkRulerz,FallenAngelX)
+- Eye of Archeus(fixed by FallenAngelX, fixed by Zergtmn)
+- Varoius Too Many to List Quests Fix ( by many,many,many authors)
 
 - this list isn't complete
 

@@ -21,7 +21,7 @@ enum
     TYPE_VEZAX = 12,
     TYPE_YOGG_SARON = 13,
     TYPE_ALGALON = 14,
-
+    
     //Hardmodes etc.
     TYPE_HODIR_HARD = 15,
     TYPE_MIMIRON_HARD = 16,
@@ -45,7 +45,8 @@ enum
     DATA_SANCTUM_SENTRY_2       = 29,
     DATA_SANCTUM_SENTRY_3       = 30,
     DATA_SANCTUM_SENTRY_4       = 31,
-
+    DATA_RAZORSCALE             = 32,
+	
     NPC_LEVIATHAN               = 33113,
     NPC_IGNIS                   = 33118,
     NPC_RAZORSCALE              = 33186,

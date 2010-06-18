@@ -336,7 +336,7 @@ struct MANGOS_DLL_DECL npc_saronitevaporsAI : public ScriptedAI
 
     void Reset()
     {
-        pVezax = (Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_VEZAX));
+        pVezax = (Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(TYPE_VEZAX));
     }
     void AttackStart(Unit *pWho){return;}
     void DamageTaken(Unit* pDoneBy, uint32 &damage)

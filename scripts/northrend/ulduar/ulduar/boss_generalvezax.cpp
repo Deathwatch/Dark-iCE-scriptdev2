@@ -387,9 +387,3 @@ void AddSC_boss_vezax()
     newscript->GetAI = &GetAI_npc_saronitevapors;
     newscript->RegisterSelf();
 }
-
-/*
-UPDATE `creature_template` SET `mechanic_immune_mask` = 650854271, `ScriptName` = 'boss_generalvezax' WHERE `entry` = 33271;
-UPDATE `creature_template` SET `minlevel` = 83, `maxlevel` = 83, `minhealth` = 1575785, `maxhealth` = 1575785, `faction_A` = 16, `faction_H` = 16, `mindmg` = 412, `maxdmg` = 562, `attackpower` = 536, `mechanic_immune_mask` = 650854271, `ScriptName` = 'boss_saroniteanimus' WHERE `entry` = 33524;
-UPDATE `creature_template` SET `minhealth` = 12600, `maxhealth` = 12600, `minlevel` = 80, `maxlevel` = 80, `faction_A` = 32, `faction_H` = 32, `ScriptName` = 'npc_saronitevapors' WHERE `entry` = 33488;
-*/

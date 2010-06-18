@@ -729,15 +729,3 @@ void AddSC_boss_razorscale()
     NewScript->pGossipSelect = &GossipSelect_npc_expedition_commander;
     NewScript->RegisterSelf();
 }
-/*
-UPDATE gameobject_template SET data10 = 63524 WHERE entry = 194519;
-UPDATE gameobject_template SET data10 = 63657 WHERE entry = 194541;
-UPDATE gameobject_template SET data10 = 63658 WHERE entry = 194542;
-UPDATE gameobject_template SET data10 = 63659 WHERE entry = 194543;
-DELETE FROM spell_script_target WHERE entry IN (63524, 63657, 63658,63659, 62505);
-INSERT INTO spell_script_target VALUES (63524, 1, 33184);
-INSERT INTO spell_script_target VALUES (63657, 1, 33184);
-INSERT INTO spell_script_target VALUES (63658, 1, 33184);
-INSERT INTO spell_script_target VALUES (63659, 1, 33184);
-INSERT INTO spell_script_target VALUES (62505, 1, 33186);
-*/

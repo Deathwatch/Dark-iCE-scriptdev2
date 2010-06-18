@@ -3286,48 +3286,98 @@ struct MANGOS_DLL_DECL npc_eye_of_acherusAI : public ScriptedAI
     npc_eye_of_acherusAI(Creature *pCreature) : ScriptedAI(pCreature)
     {
         m_creature->SetActiveObjectState(true);
-        m_creature->SetLevel(55);//else one hack
-        StartTimer = 2000;		
-        Active = false;
+        Reset();
     }
 
-    uint32 StartTimer;	
+    uint64 EyeGuid;
+    uint32 StartTimer;
+	uint64 playerGUID;
+
     bool Active;
 
-    void Reset(){}
-    void AttackStart(Unit *) {}
-    void MoveInLineOfSight(Unit*) {}
+    void Reset()
+    {
+		EyeGuid = 0;
+		StartTimer = 2000;		
+		Active = false;
+    }
+
+	void JustDied(Unit *pUnit)
+	{	   
+		/*m_creature->GetMap()->CreatureRelocation(m_creature, 2325.0f, -5660.0f, 427.0f, 3.83f);
+		m_creature->RemoveAurasDueToSpellByCancel(51852);//*/
+		error_log("SD2: EYE Remove Aura %u", playerGUID);
+
+		if (Unit* pPlayer = Unit::GetUnit(*m_creature,playerGUID))
+		{
+			error_log("SD2: EYE Remove Aura");
+			m_creature->GetMap()->CreatureRelocation(m_creature, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), pPlayer->GetOrientation());
+			//m_creature->RemoveAurasDueToSpellByCancel(51852);
+			pPlayer->RemoveAurasDueToSpell(51852);
+		}
+		//m_creature->Uncharm();
+		m_creature->CleanupsBeforeDelete();
+		m_creature->AddObjectToRemoveList();
+	}
+
+
+	void AttackStart(Unit *pWho)
+	{
+        if (!pWho)
+			return;
+
+		if (m_creature->Attack(pWho, true))
+		{
+			m_creature->AddThreat(pWho);
+			m_creature->SetInCombatWith(pWho);
+			pWho->SetInCombatWith(m_creature);		
+		}
+    }
 
     void MovementInform(uint32 uiType, uint32 uiPointId)
     {
         if (uiType != POINT_MOTION_TYPE)
             return;
-
+		
         if (uiPointId == 0)
         {
-            char * text1 = "The Eye of Acherus is in your control";
-            m_creature->MonsterTextEmote(text1, m_creature->GetGUID(), true);          
-            m_creature->CastSpell(m_creature, 51890, true);
+			Unit *Eye1 = Unit::GetUnit((*m_creature), m_creature->GetGUID());
+			if (Eye1)
+			{
+				char * text1 = "The Eye of Acherus is in your control";
+				Eye1->MonsterTextEmote(text1, Eye1->GetGUID(), true);          
+				m_creature->SetSpeedRate(MOVE_FLIGHT, 2.8f, true);
+				m_creature->CastSpell(m_creature, 51890, true);
+            }
         }
-    }
+	}
 
     void UpdateAI(const uint32 uiDiff)
     {
-		if(!Active)  
+		if(m_creature->isCharmed())  
 		{     
-			if (StartTimer < uiDiff)
+			if (StartTimer < uiDiff && !Active)
 			{
-				char * text = "The Eye of Acherus launches towards its destination";
-				m_creature->MonsterTextEmote(text, m_creature->GetGUID(), true);  
-                m_creature->SetSpeedRate(MOVE_FLIGHT, 6.8f,true);             
-				m_creature->GetMotionMaster()->MovePoint(0, 1711.0f, -5820.0f, 147.0f);
-				Active = true;
+				EyeGuid = m_creature->GetGUID();
+				Unit *Eye = Unit::GetUnit((*m_creature), EyeGuid);
+				if (Eye)
+				{
+					char * text = "The Eye of Acherus launches towards its destination";
+					Eye->MonsterTextEmote(text, Eye->GetGUID(), true);              
+					m_creature->SetSpeedRate(MOVE_FLIGHT, 6.8f, true);
+					m_creature->GetMotionMaster()->MovePoint(0, 1711.0f, -5820.0f, 147.0f);
+					//m_creature->setFaction(35);
+					Active = true;
+				}
 			}
 			else StartTimer -= uiDiff;
 		}
-        else
-            if(!m_creature->GetCharmerGUID())
-                m_creature->AddObjectToRemoveList();
+		else
+		{
+			m_creature->CleanupsBeforeDelete();
+			m_creature->AddObjectToRemoveList();
+		}
+		DoMeleeAttackIfReady();
     }
 };
 

@@ -546,7 +546,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
                 // Crash the server in group update far members, dunno why
                 // I will try to use this again, maybe I have fix...
                 if(Creature *pVortex = m_creature->SummonCreature(NPC_VORTEX, OtherLoc[1].x, OtherLoc[1].y, OtherLoc[1].z, OtherLoc[1].o, TEMPSUMMON_TIMED_DESPAWN, 18000))          
-                    itr->getSource()->SetFarSightGUID(pVortex->GetGUID());
+                    itr->getSource()->GetCamera().SetView(pVortex);
             }        
         }
         else if(phase > 1 && phase < 26){
@@ -583,7 +583,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
             Map::PlayerList const &lPlayers = pMap->GetPlayers();
             for(Map::PlayerList::const_iterator itr = lPlayers.begin(); itr != lPlayers.end(); ++itr)
             {
-                itr->getSource()->SetFarSightGUID(0);
+                itr->getSource()->GetCamera().ResetView();
                 itr->getSource()->NearTeleportTo(VortexLoc[0].x, VortexLoc[0].y, VORTEX_Z+10, 0);
             }
             

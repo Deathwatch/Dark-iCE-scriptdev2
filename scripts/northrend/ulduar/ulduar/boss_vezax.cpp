@@ -293,7 +293,7 @@ struct MANGOS_DLL_DECL boss_saroniteanimusAI : public ScriptedAI
     {
         m_uiProfoundDarkness_Timer = IN_MILLISECONDS;
         m_creature->CastSpell(m_creature, SPELL_SARONITE_ANIMUS_FORMATION, true);
-        pVezax = (Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_VEZAX));
+        pVezax = (Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(TYPE_VEZAX));
         if(!pVezax || !pVezax->getVictim())
             return;
 
@@ -336,7 +336,7 @@ struct MANGOS_DLL_DECL npc_saronitevaporsAI : public ScriptedAI
 
     void Reset()
     {
-        pVezax = (Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_VEZAX));
+        pVezax = (Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(TYPE_VEZAX));
     }
     void AttackStart(Unit *pWho){return;}
     void DamageTaken(Unit* pDoneBy, uint32 &damage)

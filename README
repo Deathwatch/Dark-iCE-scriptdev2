@@ -1,6 +1,6 @@
 @package dark-ice scripts for ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
 @revision (1718)
-@copyright (c) 2009-2010 /dev/ Hellscream/dark-ice.
+@copyright (c) 2009-2010 /dev/ Hellscream/Dark-iCE.
 @license GNU Public License
 
 This program is free software; you can redistribute it and/or modify
@@ -20,7 +20,27 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 Attention please! In my project only correct Linux Makefile provided. 
 If you want compile this branch on Windows, please convert Makefile to your c++ compiler.
 
-Maintained and Overseer: FallenAngelX
+Editor/Rewriter and Overseer: FallenAngelX
+
+In this repository you will find the  best scripts on and around GiT:
+
+- many scripts from Insider42,official SD2,FalleAngelX
+- Ulduar (fixed up by FallenAngelX)
+- Trial of the Champion ( by Syntec, big rewrite by rsa)
+- Violet hold (by ckegg, big rewrite by rsa)
+- Naxxramas (by scrappydoo , Updated by FAllenAngelX)
+- An'kahet (by scrappydoo, Updated by FAllenAngelX)
+- Malygos (by Tasssadar)
+- Trial of the Crusader (by rsa)
+- Halls of reflection (partially, by rsa)
+- Icecrown Citadel (by rsa)
+- Ruby Sanctum (by notagain)
+- A Few NPC special (by rsa, Tasssadar)
+- Oculus (by cmaranec,OJ,FallenAngelX)
+- Alot of Custom Stuff (by Darkiss)
+- Nexus (by Trinity port in by Janu)
+
+- this list isn't complete
 
 Thanks to:
 - Vladimir Mangos - MaNGOS project;
@@ -35,13 +55,25 @@ Thanks to:
 - Insider42 - bugreports, features;
 - Hellscream staff/Dark-Ice - LOTS of features
 - SCRAPPYDOO	
-- kero99,selector,janu
-- rsa
-- tasssadar
-- orangevirus
-- cmaranec
-- przemratajczak 
-- mangosZero
-- set
+- Kero99
+- Janu
+- Rsa
+- Tasssadar
+- Orangevirus
+- Cmaranec
+- Przemratajczak 
+- MangosZero
+- Set
+- SkinLayers - keeping linux compilable
+- Ancient
 - all - testing.
-- and those who were missed, your work has been important too
+
+- and those who were missed, your work has been important too-- list is not complete  8)
+
+::DARK-ICE Development Team::
+- DarkRulerz
+- 3raZar
+- FallenAngelX
+- Singlem
+- Notagain
+- and to all those to have helped!!!!

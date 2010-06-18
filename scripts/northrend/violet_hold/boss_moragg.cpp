@@ -125,7 +125,7 @@ struct MANGOS_DLL_DECL boss_moraggAI : public ScriptedAI
 
         if (m_uiCorrosiveSaliva_Timer < uiDiff)
         {
-            DoCast(m_creature->getVictim(), SPELL_CORROSICE_SALIVA);
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_CORROSICE_SALIVA);
             m_uiCorrosiveSaliva_Timer = urand(10000, 11000);
         }
         else m_uiCorrosiveSaliva_Timer -= uiDiff;
@@ -133,7 +133,7 @@ struct MANGOS_DLL_DECL boss_moraggAI : public ScriptedAI
         if (m_uiOpticLink_Timer < uiDiff)
         {
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                DoCast(pTarget, SPELL_OPTIC_LINK);
+                DoCastSpellIfCan(pTarget, SPELL_OPTIC_LINK);
             m_uiOpticLink_Timer = urand(25000, 30000);
         }
         else m_uiOpticLink_Timer -= uiDiff;
@@ -141,7 +141,7 @@ struct MANGOS_DLL_DECL boss_moraggAI : public ScriptedAI
         if (m_uiRay_Timer < uiDiff)
         {
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                DoCast(pTarget, urand(0, 1) ? SPELL_RAY_PAIN : SPELL_RAY_SUFFERING);
+                DoCastSpellIfCan(pTarget, urand(0, 1) ? SPELL_RAY_PAIN : SPELL_RAY_SUFFERING);
             m_uiRay_Timer = urand(2000, 7000);
         }
         else m_uiRay_Timer -= uiDiff;

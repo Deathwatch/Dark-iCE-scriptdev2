@@ -113,7 +113,7 @@ struct MANGOS_DLL_DECL boss_ichoronAI : public ScriptedAI
 
         if (m_creature->Attack(pWho, true))
         {
-//            DoCast(m_creature, SPELL_PROTECTIVE_BUBBLE);
+//            DoCastSpellIfCan(m_creature, SPELL_PROTECTIVE_BUBBLE);
             m_creature->AddThreat(pWho);
             m_creature->SetInCombatWith(pWho);
             pWho->SetInCombatWith(m_creature);
@@ -126,7 +126,7 @@ struct MANGOS_DLL_DECL boss_ichoronAI : public ScriptedAI
         m_creature->SetHealth(m_creature->GetHealth() + m_creature->GetMaxHealth() * 0.01);
         if (m_bIsExploded)
         {
-            DoCast(m_creature, SPELL_PROTECTIVE_BUBBLE);
+            DoCastSpellIfCan(m_creature, SPELL_PROTECTIVE_BUBBLE);
             m_bIsExploded = false;
             m_creature->SetVisibility(VISIBILITY_ON);
             m_creature->GetMotionMaster()->MoveChase(m_creature->getVictim());
@@ -197,11 +197,11 @@ struct MANGOS_DLL_DECL boss_ichoronAI : public ScriptedAI
                 {
                     if (!m_creature->HasAura(SPELL_PROTECTIVE_BUBBLE, EFFECT_INDEX_0))
                     {
-                        DoCast(m_creature, m_bIsRegularMode ? SPELL_WATER_BLAST_H : SPELL_WATER_BLAST);
-                        //DoCast(m_creature, SPELL_DRAINED);
+                        DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_WATER_BLAST_H : SPELL_WATER_BLAST);
+                        //DoCastSpellIfCan(m_creature, SPELL_DRAINED);
                         m_bIsExploded = true;
                         m_uiShowup_Counter = 0;
-                        DoCast(m_creature, SPELL_PROTECTIVE_BUBBLE);
+                        DoCastSpellIfCan(m_creature, SPELL_PROTECTIVE_BUBBLE);
                         m_creature->AttackStop();
                         for(uint8 i = 0; i < 10; i++)
                         {
@@ -239,14 +239,14 @@ struct MANGOS_DLL_DECL boss_ichoronAI : public ScriptedAI
         {
             if (m_uiWaterBoltVolley_Timer < uiDiff)
             {
-                DoCast(m_creature, m_bIsRegularMode ? SPELL_WATER_BOLT_VOLLEY_H : SPELL_WATER_BOLT_VOLLEY);
+                DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_WATER_BOLT_VOLLEY_H : SPELL_WATER_BOLT_VOLLEY);
                 m_uiWaterBoltVolley_Timer = urand(10000, 15000);
             }
             else m_uiWaterBoltVolley_Timer -= uiDiff;
 
             if (!m_bIsFrenzy && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 25)
             {
-                DoCast(m_creature, m_bIsRegularMode ? SPELL_FRENZY_H : SPELL_FRENZY);
+                DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_FRENZY_H : SPELL_FRENZY);
                 m_bIsFrenzy = true;
             }
         }
@@ -318,7 +318,7 @@ struct MANGOS_DLL_DECL mob_ichor_globuleAI : public ScriptedAI
 
     void JustDied(Unit* pKiller)
     {
-        DoCast(m_creature, SPELL_SPLASH);
+        DoCastSpellIfCan(m_creature, SPELL_SPLASH);
     }
 };
 

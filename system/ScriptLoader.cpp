@@ -342,6 +342,8 @@ extern void AddSC_boss_patchwerk();
 extern void AddSC_boss_razuvious();
 extern void AddSC_boss_sapphiron();
 extern void AddSC_instance_naxxramas();
+extern void AddSC_instance_eye_of_eternity();                //eye_of_eternity
+extern void AddSC_boss_malygos();
 extern void AddSC_boss_anomalus();                          //nexus
 extern void AddSC_boss_keristrasza();
 extern void AddSC_boss_ormorok();
@@ -850,6 +852,8 @@ void AddScripts()
     AddSC_boss_razuvious();
     AddSC_boss_sapphiron();
     AddSC_instance_naxxramas();
+	AddSC_instance_eye_of_eternity();                //eye_of_eternity
+	AddSC_boss_malygos();
     AddSC_boss_anomalus();                                  //nexus
     AddSC_boss_keristrasza();
     AddSC_boss_ormorok();

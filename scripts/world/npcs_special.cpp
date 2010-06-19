@@ -2278,6 +2278,7 @@ struct MANGOS_DLL_DECL mob_mirror_imageAI : public ScriptedAI
                     m_creature->SetFFAPvP(true);
 
                 pOwner->CastSpell(m_creature, 57507, true); // Not right spell, but it has both auras we need
+                m_creature->SetOwnerGUID(pOwner->GetGUID());
             }
             bLocked = true;
         }

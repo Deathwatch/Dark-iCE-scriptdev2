@@ -441,7 +441,7 @@ extern void AddSC_boss_the_lich_king_icc();
 extern void AddSC_instance_forge_of_souls();                // Forge_of_souls
 extern void AddSC_boss_bronjahm();
 extern void AddSC_trash_forge_of_souls();
-extern void AddSC_boss_forge_of_souls();
+extern void AddSC_forge_of_souls();
 extern void AddSC_boss_devourer_of_souls();
 
 extern void AddSC_instance_pit_of_saron();                  // Pit_of_saron

@@ -951,7 +951,7 @@ void AddScripts()
     AddSC_boss_blood_queen_lanathel();
     AddSC_boss_valithria_dreamwalker();
     AddSC_boss_sindragosa();
-	AddSC_boss_boss_the_lich_king_icc();
+	AddSC_boss_the_lich_king_icc();
 
     AddSC_instance_forge_of_souls();                        // Forge_of_souls
     AddSC_boss_bronjahm();

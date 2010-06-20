@@ -1113,7 +1113,7 @@ CreatureAI* GetAI_mob_raging_spirit(Creature* pCreature)
     return new mob_raging_spiritAI(pCreature);
 }
 
-void AddSC_boss_lich_king_icc()
+void AddSC_boss_the_lich_king_icc()
 {
     Script *newscript;
 

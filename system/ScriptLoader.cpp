@@ -436,10 +436,12 @@ extern void AddSC_blood_prince_council();
 extern void AddSC_boss_blood_queen_lanathel();
 extern void AddSC_boss_valithria_dreamwalker();
 extern void AddSC_boss_sindragosa();
-extern void AddSC_boss_lich_king();
+extern void AddSC_boss_the_lich_king_icc();
 
 extern void AddSC_instance_forge_of_souls();                // Forge_of_souls
 extern void AddSC_boss_bronjahm();
+extern void AddSC_trash_forge_of_souls();
+extern void AddSC_boss_forge_of_souls();
 extern void AddSC_boss_devourer_of_souls();
 
 extern void AddSC_instance_pit_of_saron();                  // Pit_of_saron
@@ -450,7 +452,6 @@ extern void AddSC_boss_scourgelord_tyrannus();
 extern void AddSC_instance_halls_of_reflection();           // Halls_of_reflection
 extern void AddSC_boss_falryn();
 extern void AddSC_boss_marwyn();
-//extern void AddSC_boss_lich_king_fh();
 
 //outland
 extern void AddSC_boss_exarch_maladaar();                   //auchindoun, auchenai_crypts
@@ -950,9 +951,12 @@ void AddScripts()
     AddSC_boss_blood_queen_lanathel();
     AddSC_boss_valithria_dreamwalker();
     AddSC_boss_sindragosa();
+	AddSC_boss_boss_the_lich_king_icc();
 
     AddSC_instance_forge_of_souls();                        // Forge_of_souls
     AddSC_boss_bronjahm();
+	AddSC_trash_forge_of_souls();
+	AddSC_forge_of_souls();
     AddSC_boss_devourer_of_souls();
 
     AddSC_instance_pit_of_saron();                          // Pit_of_saron
@@ -963,7 +967,7 @@ void AddScripts()
     AddSC_instance_halls_of_reflection();                   // Halls_of_reflection
     AddSC_boss_falryn();
     AddSC_boss_marwyn();
-//    AddSC_boss_lich_king_fh();
+ 
 
     //outland
     AddSC_boss_exarch_maladaar();                           //auchindoun, auchenai_crypts

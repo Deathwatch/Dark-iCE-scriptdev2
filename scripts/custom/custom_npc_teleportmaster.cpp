@@ -263,7 +263,8 @@ void ProcessMenu_custom_npc_teleportmaster(Player *player, Creature *Creature, u
 bool GossipHello_custom_npc_teleportmaster(Player *player, Creature *Creature)
 {
 	// Make sure we can access the Config file
-	if(!SD2Config.SetSource(_SCRIPTDEV2_CONFIG,true)){
+	if(!SD2Config.SetSource(_SCRIPTDEV2_CONFIG))
+	{
 		player->CLOSE_GOSSIP_MENU();
 		error_log("TeleportMaster: Unable to open configuration file");
 		Creature->MonsterWhisper("I'm sorry, we are having technical difficulties.  Please check back later.", player->GetGUID());

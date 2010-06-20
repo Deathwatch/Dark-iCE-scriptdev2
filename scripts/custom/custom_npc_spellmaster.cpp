@@ -48,7 +48,7 @@ EndScriptData */
 bool GossipHello_custom_npc_spellmaster(Player* pPlayer, Creature* pCreature)
 {
     Config DARKICEConfig;
-    if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+    if(!DARKICEConfig.SetSource(_DARKICE_CONFIG))
         error_log("DARKICE: Unable to open configuration file");
         
     bool LearnAllWeapons            = DARKICEConfig.GetBoolDefault("Spellmaster.LearnAllWeapons", true);

@@ -30,7 +30,7 @@ EndScriptData */
 bool ItemUse_custom_item_talentstone(Player* pPlayer, Item* pItem, const SpellCastTargets &pTargets)
 {
     Config DARKICEConfig;
-	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG))
 		error_log("DARKICE: Unable to open configuration file");
 
     if ((pPlayer->isInCombat()) || (pPlayer->isInFlight()) || (pPlayer->isDead()))
@@ -51,7 +51,7 @@ bool ItemUse_custom_item_talentstone(Player* pPlayer, Item* pItem, const SpellCa
 bool ItemUse_custom_item_cooldownremover(Player* pPlayer, Item* pItem, const SpellCastTargets &pTargets)
 {
     Config DARKICEConfig;
-	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG))
 		error_log("DARKICE: Unable to open configuration file");
 		
     bool CooldownRemoverInfinte = DARKICEConfig.GetBoolDefault("Item_CooldownRemoverInfinte", true);
@@ -88,7 +88,7 @@ bool ItemUse_custom_item_invinciblemount(Player* pPlayer, Item* pItem, const Spe
 bool ItemUse_custom_item_levelplayer(Player* pPlayer, Item* pItem, const SpellCastTargets &pTargets)
 {
     Config DARKICEConfig;
-	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG))
 		error_log("DARKICE: Unable to open configuration file");
 
     if ((pPlayer->isInCombat()) || (pPlayer->isInFlight()) || (pPlayer->isDead()))
@@ -132,7 +132,7 @@ bool ItemUse_custom_item_metamorphosisspell(Player* pPlayer, Item* pItem, const 
 bool ItemUse_custom_item_summonbanker(Player* pPlayer, Item* pItem, const SpellCastTargets &pTargets)
 {
     Config DARKICEConfig;
-	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG))
 		error_log("DARKICE: Unable to open configuration file");
 
     if ((pPlayer->isInCombat()) || (pPlayer->isInFlight()) || (pPlayer->isDead()))
@@ -152,7 +152,7 @@ bool ItemUse_custom_item_summonbanker(Player* pPlayer, Item* pItem, const SpellC
 bool ItemUse_custom_item_summontelenpc(Player* pPlayer, Item* pItem, const SpellCastTargets &pTargets)
 {
     Config DARKICEConfig;
-	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG))
 		error_log("DARKICE: Unable to open configuration file");
 
     if ((pPlayer->isInCombat()) || (pPlayer->isInFlight()) || (pPlayer->isDead()))

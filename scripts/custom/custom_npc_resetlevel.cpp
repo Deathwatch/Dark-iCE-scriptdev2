@@ -29,7 +29,7 @@ EndScriptData */
 bool GossipHello_custom_npc_resetlevel(Player* pPlayer, Creature* pCreature)
 {
 	Config DARKICEConfig;
-	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG))
 		error_log("DARKICE: Unable to open configuration file");
 
     pPlayer->ADD_GOSSIP_ITEM(0, "Do you want to reset your character ?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
@@ -42,7 +42,7 @@ bool GossipHello_custom_npc_resetlevel(Player* pPlayer, Creature* pCreature)
 bool GossipSelect_custom_npc_resetlevel(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
     Config DARKICEConfig;
-	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG))
 		error_log("DARKICE: Unable to open configuration file");
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF+1)
@@ -50,7 +50,7 @@ bool GossipSelect_custom_npc_resetlevel(Player* pPlayer, Creature* pCreature, ui
 		if (pPlayer->getLevel() == (DARKICEConfig.GetFloatDefault("ResetMaster.ResetMinimumLevel",0)))
 		{
         	Config DARKICEConfig;
-        	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+        	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG))
        		error_log("DARKICE: Unable to open configuration file");
 
 			pCreature->MonsterWhisper("You have been reset!", pPlayer->GetGUID());

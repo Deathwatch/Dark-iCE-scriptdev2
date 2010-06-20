@@ -31,7 +31,7 @@ EndScriptData */
 bool GossipHello_custom_npc_tokenvendor(Player* pPlayer, Creature* pCreature)
 {
     Config DARKICEConfig;
-	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG))
 		error_log("DARKICE: Unable to open configuration file");
 
     pPlayer->ADD_GOSSIP_ITEM( 5, "Exchange 25 BOJ to 10 Gold" , GOSSIP_SENDER_MAIN, 2000);

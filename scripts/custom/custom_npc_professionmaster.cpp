@@ -30,7 +30,7 @@ EndScriptData */
 bool GossipHello_custom_npc_professionmaster(Player* pPlayer, Creature* pCreature)
 {
 	Config DARKICEConfig;
-	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG))
 		error_log("DARKICE: Unable to open configuration file");
 
 	bool ProfessionsEnabled = DARKICEConfig.GetBoolDefault("ProfessionMaster.ProfessionsEnabled", true);
@@ -68,7 +68,7 @@ if (pPlayer->isInCombat())
 }
 
 	Config DARKICEConfig;
-	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG,true))
+	if(!DARKICEConfig.SetSource(_DARKICE_CONFIG))
 		error_log("DARKICE: Unable to open configuration file");
         
 //Money Check

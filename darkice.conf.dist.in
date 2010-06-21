@@ -3,7 +3,9 @@
 # This file must be placed within the directory which holds mangosd.conf and realmd.conf
 # or the scripts will not work as they should.
 ################################################################################################
-ConfVersion=2010060701
+
+[darkiceConf]
+ConfVersion=2010062001
 
 ################################################################################################
 # Info:

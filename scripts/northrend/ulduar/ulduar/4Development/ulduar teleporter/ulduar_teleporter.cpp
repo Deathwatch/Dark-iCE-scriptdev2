@@ -17,7 +17,8 @@
 /* ScriptData
 SDName: Ulduar_teleport
 SD%Complete: 100%
-SDComment: by /dev/FallenAngelX
+SDComment: by /dev/FallenAngelX ======= ToDo:currently all area's are opened and able to port to 
+                                             they will need locked down after zone is finished (w/dev) / other languages if i ever get around to it
 SDCategory: Ulduar
 EndScriptData */
 

@@ -69,7 +69,7 @@ struct MANGOS_DLL_DECL boss_auriayaAI : public ScriptedAI
 
         if (ScreechTimer < diff)
         {
-            DoCast(m_creature, Regular ? SP_SONIC_SCREECH : H_SP_SONIC_SCREECH);
+            DoCastSpellIfCan(m_creature, Regular ? SP_SONIC_SCREECH : H_SP_SONIC_SCREECH);
             ScreechTimer = 25000 + rand()%15000;
         }
         else ScreechTimer -= diff;
@@ -79,7 +79,7 @@ struct MANGOS_DLL_DECL boss_auriayaAI : public ScriptedAI
             Unit *target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
             if(target && target->isAlive())
             {
-                DoCast(target, SP_GUARDIAN_SWARM);
+                DoCastSpellIfCan(target, SP_GUARDIAN_SWARM);
                 /*Creature *add = NULL;
                 for(int i=0; i<16; i++)
                 {
@@ -96,14 +96,14 @@ struct MANGOS_DLL_DECL boss_auriayaAI : public ScriptedAI
 
         if (TerrifyTimer < diff)
         {
-            DoCast(m_creature->getVictim(), SP_TERRIFY);
+            DoCastSpellIfCan(m_creature->getVictim(), SP_TERRIFY);
             TerrifyTimer = 30000 + rand()%15000;
         }
         else TerrifyTimer -= diff;
 
         if (EnrageTimer < diff)
         {
-            DoCast(m_creature, SP_BERSERK);
+            DoCastSpellIfCan(m_creature, SP_BERSERK);
             EnrageTimer = 20000 + rand()%20000;
         }
         else EnrageTimer -= diff;

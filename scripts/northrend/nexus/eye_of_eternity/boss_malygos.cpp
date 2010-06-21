@@ -67,13 +67,13 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
 		
     	if (SPELL_ARCANE_BREATH_Timer <= uiDiff)
         {
-			DoCast(m_creature, m_bIsRegularMode ? SPELL_ARCANE_BREATH_N : SPELL_ARCANE_BREATH_H);
+			DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_ARCANE_BREATH_N : SPELL_ARCANE_BREATH_H);
             SPELL_ARCANE_BREATH_Timer = 50000;
         } else SPELL_ARCANE_BREATH_Timer -= uiDiff;
 
 		if (SPELL_ARCANE_PULSE_Timer <= uiDiff && phase > 1)
         {
-			DoCast(m_creature, SPELL_ARCANE_PULSE);
+			DoCastSpellIfCan(m_creature, SPELL_ARCANE_PULSE);
 				SPELL_ARCANE_PULSE_Timer = 20000;
         } else SPELL_ARCANE_PULSE_Timer -= uiDiff;
 		
@@ -81,9 +81,9 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
         {
 			switch (phase)
 			{
-				case 1: DoCast(m_creature, SPELL_ARCANE_STORM_1); break;
-				case 2: DoCast(m_creature, SPELL_ARCANE_STORM_1); break;
-				case 3: DoCast(m_creature, SPELL_ARCANE_STORM_1); break;
+				case 1: DoCastSpellIfCan(m_creature, SPELL_ARCANE_STORM_1); break;
+				case 2: DoCastSpellIfCan(m_creature, SPELL_ARCANE_STORM_1); break;
+				case 3: DoCastSpellIfCan(m_creature, SPELL_ARCANE_STORM_1); break;
 			}
             SPELL_ARCANE_STORM_Timer = 3000;
         } else SPELL_ARCANE_STORM_Timer -= uiDiff;

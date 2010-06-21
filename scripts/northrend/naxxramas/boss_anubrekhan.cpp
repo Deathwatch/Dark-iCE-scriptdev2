@@ -150,7 +150,7 @@ struct MANGOS_DLL_DECL boss_anubrekhanAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        //If some worshiper ar dead cast spell
+        //If some worshipers are dead cast spell
         for(uint8 i=0; i<4; ++i)
         {
             Unit* pGuard = Unit::GetUnit(*m_creature, m_uiGuardGUID[i]);

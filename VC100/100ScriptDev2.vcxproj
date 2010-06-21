@@ -542,7 +542,7 @@
     <ClCompile Include="..\scripts\northrend\ulduar\ulduar\boss_vezax.cpp" />
     <ClCompile Include="..\scripts\northrend\ulduar\ulduar\boss_xt002.cpp" />
     <ClCompile Include="..\scripts\northrend\ulduar\ulduar\boss_yogg_saron.cpp" />
-    <ClCompile Include="..\scripts\northrend\ulduar\ulduar\ulduar_teleport.cpp" />
+    <ClCompile Include="..\scripts\northrend\ulduar\ulduar\ulduar_teleporter.cpp" />
     <ClCompile Include="..\scripts\northrend\vault_of_archavon\boss_archavon.cpp" />
     <ClCompile Include="..\scripts\northrend\vault_of_archavon\boss_emalon.cpp" />
     <ClCompile Include="..\scripts\northrend\vault_of_archavon\boss_koralon.cpp" />

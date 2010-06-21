@@ -1795,9 +1795,6 @@
     <ClCompile Include="..\scripts\northrend\ulduar\ulduar\boss_yogg_saron.cpp">
       <Filter>scripts\northrend\ulduar\ulduar</Filter>
     </ClCompile>
-    <ClCompile Include="..\scripts\northrend\ulduar\ulduar\ulduar_teleport.cpp">
-      <Filter>scripts\northrend\ulduar\ulduar</Filter>
-    </ClCompile>
     <ClCompile Include="..\scripts\northrend\vault_of_archavon\boss_archavon.cpp">
       <Filter>scripts\northrend\vault_of_archavon</Filter>
     </ClCompile>
@@ -1899,6 +1896,9 @@
     </ClCompile>
     <ClCompile Include="..\scripts\northrend\icecrown_citadel\frozen_halls\forge_of_souls\trash_forge_of_souls.cpp">
       <Filter>scripts\northrend\icecrown_citadel\frozen_halls\forge_of_souls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\scripts\northrend\ulduar\ulduar\ulduar_teleporter.cpp">
+      <Filter>scripts\northrend\ulduar\ulduar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

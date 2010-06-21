@@ -37,6 +37,7 @@ struct MANGOS_DLL_DECL instance_obsidian_sanctum : public ScriptedInstance
     uint64 m_uiTenebronGUID;
     uint64 m_uiShadronGUID;
     uint64 m_uiVesperonGUID;
+    uint8 m_uiDragonsAlive;
 
     void Initialize()
     {
@@ -46,6 +47,7 @@ struct MANGOS_DLL_DECL instance_obsidian_sanctum : public ScriptedInstance
         m_uiTenebronGUID   = 0;
         m_uiShadronGUID    = 0;
         m_uiVesperonGUID   = 0;
+        m_uiDragonsAlive   = 0;
     }
 
     void OnCreatureCreate(Creature* pCreature)
@@ -76,6 +78,8 @@ struct MANGOS_DLL_DECL instance_obsidian_sanctum : public ScriptedInstance
     {
         if (uiType == TYPE_SARTHARION_EVENT)
             m_auiEncounter[0] = uiData;
+        else if(uiType == TYPE_DRAGONS_ALIVE)
+            m_uiDragonsAlive = uiData;
     }
 
     uint32 GetData(uint32 uiType)
@@ -100,6 +104,17 @@ struct MANGOS_DLL_DECL instance_obsidian_sanctum : public ScriptedInstance
                 return m_uiVesperonGUID;
         }
         return 0;
+    }
+
+    bool CheckConditionCriteriaMeet(Player const* source, uint32 map_id, uint32 instance_condition_id)
+    {
+        //Check map...
+        if(map_id != instance->GetId())
+            return false;
+        //Check dragons count
+        if(m_uiDragonsAlive >= instance_condition_id)
+            return true;
+        return false;
     }
 };
 

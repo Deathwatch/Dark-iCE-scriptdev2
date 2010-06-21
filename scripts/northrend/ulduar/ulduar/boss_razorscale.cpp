@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: boss_razorscale
 SD%Complete: 90%
-SDComment: missing knockback at beggining of phase2. yells and emotes missing, need to use harpoons to start ground phase instead of timer
+SDComment:m TODO: knockback at beggining of phase2. yells and emotes. need to use harpoons to start ground phase instead of timer
 SDCategory: Ulduar
 EndScriptData */
 
@@ -29,83 +29,47 @@ enum
     //yells/emotes
 
     //razorscale air phase
-    SPELL_FIREBALL                 = 62796,
-    SPELL_FIREBALL_H               = 63815,
-    SPELL_WING_BUFFET              = 62666,
-    SPELL_STUN                     = 62794,
+    SPELL_FIREBALL				= 62796,
+    SPELL_FIREBALL_H			= 63815,
+    SPELL_WING_BUFFET			= 62666,
+    SPELL_STUN					= 62794,
     //both
-    SPELL_BERSERK                  = 47008,
-    DEVOURING_FLAME_VISUAL         = 63236,
-    SPELL_FLAME_BREATH             = 63317,
-    SPELL_FLAME_BREATH_H           = 64021,
+    SPELL_BERSERK				= 47008,
+    DEVOURING_FLAME_VISUAL		= 63236,
+    SPELL_FLAME_BREATH			= 63317,
+    SPELL_FLAME_BREATH_H		= 64021,
     //ground
-    SPELL_FLAME_BUFFET             = 64016,
-    SPELL_FLAME_BUFFET_H           = 64023,
-    SPELL_FUSE_ARMOR               = 64771,
+    SPELL_FLAME_BUFFET			= 64016,
+    SPELL_FLAME_BUFFET_H		= 64023,
+    SPELL_FUSE_ARMOR			= 64771,
 
     //devouring flame target
-    AURA_DEVOURING_FLAME           = 64709,
-    AURA_DEVOURING_FLAME_H         = 64734,
+    AURA_DEVOURING_FLAME		= 64709,
+    AURA_DEVOURING_FLAME_H		= 64734,
 
     //dark rune watcher
-    SPELL_LIGHTNING_BOLT           = 63809,
-    SPELL_LIGHTNING_BOLT_H         = 64696,
-    SPELL_CHAIN_LIGHTNING          = 64758,
-    SPELL_CHAIN_LIGHTNING_H        = 64759,
+    SPELL_LIGHTNING_BOLT		= 63809,
+    SPELL_LIGHTNING_BOLT_H		= 64696,
+    SPELL_CHAIN_LIGHTNING		= 64758,
+    SPELL_CHAIN_LIGHTNING_H		= 64759,
 
     //dark rune sentinel
-    SPELL_BATTLE_SHOUT             = 46763,
-    SPELL_BATTLE_SHOUT_H           = 64062,
-    SPELL_WHIRLWIND                = 63808,
+    SPELL_BATTLE_SHOUT			= 46763,
+    SPELL_BATTLE_SHOUT_H		= 64062,
+    SPELL_WHIRLWIND				= 63808,
 
     //dark rune guardian
-    SPELL_STORMSTRIKE              = 64757,
+    SPELL_STORMSTRIKE			= 64757,
 
     //NPC ids
-    MOB_DARK_RUNE_WATCHER          = 33453,
-    MOB_DARK_RUNE_SENTINEL         = 33846,
-    MOB_DARK_RUNE_GUARDIAN         = 33388,
+    MOB_DARK_RUNE_WATCHER		= 33453,
+    MOB_DARK_RUNE_SENTINEL		= 33846,
+    MOB_DARK_RUNE_GUARDIAN		= 33388,
 
-    NPC_HARPOON_GUN                = 33184,
-    GO_HARPOON_GUN_1               = 194519,
-    GO_HARPOON_GUN_2               = 194541,
-    GO_HARPOON_GUN_3               = 194542,
-    GO_HARPOON_GUN_4               = 194543,
-    GO_HARPOON_DESTROYED           = 194565,
-
-    GO_MOLE_MACHINE_S              = 188478, // 1 watcher 1 guard
-    GO_MOLE_MACHINE_M              = 186685, // 1 watcher 2 guard
-    GO_MOLE_MACHINE_L              = 186880, // 1 sentinel
-
-    AURA_HARPOON                   = 62505,
-    
-    HARPOON_COUNT                  = 4,
-    MAX_POS                        = 3,
-    MAX_WAVE                       = 4
+    //Achievements
+    ACHIEV_QUICK_SHAVE			= 2919,
+    ACHIEV_QUICK_SHAVE_H			= 2921
 };
-const struct HarpoonPos { uint32 entry, x, y, z, o; }
-Harpoon[HARPOON_COUNT] = 
-{
-    {GO_HARPOON_GUN_1, 560.47f, -140.27f, 391.52f, 5.226f},
-    {GO_HARPOON_GUN_2, 571.95f, -136.01f, 391.51f, 2.286f},
-    {GO_HARPOON_GUN_3, 589.92f, -133.62f, 391.90f, 3.299f},
-    {GO_HARPOON_GUN_4, 601.82f, -139.88f, 391.52f, 4.035f}
-};
-
-const struct AddsPos { uint32 x, y, z; }
-ApproxAddsPos[MAX_POS] = 
-{
-    {651.10f, -216.32f, 391.23f},
-    {574.65f, -240.61f, 391.18f},
-    {516.87f, -194.87f, 391.18f}
-};
-
-//float RazorscaleAddR[3] = {621.63f, -228.67f, 391.18f}; //right
-//float RazorscaleAddL[3] = {564.14f, -222.04f, 391.51f}; //left
-//float RazorscaleAddM[3] = {591.05f, -209.06f, 392.09f}; //middle
-
-float RazorscaleFlying[3] = {587.62f, -179.02f, 435.41f}; //air
-float RazorscaleGround[3] = {587.62f, -179.02f, 391.62f}; //ground
 
 #define GOSSIP_START     "Bring Razorscale down!"
 
@@ -121,24 +85,23 @@ struct MANGOS_DLL_DECL npc_expedition_commanderAI : public ScriptedAI
 
     ScriptedInstance* m_pInstance;
 
-    void Reset()
-    {
-    }
+    void Reset() {}
 
     void BeginRazorscaleEvent(Player* pPlayer)
     {
         if (!m_pInstance)
             return;
-        if(m_pInstance->GetData(TYPE_RAZORSCALE) == NOT_STARTED || m_pInstance->GetData(TYPE_RAZORSCALE) == FAIL){
 
-        debug_log("SD2: Razorscale - event initiated by player %s", pPlayer->GetName());
+        if(m_pInstance->GetData(TYPE_RAZORSCALE) == NOT_STARTED || m_pInstance->GetData(TYPE_RAZORSCALE) == FAIL)
+		{
+			debug_log("SD2: Razorscale - event initiated by player %s", pPlayer->GetName());
 
-        if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(DATA_RAZORSCALE))))
-        {
-            pTemp->SetInCombatWithZone();
-            pTemp->AddThreat(pPlayer,0.0f);
-            pTemp->AI()->AttackStart(pPlayer);
-        }
+			if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_RAZORSCALE))))
+			{
+				pTemp->SetInCombatWithZone();
+				pTemp->AddThreat(pPlayer,0.0f);
+				pTemp->AI()->AttackStart(pPlayer);
+			}
         }else debug_log("SD2: Razorscale - player %s is a moron. he tried to start the event when its already done, or over", pPlayer->GetName());
     }
 
@@ -161,8 +124,8 @@ CreatureAI* GetAI_npc_expedition_commander(Creature* pCreature)
 bool GossipHello_npc_expedition_commander(Player* pPlayer, Creature* pCreature)
 {
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
-
     pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+
     return true;
 }
 
@@ -182,9 +145,9 @@ struct MANGOS_DLL_DECL mob_devouring_flame_targetAI : public ScriptedAI
 {
     mob_devouring_flame_targetAI(Creature* pCreature) : ScriptedAI(pCreature) 
     {
-        Reset();
-        SetCombatMovement(false);
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+		m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
+        Reset();
     }
 
     ScriptedInstance* m_pInstance;
@@ -196,9 +159,8 @@ struct MANGOS_DLL_DECL mob_devouring_flame_targetAI : public ScriptedAI
     {
         Death_Timer = 25500;
         m_creature->SetDisplayId(11686);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         DoCastSpellIfCan(m_creature,  m_bIsRegularMode ? AURA_DEVOURING_FLAME : AURA_DEVOURING_FLAME_H);
+		SetCombatMovement(false);
     }
 
     void UpdateAI(const uint32 diff)
@@ -223,8 +185,9 @@ struct MANGOS_DLL_DECL mob_dark_rune_watcherAI : public ScriptedAI
 {
     mob_dark_rune_watcherAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        Reset();
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+		m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
+        Reset();
     }
 
     ScriptedInstance* m_pInstance;
@@ -270,8 +233,9 @@ struct MANGOS_DLL_DECL mob_dark_rune_sentinelAI : public ScriptedAI
 {
     mob_dark_rune_sentinelAI(Creature* pCreature) : ScriptedAI(pCreature) 
     {
-        Reset();
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+		m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
+        Reset();
     }
 
     ScriptedInstance* m_pInstance;
@@ -318,8 +282,9 @@ struct MANGOS_DLL_DECL mob_dark_rune_guardianAI : public ScriptedAI
 {
     mob_dark_rune_guardianAI(Creature* pCreature) : ScriptedAI(pCreature) 
     {
-        Reset();
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+		m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
+        Reset();
     }
 
     ScriptedInstance* m_pInstance;
@@ -353,11 +318,12 @@ CreatureAI* GetAI_mob_dark_rune_guardian(Creature* pCreature)
     return new mob_dark_rune_guardianAI(pCreature);
 }
 
-std::vector<GameObject*> m_vGOHarpoon(4, NULL);
-std::vector<Creature*> m_vNPCHarpoon(4, NULL);
-
-std::vector<Creature*> m_vNPCRepair(3, NULL);
-std::vector<GameObject*> m_vGOMoleMachine(4, NULL);
+float RazorscaleAddX[4];
+float RazorscaleAddY[4];
+float RazorscaleAddZ[4];
+float RazorscaleBossX[2];
+float RazorscaleBossY[2];
+float RazorscaleBossZ[2];
 
 //razorscale
 struct MANGOS_DLL_DECL boss_razorscaleAI : public ScriptedAI
@@ -366,50 +332,51 @@ struct MANGOS_DLL_DECL boss_razorscaleAI : public ScriptedAI
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
+
+        RazorscaleAddX[3] = 621.633301f; RazorscaleAddY[3] = -228.671371f; RazorscaleAddZ[3] = 391.180328f; //right
+        RazorscaleAddX[1] = 564.140198f; RazorscaleAddY[1] = -222.049149f; RazorscaleAddZ[1] = 391.517212f; //left
+        RazorscaleAddX[2] = 591; RazorscaleAddY[2] = -209; RazorscaleAddZ[2] = 392; //middle
+        RazorscaleBossX[2] = 587.629761f; RazorscaleBossY[2] = -179.022522f; RazorscaleBossZ[2] = 391.625061f; //ground
+        RazorscaleBossX[1] = 587.629761f; RazorscaleBossY[1] = -179.022522f; RazorscaleBossZ[1] = 445.415070f; //air
+
         Reset();
     }
 
     ScriptedInstance* m_pInstance;
     bool m_bIsRegularMode;
 
-    float MoleX[MAX_WAVE];
-    float MoleY[MAX_WAVE];
-    float MoleZ[MAX_WAVE];
-    uint8 MoleWave[MAX_WAVE];
-
-    uint32 m_uiFireball;
-    uint32 m_uiDevouring_Flame;
-    uint32 m_uiFlame_Buffet;
-    uint32 m_uiFuse_Armor;
-    uint32 m_uiFlame_Breath;
-    uint32 m_uiBerserk;
-    uint32 m_uiMoleDespawn;
-    uint32 m_uiDelayedNpcSpawn;
-    uint32 m_uiBreakFree;
-    uint32 m_uiSpawnMoleTimer;
-    uint32 m_uiRepairTimer;
-    
-    uint8 m_uiPrepareFlyOffPhase;
-    uint8 m_uiCurrentRepairngHarpoon;
-    
-    bool m_bDelayed;
-    bool m_bPrepareDespawn;
-    
-    bool Phase1; // air
-    bool Phase2; // harpooned
-    bool Phase3; // ground
+    uint32 Fireball_Timer;
+    uint32 Devouring_Flame_Timer;
+    uint32 Flame_Buffet_Timer;
+    uint32 Fuse_Armor_Timer;
+    uint32 Flame_Breath_Timer;
+    uint32 wave1_spawn;  //right side, 1 of each
+    uint32 wave2_spawn; //left side, 1 of each
+    uint32 wave3_spawn; // big guy
+    uint32 Berserk_Timer;
+    uint32 Grounded_Timer; // 8 secs after ground fase is over, adds come
+    uint32 Ground_Cast;
+    uint32 Ground_Knockback;
+    uint32 Timetoground;
+    uint32 Stun_Timer;
+    uint32 Shave_Count;
+    bool airphase;
+    bool grounded;
+    bool berserk;
 
     void Reset()
     {
-        m_uiSpawnMoleTimer = urand(8,10)*IN_MILLISECONDS;
-        m_uiBerserk = 900000;
-
-        Phase1 = false;
-        Phase2 = false;
-        Phase3 = false;
-        m_bDelayed = false;
-        m_bPrepareDespawn = false;
-
+        Fireball_Timer = 10000;  // 10 secs for the first, fckin spam after that ~2secs
+        Devouring_Flame_Timer = 18000; // 18 secs first, 12 seconds after
+        wave1_spawn = 7000; // 54
+        wave2_spawn = 9000; //52
+        wave3_spawn = 11000; //56
+        Berserk_Timer = 900000;
+        Timetoground = 80000;
+        Shave_Count = 0;
+        airphase = false;
+        grounded = false;
+        berserk = false;
         if (m_pInstance)
             m_pInstance->SetData(TYPE_RAZORSCALE, NOT_STARTED);
     }
@@ -418,144 +385,33 @@ struct MANGOS_DLL_DECL boss_razorscaleAI : public ScriptedAI
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_RAZORSCALE, DONE);
+
+        if (Shave_Count<2)
+        {
+            AchievementEntry const *AchievQuickShave = GetAchievementStore()->LookupEntry(m_bIsRegularMode ? ACHIEV_QUICK_SHAVE : ACHIEV_QUICK_SHAVE_H);
+            if (AchievQuickShave )
+            {
+                Map* pMap = m_creature->GetMap();
+                if (pMap && pMap->IsDungeon())
+                {
+                    Map::PlayerList const &players = pMap->GetPlayers();
+                    for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+                        itr->getSource()->CompletedAchievement(AchievQuickShave );
+                }
+            }
+        }
+
     }
 
     void Aggro(Unit* pWho)
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_RAZORSCALE, IN_PROGRESS);
-        
-        EnterAirPhase();
-    }
-
-    void FinishTurrent(uint8 entry)
-    {
-        if(m_vGOHarpoon[entry])
-            m_vGOHarpoon[entry]->Delete();
-        m_vGOHarpoon[entry] = m_creature->SummonGameobject(Harpoon[entry].entry, Harpoon[entry].x, Harpoon[entry].y, Harpoon[entry].z, Harpoon[entry].o, TEMPSUMMON_MANUAL_DESPAWN);
-        m_vNPCHarpoon[entry] = m_creature->SummonCreature(NPC_HARPOON_GUN, Harpoon[entry].x, Harpoon[entry].y, Harpoon[entry].z, Harpoon[entry].o, TEMPSUMMON_MANUAL_DESPAWN, 0);
-        // finish yell
-    }
-
-    void DestroyTurrents()
-    {
-        for(uint8 i = 0; i < HARPOON_COUNT; ++i)
-        {
-            if(m_vGOHarpoon[i])
-                m_vGOHarpoon[i]->Delete();
-            m_vGOHarpoon[i] = m_creature->SummonGameobject(GO_HARPOON_DESTROYED, Harpoon[i].x, Harpoon[i].y, Harpoon[i].z, Harpoon[i].o, TEMPSUMMON_MANUAL_DESPAWN);
-            m_vNPCHarpoon[i] = m_creature->SummonCreature(NPC_HARPOON_GUN, Harpoon[i].x, Harpoon[i].y, Harpoon[i].z, Harpoon[i].o, TEMPSUMMON_MANUAL_DESPAWN, 0);
-        }
-    }
-
-    void SpawnWaveMole(uint8 count)
-    {
-        uint32 goid;
-        uint8 wave = MoleWave[count] = urand(0,2);
-        switch(wave)
-        {
-            case 0: goid = GO_MOLE_MACHINE_S; break;  // 1 watcher 1 guardian
-            case 1: goid = GO_MOLE_MACHINE_M; break;  // 1 watcher 2 guardians
-            case 2: goid = GO_MOLE_MACHINE_L; break;  // 1 sentinel
-        }
-
-        uint8 random = urand(0,2);
-        float x = MoleX[count] = ApproxAddsPos[random].x - 5 + urand(0,10);
-        float y = MoleY[count] = ApproxAddsPos[random].y - 5 + urand(0,10);
-        float z = MoleZ[count] = ApproxAddsPos[random].z;
-        float angle = m_creature->GetAngle(x,y)+M_PI_F;
-        if(GameObject* pGO = m_vGOMoleMachine[count] = m_creature->SummonGameobject(goid, x, y, z, angle, TEMPSUMMON_MANUAL_DESPAWN))
-            pGO->Use(m_creature);
-
-        m_uiDelayedNpcSpawn = 3*IN_MILLISECONDS;
-        m_uiMoleDespawn = 8*IN_MILLISECONDS;
-        m_bDelayed = true;
-        m_bPrepareDespawn = true;
-
-    }
-
-    void SpawnWaveNPC(uint8 count)
-    {
-        if(MoleWave[count] == 1 || MoleWave[count] == 2)
-        {
-            SpawnWaveCreature(MOB_DARK_RUNE_WATCHER, count);
-            SpawnWaveCreature(MOB_DARK_RUNE_GUARDIAN, count);
-        }
-        if(MoleWave[count] == 2)
-            SpawnWaveCreature(MOB_DARK_RUNE_GUARDIAN, count);
-
-        if(MoleWave[count] == 3)
-            SpawnWaveCreature(MOB_DARK_RUNE_SENTINEL, count);
-    }
-
-    void SpawnWaveCreature(uint32 entry, uint8 count)
-    {
-        if(Creature* pTemp = m_creature->SummonCreature(entry, MoleX[count], MoleY[count], MoleZ[count], 0, TEMPSUMMON_CORPSE_DESPAWN, 0))
-            if(Creature* pRepair = m_vNPCRepair[urand(0,2)])
-            (pTemp->AI())->AttackStart(pRepair);
-    }
-
-    void EnterAirPhase()
-    {
-        Phase1 = true;
-        Phase2 = false;
+        airphase = true;
         SetCombatMovement(false);
-        m_creature->SetSpeedRate(MOVE_FLIGHT, 2.0f, true);
-        m_creature->SetSpeedRate(MOVE_RUN, 2.0f, true);
-        m_creature->SetSpeedRate(MOVE_WALK, 2.0f, true);
-        m_creature->SetUInt32Value(UNIT_FIELD_BYTES_0, 50331648);
-        m_creature->SetUInt32Value(UNIT_FIELD_BYTES_1, 50331648);
-        WorldPacket heart;
-        m_creature->BuildHeartBeatMsg(&heart);
-        m_creature->SendMessageToSet(&heart, false);
-        m_creature->GetMotionMaster()->MovePoint(0, RazorscaleFlying[0], RazorscaleFlying[1], RazorscaleFlying[2]);
-        m_uiCurrentRepairngHarpoon = 0;
-        m_uiFireball = 10000;
-        m_uiDevouring_Flame = 18000;
-        m_uiRepairTimer = 20*IN_MILLISECONDS;
-
-    }
-
-    void EnterHarpoonedPhase()
-    {
-        Phase1 = false;
-        Phase2 = true;
-        m_creature->RemoveAurasDueToSpell(AURA_HARPOON);
-        SetCombatMovement(false);
-        m_creature->SetSpeedRate(MOVE_FLIGHT, 1.0f, true);
-        m_creature->SetSpeedRate(MOVE_RUN, 1.0f, true);
-        m_creature->SetSpeedRate(MOVE_WALK, 1.0f, true);
-        m_creature->SetUInt32Value(UNIT_FIELD_BYTES_0, 50331648);
-        m_creature->SetUInt32Value(UNIT_FIELD_BYTES_1, 50331648);
-        WorldPacket heart;
-        m_creature->BuildHeartBeatMsg(&heart);
-        m_creature->SendMessageToSet(&heart, false);
-        m_creature->GetMotionMaster()->MovePoint(0, RazorscaleGround[0], RazorscaleGround[1], RazorscaleGround[2]);
-        m_uiBreakFree = 35*IN_MILLISECONDS;
-        m_uiPrepareFlyOffPhase = 0;
-    }
-
-    void EnterGroundPhase()
-    {
-        Phase1 = false;
-        Phase2 = false;
-        Phase3 = true;
-        if(m_creature->GetPositionZ() < 398.0f)
-            m_creature->RemoveAurasDueToSpell(SPELL_STUN);
-        else
-        {
-            SetCombatMovement(false);
-            m_creature->SetSpeedRate(MOVE_FLIGHT, 1.0f, true);
-            m_creature->SetSpeedRate(MOVE_RUN, 1.0f, true);
-            m_creature->SetSpeedRate(MOVE_WALK, 1.0f, true);
-            m_creature->SetUInt32Value(UNIT_FIELD_BYTES_0, 50331648);
-            m_creature->SetUInt32Value(UNIT_FIELD_BYTES_1, 50331648);
-            WorldPacket heart;
-            m_creature->BuildHeartBeatMsg(&heart);
-            m_creature->SendMessageToSet(&heart, false);
-            m_creature->GetMotionMaster()->MovePoint(0, RazorscaleGround[0], RazorscaleGround[1], RazorscaleGround[2]);
-        }
-
+        m_creature->GetMotionMaster()->MoveIdle();
+        m_creature->GetMap()->CreatureRelocation(m_creature, RazorscaleBossX[1], RazorscaleBossY[1], RazorscaleBossZ[1], 0.0f);
+        m_creature->SendMonsterMove(RazorscaleBossX[1], RazorscaleBossY[1], RazorscaleBossZ[1], SPLINETYPE_NORMAL, m_creature->GetSplineFlags(), 1);
     }
 
     void JustReachedHome()
@@ -569,122 +425,158 @@ struct MANGOS_DLL_DECL boss_razorscaleAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        if(Phase1)
+        if (Fireball_Timer < diff && airphase && !grounded)
         {
-            // Fireball
-            if (m_uiFireball < diff)
-            {
-                if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
-                    DoCastSpellIfCan(target, m_bIsRegularMode ? SPELL_FIREBALL : SPELL_FIREBALL_H);
-                m_uiFireball = 2000;
-            }else m_uiFireball -= diff;
+            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+                DoCastSpellIfCan(target, m_bIsRegularMode ? SPELL_FIREBALL : SPELL_FIREBALL_H);
+            Fireball_Timer = 2000;
+        }else Fireball_Timer -= diff;   
 
-            if(m_uiRepairTimer < diff)
-            {
-                FinishTurrent(m_uiCurrentRepairngHarpoon);
-                m_uiRepairTimer = 20*IN_MILLISECONDS;
-                m_uiCurrentRepairngHarpoon++;
-            }else m_uiRepairTimer -= diff;
-        }
-
-        if(!Phase3)
+        if (Devouring_Flame_Timer < diff && !grounded)
         {
-            // First lets spawn mole
-            if(m_uiSpawnMoleTimer < diff && !Phase3)
-            {
-                for(uint8 i = 0; i < MAX_WAVE; ++i)
-                    SpawnWaveMole(i);
-                m_uiSpawnMoleTimer = urand(40,50)*IN_MILLISECONDS;
-            }else m_uiSpawnMoleTimer -= diff;
-
-            // Set Ground phase
-            if(m_creature->GetHealthPercent() <= 50)
-                EnterGroundPhase();
-        }
-
-        if(Phase3)
-        {
-            // Fuse Armor
-            if (m_uiFuse_Armor < diff)
-            {
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_FUSE_ARMOR);
-                m_uiFuse_Armor = 13000;
-            }else m_uiFuse_Armor -= diff;
-
-            // Flame Buffet
-            if (m_uiFlame_Buffet < diff)
-            {
-                DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_FLAME_BUFFET : SPELL_FLAME_BUFFET_H);
-                m_uiFlame_Buffet = 13000;
-            }else m_uiFlame_Buffet -= diff;
-
-            // Flame Breath
-            if (m_uiFlame_Breath < diff)
-            {
-                DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_FLAME_BREATH : SPELL_FLAME_BREATH_H);
-                m_uiFlame_Breath = 14000;
-            }else m_uiFlame_Breath -= diff;
-        }
-
-        // Spawn npcs from mole
-        if(m_uiDelayedNpcSpawn < diff && m_bDelayed)
-        {
-            for(uint8 i = 0; i < MAX_WAVE; ++i)
-                SpawnWaveNPC(i);
-            m_bDelayed = false;
-        }else m_uiDelayedNpcSpawn -= diff;
-
-        if(m_uiMoleDespawn < diff && m_bPrepareDespawn)
-        {
-            for(uint8 i = 0; i < MAX_WAVE; ++i)
-                if(GameObject* pGO = m_vGOMoleMachine[i])
-                    pGO->Delete();
-            m_bPrepareDespawn = false;
-        }else m_uiMoleDespawn -= diff;
-        
-        // Devouring Flame
-        if (m_uiDevouring_Flame < diff && !Phase2)
-        {
-            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0))
+            if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 DoCastSpellIfCan(target, DEVOURING_FLAME_VISUAL);
-            m_uiDevouring_Flame = 12000;
-        }else m_uiDevouring_Flame -= diff;  
+            Devouring_Flame_Timer = 12000;
+        }else Devouring_Flame_Timer -= diff;  
 
-        if(Phase2)
+        if (wave1_spawn < diff && airphase && !grounded)
         {
-            // Stun when reaches the ground
-            if(!m_creature->HasAura(SPELL_STUN))
-                if(m_creature->GetPositionZ() < 393.0f)
-                    m_creature->CastSpell(m_creature, SPELL_STUN, true);
-
-            // Prepare to enter air phase
-            if(m_uiBreakFree < diff)
-            {
-                if(m_creature->HasAura(SPELL_STUN))
-                    m_creature->RemoveAurasDueToSpell(SPELL_STUN);
-                if(Creature* pTemp = m_vNPCHarpoon[urand(0,3)])
-                    m_creature->SetFacingToObject(pTemp);
-                if (!m_creature->IsNonMeleeSpellCasted(false))
+            if (Creature* pTemp = m_creature->SummonCreature(MOB_DARK_RUNE_WATCHER, RazorscaleAddX[3], RazorscaleAddY[3], RazorscaleAddZ[3], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000))
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 {
-                    if(m_uiPrepareFlyOffPhase == 0)
-                        m_creature->CastSpell(m_creature, m_bIsRegularMode ? SPELL_FLAME_BREATH : SPELL_FLAME_BREATH_H, true);
-                    else if(m_uiPrepareFlyOffPhase == 1)
-                        m_creature->CastSpell(m_creature, SPELL_WING_BUFFET, true);
-                    else if(m_uiPrepareFlyOffPhase == 2)
-                        EnterAirPhase();
-                    m_uiPrepareFlyOffPhase++;
+                    pTemp->AddThreat(pTarget, 0.0f);
+                    pTemp->AI()->AttackStart(pTarget);
                 }
-            }else m_uiBreakFree -= diff;
-        }
+            if (Creature* pTemp = m_creature->SummonCreature(MOB_DARK_RUNE_GUARDIAN, RazorscaleAddX[3], RazorscaleAddY[3], RazorscaleAddZ[3], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000))
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+                {
+                    pTemp->AddThreat(pTarget, 0.0f);
+                    pTemp->AI()->AttackStart(pTarget);
+                }
+            wave1_spawn = 54000;
+        }else wave1_spawn -= diff;
 
-        // Enrage
-        if (m_uiBerserk < diff)
+        if (wave2_spawn < diff && airphase && !grounded)
+        {
+            if (Creature* pTemp = m_creature->SummonCreature(MOB_DARK_RUNE_WATCHER, RazorscaleAddX[1], RazorscaleAddY[1], RazorscaleAddZ[1], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000))
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+                {
+                    pTemp->AddThreat(pTarget, 0.0f);
+                    pTemp->AI()->AttackStart(pTarget);
+                }
+            if (Creature* pTemp = m_creature->SummonCreature(MOB_DARK_RUNE_GUARDIAN, RazorscaleAddX[1], RazorscaleAddY[1], RazorscaleAddZ[1], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000))
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+                {
+                    pTemp->AddThreat(pTarget, 0.0f);
+                    pTemp->AI()->AttackStart(pTarget);
+                }
+            wave2_spawn = 54000;
+        }else wave2_spawn -= diff;
+
+        if (wave3_spawn < diff && airphase && !grounded)
+        {
+            switch(urand(0, 2)) //33% chance of spawning
+            {
+                case 0:
+                break;
+                case 1:
+                    if (Creature* pTemp = m_creature->SummonCreature(MOB_DARK_RUNE_SENTINEL, RazorscaleAddX[2], RazorscaleAddY[2], RazorscaleAddZ[2], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000))
+                        if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+                        {
+                            pTemp->AddThreat(pTarget, 0.0f);
+                            pTemp->AI()->AttackStart(pTarget);
+                        }
+                break;
+                case 2:
+                break;
+            }
+            wave3_spawn = 54000;
+        }else wave3_spawn -= diff;
+
+        if (Berserk_Timer < diff && !berserk)
         {
             DoCastSpellIfCan(m_creature, SPELL_BERSERK);
-            m_uiBerserk = 10*IN_MILLISECONDS;
-        }else m_uiBerserk -= diff;
-        
-        DoMeleeAttackIfReady();
+            berserk = true;
+        }else Berserk_Timer -= diff;
+
+        if (Timetoground < diff && airphase)
+        {
+            m_creature->GetMap()->CreatureRelocation(m_creature, RazorscaleBossX[2], RazorscaleBossY[2], RazorscaleBossZ[2], 1.5);
+            m_creature->SendMonsterMove(RazorscaleBossX[2], RazorscaleBossY[2], RazorscaleBossZ[2], SPLINETYPE_NORMAL, m_creature->GetSplineFlags(), 1);
+            grounded = true;
+            Stun_Timer = 2000;
+            Ground_Cast = 40000;
+            Grounded_Timer = 45000;
+            Timetoground = 130000;
+        }else Timetoground -= diff;
+
+        if (Stun_Timer < diff && grounded)
+        {
+            DoCastSpellIfCan(m_creature, SPELL_STUN);
+            Stun_Timer = 60000;
+        }else Stun_Timer -= diff;
+
+        if (Ground_Cast < diff && grounded)
+        {
+            m_creature->RemoveAurasDueToSpell(SPELL_STUN);
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_FLAME_BREATH : SPELL_FLAME_BREATH_H);
+            Ground_Cast = 10000;
+            Ground_Knockback = 1000;
+        }else Ground_Cast -= diff;
+
+        if (Ground_Knockback < diff && grounded)
+        {
+            DoCastSpellIfCan(m_creature, SPELL_WING_BUFFET);
+            Ground_Knockback = 10000;
+        }else Ground_Knockback -= diff;
+
+        if (Grounded_Timer < diff && grounded)
+        {
+            m_creature->GetMap()->CreatureRelocation(m_creature, RazorscaleBossX[1], RazorscaleBossY[1], RazorscaleBossZ[1], 0.0f);
+            m_creature->SendMonsterMove(RazorscaleBossX[1], RazorscaleBossY[1], RazorscaleBossZ[1], SPLINETYPE_NORMAL, m_creature->GetSplineFlags(), 1);
+            grounded = false;
+            Fireball_Timer = 10000;
+            Devouring_Flame_Timer = 18000;
+            wave1_spawn = 7000;
+            wave2_spawn = 9000;
+            wave3_spawn = 11000;
+            ++Shave_Count;
+        }else Grounded_Timer -= diff;
+
+        if (airphase && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 50)
+        {
+            if (m_creature->HasAura(SPELL_STUN))
+                m_creature->RemoveAurasDueToSpell(SPELL_STUN);
+            airphase = false;
+            grounded = false;
+            Devouring_Flame_Timer = 12000;
+            Flame_Buffet_Timer = 10000; //every 10 secs
+            Fuse_Armor_Timer = 13000; //every ~13
+            Flame_Breath_Timer = 6000; //every 14
+            SetCombatMovement(true);
+            m_creature->GetMotionMaster()->MoveChase(m_creature->getVictim());
+        }
+
+        if (Fuse_Armor_Timer < diff && !airphase)
+        {
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_FUSE_ARMOR);
+            Fuse_Armor_Timer = 13000;
+        }else Fuse_Armor_Timer -= diff;
+
+        if (Flame_Buffet_Timer < diff && !airphase)
+        {
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_FLAME_BUFFET : SPELL_FLAME_BUFFET_H);
+            Flame_Buffet_Timer = 13000;
+        }else Flame_Buffet_Timer -= diff;
+
+        if (Flame_Breath_Timer < diff && !airphase)
+        {
+            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_FLAME_BREATH : SPELL_FLAME_BREATH_H);
+            Flame_Breath_Timer = 14000;
+        }else Flame_Breath_Timer -= diff;
+
+        if (!airphase && !grounded)
+            DoMeleeAttackIfReady();
     }
 };
 

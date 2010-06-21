@@ -788,6 +788,7 @@ UPDATE creature_template SET ScriptName='npc_manaforge_control_console' WHERE en
 UPDATE creature_template SET ScriptName='npc_commander_dawnforge' WHERE entry=19831;
 UPDATE creature_template SET ScriptName='npc_protectorate_nether_drake' WHERE entry=20903;
 UPDATE creature_template SET ScriptName='npc_veronia' WHERE entry=20162;
+UPDATE creature_template SET ScriptName='npc_bessy' WHERE entry=20415;
 
 /*  */
 /* THE NEXUS */
@@ -986,7 +987,7 @@ DELETE FROM areatrigger_scripts WHERE entry=4853;
 INSERT INTO areatrigger_scripts VALUES (4853,'at_madrigosa');
 
 /* SWAMP OF SORROWS */
-
+UPDATE creature_template SET ScriptName='npc_galen_goodward' WHERE entry=5391;
 
 /* TANARIS */
 UPDATE creature_template SET ScriptName='mob_aquementas' WHERE entry=9453;

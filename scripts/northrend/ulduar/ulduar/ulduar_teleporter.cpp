@@ -1,3 +1,25 @@
+/* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+/* ScriptData
+SDName: Ulduar_teleport
+SD%Complete: 100%
+SDComment: by /dev/FallenAngelX
+SDCategory: Ulduar
+EndScriptData */
 
 #include "precompiled.h"
 #include "def_ulduar.h"
@@ -19,14 +41,14 @@ struct t_Locations
 
 static t_Locations PortalLoc[]=
 {
-{"-?-English","??????-russian",-706.122f, -92.6024f, 429.876f, 0,true,true,TYPE_LEVIATHAN_TP}, //
-{"-?-","???????",131.248f, -35.3802f, 409.804f, 0,true,true,TYPE_FLAME_LEVIATHAN},  //
-{"-?-","???????",553.233f, -12.3247f, 409.679f, 0,true,true,TYPE_XT002_TP}, //
-{"-?-","??????",926.292f, -11.4635f, 418.595f, 0,true,true,TYPE_XT002}, //
-{"-?-","????????",1498.09f, -24.246f, 420.967f, 0,true,true,TYPE_KOLOGARN}, //
-{"-?-","?????????",1859.45f, -24.1f, 448.9f, 0,true,true,TYPE_KOLOGARN}, //
-{"-?-","?????????",2536.87f, 2569.15f, 412.304f, 0,true,true,TYPE_VEZAX}, //
-{"-?-","??????????",1854.297f, -11.0173f, 334.4f, 0,true,true,TYPE_KOLOGARN}, //
+{"Expedition Base Camp","??????-russian",-706.122f, -92.6024f, 429.876f, 0,true,true,TYPE_LEVIATHAN_TP}, //
+{"Formation Grounds","???????",131.248f, -35.3802f, 409.804f, 0,true,true,TYPE_FLAME_LEVIATHAN},  //
+{"Colossal Forge","???????",553.233f, -12.3247f, 409.679f, 0,true,true,TYPE_XT002_TP}, //
+{"Scrapyard","??????",926.292f, -11.4635f, 418.595f, 0,true,true,TYPE_XT002}, //
+{"Antechamber of Ulduar","????????",1498.09f, -24.246f, 420.967f, 0,true,true,TYPE_KOLOGARN}, //
+{"Shattered Walkway","?????????",1859.45f, -24.1f, 448.9f, 0,true,true,TYPE_KOLOGARN}, //
+{"Spark of Imagination","?????????",2536.87f, 2569.15f, 412.304f, 0,true,true,TYPE_VEZAX}, //
+{"Prison of Yogg-Saron","??????????",1854.297f, -11.0173f, 334.4f, 0,true,true,TYPE_KOLOGARN}, //
 };
 
 bool GOGossipHello_go_ulduar_teleporter(Player *player, GameObject *pGo)

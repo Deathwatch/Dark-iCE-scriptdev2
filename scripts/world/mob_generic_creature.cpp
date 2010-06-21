@@ -83,7 +83,7 @@ struct MANGOS_DLL_DECL generic_creatureAI : public ScriptedAI
         //If we are within range melee the target
         if (m_creature->IsWithinDistInMap(m_creature->getVictim(), ATTACK_DISTANCE))
         {
-            //Make sure our attack is ready and we arn't currently casting
+            //Make sure our attack is ready and we aren't currently casting
             if (m_creature->isAttackReady() && !m_creature->IsNonMeleeSpellCasted(false))
             {
                 bool Healing = false;
@@ -114,7 +114,7 @@ struct MANGOS_DLL_DECL generic_creatureAI : public ScriptedAI
         }
         else
         {
-            //Only run this code if we arn't already casting
+            //Only run this code if we aren't already casting
             if (!m_creature->IsNonMeleeSpellCasted(false))
             {
                 bool Healing = false;
@@ -128,7 +128,7 @@ struct MANGOS_DLL_DECL generic_creatureAI : public ScriptedAI
                 if (info) Healing = true;
                 else info = SelectSpell(m_creature->getVictim(), -1, -1, SELECT_TARGET_ANY_ENEMY, 0, 0, ATTACK_DISTANCE, 0, SELECT_EFFECT_DONTCARE);
 
-                //Found a spell, check if we arn't on cooldown
+                //Found a spell, check if we aren't on cooldown
                 if (info && !GlobalCooldown)
                 {
                     //If we are currently moving stop us and set the movement generator
@@ -145,7 +145,7 @@ struct MANGOS_DLL_DECL generic_creatureAI : public ScriptedAI
                     GlobalCooldown = GENERIC_CREATURE_COOLDOWN;
 
 
-                }//If no spells available and we arn't moving run to target
+                }//If no spells available and we aren't moving run to target
                 else if (IsSelfRooted)
                 {
                     //Cancel our current spell and then allow movement agian

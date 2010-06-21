@@ -374,6 +374,7 @@ extern void AddSC_halls_of_stone();
 extern void AddSC_boss_krystallus();
 extern void AddSC_instance_halls_of_stone();
 extern void AddSC_boss_algalon();							//ulduar
+extern void AddSC_go_ulduar_teleporter();
 extern void AddSC_boss_auriaya();
 extern void AddSC_boss_flameleviathan();
 extern void AddSC_boss_freya();
@@ -388,7 +389,6 @@ extern void AddSC_boss_xt002();
 extern void AddSC_boss_vezax();
 extern void AddSC_boss_yogg_saron();
 extern void AddSC_instance_ulduar();
-extern void AddSC_ulduar_teleport();
 
 extern void AddSC_boss_ingvar();                            //utgarde_keep
 extern void AddSC_boss_keleseth();
@@ -893,6 +893,7 @@ void AddScripts()
     AddSC_boss_algalon(); 									//ulduar
     AddSC_boss_auriaya();
     AddSC_boss_flameleviathan();
+	AddSC_go_ulduar_teleporter();
     AddSC_boss_freya();
     AddSC_boss_hodir();
     AddSC_boss_ignis();
@@ -905,7 +906,6 @@ void AddScripts()
     AddSC_boss_xt002();
     AddSC_boss_yogg_saron();
     AddSC_instance_ulduar();
-    AddSC_ulduar_teleport();
     AddSC_boss_ingvar();                                    //utgarde_keep
     AddSC_boss_keleseth();
     AddSC_boss_skarvald_and_dalronn();

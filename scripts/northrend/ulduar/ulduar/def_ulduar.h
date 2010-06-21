@@ -65,6 +65,10 @@ enum
     NPC_VEZAX                   = 33271,
     NPC_YOGGSARON               = 33288,
     NPC_ALGALON                 = 32871,
+	
+	GO_TELEPORT_GOSSIP_MESSAGE  = 99323,
+    TELEPORT_GOSSIP_MESSAGE     = 99322,
+	MAP_NUM                     = 603,
     
     GO_KOLOGARN_BRIDGE          = 194232,
     GO_KOLOGARN_LOOT            = 195046,

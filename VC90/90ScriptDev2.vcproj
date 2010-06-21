@@ -2252,7 +2252,7 @@
 							>
 						</File>
 						<File
-							RelativePath="..\scripts\northrend\ulduar\ulduar\ulduar_teleport.cpp"
+							RelativePath="..\scripts\northrend\ulduar\ulduar\ulduar_teleporter.cpp"
 							>
 						</File>
 					</Filter>

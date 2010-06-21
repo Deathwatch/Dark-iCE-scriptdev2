@@ -933,6 +933,12 @@
     <ClCompile Include="..\scripts\kalimdor\caverns_of_time\old_hillsbrad\old_hillsbrad.cpp">
       <Filter>scripts\kalimdor\caverns_of_time\old_hillsbrad</Filter>
     </ClCompile>
+	<ClCompile Include="..\scripts\kalimdor\dire_maul\dire_maul.cpp">
+	  <Filter>scripts\kalimdor\dire_maul</Filter>
+	</ClCompile>
+	<ClCompile Include="..\scripts\kalimdor\dire_maul\instance_dire_maul.cpp">
+	  <Filter>scripts\kalimdor\dire_maul</Filter>
+	</ClCompile>  
     <ClCompile Include="..\scripts\kalimdor\maraudon\boss_celebras_the_cursed.cpp">
       <Filter>scripts\kalimdor\maraudon</Filter>
     </ClCompile>

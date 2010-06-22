@@ -210,7 +210,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Hellscream\scriptdev2\scripts\kalimdor\dire_maul\instance_dire_maul.cpp" />
+    <ClCompile Include="..\scriptdev2\scripts\kalimdor\dire_maul\instance_dire_maul.cpp" />
     <ClCompile Include="..\base\escort_ai.cpp" />
     <ClCompile Include="..\base\follower_ai.cpp" />
     <ClCompile Include="..\base\guard_ai.cpp" />

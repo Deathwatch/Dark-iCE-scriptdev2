@@ -75,11 +75,6 @@ struct _Locations
 
 static _Locations SpawnLoc[]=
 {
-<<<<<<< HEAD:scripts/northrend/icecrown_citadel/frozen_halls/halls_of_reflection/def_halls.h
-    {5325.330078f, 1976.609985f, 707.695007f},  // 0 Марвин
-    {5274.630859f, 2040.283813f, 709.319824f},  // 1 Фалрик
-    {5346.934570f, 2044.740234f, 707.695801f},  // 2 Выход
-=======
     //Wing 01
     {5277.409f, 1993.161f, 707.694f, 0.05f}, //27
     {5301.876f, 2041.699f, 707.694f, 4.71f}, //1
@@ -115,7 +110,5 @@ static _Locations SpawnLoc[]=
     {5319.835f, 1975.177f, 707.694f, 1.62f}, //14
     {5277.445f, 2017.197f, 707.694f, 0.05f}, //26
     {5298.198f, 2037.762f, 707.694f, 4.71f}  //0
->>>>>>> 528f82c... Frozen halls (from Mioka and me) added. Not stable, need testing!:scripts/northrend/icecrown_citadel/frozen_halls/halls_of_reflection/def_halls.h
 };
-
 #endif

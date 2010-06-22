@@ -399,7 +399,24 @@ scripts/northrend/gundrak/boss_moorabi.cpp \
 scripts/northrend/gundrak/boss_sladran.cpp \
 scripts/northrend/gundrak/gundrak.h \
 scripts/northrend/gundrak/instance_gundrak.cpp \
+<<<<<<< HEAD:Makefile.am
 scripts/northrend/icecrown_citadel/frozen_halls/halls_of_reflection/boss_falryn.cpp \
+=======
+scripts/northrend/icecrown_citadel/frozen_halls/forge_of_souls/def_forge.h \
+scripts/northrend/icecrown_citadel/frozen_halls/forge_of_souls/instance_forge_of_souls.cpp \
+scripts/northrend/icecrown_citadel/frozen_halls/forge_of_souls/boss_devourer_of_souls.cpp \
+scripts/northrend/icecrown_citadel/frozen_halls/forge_of_souls/boss_bronjahm.cpp \
+scripts/northrend/icecrown_citadel/frozen_halls/forge_of_souls/forge_of_souls.cpp \
+scripts/northrend/icecrown_citadel/frozen_halls/forge_of_souls/trash_forge_of_souls.cpp \
+scripts/northrend/icecrown_citadel/frozen_halls/pit_of_saron/instance_pit_of_saron.cpp \
+scripts/northrend/icecrown_citadel/frozen_halls/pit_of_saron/boss_forgemaster_gafrost.cpp \
+scripts/northrend/icecrown_citadel/frozen_halls/pit_of_saron/boss_scourgelord_tyrannus.cpp \
+scripts/northrend/icecrown_citadel/frozen_halls/pit_of_saron/boss_krick_and_ick.cpp \
+scripts/northrend/icecrown_citadel/frozen_halls/halls_of_reflection/def_halls.h \
+scripts/northrend/icecrown_citadel/frozen_halls/halls_of_reflection/instance_halls_of_reflection.cpp \
+scripts/northrend/icecrown_citadel/frozen_halls/halls_of_reflection/halls_of_reflection.cpp \
+scripts/northrend/icecrown_citadel/frozen_halls/halls_of_reflection/boss_falric.cpp \
+>>>>>>> 528f82c... Frozen halls (from Mioka and me) added. Not stable, need testing!:Makefile.am
 scripts/northrend/icecrown_citadel/frozen_halls/halls_of_reflection/boss_lich_king.cpp \
 scripts/northrend/icecrown_citadel/frozen_halls/halls_of_reflection/boss_marwyn.cpp \
 scripts/northrend/icecrown_citadel/frozen_halls/halls_of_reflection/def_halls.h \

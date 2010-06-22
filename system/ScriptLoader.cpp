@@ -449,9 +449,23 @@ extern void AddSC_boss_forgemaster_gafrost();
 extern void AddSC_boss_krick();
 extern void AddSC_boss_scourgelord_tyrannus();
 
+<<<<<<< HEAD:system/ScriptLoader.cpp
 extern void AddSC_instance_halls_of_reflection();           // Halls_of_reflection
 extern void AddSC_boss_falryn();
 extern void AddSC_boss_marwyn();
+=======
+extern void AddSC_instance_halls_of_reflection();
+extern void AddSC_halls_of_reflection();
+extern void AddSC_boss_falric();
+extern void AddSC_boss_marwyn();
+extern void AddSC_boss_lich_king_hr();
+
+extern void AddSC_instance_ruby_sanctum();                  // Ruby Sanctum
+extern void AddSC_boss_halion();
+extern void AddSC_boss_ragefire();
+extern void AddSC_boss_zarithian();
+extern void AddSC_boss_baltharus();
+>>>>>>> 528f82c... Frozen halls (from Mioka and me) added. Not stable, need testing!:system/ScriptLoader.cpp
 
 //outland
 extern void AddSC_boss_exarch_maladaar();                   //auchindoun, auchenai_crypts
@@ -964,10 +978,24 @@ void AddScripts()
     AddSC_boss_krick();
     AddSC_boss_scourgelord_tyrannus();
 
+<<<<<<< HEAD:system/ScriptLoader.cpp
     AddSC_instance_halls_of_reflection();                   // Halls_of_reflection
     AddSC_boss_falryn();
     AddSC_boss_marwyn();
  
+=======
+    AddSC_instance_halls_of_reflection();
+    AddSC_halls_of_reflection();
+    AddSC_boss_falric();
+    AddSC_boss_marwyn();
+    AddSC_boss_lich_king_hr();
+
+    AddSC_instance_ruby_sanctum();                         // Ruby Sanctum
+    AddSC_boss_halion();
+    AddSC_boss_ragefire();
+    AddSC_boss_zarithian();
+    AddSC_boss_baltharus();
+>>>>>>> 528f82c... Frozen halls (from Mioka and me) added. Not stable, need testing!:system/ScriptLoader.cpp
 
     //outland
     AddSC_boss_exarch_maladaar();                           //auchindoun, auchenai_crypts

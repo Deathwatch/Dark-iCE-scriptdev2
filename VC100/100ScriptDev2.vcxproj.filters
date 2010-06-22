@@ -1897,7 +1897,7 @@
     <ClCompile Include="..\scripts\northrend\ulduar\ulduar\ulduar_teleporter.cpp">
       <Filter>scripts\northrend\ulduar\ulduar</Filter>
     </ClCompile>
-    <ClCompile Include="..\scriptdev2\scripts\kalimdor\dire_maul\instance_dire_maul.cpp">
+    <ClCompile Include="..\scripts\kalimdor\dire_maul\instance_dire_maul.cpp">
       <Filter>scripts\kalimdor\dire_maul</Filter>
     </ClCompile>
   </ItemGroup>

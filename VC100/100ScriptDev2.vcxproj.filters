@@ -933,12 +933,9 @@
     <ClCompile Include="..\scripts\kalimdor\caverns_of_time\old_hillsbrad\old_hillsbrad.cpp">
       <Filter>scripts\kalimdor\caverns_of_time\old_hillsbrad</Filter>
     </ClCompile>
-	<ClCompile Include="..\scripts\kalimdor\dire_maul\dire_maul.cpp">
-	  <Filter>scripts\kalimdor\dire_maul</Filter>
-	</ClCompile>
-	<ClCompile Include="..\scripts\kalimdor\dire_maul\instance_dire_maul.cpp">
-	  <Filter>scripts\kalimdor\dire_maul</Filter>
-	</ClCompile>  
+    <ClCompile Include="..\scripts\kalimdor\dire_maul\dire_maul.cpp">
+      <Filter>scripts\kalimdor\dire_maul</Filter>
+    </ClCompile>
     <ClCompile Include="..\scripts\kalimdor\maraudon\boss_celebras_the_cursed.cpp">
       <Filter>scripts\kalimdor\maraudon</Filter>
     </ClCompile>
@@ -1900,6 +1897,9 @@
     <ClCompile Include="..\scripts\northrend\ulduar\ulduar\ulduar_teleporter.cpp">
       <Filter>scripts\northrend\ulduar\ulduar</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Hellscream\scriptdev2\scripts\kalimdor\dire_maul\instance_dire_maul.cpp">
+      <Filter>scripts\kalimdor\dire_maul</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\base\escort_ai.h">
@@ -2146,6 +2146,9 @@
     </ClInclude>
     <ClInclude Include="..\scripts\northrend\nexus\oculus\oculus.h">
       <Filter>scripts\northrend\nexus\oculus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scripts\kalimdor\dire_maul\dire_maul.h">
+      <Filter>scripts\kalimdor\dire_maul</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -558,8 +558,8 @@
 					>
 				</File>
 				<File
-				    RelativePath="..\scripts\eastern_kingdoms\swamp_of_sorrows.cpp"
-				    >
+					RelativePath="..\scripts\eastern_kingdoms\swamp_of_sorrows.cpp"
+					>
 				</File>
 				<File
 					RelativePath="..\scripts\eastern_kingdoms\tirisfal_glades.cpp"
@@ -641,6 +641,10 @@
 					Name="blackrock_spire"
 					>
 					<File
+						RelativePath="..\scripts\eastern_kingdoms\blackrock_spire\blackrock_spire.h"
+						>
+					</File>
+					<File
 						RelativePath="..\scripts\eastern_kingdoms\blackrock_spire\boss_drakkisath.cpp"
 						>
 					</File>
@@ -690,10 +694,6 @@
 					</File>
 					<File
 						RelativePath="..\scripts\eastern_kingdoms\blackrock_spire\instance_blackrock_spire.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\scripts\eastern_kingdoms\blackrock_spire\blackrock_spire.h"
 						>
 					</File>
 				</Filter>
@@ -1342,11 +1342,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\scripts\kalimdor\durotar.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\scripts\kalimdor\dustwallow_marsh.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\scripts\kalimdor\felwood.cpp"					
+					RelativePath="..\scripts\kalimdor\felwood.cpp"
 					>
 				</File>
 				<File
@@ -1355,10 +1359,6 @@
 				</File>
 				<File
 					RelativePath="..\scripts\kalimdor\moonglade.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\scripts\kalimdor\durotar.cpp"
 					>
 				</File>
 				<File
@@ -1553,17 +1553,17 @@
 					Name="dire_maul"
 					>
 					<File
-					  RelativePath="..\scripts\kalimdor\dire_maul\dire_maul.cpp"
-					  >
+						RelativePath="..\scripts\kalimdor\dire_maul\dire_maul.cpp"
+						>
 					</File>
 					<File
-					  RelativePath="..\scripts\kalimdor\dire_maul\dire_maul.h"
-					  >
+						RelativePath="..\scripts\kalimdor\dire_maul\dire_maul.h"
+						>
 					</File>
 					<File
-					  RelativePath="..\scripts\kalimdor\dire_maul\instance_dire_maul.cpp"
-					  >
-					</File>  
+						RelativePath="..\scripts\kalimdor\dire_maul\instance_dire_maul.cpp"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="maraudon"
@@ -2523,11 +2523,11 @@
 								>
 							</File>
 							<File
-								RelativePath="..\scripts\northrend\icecrown_citadel\frozen_halls\halls_of_reflection\instance_halls_of_reflection.cpp"
+								RelativePath="..\scripts\northrend\icecrown_citadel\frozen_halls\halls_of_reflection\halls_of_reflection.cpp"
 								>
 							</File>
 							<File
-								RelativePath="..\scripts\northrend\icecrown_citadel\frozen_halls\halls_of_reflection\halls_of_reflection.cpp"
+								RelativePath="..\scripts\northrend\icecrown_citadel\frozen_halls\halls_of_reflection\instance_halls_of_reflection.cpp"
 								>
 							</File>
 						</Filter>
@@ -2551,11 +2551,11 @@
 								>
 							</File>
 							<File
-								RelativePath="..\scripts\northrend\icecrown_citadel\frozen_halls\forge_of_souls\trash_forge_of_souls.cpp"
+								RelativePath="..\scripts\northrend\icecrown_citadel\frozen_halls\forge_of_souls\instance_forge_of_souls.cpp"
 								>
 							</File>
 							<File
-								RelativePath="..\scripts\northrend\icecrown_citadel\frozen_halls\forge_of_souls\instance_forge_of_souls.cpp"
+								RelativePath="..\scripts\northrend\icecrown_citadel\frozen_halls\forge_of_souls\trash_forge_of_souls.cpp"
 								>
 							</File>
 						</Filter>
@@ -2565,15 +2565,27 @@
 					Name="ruby_sanctum"
 					>
 					<File
+						RelativePath="..\scripts\northrend\ruby_sanctum\boss_baltharus.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\scripts\northrend\ruby_sanctum\boss_halion.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\scripts\northrend\ruby_sanctum\instance_ruby_sanctum.cpp"
+						RelativePath="..\scripts\northrend\ruby_sanctum\boss_ragefire.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\scripts\northrend\ruby_sanctum\ruby_sanctum.h"
+						RelativePath="..\scripts\northrend\ruby_sanctum\boss_zarithian.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\scripts\northrend\ruby_sanctum\def_ruby_sanctum.h"
+						>
+					</File>
+					<File
+						RelativePath="..\scripts\northrend\ruby_sanctum\instance_ruby_sanctum.cpp"
 						>
 					</File>
 				</Filter>

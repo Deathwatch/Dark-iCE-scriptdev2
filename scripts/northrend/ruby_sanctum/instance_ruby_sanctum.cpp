@@ -1,79 +1,80 @@
 /* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
-
-/* ScriptData
-SDName: Instance_Ruby_Sanctum
-SD%Complete: 15%
-SDComment: Waiting for blizzlike to come out b4 i finish it
-SDCategory: Ruby Sanctum
-EndScriptData */
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
 
 #include "precompiled.h"
-#include "ruby_sanctum.h"
+#include "def_ruby_sanctum.h"
 
 struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
 {
-    instance_ruby_sanctum(Map* pMap) : ScriptedInstance(pMap) {Initialize();};
+    instance_ruby_sanctum(Map* pMap) : ScriptedInstance(pMap) 
+    {
+        Initialize();
+    }
 
-    uint32 m_auiEncounter[MAX_ENCOUNTER];
     std::string strSaveData;
 
+    //Creatures GUID
+    uint32 m_auiEncounter[MAX_ENCOUNTERS+1];
     uint64 m_uiHalionGUID;
-    uint64 m_uiZarithrianGUID;
+    uint64 m_uiRagefireGUID;
+    uint64 m_uiZarithianGUID;
     uint64 m_uiBaltharusGUID;
-    uint64 m_uiSavianaGUID;
 
     void Initialize()
     {
-        memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
-
-        m_uiHalionGUID             = 0;
-        m_uiZarithrianGUID         = 0;
-        m_uiBaltharusGUID          = 0;
-        m_uiSavianaGUID            = 0;
-    }
-
-    bool IsEncounterInProgress() const
-    {
-        for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
-            if (m_auiEncounter[i] == IN_PROGRESS)
-                return true;
-
-        return false;
+        for (uint8 i = 0; i < MAX_ENCOUNTERS; ++i)
+            m_auiEncounter[i] = NOT_STARTED;
     }
 
     void OnCreatureCreate(Creature* pCreature)
     {
-        switch (pCreature->GetEntry())
+        switch(pCreature->GetEntry())
         {
-            case 39863: m_uiHalionGUID      = pCreature->GetGUID(); break;
-			case 39746: m_uiZarithrianGUID  = pCreature->GetGUID(); break;
-			case 39751: m_uiBaltharusGUID   = pCreature->GetGUID(); break;
-			case 39747: m_uiSavianaGUID     = pCreature->GetGUID(); break;
+            case NPC_HALION: 
+                         m_uiHalionGUID = pCreature->GetGUID();
+                         break;
+            case NPC_RAGEFIRE:
+                          m_uiRagefireGUID = pCreature->GetGUID();
+                          break;
+        }
+    }
+
+    void OnObjectCreate(GameObject* pGo)
+    {
+        switch(pGo->GetEntry())
+        {
         }
     }
 
     void SetData(uint32 uiType, uint32 uiData)
     {
+        switch(uiType)
+        {
+            case TYPE_HALION:   m_auiEncounter[3] = uiData; break;
+            case TYPE_RAGEFIRE: m_auiEncounter[1] = uiData; break;
+        }
+
         if (uiData == DONE)
         {
             OUT_SAVE_INST_DATA;
 
             std::ostringstream saveStream;
-            saveStream << m_auiEncounter[0];
+
+            for(uint8 i = 0; i < MAX_ENCOUNTERS; ++i)
+                saveStream << m_auiEncounter[i] << " ";
 
             strSaveData = saveStream.str();
 
@@ -89,21 +90,20 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
 
     uint32 GetData(uint32 uiType)
     {
-        switch (uiType)
+        switch(uiType)
         {
-            case TYPE_HALION_EVENT:    return m_auiEncounter[0];
+             case TYPE_HALION:       return m_auiEncounter[3];
+             case TYPE_RAGEFIRE:     return m_auiEncounter[2];
         }
         return 0;
     }
 
     uint64 GetData64(uint32 uiData)
     {
-        switch (uiData)
+        switch(uiData)
         {
-            case DATA_HALION:              return m_uiHalionGUID;
-            case DATA_BALTHARUS:           return m_uiZarithrianGUID;
-            case DATA_ZARITHRIAN:          return m_uiBaltharusGUID;
-            case DATA_SAVIANA:             return m_uiSavianaGUID;
+            case NPC_HALION:   return m_uiHalionGUID;
+            case NPC_RAGEFIRE: return m_uiRagefireGUID;
         }
         return 0;
     }
@@ -120,11 +120,13 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
 
         std::istringstream loadStream(chrIn);
 
-        loadStream >> m_auiEncounter[0] >> m_auiEncounter[1];
+        for(uint8 i = 0; i < MAX_ENCOUNTERS; ++i)
+        {
+            loadStream >> m_auiEncounter[i];
 
-        for(uint8 i = 0; i < MAX_ENCOUNTER; ++i)
             if (m_auiEncounter[i] == IN_PROGRESS)
                 m_auiEncounter[i] = NOT_STARTED;
+        }
 
         OUT_LOAD_INST_DATA_COMPLETE;
     }
@@ -135,11 +137,12 @@ InstanceData* GetInstanceData_instance_ruby_sanctum(Map* pMap)
     return new instance_ruby_sanctum(pMap);
 }
 
+
 void AddSC_instance_ruby_sanctum()
 {
-    Script *newscript;
-    newscript = new Script;
-    newscript->Name = "instance_ruby_sanctum";
-    newscript->GetInstanceData = &GetInstanceData_instance_ruby_sanctum;
-    newscript->RegisterSelf();
+    Script* pNewScript;
+    pNewScript = new Script;
+    pNewScript->Name = "instance_ruby_sanctum";
+    pNewScript->GetInstanceData = &GetInstanceData_instance_ruby_sanctum;
+    pNewScript->RegisterSelf();
 }

@@ -112,5 +112,5 @@ void AddSC_boss_general()
     newscript = new Script;
     newscript->Name = "boss_general";
     newscript->GetAI = &GetAI_boss_general;
-    newscript->RegisterSelf();
+    newscript->RegisterSelf(false);
 }

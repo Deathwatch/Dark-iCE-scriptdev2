@@ -28,7 +28,8 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
 
     //Creatures GUID
     uint32 m_auiEncounter[MAX_ENCOUNTERS+1];
-    uint64 m_uiHalionGUID;
+    uint64 m_uiHalion_pGUID;
+	uint64 m_uiHalion_tGUID;
     uint64 m_uiRagefireGUID;
     uint64 m_uiZarithianGUID;
     uint64 m_uiBaltharusGUID;
@@ -43,8 +44,11 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
     {
         switch(pCreature->GetEntry())
         {
-            case NPC_HALION: 
-                         m_uiHalionGUID = pCreature->GetGUID();
+            case NPC_HALION_P: 
+                         m_uiHalion_pGUID = pCreature->GetGUID();
+                         break;
+			case NPC_HALION_T: 
+                         m_uiHalion_tGUID = pCreature->GetGUID();
                          break;
             case NPC_RAGEFIRE:
                           m_uiRagefireGUID = pCreature->GetGUID();
@@ -54,9 +58,6 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
 
     void OnObjectCreate(GameObject* pGo)
     {
-        switch(pGo->GetEntry())
-        {
-        }
     }
 
     void SetData(uint32 uiType, uint32 uiData)
@@ -102,7 +103,8 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
     {
         switch(uiData)
         {
-            case NPC_HALION:   return m_uiHalionGUID;
+            case NPC_HALION_P:   return m_uiHalion_pGUID;
+			case NPC_HALION_T:   return m_uiHalion_tGUID;
             case NPC_RAGEFIRE: return m_uiRagefireGUID;
         }
         return 0;

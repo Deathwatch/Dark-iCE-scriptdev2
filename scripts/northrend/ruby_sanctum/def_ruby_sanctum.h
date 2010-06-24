@@ -15,11 +15,36 @@ enum
     TYPE_RAGEFIRE                  = 2,
     TYPE_HALION                    = 3,
 
-    NPC_HALION                     = 39863,
+    NPC_HALION_P					= 39863,	// Halion Physical Realm NPC
+	NPC_HALION_T					= 40142,	// Halion Twilight Realm NPC
+
     NPC_BALTHARUS                  = 39751,
     NPC_ZARITHIAN                  = 39746,
-    NPC_RAGEFIRE                   = 39747
+    NPC_RAGEFIRE                   = 39747,
 
+	GO_HALION_FIRE_RING			   = 202800, //9482
+	GO_HALION_PORTAL_0			   = 202794, //1327	ENTRY
+	GO_HALION_PORTAL_1			   = 202795, //1327	ENTRY
+	GO_HALION_PORTAL_2			   = 202797, //9011	EXIT
+	GO_HALION_PORTAL_3			   = 202798, //9011	EXIT
+
+	TYPE_DIFFICULTY				   = 101,
+	
+	DATA_HEALTH_HALION_P           = 201,
+    DATA_HEALTH_HALION_T           = 202,
+};
+
+enum uiWorldStates
+{
+    UPDATE_STATE_UI_SHOW            = 5049,
+    UPDATE_STATE_UI_COUNT           = 5050,
+};
+
+static Locations SpawnLoc[]=
+{
+    {0.0f, 0.0f, 0.0f}, // 0 HALION
+    {0.0f, 0.0f, 0.0f}, // 1 PULSAR0
+    {0.0f, 0.0f, 0.0f}, // 2 PULSAR1
 };
 
 #endif

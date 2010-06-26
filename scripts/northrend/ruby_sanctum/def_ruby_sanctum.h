@@ -15,6 +15,8 @@ enum
     TYPE_RAGEFIRE                  = 2,
     TYPE_HALION                    = 3,
 
+	TYPE_HALION_LOCK               = 4,	//lock inside the fire ring
+
     NPC_HALION_P					= 39863,	// Halion Physical Realm NPC
 	NPC_HALION_T					= 40142,	// Halion Twilight Realm NPC
 
@@ -23,10 +25,11 @@ enum
     NPC_RAGEFIRE                   = 39747,
 
 	GO_HALION_FIRE_RING			   = 202800, //9482
-	GO_HALION_PORTAL_0			   = 202794, //1327	ENTRY
-	GO_HALION_PORTAL_1			   = 202795, //1327	ENTRY
-	GO_HALION_PORTAL_2			   = 202797, //9011	EXIT
-	GO_HALION_PORTAL_3			   = 202798, //9011	EXIT
+	GO_HALION_PORTAL_0			   = 193988, //1327	ENTRY
+	GO_HALION_PORTAL_1			   = 202794, //1327	ENTRY
+	GO_HALION_PORTAL_2			   = 202795, //1327	EXIT
+	GO_HALION_PORTAL_3			   = 202797, //1327	EXIT
+	
 
 	TYPE_DIFFICULTY				   = 101,
 	

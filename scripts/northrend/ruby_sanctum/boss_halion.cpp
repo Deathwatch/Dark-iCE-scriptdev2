@@ -29,6 +29,8 @@ enum
     //SPELLS
 	//All
 	SPELL_TWILIGHT_PRECISION        = 78243,	// Increases Halion's chance to hit by 5% and decreases all players' chance to dodge by 20%
+	SPELL_TWILIGHT_DIVISION         = 75063,	// Phases the caster, allowing him to exist and act simultaneously in both the material and Twilight realms.
+	SPELL_BERSERK			        = 26663,	// Increases the caster's attack and movement speeds by 150% and all damage it deals by 500% for 5 min.  Also grants immunity to Taunt effects.
 	SPELL_CORPREALITY_EVEN			= 74826,	// Deals & receives normal damage
 	SPELL_CORPREALITY_20I			= 74827,	// Damage dealt increased by 10% & Damage taken increased by 15%
 	SPELL_CORPREALITY_40I			= 74828,	// Damage dealt increased by 30% & Damage taken increased by 50%
@@ -136,15 +138,23 @@ struct MANGOS_DLL_DECL boss_halion_pAI : public ScriptedAI
     }
 
     ScriptedInstance* m_pInstance;
-    uint8 stage;
+    uint8 p_phase;
+	bool intro;
     BossSpellWorker* bsw;
 
     void Reset() {
         if(!m_pInstance) return;
-        stage = 0;
+        p_phase = 0;
     }
 
-    void JustReachedHome()
+    void MoveInLineOfSight(Unit* pWho) 
+    {
+        if (intro) return;
+        DoScriptText(-1666100,m_creature);
+        intro = true;
+    }
+
+	void JustReachedHome()
     {
         if (!m_pInstance) return;
             m_pInstance->SetData(TYPE_HALION, FAIL);
@@ -181,7 +191,7 @@ struct MANGOS_DLL_DECL boss_halion_pAI : public ScriptedAI
         m_pInstance->SetData(TYPE_HALION, IN_PROGRESS);     
         DoScriptText(-1666101,m_creature);
         m_pInstance->SetData(DATA_HEALTH_HALION_P, m_creature->GetMaxHealth());
-    }
+	}
 
     void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
     {
@@ -204,32 +214,49 @@ struct MANGOS_DLL_DECL boss_halion_pAI : public ScriptedAI
                                       m_pInstance->GetData(DATA_HEALTH_HALION_T) != 0)
                 m_creature->SetHealth(m_pInstance->GetData(DATA_HEALTH_HALION_T));
 
-    if (m_creature->GetHealthPercent() < 75.0f && stage == 0)
-		stage = 1;
+    if (m_creature->GetHealthPercent() < 100.0f && p_phase == 0)
+	{
+		m_pInstance->SetData(TYPE_HALION_LOCK, DONE);
+		p_phase = 1;
+	}
+	
+	if (m_creature->GetHealthPercent() < 75.0f && p_phase == 1)
+	{
+		DoScriptText(-1666108,m_creature);
+		p_phase = 2;
+	}
 
-	if (m_creature->GetHealthPercent() < 50.0f && stage == 1)
-		stage = 2;
+	if (m_creature->GetHealthPercent() < 50.0f && p_phase == 2)
+	{
+		DoScriptText(-1666109,m_creature);
+		p_phase = 3;
+	}
 
-	switch (stage)
+	switch (p_phase)
         {
-         case 0:	//fight in physical realm
-              //flame breath
-			  //meteor strike
-			  //flame consumption
+         case 0: //SPAWNED
                 break;
-
-         case 1:	//fight in twilight realm
-              //not attackable
-                 break;
-
-          case 2:	//fight in split realm
-			  //flame breath
-			  //meteor strike
-			  //flame consumption
-			  //corpreality
-                 break;
+		 case 1: //PHASE 1 PHYSICAL REALM
+            bsw->timedCast(SPELL_FLAME_BREATH_0, uiDiff);
+			bsw->timedCast(SPELL_FIERY_COMBUSTION, uiDiff);
+			/* Needs Script
+			bsw->timedCast(SPELL_METEOR_STRIKE, uiDiff); 
+			*/
+                break;
+         case 2: //DEPHASE HALION FORCE TO TWILIGHT REALM
+             //setflag unattackable, unselectable, remove combat
+			    break;
+         case 3: //PHASE 3 BOTH REALMS
+            bsw->timedCast(SPELL_FLAME_BREATH_0, uiDiff);
+			bsw->timedCast(SPELL_FIERY_COMBUSTION, uiDiff);
+			bsw->doCast(SPELL_TWILIGHT_DIVISION);
+			/* Needs Script
+			bsw->timedCast(SPELL_METEOR_STRIKE, uiDiff); 
+			bsw->timedCast(SPELL_CORPREALITY_EVEN, uiDiff); 
+			*/
+                break;
           default:
-                 break;
+                break;
          }
 
         DoMeleeAttackIfReady();
@@ -255,13 +282,13 @@ struct MANGOS_DLL_DECL boss_halion_tAI : public ScriptedAI
     }
 
     ScriptedInstance* m_pInstance;
-	uint8 stage;
+	uint8 t_phase;
     BossSpellWorker* bsw;
 
     void Reset() 
     {
         if(!m_pInstance) return;
-		stage = 0;
+		t_phase = 0;
     }
 
     void JustReachedHome()
@@ -297,6 +324,9 @@ struct MANGOS_DLL_DECL boss_halion_tAI : public ScriptedAI
         if (!m_pInstance) return;
         m_creature->SetInCombatWithZone();
         m_pInstance->SetData(DATA_HEALTH_HALION_T, m_creature->GetMaxHealth());
+
+		if (t_phase == 0)
+			t_phase = 2;
     }
 
     void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
@@ -319,33 +349,37 @@ struct MANGOS_DLL_DECL boss_halion_tAI : public ScriptedAI
                                       m_pInstance->GetData(DATA_HEALTH_HALION_P) != 0)
                 m_creature->SetHealth(m_pInstance->GetData(DATA_HEALTH_HALION_P));
 
-    if (m_creature->GetHealthPercent() < 75.0f && stage == 0)
-		stage = 1;
-
-	if (m_creature->GetHealthPercent() < 50.0f && stage == 1)
-		stage = 2;
+	if (m_creature->GetHealthPercent() < 50.0f && t_phase == 2)
+	{
+		DoScriptText(-1666109,m_creature);
+		t_phase = 3;
+		
+	}
 	
-	switch (stage)
+	switch (t_phase)
         {
-         case 0:	//fight in physical realm
-			 //Not attackable
+         case 0: //SPAWNED
                 break;
-
-		 case 1:	//fight in twilight realm
-			 //shadow breath
-			 //dusk shroud
-			 //shadow consumption
-                 break;
-
-          case 2:	//fight in split realm
-			 //shadow breath
-			 //dusk shroud
-			 //shadow consumption 
-                 break;
-
+		 case 1: //FAIL
+             //HOW DID U GET HERE
+			 break;
+         case 2: //PHASE 2 TWILIGHT REALM
+			 bsw->doCast(SPELL_TWILIGHT_DIVISION);
+			 bsw->doCast(SPELL_DUSK_SHROUD_0);
+			 bsw->timedCast(SPELL_DARK_BREATH_0, uiDiff);
+			 bsw->timedCast(SPELL_SOUL_CONSUMPTION, uiDiff);
+             break;
+         case 3: //PHASE 3 BOTH REALMS
+			 bsw->doCast(SPELL_TWILIGHT_DIVISION);
+			 bsw->doCast(SPELL_DUSK_SHROUD_0);
+			 bsw->timedCast(SPELL_DARK_BREATH_0, uiDiff);
+			 bsw->timedCast(SPELL_SOUL_CONSUMPTION, uiDiff);
+             break;
           default:
-                 break;
+                break;
          }
+		
+		bsw->timedCast(SPELL_BERSERK, uiDiff);
 
         DoMeleeAttackIfReady();
     }

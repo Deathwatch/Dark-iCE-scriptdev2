@@ -21,12 +21,15 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
 {
     instance_ruby_sanctum(Map* pMap) : ScriptedInstance(pMap) 
     {
-        Initialize();
+        Difficulty = pMap->GetDifficulty();
+		Initialize();
     }
 
-    std::string strSaveData;
+    uint8 Difficulty;
+    bool needSave;
+	std::string strSaveData;
 
-    //Creatures GUID
+	//Creatures GUID
     uint32 m_auiEncounter[MAX_ENCOUNTERS+1];
     uint64 m_uiHalion_pGUID;
 	uint64 m_uiHalion_tGUID;
@@ -34,10 +37,52 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
     uint64 m_uiZarithianGUID;
     uint64 m_uiBaltharusGUID;
 
+	//object GUID
+	uint64 m_uiHalionFireRingGUID;
+	uint64 m_uiHalionPortal0GUID;
+	uint64 m_uiHalionPortal1GUID;
+	uint64 m_uiHalionPortal2GUID;
+	uint64 m_uiHalionPortal3GUID;
+
+	void OpenDoor(uint64 guid)
+    {
+        if(!guid) return;
+        GameObject* pGo = instance->GetGameObject(guid);
+        if(pGo) pGo->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
+    }
+
+    void CloseDoor(uint64 guid)
+    {
+        if(!guid) return;
+        GameObject* pGo = instance->GetGameObject(guid);
+        if(pGo) pGo->SetGoState(GO_STATE_READY);
+    }
+
     void Initialize()
     {
         for (uint8 i = 0; i < MAX_ENCOUNTERS; ++i)
             m_auiEncounter[i] = NOT_STARTED;
+
+		m_auiEncounter[0] = 0;
+
+        m_uiHalion_pGUID = 0;
+        m_uiHalion_tGUID = 0;
+        m_uiRagefireGUID = 0;
+        m_uiZarithianGUID = 0;
+        m_uiBaltharusGUID = 0;
+        m_uiHalionFireRingGUID = 0;
+        m_uiHalionPortal0GUID = 0;
+        m_uiHalionPortal1GUID = 0;
+		m_uiHalionPortal2GUID = 0;
+        m_uiHalionPortal3GUID = 0;
+    }
+
+	bool IsEncounterInProgress() const
+    {
+        for(uint8 i = 1; i < MAX_ENCOUNTERS-3 ; ++i)
+            if (m_auiEncounter[i] == IN_PROGRESS) return true;
+
+        return false;
     }
 
     void OnCreatureCreate(Creature* pCreature)
@@ -53,19 +98,53 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
             case NPC_RAGEFIRE:
                           m_uiRagefireGUID = pCreature->GetGUID();
                           break;
+            case NPC_ZARITHIAN:
+                          m_uiZarithianGUID = pCreature->GetGUID();
+                          break;
+            case NPC_BALTHARUS:
+                          m_uiBaltharusGUID = pCreature->GetGUID();
+                          break;
+
         }
     }
 
     void OnObjectCreate(GameObject* pGo)
     {
+		switch(pGo->GetEntry())
+        {
+            case GO_HALION_FIRE_RING:
+                         m_uiHalionFireRingGUID = pGo->GetGUID();
+                         break;
+			case GO_HALION_PORTAL_0:
+                         m_uiHalionPortal0GUID = pGo->GetGUID();
+                         break;
+			case GO_HALION_PORTAL_1:
+                         m_uiHalionPortal1GUID = pGo->GetGUID();
+                         break;
+			case GO_HALION_PORTAL_2:
+                         m_uiHalionPortal2GUID = pGo->GetGUID();
+                         break;
+			case GO_HALION_PORTAL_3:
+                         m_uiHalionPortal3GUID = pGo->GetGUID();
+                         break;
+        }
     }
 
     void SetData(uint32 uiType, uint32 uiData)
     {
         switch(uiType)
         {
-            case TYPE_HALION:   m_auiEncounter[3] = uiData; break;
-            case TYPE_RAGEFIRE: m_auiEncounter[1] = uiData; break;
+            case TYPE_BALTHARUS: m_auiEncounter[0] = uiData; break;
+			case TYPE_ZARITHIAN: m_auiEncounter[1] = uiData; break;
+			case TYPE_RAGEFIRE:  m_auiEncounter[2] = uiData; break;
+            case TYPE_HALION:
+				m_auiEncounter[3] = uiData;
+                if (uiData == IN_PROGRESS) CloseDoor(m_uiHalionFireRingGUID);
+                                      else OpenDoor(m_uiHalionFireRingGUID);
+                if (uiData == DONE)  {
+                                     OpenDoor(m_uiHalionFireRingGUID);
+                                     }
+                break;
         }
 
         if (uiData == DONE)
@@ -93,8 +172,11 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
     {
         switch(uiType)
         {
-             case TYPE_HALION:       return m_auiEncounter[3];
-             case TYPE_RAGEFIRE:     return m_auiEncounter[2];
+            case TYPE_DIFFICULTY:    return Difficulty;
+			case TYPE_BALTHARUS:	 return m_auiEncounter[0];
+			case TYPE_ZARITHIAN:	 return m_auiEncounter[1];
+			case TYPE_RAGEFIRE:		 return m_auiEncounter[2];
+            case TYPE_HALION:		 return m_auiEncounter[3];
         }
         return 0;
     }
@@ -103,9 +185,12 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
     {
         switch(uiData)
         {
-            case NPC_HALION_P:   return m_uiHalion_pGUID;
+			case NPC_BALTHARUS:	 return m_uiBaltharusGUID;
+			case NPC_ZARITHIAN:	 return m_uiZarithianGUID;
+			case NPC_RAGEFIRE:   return m_uiRagefireGUID;
+			case NPC_HALION_P:   return m_uiHalion_pGUID;
 			case NPC_HALION_T:   return m_uiHalion_tGUID;
-            case NPC_RAGEFIRE: return m_uiRagefireGUID;
+            
         }
         return 0;
     }

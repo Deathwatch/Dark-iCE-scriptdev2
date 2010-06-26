@@ -428,7 +428,7 @@ bool GOHello_go_foam_sword_rack(Player* pPlayer, GameObject* pGo)
 
 enum eHives
 {
-    QUEST_HIVE_IN_THE_TOWER                       = 9544,
+    QUEST_HIVE_IN_THE_TOWER                       = 1126,
     NPC_HIVE_AMBUSHER                             = 13301
 };
 
@@ -440,6 +440,23 @@ bool GOHello_go_hive_pod(Player *pPlayer, GameObject *pGO)
     return true;
 }
 
+/*######
+## go_bristlelimb_cage
+#####*/
+enum Prophecy
+{
+  QUEST_PROPHECY_OF_AKIDA = 9544
+};
+
+bool GOHello_go_bristlelimb_cage(Player* p, GameObject* g)
+{
+    if (p->GetQuestStatus(QUEST_PROPHECY_OF_AKIDA == QUEST_STATUS_INCOMPLETE))
+    {
+        g->UseDoorOrButton();
+        p->KilledMonsterCredit(17375, 0);
+    }
+    return true;
+}
 
 void AddSC_go_scripts()
 {
@@ -549,5 +566,9 @@ void AddSC_go_scripts()
     newscript->Name = "go_hive_pod";
     newscript->pGOHello = &GOHello_go_hive_pod;
     newscript->RegisterSelf();
-
+    
+    newscript = new Script;
+    newscript->Name = "go_bristlelimb_cage";
+    newscript->pGOHello = &GOHello_go_bristlelimb_cage;
+    newscript->RegisterSelf();
 }

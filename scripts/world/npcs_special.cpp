@@ -1768,7 +1768,7 @@ struct MANGOS_DLL_DECL npc_valkyr_battle_maidenAI : public ScriptedAI
                     FlyBackTimer = 500;
                     break;
                 case 1:
-                    plr->GetClosePoint(x,y,z, m_creature->GetObjectSize());
+                    plr->GetClosePoint(x,y,z, m_creature->GetObjectBoundingRadius());
                     z += 2.5; x -= 2; y -= 1.5;
                     m_creature->GetMotionMaster()->MovePoint(0, x, y, z);
                     m_creature->SetUInt64Value(UNIT_FIELD_TARGET, plr->GetGUID());

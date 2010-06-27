@@ -72,3 +72,4 @@ bin/*
 *.ncb
 *.suo
 *.sdf
+*.opensdf

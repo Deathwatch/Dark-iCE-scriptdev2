@@ -362,7 +362,7 @@ struct MANGOS_DLL_DECL boss_ymironAI : public ScriptedAI
                 if (Creature* pKingSpirit = (Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(Kings[m_uiCurrentKing][0])))
                 {
                     float x, y, z;
-                    pKingSpirit->GetClosePoint(x, y, z, pKingSpirit->GetObjectSize(), 2*INTERACTION_DISTANCE, pKingSpirit->GetAngle(m_creature));
+                    pKingSpirit->GetClosePoint(x, y, z, pKingSpirit->GetObjectBoundingRadius(), 2*INTERACTION_DISTANCE, pKingSpirit->GetAngle(m_creature));
                     // z hardcoded
                     m_creature->GetMotionMaster()->MovePoint(0, x, y, 104.76f);
                     bIsInRun = true;

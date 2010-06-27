@@ -414,7 +414,7 @@ scripts/northrend/icecrown_citadel/frozen_halls/forge_of_souls/boss_bronjahm.cpp
 scripts/northrend/icecrown_citadel/frozen_halls/forge_of_souls/boss_devourer_of_souls.cpp \
 scripts/northrend/icecrown_citadel/frozen_halls/forge_of_souls/def_forge.h \
 scripts/northrend/icecrown_citadel/frozen_halls/forge_of_souls/trash_forge_of_souls \
-scripts/northrend/icecrown_citadel/frozen_halls/forge_of_souls/forge_of_soul.cpp \
+scripts/northrend/icecrown_citadel/frozen_halls/forge_of_souls/forge_of_souls.cpp \
 scripts/northrend/icecrown_citadel/frozen_halls/forge_of_souls/instance_forge_of_souls.cpp \
 scripts/northrend/icecrown_citadel/icecrown_citadel/blood_prince_council.cpp \
 scripts/northrend/icecrown_citadel/icecrown_citadel/boss_blood_queen_lanathel.cpp \

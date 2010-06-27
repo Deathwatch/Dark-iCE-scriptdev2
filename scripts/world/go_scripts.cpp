@@ -564,11 +564,11 @@ void AddSC_go_scripts()
 
 	newscript = new Script;
     newscript->Name = "go_hive_pod";
-    newscript->pGOHello = &GOHello_go_hive_pod;
+    newscript->pGOHello =           &GOHello_go_hive_pod;
     newscript->RegisterSelf();
     
     newscript = new Script;
     newscript->Name = "go_bristlelimb_cage";
-    newscript->pGOHello = &GOHello_go_bristlelimb_cage;
+    newscript->pGOHello =           &GOHello_go_bristlelimb_cage;
     newscript->RegisterSelf();
 }

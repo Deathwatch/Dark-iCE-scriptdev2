@@ -416,6 +416,7 @@ struct MANGOS_DLL_DECL  mob_cult_adherentAI : public ScriptedAI
     void Reset()
     {
         bsw->resetTimers();
+		m_creature->SetRespawnDelay(DAY);
         bsw->doCast(SPELL_SUMMON_VISUAL);
         bone = false;
     }
@@ -469,6 +470,7 @@ struct MANGOS_DLL_DECL  mob_cult_fanaticAI : public ScriptedAI
     void Reset()
     {
         bsw->resetTimers();
+		m_creature->SetRespawnDelay(DAY);
         bone = false;
     }
 

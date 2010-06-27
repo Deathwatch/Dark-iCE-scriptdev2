@@ -613,8 +613,8 @@ void AddSC_eversong_woods()
     pNewScript->pQuestAccept = &QuestAccept_unexpected_results;
     pNewScript->RegisterSelf();
 
-    newscript = new Script;
-    newscript->Name= "npc_infused_crystal";
-    newscript->GetAI = &GetAI_npc_infused_crystal;
-    newscript->RegisterSelf();
+    pNewScript = new Script;
+    pNewScript->Name= "npc_infused_crystal";
+    pNewScript->GetAI = &GetAI_npc_infused_crystal;
+    pNewScript->RegisterSelf();
 }

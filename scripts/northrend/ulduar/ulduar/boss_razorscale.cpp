@@ -321,9 +321,9 @@ CreatureAI* GetAI_mob_dark_rune_guardian(Creature* pCreature)
 float RazorscaleAddX[4];
 float RazorscaleAddY[4];
 float RazorscaleAddZ[4];
-float RazorscaleBossX[2];
-float RazorscaleBossY[2];
-float RazorscaleBossZ[2];
+float RazorscaleBossX[3];
+float RazorscaleBossY[3];
+float RazorscaleBossZ[3];
 
 //razorscale
 struct MANGOS_DLL_DECL boss_razorscaleAI : public ScriptedAI

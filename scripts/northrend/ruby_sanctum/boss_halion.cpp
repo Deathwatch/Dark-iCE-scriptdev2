@@ -411,7 +411,7 @@ struct MANGOS_DLL_DECL boss_halion_tAI : public ScriptedAI
 
 struct MANGOS_DLL_DECL mob_flameAI : public ScriptedAI
 {
-    mob_coldflameAI(Creature *pCreature) : ScriptedAI(pCreature)
+    mob_flameAI(Creature *pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
         bsw = new BossSpellWorker(this);

@@ -52,8 +52,10 @@ enum
     SPELL_CORPOREALITY_80D			= 74835,	// Damage dealt reduced by 100% & Damage taken reduced by 200%
     SPELL_CORPOREALITY_100D			= 74836,	// Damage dealt reduced by 200% & Damage taken reduced by 400% 
 	//METEOR STRIKE
-	SPELL_METEOR_STRIKE				= 75877,	// Inflicts 18,750 to 21,250 Fire damage to enemies within 12 yards of the targeted area. Takes about 5 seconds to land.
+	SPELL_METEOR_STRIKE				= 75877,	// Script Start
+	SPELL_METEOR					= 74637,	// Inflicts 18,750 to 21,250 Fire damage to enemies within 12 yards of the targeted area. Takes about 5 seconds to land.
 	SPELL_METEOR_IMPACT_ZONE		= 74641,	// IMPACT ZONE FOR METEOR
+	SPELL_METEOR_LAND				= 74648,	// LANDING EFFECT
 	SPELL_METEOR_FLAME				= 74718,	// FLAME FROM METEOR
     //N10
     SPELL_FLAME_BREATH_0			= 74525,	// Inflicts 17,500 to 22,500 Fire damage to players in front of Halion
@@ -71,11 +73,11 @@ enum
     NPC_LIVING_EMBER				= 40683,
     NPC_LIVING_INFERNO				= 40681,
 	//Summons
-    NPC_METEOR						= 38711,	//casts "impact zone then meteor
-    NPC_METEORFLAME_0				= 36672,	//meteor flame 0
-	NPC_METEORFLAME_1				= 36673,	//meteor flame 1
-	NPC_METEORFLAME_2				= 36674,	//meteor flame 2
-	NPC_METEORFLAME_3				= 36675,	//meteor flame 3
+    NPC_METEOR_STRIKE				= 40029,	//casts "impact zone" then meteor
+    NPC_METEORFLAME_0				= 36673,	//meteor flame 0
+	NPC_METEORFLAME_1				= 36674,	//meteor flame 1
+	NPC_METEORFLAME_2				= 36675,	//meteor flame 2
+	NPC_METEORFLAME_3				= 36676,	//meteor flame 3
 	NPC_SHADOW_PULSAR_N				= 40083,	//spinning orb N spawn
     NPC_SHADOW_PULSAR_S				= 40100,	//spinning orb S spawn
         
@@ -162,9 +164,11 @@ struct MANGOS_DLL_DECL boss_halion_pAI : public ScriptedAI
     {
         if (intro)
             return;
-
+		else
+		{
         DoScriptText(-1666100,m_creature);
         intro = true;
+		}
     }
 
     void JustReachedHome()
@@ -187,7 +191,8 @@ struct MANGOS_DLL_DECL boss_halion_pAI : public ScriptedAI
                 m_pInstance->SetData(TYPE_HALION, DONE);
         else
             m_pInstance->SetData(TYPE_HALION, SPECIAL);
-        m_pInstance->SetData(DATA_HEALTH_HALION_P, 0);
+		
+		m_pInstance->SetData(DATA_HEALTH_HALION_P, 0);
     }
 
     void KilledUnit(Unit* pVictim)
@@ -261,9 +266,18 @@ struct MANGOS_DLL_DECL boss_halion_pAI : public ScriptedAI
             case 1: //PHASE 1 PHYSICAL REALM
                 bsw->timedCast(SPELL_FLAME_BREATH_0, uiDiff);
                 bsw->timedCast(SPELL_FIERY_COMBUSTION, uiDiff);
-                /* Needs Script
-                bsw->timedCast(SPELL_METEOR_STRIKE, uiDiff); 
-                */
+                /* Meteor Needs Test */
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1))
+                            if (bsw->doCast(SPELL_METEOR, pTarget) == CAST_OK)
+                              {
+								DoScriptText(-1666106,m_creature,pTarget);
+                                  
+								float fPosX, fPosY, fPosZ;
+								m_creature->GetPosition(fPosX, fPosY, fPosZ);
+								if (Unit* pMeteor = bsw->doSummon(NPC_METEOR_STRIKE, fPosX, fPosY, fPosZ))
+									pMeteor->AddThreat(pTarget, 100.0f);
+                              }; 
+                
                 break;
             case 2: //DEPHASE HALION FORCE TO TWILIGHT REALM
                 //setflag unattackable, unselectable, remove combat
@@ -319,7 +333,6 @@ struct MANGOS_DLL_DECL boss_halion_tAI : public ScriptedAI
 
         m_pInstance->SetData(TYPE_HALION, FAIL);
         m_pInstance->SetData(DATA_HEALTH_HALION_T, m_creature->GetMaxHealth());
-        m_creature->ForcedDespawn();
     }
 
     void JustDied(Unit* pKiller)
@@ -409,6 +422,121 @@ struct MANGOS_DLL_DECL boss_halion_tAI : public ScriptedAI
     }
 };
 
+CreatureAI* GetAI_boss_halion_t(Creature* pCreature)
+{
+    return new boss_halion_tAI(pCreature);
+}
+
+struct MANGOS_DLL_DECL mob_meteorAI : public ScriptedAI
+{
+    mob_meteorAI(Creature *pCreature) : ScriptedAI(pCreature)
+    {
+        m_pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
+        bsw = new BossSpellWorker(this);
+        Reset();
+    }
+
+    ScriptedInstance *m_pInstance;
+    BossSpellWorker* bsw;
+    uint32 m_uiTimer;
+
+    void Reset()
+    {
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+		m_uiTimer = 5000;
+	}
+
+    void AttackStart(Unit *who)
+    {
+        //ignore all attackstart commands
+        return;
+    }
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        if (!m_pInstance)
+            return;
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+		bsw->doCast(SPELL_METEOR);
+        bsw->timedCast(SPELL_METEOR_IMPACT_ZONE, uiDiff);
+		bsw->timedCast(SPELL_METEOR_LAND, uiDiff);
+
+		if (m_uiTimer < uiDiff)
+            {               
+				switch (urand(0,3)) 
+				{
+					case 0:
+						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[0][0], m_xflame[0][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[1][0], m_xflame[1][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[2][0], m_xflame[2][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                        m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[3][0], m_xflame[3][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[4][0], m_xflame[4][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[5][0], m_xflame[5][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[6][0], m_xflame[6][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[7][0], m_xflame[7][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[8][0], m_xflame[8][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                        m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[9][0], m_xflame[9][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[10][0], m_xflame[10][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[11][0], m_xflame[11][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						break;
+                    case 1:
+						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[0][2], m_xflame[0][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[1][2], m_xflame[1][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[2][2], m_xflame[2][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                        m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[3][2], m_xflame[3][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[4][2], m_xflame[4][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[5][2], m_xflame[5][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[6][2], m_xflame[6][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[7][2], m_xflame[7][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[8][2], m_xflame[8][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                        m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[9][2], m_xflame[9][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[10][2], m_xflame[10][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[11][2], m_xflame[11][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                        break;
+                    case 2:
+						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[0][4], m_xflame[0][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[1][4], m_xflame[1][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[2][4], m_xflame[2][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                        m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[3][4], m_xflame[3][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[4][4], m_xflame[4][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[5][4], m_xflame[5][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[6][4], m_xflame[6][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[7][4], m_xflame[7][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[8][4], m_xflame[8][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                        m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[9][4], m_xflame[9][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[10][4], m_xflame[10][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[11][4], m_xflame[11][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                        break;
+					case 3:
+						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[0][6], m_xflame[0][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[1][6], m_xflame[1][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[2][6], m_xflame[2][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                        m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[3][6], m_xflame[3][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[4][6], m_xflame[4][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[5][6], m_xflame[5][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[6][6], m_xflame[6][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[7][6], m_xflame[7][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[8][6], m_xflame[8][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                        m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[9][6], m_xflame[9][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[10][6], m_xflame[10][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+						m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[11][6], m_xflame[11][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                        break;
+                                                   
+				};
+				
+			m_uiTimer = 998000;
+            }
+			else
+                    m_uiTimer -= uiDiff;
+	}
+};
+CreatureAI* GetAI_mob_meteor(Creature* pCreature)
+{
+    return new mob_meteorAI(pCreature);
+}
 struct MANGOS_DLL_DECL mob_flameAI : public ScriptedAI
 {
     mob_flameAI(Creature *pCreature) : ScriptedAI(pCreature)
@@ -420,13 +548,11 @@ struct MANGOS_DLL_DECL mob_flameAI : public ScriptedAI
 
     ScriptedInstance *m_pInstance;
     BossSpellWorker* bsw;
-    float fPosX, fPosY, fPosZ;
 
     void Reset()
     {
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-        m_creature->GetPosition(fPosX, fPosY, fPosZ);
     }
 
     void AttackStart(Unit *who)
@@ -439,16 +565,13 @@ struct MANGOS_DLL_DECL mob_flameAI : public ScriptedAI
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
+
+		bsw->doCast(SPELL_METEOR_FLAME);
     }
 };
 CreatureAI* GetAI_mob_flame(Creature* pCreature)
 {
     return new mob_flameAI(pCreature);
-}
-
-CreatureAI* GetAI_boss_halion_t(Creature* pCreature)
-{
-    return new boss_halion_tAI(pCreature);
 }
 
 void AddSC_boss_halion()
@@ -468,5 +591,10 @@ void AddSC_boss_halion()
 	newscript = new Script;
     newscript->Name = "mob_flame";
     newscript->GetAI = &GetAI_mob_flame;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "mob_meteor";
+    newscript->GetAI = &GetAI_mob_meteor;
     newscript->RegisterSelf();
 }

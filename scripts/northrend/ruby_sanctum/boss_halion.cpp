@@ -72,10 +72,10 @@ enum
     NPC_LIVING_INFERNO				= 40681,
 	//Summons
     NPC_METEOR						= 38711,	//casts "impact zone then meteor
-    NPC_METEORFLAME_N				= 36672,	//meteor flame N
-	NPC_METEORFLAME_S				= 36672,	//meteor flame S
-	NPC_METEORFLAME_E				= 36672,	//meteor flame E
-	NPC_METEORFLAME_W				= 36672,	//meteor flame W
+    NPC_METEORFLAME_0				= 36672,	//meteor flame 0
+	NPC_METEORFLAME_1				= 36673,	//meteor flame 1
+	NPC_METEORFLAME_2				= 36674,	//meteor flame 2
+	NPC_METEORFLAME_3				= 36675,	//meteor flame 3
 	NPC_SHADOW_PULSAR_N				= 40083,	//spinning orb N spawn
     NPC_SHADOW_PULSAR_S				= 40100,	//spinning orb S spawn
         
@@ -94,20 +94,20 @@ enum
 
 static float m_xflame[12][8]=
 {
-    //RND0			 RND1		     RND2			 RND3
-	//x		//y		//x		//y		//x		//y		//x		//y
+    //RND0			RND1		    RND2			RND3
+	//x		y		x		y		x		y		x		y
 	{2.0f,	0.0f,	2.0f,	1.0f,	1.5f,	1.5f,	1.0f, 	2.0f},		//NPC0 SPAWN1
     {4.5f,	0.0f,	4.0f,	2.0f,	3.0f,	3.0f,	2.0f, 	4.0f},		//NPC0 SPAWN2 
     {7.5f,	0.0f,	6.5f,	3.5f,	4.5f,	4.5f,	3.5f, 	6.5f},		//NPC0 SPAWN3
-	//x		//y		//x		//y		//x		//y		//x		//y
+	//x		y		x		y		x		y		x		y
     {0.0f,	2.0f,	-2.0f,	-1.0f,	-1.5f,	1.5f,	-1.0f, 	2.0f},		//NPC1 SPAWN1
     {0.0f,	4.5f,	-4.0f,	-2.0f,	-3.0f,	3.0f, 	-2.0f, 	4.0f},		//NPC1 SPAWN2
     {0.0f,	7.5f,	-6.5f,	-3.5f,	-4.5f,	4.5f, 	-3.5f, 	6.5f},		//NPC1 SPAWN3
-	//x		//y		//x		//y		//x		//y		//x		//y
+	//x		y		x		y		x		y		x		y
     {-2.0f, 0.0f,	1.0f,	2.0f,	-1.5f,	-1.5f,	-1.0f, 	-2.0f},		//NPC2 SPAWN1
-    {-4.5f, 0.0f,	2.0f,	4.0f,	-3.0f,	-3.0f,	-2.0f, 	-4.0ff},	//NPC2 SPAWN2
+    {-4.5f, 0.0f,	2.0f,	4.0f,	-3.0f,	-3.0f,	-2.0f, 	-4.0f},		//NPC2 SPAWN2
     {-7.5f,	0.0f,	3.5f,	6.5f,	-4.5f,	-4.5f,	-3.5f, 	-6.5f},		//NPC2 SPAWN3
-	//x		//y		//x		//y		//x		//y		//x		//y
+	//x		y		x		y		x		y		x		y
     {0.0f,	-2.0f,	-1.0f,	-2.0f,	1.5f,	-1.5f, 	1.0f, 	-2.0f},		//NPC3 SPAWN1
     {0.0f,	-4.5f,	-2.0f,	-4.0f,	3.0f,	-3.0f, 	2.5f, 	-4.0f},		//NPC3 SPAWN2
     {0.0f,	-7.5f,	-3.5f,	-6.5f,	4.5f,	-4.5f, 	3.5f, 	-6.5f},		//NPC3 SPAWN3
@@ -409,7 +409,7 @@ struct MANGOS_DLL_DECL boss_halion_tAI : public ScriptedAI
     }
 };
 
-struct MANGOS_DLL_DECL mob_coldflameAI : public ScriptedAI
+struct MANGOS_DLL_DECL mob_flameAI : public ScriptedAI
 {
     mob_coldflameAI(Creature *pCreature) : ScriptedAI(pCreature)
     {
@@ -419,7 +419,6 @@ struct MANGOS_DLL_DECL mob_coldflameAI : public ScriptedAI
     }
 
     ScriptedInstance *m_pInstance;
-    uint32 m_uiRangeCheck_Timer;
     BossSpellWorker* bsw;
     float fPosX, fPosY, fPosZ;
 
@@ -428,20 +427,6 @@ struct MANGOS_DLL_DECL mob_coldflameAI : public ScriptedAI
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         m_creature->GetPosition(fPosX, fPosY, fPosZ);
-        m_creature->GetRandomPoint(fPosX, fPosY, fPosZ, urand(150, 200), fPosX, fPosY, fPosZ);
-        m_creature->GetMotionMaster()->MovePoint(1, fPosX, fPosY, fPosZ);
-        SetCombatMovement(false);
-        m_creature->SetSpeedRate(MOVE_RUN, 0.8f);
-        bsw->doCast(SPELL_COLD_FLAME_0);
-    }
-
-    void MovementInform(uint32 type, uint32 id)
-    {
-        if(!m_pInstance) return;
-        if(type != POINT_MOTION_TYPE) return;
-        if(id != 1)
-             m_creature->GetMotionMaster()->MovePoint(1, fPosX, fPosY, fPosZ);
-             else m_creature->ForcedDespawn();
     }
 
     void AttackStart(Unit *who)
@@ -452,11 +437,15 @@ struct MANGOS_DLL_DECL mob_coldflameAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff)
     {
-        bsw->timedCast(SPELL_COLD_FLAME_0, uiDiff);
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
     }
 };
+CreatureAI* GetAI_mob_flame(Creature* pCreature)
+{
+    return new mob_flameAI(pCreature);
+}
+
 CreatureAI* GetAI_boss_halion_t(Creature* pCreature)
 {
     return new boss_halion_tAI(pCreature);
@@ -474,5 +463,10 @@ void AddSC_boss_halion()
     newscript = new Script;
     newscript->Name = "boss_halion_t";
     newscript->GetAI = &GetAI_boss_halion_t;
+    newscript->RegisterSelf();
+
+	newscript = new Script;
+    newscript->Name = "mob_flame";
+    newscript->GetAI = &GetAI_mob_flame;
     newscript->RegisterSelf();
 }

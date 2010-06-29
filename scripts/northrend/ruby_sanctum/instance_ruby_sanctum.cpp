@@ -147,12 +147,11 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
                 m_auiEncounter[3] = uiData;
                 if (uiData == IN_PROGRESS)
                     CloseDoor(m_uiHalionFireRingGUID);
-                else OpenDoor(m_uiHalionFireRingGUID);
+                else
+                    OpenDoor(m_uiHalionFireRingGUID);
 
                 if (uiData == DONE)
-                {
                     OpenDoor(m_uiHalionFireRingGUID);
-                }
                 break;
         }
 

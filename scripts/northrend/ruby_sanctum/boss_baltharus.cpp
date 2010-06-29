@@ -44,7 +44,9 @@ struct MANGOS_DLL_DECL boss_baltharusAI : public ScriptedAI
 
     void Reset()
     {
-        if(!pInstance) return;
+        if(!pInstance)
+            return;
+
         pInstance->SetData(TYPE_BALTHARUS, NOT_STARTED);
         bsw->resetTimers();
     }
@@ -55,7 +57,8 @@ struct MANGOS_DLL_DECL boss_baltharusAI : public ScriptedAI
 
     void MovementInform(uint32 type, uint32 id)
     {
-        if (type != POINT_MOTION_TYPE) return;
+        if (type != POINT_MOTION_TYPE)
+            return;
     }
 
     void KilledUnit(Unit* pVictim)
@@ -72,7 +75,8 @@ struct MANGOS_DLL_DECL boss_baltharusAI : public ScriptedAI
 
     void JustReachedHome()
     {
-        if (pInstance) pInstance->SetData(TYPE_BALTHARUS, FAIL);
+        if (pInstance)
+            pInstance->SetData(TYPE_BALTHARUS, FAIL);
     }
 
     void JustSummoned(Creature* summoned)
@@ -81,12 +85,14 @@ struct MANGOS_DLL_DECL boss_baltharusAI : public ScriptedAI
 
     void Aggro(Unit *who) 
     {
-        if(pInstance) pInstance->SetData(TYPE_BALTHARUS, IN_PROGRESS);
+        if(pInstance)
+            pInstance->SetData(TYPE_BALTHARUS, IN_PROGRESS);
     }
 
     void JustDied(Unit *killer)
     {
-        if(pInstance) pInstance->SetData(TYPE_BALTHARUS, DONE);
+        if(pInstance)
+            pInstance->SetData(TYPE_BALTHARUS, DONE);
     }
 
     void UpdateAI(const uint32 diff)

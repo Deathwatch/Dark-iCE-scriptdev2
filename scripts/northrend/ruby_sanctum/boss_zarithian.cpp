@@ -44,7 +44,9 @@ struct MANGOS_DLL_DECL boss_zarithianAI : public ScriptedAI
 
     void Reset()
     {
-        if(!pInstance) return;
+        if(!pInstance)
+            return;
+
         pInstance->SetData(TYPE_ZARITHIAN, NOT_STARTED);
         bsw->resetTimers();
     }
@@ -55,7 +57,8 @@ struct MANGOS_DLL_DECL boss_zarithianAI : public ScriptedAI
 
     void MovementInform(uint32 type, uint32 id)
     {
-        if (type != POINT_MOTION_TYPE) return;
+        if (type != POINT_MOTION_TYPE)
+            return;
     }
 
     void KilledUnit(Unit* pVictim)
@@ -72,7 +75,8 @@ struct MANGOS_DLL_DECL boss_zarithianAI : public ScriptedAI
 
     void JustReachedHome()
     {
-        if (pInstance) pInstance->SetData(TYPE_ZARITHIAN, FAIL);
+        if (pInstance)
+            pInstance->SetData(TYPE_ZARITHIAN, FAIL);
     }
 
     void JustSummoned(Creature* summoned)
@@ -81,12 +85,14 @@ struct MANGOS_DLL_DECL boss_zarithianAI : public ScriptedAI
 
     void Aggro(Unit *who) 
     {
-        if(pInstance) pInstance->SetData(TYPE_ZARITHIAN, IN_PROGRESS);
+        if(pInstance)
+            pInstance->SetData(TYPE_ZARITHIAN, IN_PROGRESS);
     }
 
     void JustDied(Unit *killer)
     {
-        if(pInstance) pInstance->SetData(TYPE_ZARITHIAN, DONE);
+        if(pInstance)
+            pInstance->SetData(TYPE_ZARITHIAN, DONE);
     }
 
     void UpdateAI(const uint32 diff)
@@ -99,7 +105,6 @@ struct MANGOS_DLL_DECL boss_zarithianAI : public ScriptedAI
         DoMeleeAttackIfReady();
     }
 };
-
 
 CreatureAI* GetAI_boss_zarithian(Creature* pCreature)
 {

@@ -29,46 +29,55 @@ enum
     //SPELLS
     //All
     SPELL_TWILIGHT_PRECISION        = 78243,	// Increases Halion's chance to hit by 5% and decreases all players' chance to dodge by 20%
-    SPELL_TWILIGHT_DIVISION         = 75063,	// Phases the caster, allowing him to exist and act simultaneously in both the material and Twilight realms.
-    SPELL_BERSERK			        = 26663,	// Increases the caster's attack and movement speeds by 150% and all damage it deals by 500% for 5 min.  Also grants immunity to Taunt effects.
-    SPELL_CORPREALITY_EVEN			= 74826,	// Deals & receives normal damage
-    SPELL_CORPREALITY_20I			= 74827,	// Damage dealt increased by 10% & Damage taken increased by 15%
-    SPELL_CORPREALITY_40I			= 74828,	// Damage dealt increased by 30% & Damage taken increased by 50%
-    SPELL_CORPREALITY_60I			= 74829,	// Damage dealt increased by 60% & Damage taken increased by 100%
-    SPELL_CORPREALITY_80I			= 74830,	// Damage dealt increased by 100% & Damage taken increased by 200%
-    SPELL_CORPREALITY_100I			= 74831,	// Damage dealt increased by 200% & Damage taken increased by 400%
-    SPELL_CORPREALITY_20D			= 74832,	// Damage dealt reduced by 10% & Damage taken reduced by 15%
-    SPELL_CORPREALITY_40D			= 74833,	// Damage dealt reduced by 30% & Damage taken reduced by 50%
-    SPELL_CORPREALITY_60D			= 74834,	// Damage dealt reduced by 60% & Damage taken reduced by 100%
-    SPELL_CORPREALITY_80D			= 74835,	// Damage dealt reduced by 100% & Damage taken reduced by 200%
-    SPELL_CORPREALITY_100D			= 74836,	// Damage dealt reduced by 200% & Damage taken reduced by 400%
-    SPELL_METEOR_STRIKE				= 75877,	// Inflicts 18,750 to 21,250 Fire damage to enemies within 12 yards of the targeted area. Takes about 5 seconds to land.
+	SPELL_BERSERK			        = 26663,	// Increases the caster's attack and movement speeds by 150% and all damage it deals by 500% for 5 min.  Also grants immunity to Taunt effects.
+	SPELL_START_PHASE2				= 74808,	// Phases the caster into the Twilight realm, leaving behind a large rift.
+	SPELL_TWILIGHT_ENTER			= 74807,	// Phases the caster into the Twilight realm
+
+	//NEED SCRIPT
+	SPELL_TAIL_LASH					= 74531,	// A sweeping tail strike hits all enemies behind the caster, inflicting 3063 to 3937 damage and stunning them for 2 sec.
+	SPELL_TWILIGHT_DIVISION         = 75063,	// Phases the caster, allowing him to exist and act simultaneously in both the material and Twilight realms.
     SPELL_FIERY_COMBUSTION			= 74562,	// Inflicts 4,000 Fire damage every 2 seconds for 30 seconds to a random raider. Every time Fiery Combustion does damage, it applies a stackable Mark of Combustion.
     SPELL_SOUL_CONSUMPTION			= 74792,	// Inflicts 4,000 Shadow damage every 2 seconds for 30 seconds to a random raider. Every time Soul Consumption does damage, it applies a stackable Mark of Consumption.
     SPELL_TWILIGHT_CUTTER			= 77844,	// Inflicts 13,875 to 16,125 Shadow damage every second to players touched by the shadow beam
-
+	//CORPOREALITY
+	SPELL_CORPOREALITY_EVEN			= 74826,	// Deals & receives normal damage
+    SPELL_CORPOREALITY_20I			= 74827,	// Damage dealt increased by 10% & Damage taken increased by 15%
+    SPELL_CORPOREALITY_40I			= 74828,	// Damage dealt increased by 30% & Damage taken increased by 50%
+    SPELL_CORPOREALITY_60I			= 74829,	// Damage dealt increased by 60% & Damage taken increased by 100%
+    SPELL_CORPOREALITY_80I			= 74830,	// Damage dealt increased by 100% & Damage taken increased by 200%
+    SPELL_CORPOREALITY_100I			= 74831,	// Damage dealt increased by 200% & Damage taken increased by 400%
+    SPELL_CORPOREALITY_20D			= 74832,	// Damage dealt reduced by 10% & Damage taken reduced by 15%
+    SPELL_CORPOREALITY_40D			= 74833,	// Damage dealt reduced by 30% & Damage taken reduced by 50%
+    SPELL_CORPOREALITY_60D			= 74834,	// Damage dealt reduced by 60% & Damage taken reduced by 100%
+    SPELL_CORPOREALITY_80D			= 74835,	// Damage dealt reduced by 100% & Damage taken reduced by 200%
+    SPELL_CORPOREALITY_100D			= 74836,	// Damage dealt reduced by 200% & Damage taken reduced by 400% 
+	//METEOR STRIKE
+	SPELL_METEOR_STRIKE				= 75877,	// Inflicts 18,750 to 21,250 Fire damage to enemies within 12 yards of the targeted area. Takes about 5 seconds to land.
+	SPELL_METEOR_IMPACT_ZONE		= 74641,	// IMPACT ZONE FOR METEOR
+	SPELL_METEOR_FLAME				= 74718,	// FLAME FROM METEOR
     //N10
     SPELL_FLAME_BREATH_0			= 74525,	// Inflicts 17,500 to 22,500 Fire damage to players in front of Halion
     SPELL_DARK_BREATH_0				= 74806,	// Inflicts 17,500 to 22,500 Shadow damage to players in front of Halion
     SPELL_DUSK_SHROUD_0				= 75484,	// Inflicts 3,000 Shadow damage every 2 seconds to everyone in the Twilight Realm
-
     //H10 & N25
     SPELL_FLAME_BREATH_1			= 74527,	// Inflicts 26,250 to 33,750 Fire damage to players in front of Halion
     SPELL_DARK_BREATH_1				= 74806,	// Inflicts 26,250 to 33,750 Shadow damage to players in front of Halion
     SPELL_DUSK_SHROUD_1				= 75485,	// Inflicts 4,500 Shadow damage every 2 seconds to everyone in the Twilight Realm
-
     //H25
     SPELL_FLAME_BREATH_2			= 74404,	// Inflicts 17,500 to 22,500 Fire damage to players in front of Halion
     SPELL_DARK_BREATH_2				= 75956,	// Inflicts 33,688 to 43,312 Shadow damage to players in front of Halion
     SPELL_DUSK_SHROUD_2				= 75486,	// Inflicts 6,000 Shadow damage every 2 seconds to everyone in the Twilight Realm
-    
     //NPC
     NPC_LIVING_EMBER				= 40683,
     NPC_LIVING_INFERNO				= 40681,
-    NPC_SHADOW_PULSAR_0				= 40083,
-    NPC_SHADOW_PULSAR_1				= 40100,
-    NPC_SHADOW_PULSAR_2				= 40468,
-    NPC_SHADOW_PULSAR_3				= 40469,
+	//Summons
+    NPC_METEOR						= 38711,	//casts "impact zone then meteor
+    NPC_METEORFLAME_N				= 36672,	//meteor flame N
+	NPC_METEORFLAME_S				= 36672,	//meteor flame S
+	NPC_METEORFLAME_E				= 36672,	//meteor flame E
+	NPC_METEORFLAME_W				= 36672,	//meteor flame W
+	NPC_SHADOW_PULSAR_N				= 40083,	//spinning orb N spawn
+    NPC_SHADOW_PULSAR_S				= 40100,	//spinning orb S spawn
         
     //SAYS
     SAY_HALION_SPAWN                = -1666100, //17499 Meddlesome insects, you're too late! The Ruby Sanctum is lost.
@@ -83,49 +92,45 @@ enum
     SAY_HALION_PHASE_3	            = -1666109, //17508 I am the light AND the darkness! Cower mortals before the Herald of Deathwing!
 };
 
-struct Waypoint
+static float m_xflame[12][8]=
 {
-    float m_fX, m_fY, m_fZ;
+    //RND0			 RND1		     RND2			 RND3
+	//x		//y		//x		//y		//x		//y		//x		//y
+	{2.0f,	0.0f,	2.0f,	1.0f,	1.5f,	1.5f,	1.0f, 	2.0f},		//NPC0 SPAWN1
+    {4.5f,	0.0f,	4.0f,	2.0f,	3.0f,	3.0f,	2.0f, 	4.0f},		//NPC0 SPAWN2 
+    {7.5f,	0.0f,	6.5f,	3.5f,	4.5f,	4.5f,	3.5f, 	6.5f},		//NPC0 SPAWN3
+	//x		//y		//x		//y		//x		//y		//x		//y
+    {0.0f,	2.0f,	-2.0f,	-1.0f,	-1.5f,	1.5f,	-1.0f, 	2.0f},		//NPC1 SPAWN1
+    {0.0f,	4.5f,	-4.0f,	-2.0f,	-3.0f,	3.0f, 	-2.0f, 	4.0f},		//NPC1 SPAWN2
+    {0.0f,	7.5f,	-6.5f,	-3.5f,	-4.5f,	4.5f, 	-3.5f, 	6.5f},		//NPC1 SPAWN3
+	//x		//y		//x		//y		//x		//y		//x		//y
+    {-2.0f, 0.0f,	1.0f,	2.0f,	-1.5f,	-1.5f,	-1.0f, 	-2.0f},		//NPC2 SPAWN1
+    {-4.5f, 0.0f,	2.0f,	4.0f,	-3.0f,	-3.0f,	-2.0f, 	-4.0ff},	//NPC2 SPAWN2
+    {-7.5f,	0.0f,	3.5f,	6.5f,	-4.5f,	-4.5f,	-3.5f, 	-6.5f},		//NPC2 SPAWN3
+	//x		//y		//x		//y		//x		//y		//x		//y
+    {0.0f,	-2.0f,	-1.0f,	-2.0f,	1.5f,	-1.5f, 	1.0f, 	-2.0f},		//NPC3 SPAWN1
+    {0.0f,	-4.5f,	-2.0f,	-4.0f,	3.0f,	-3.0f, 	2.5f, 	-4.0f},		//NPC3 SPAWN2
+    {0.0f,	-7.5f,	-3.5f,	-6.5f,	4.5f,	-4.5f, 	3.5f, 	-6.5f},		//NPC3 SPAWN3
 };
 
-Waypoint m_pulsar0[]=
+static float m_pulsar[16][2]=
 {
-    {0.0f, 0.0f, 0.0f}, //N
-    {0.0f, 0.0f, 0.0f}, //NNE
-    {0.0f, 0.0f, 0.0f}, //NE
-    {0.0f, 0.0f, 0.0f}, //NEE
-    {0.0f, 0.0f, 0.0f}, //E
-    {0.0f, 0.0f, 0.0f}, //SEE
-    {0.0f, 0.0f, 0.0f}, //SE
-    {0.0f, 0.0f, 0.0f}, //SSE
-    {0.0f, 0.0f, 0.0f}, //S
-    {0.0f, 0.0f, 0.0f}, //SSW
-    {0.0f, 0.0f, 0.0f}, //SW
-    {0.0f, 0.0f, 0.0f}, //SWW
-    {0.0f, 0.0f, 0.0f}, //W
-    {0.0f, 0.0f, 0.0f}, //NWW
-    {0.0f, 0.0f, 0.0f}, //NW
-    {0.0f, 0.0f, 0.0f}, //NNW
-};
-
-Waypoint m_pulsar1[]=
-{
-    {0.0f, 0.0f, 0.0f}, //S
-    {0.0f, 0.0f, 0.0f}, //SSW
-    {0.0f, 0.0f, 0.0f}, //SW
-    {0.0f, 0.0f, 0.0f}, //SWW
-    {0.0f, 0.0f, 0.0f}, //W
-    {0.0f, 0.0f, 0.0f}, //NWW
-    {0.0f, 0.0f, 0.0f}, //NW
-    {0.0f, 0.0f, 0.0f}, //NNW
-    {0.0f, 0.0f, 0.0f}, //N
-    {0.0f, 0.0f, 0.0f}, //NNE
-    {0.0f, 0.0f, 0.0f}, //NE
-    {0.0f, 0.0f, 0.0f}, //NEE
-    {0.0f, 0.0f, 0.0f}, //E
-    {0.0f, 0.0f, 0.0f}, //SEE
-    {0.0f, 0.0f, 0.0f}, //SE
-    {0.0f, 0.0f, 0.0f}, //SSE
+    {0.0f, 0.0f}, //S
+    {0.0f, 0.0f}, //SSW
+    {0.0f, 0.0f}, //SW
+    {0.0f, 0.0f}, //SWW
+    {0.0f, 0.0f}, //W
+    {0.0f, 0.0f}, //NWW
+    {0.0f, 0.0f}, //NW
+    {0.0f, 0.0f}, //NNW
+    {0.0f, 0.0f}, //N
+    {0.0f, 0.0f}, //NNE
+    {0.0f, 0.0f}, //NE
+    {0.0f, 0.0f}, //NEE
+    {0.0f, 0.0f}, //E
+    {0.0f, 0.0f}, //SEE
+    {0.0f, 0.0f}, //SE
+    {0.0f, 0.0f}, //SSE
 };
 
 /*######
@@ -404,6 +409,54 @@ struct MANGOS_DLL_DECL boss_halion_tAI : public ScriptedAI
     }
 };
 
+struct MANGOS_DLL_DECL mob_coldflameAI : public ScriptedAI
+{
+    mob_coldflameAI(Creature *pCreature) : ScriptedAI(pCreature)
+    {
+        m_pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
+        bsw = new BossSpellWorker(this);
+        Reset();
+    }
+
+    ScriptedInstance *m_pInstance;
+    uint32 m_uiRangeCheck_Timer;
+    BossSpellWorker* bsw;
+    float fPosX, fPosY, fPosZ;
+
+    void Reset()
+    {
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        m_creature->GetPosition(fPosX, fPosY, fPosZ);
+        m_creature->GetRandomPoint(fPosX, fPosY, fPosZ, urand(150, 200), fPosX, fPosY, fPosZ);
+        m_creature->GetMotionMaster()->MovePoint(1, fPosX, fPosY, fPosZ);
+        SetCombatMovement(false);
+        m_creature->SetSpeedRate(MOVE_RUN, 0.8f);
+        bsw->doCast(SPELL_COLD_FLAME_0);
+    }
+
+    void MovementInform(uint32 type, uint32 id)
+    {
+        if(!m_pInstance) return;
+        if(type != POINT_MOTION_TYPE) return;
+        if(id != 1)
+             m_creature->GetMotionMaster()->MovePoint(1, fPosX, fPosY, fPosZ);
+             else m_creature->ForcedDespawn();
+    }
+
+    void AttackStart(Unit *who)
+    {
+        //ignore all attackstart commands
+        return;
+    }
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        bsw->timedCast(SPELL_COLD_FLAME_0, uiDiff);
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+    }
+};
 CreatureAI* GetAI_boss_halion_t(Creature* pCreature)
 {
     return new boss_halion_tAI(pCreature);

@@ -141,7 +141,7 @@ struct MANGOS_DLL_DECL boss_archavonAI : public ScriptedAI
         {
             if (m_pCrushingLeapTarget)
             {
-                if (m_pCrushingLeapTarget->isDead() || !m_pCrushingLeapTarget->IsInWorld() && !m_pCrushingLeapTarget->IsInMap(m_creature))
+                if (m_pCrushingLeapTarget->isDead() || !m_pCrushingLeapTarget->IsInMap(m_creature) && !m_pCrushingLeapTarget->IsInMap(m_creature))
                 {
                     m_bCrushingLeapInProgress = false;
                     return;

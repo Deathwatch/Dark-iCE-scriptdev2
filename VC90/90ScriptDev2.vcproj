@@ -2499,6 +2499,10 @@
 								>
 							</File>
 							<File
+								RelativePath="..\scripts\northrend\icecrown_citadel\frozen_halls\pit_of_saron\pit_of_saron.cpp"
+								>
+							</File>
+							<File
 								RelativePath="..\scripts\northrend\icecrown_citadel\frozen_halls\pit_of_saron\instance_pit_of_saron.cpp"
 								>
 							</File>

@@ -72,7 +72,7 @@ struct MANGOS_DLL_DECL instance_pit_of_saron : public ScriptedInstance
             case NPC_GAFROST:  m_uiGafrostGUID = pCreature->GetGUID(); break;
             case NPC_KRICK:    m_uiKrickGUID = pCreature->GetGUID(); break;
             case NPC_ICK:      m_uiIckGUID = pCreature->GetGUID(); break;
-            case NPC_TYRANNUS: m_uiTirannusGUID = pCreature->GetGUID(); break;
+            case NPC_TYRANNUS: m_uiTyrannusGUID = pCreature->GetGUID(); break;
             case NPC_RIMEFANG: m_uiRimefangGUID = pCreature->GetGUID(); break;
         }
     }

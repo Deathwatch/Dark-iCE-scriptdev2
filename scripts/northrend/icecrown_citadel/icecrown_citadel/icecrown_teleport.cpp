@@ -47,7 +47,7 @@ static t_Locations PortalLoc[]=
 {{"Icecrown Citadel","Цитадель Ледяной Короны"},4198.42f, 2769.22f, 351.065f,70859,false,true,TYPE_SAURFANG}, //
 {{"Sanctuary of Blood","Святилище крови"},4490.205566f, 2769.275635f, 403.983765f,0,false,true,TYPE_BLOOD_COUNCIL}, //
 {{"Lair of the Queen of Ice","Логово Королевы льда"},4356.580078f, 2565.75f, 220.401993f,70861,false,true,TYPE_VALITHRIA}, //
-{{"Frozen Throne","Ледяной трон"},528.767273f, -2124.845947f, 1041.86f, 70860,false,true,TYPE_SINDRAGOSA}, //
+{{"Frozen Throne","Ледяной трон"},505.212006f, -2124.350098f, 1240.939941f, 70860,false,true,TYPE_SINDRAGOSA}, //
 };
 
 

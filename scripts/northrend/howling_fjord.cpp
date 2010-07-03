@@ -17,20 +17,12 @@
 /* ScriptData
 SDName: Howling_Fjord
 SD%Complete: ?
-SDComment: Quest support: 11221, 11483, 11170
+SDComment: Quest support: 11221, 11483
 SDCategory: Howling Fjord
-
-
-/* ContentData
-npc_apothecary_lysander
-npc_deathstalker_razael
-npc_dark_ranger_lyana
-npc_mcgoyver
-EndContentData */
-
-/* EndScriptData */
+EndScriptData */
 
 #include "precompiled.h"
+#include "escort_ai.h"
 
 /*#######################
 ## Deathstalker Razael ##
@@ -121,8 +113,8 @@ bool GossipSelect_npc_dark_ranger_lyana(Player* pPlayer, Creature* pCreature, ui
 ## McGoyver ##
 ############*/
 
-#define GOSSIP_ITEM_MCGOYVER1 "Walt sent me to pick up some dark iron ingots." 
-#define GOSSIP_ITEM_MCGOYVER2 "Yarp." 
+#define GOSSIP_ITEM_MCGOYVER1 "Walt sent me to pick up some dark iron ingots."
+#define GOSSIP_ITEM_MCGOYVER2 "Yarp."
 
 enum
 {
@@ -181,155 +173,638 @@ bool GossipSelect_npc_mcgoyver(Player* pPlayer, Creature* pCreature, uint32 uiSe
     return true;
 }
 
-/*#####################
-## Apothecary Lysander ##
-#####################*/
-
-enum apothecary_lysander
+enum
 {
-	QUEST_TEST_AT_SEA			= 11170,
-	NPC_APOTHECARY_RAVIEN		= 23782,
-	APOTHECARY_RAVIEN_1			= -1050020,
-	APOTHECARY_LYSANDER_2		= -1050021,
-	APOTHECARY_RAVIEN_3			= -1050022,
-	APOTHECARY_LYSANDER_4		= -1050023,
-	APOTHECARY_RAVIEN_5			= -1050024,
-	APOTHECARY_LYSANDER_6		= -1050025,
-	APOTHECARY_LYSANDER_7		= -1050026,
-	APOTHECARY_LYSANDER_8		= -1050027,
-	APOTHECARY_LYSANDER_9		= -1050028,
-	APOTHECARY_RAVIEN_10		= -1050029
+    QUEST_CARVER_AND_A_CROAKER      = 11476,
+    ITEM_SCALAWAG_FROG              = 35803
 };
 
-struct MANGOS_DLL_DECL npc_apothecary_lysanderAI : public ScriptedAI
+struct MANGOS_DLL_DECL mob_scalawag_frogAI : public ScriptedAI
 {
-	npc_apothecary_lysanderAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+    mob_scalawag_frogAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
 
-	bool TestAtSeaEvent;
-	uint32 m_uiEventPhase;
-	uint32 m_uiEventTimer;
-	Creature* pApothecaryRavien;
+    void Reset() {}
 
-	void Reset()
-	{
-		TestAtSeaEvent = false;
-		m_uiEventPhase = 0;
-		m_uiEventTimer = 0;
-	}
-
-	void StartTestAtSea(Creature* ApothecaryRavien)
-	{
-		pApothecaryRavien = ApothecaryRavien;
-		TestAtSeaEvent = true;
-	}
-
-	void UpdateAI(const uint32 uiDiff)
-	{
-		if (TestAtSeaEvent)
-		{
-			if (m_uiEventTimer >= uiDiff)
-			{
-				m_uiEventTimer -= uiDiff;
-				return;
-			}
-			switch(m_uiEventPhase)
-			{
-				case 0: 
-					pApothecaryRavien->GetMotionMaster()->MovePoint(0, 1950.81f, -6147.646f, 24.259497f);
-					m_uiEventPhase = 1;
-					m_uiEventTimer = 8000;
-					break;
-				case 1:
-					pApothecaryRavien->SetFacingToObject(m_creature);
-					m_creature->SetFacingToObject(pApothecaryRavien);
-					DoScriptText(APOTHECARY_RAVIEN_1,pApothecaryRavien);
-					m_uiEventPhase = 2;
-					m_uiEventTimer = 6000;
-					break;
-				case 2:
-					DoScriptText(APOTHECARY_LYSANDER_2,m_creature);
-					m_uiEventPhase = 3;
-					m_uiEventTimer = 6000;
-					break;
-				case 3:
-					DoScriptText(APOTHECARY_RAVIEN_3,pApothecaryRavien);
-					m_uiEventPhase = 4;
-					m_uiEventTimer = 6000;
-					break;
-				case 4:
-					DoScriptText(APOTHECARY_LYSANDER_4,m_creature);
-					m_uiEventPhase = 5;
-					m_uiEventTimer = 6000;
-					break;
-				case 5:
-					DoScriptText(APOTHECARY_RAVIEN_5,pApothecaryRavien);
-					m_uiEventPhase = 6;
-					m_uiEventTimer = 6000;
-					break;
-				case 6:
-					DoScriptText(APOTHECARY_LYSANDER_6,m_creature);
-					m_uiEventPhase = 7;
-					m_uiEventTimer = 6000;
-					break;
-				case 7:
-					DoScriptText(APOTHECARY_LYSANDER_7,m_creature);
-					m_uiEventPhase = 8;
-					m_uiEventTimer = 6000;
-					break;
-				case 8:
-					DoScriptText(APOTHECARY_LYSANDER_8,m_creature);
-					m_uiEventPhase = 9;
-					m_uiEventTimer = 6000;
-					break;
-				case 9:
-					DoScriptText(APOTHECARY_LYSANDER_9,m_creature);
-					m_uiEventPhase = 10;
-					m_uiEventTimer = 6000;
-					break;
-				case 10:
-					DoScriptText(APOTHECARY_RAVIEN_10,pApothecaryRavien);
-					m_uiEventPhase = 11;
-					m_uiEventTimer = 6000;
-					break;
-				case 11:
-					pApothecaryRavien->GetMotionMaster()->MoveTargetedHome();
-					m_creature->GetMotionMaster()->MoveTargetedHome();
-					m_uiEventPhase = 12;
-					m_uiEventTimer = 8000;
-					break;
-				case 12:
-					pApothecaryRavien->setDeathState(JUST_DIED);
-					pApothecaryRavien->RemoveCorpse();
-					Reset();
-					break;
-			}
-		}
-	}
+    void DamageTaken(Unit* pAttacker, uint32& uiDamage)
+    {
+        if (!pAttacker || pAttacker->GetTypeId() != TYPEID_PLAYER || ((Player*)pAttacker)->GetQuestStatus(QUEST_CARVER_AND_A_CROAKER) != QUEST_STATUS_INCOMPLETE)
+        {
+            ScriptedAI::DamageTaken(pAttacker, uiDamage);
+            return;
+        }
+        Player* pPlayer = ((Player*)pAttacker);
+        ItemPosCountVec dest;
+        uint8 msg = pPlayer->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, ITEM_SCALAWAG_FROG, 1, false);
+        if (msg == EQUIP_ERR_OK)
+        {
+            uiDamage = 0;
+            pPlayer->StoreNewItem(dest, ITEM_SCALAWAG_FROG, 1, true);
+            m_creature->ForcedDespawn();
+        }
+    }
 };
 
-bool QuestComplete_npc_apothecary_lysander(Player* pPlayer, Creature* pCreature, const Quest* pQuest, uint32 item)
+CreatureAI* GetAI_mob_scalawag_frog(Creature* pCreature)
 {
-	debug_log("SD2: Quest Test at Sea");
-	if (pQuest->GetQuestId() == QUEST_TEST_AT_SEA)
-	{
-		if (Creature* pApothecaryRavien=pCreature->SummonCreature(NPC_APOTHECARY_RAVIEN, 1964.275f, -6149.898f, 24.6196f, 2.941f, TEMPSUMMON_DEAD_DESPAWN, 150000))
-		{	
-			if (npc_apothecary_lysanderAI* pLysanderAI = dynamic_cast<npc_apothecary_lysanderAI*>(pCreature->AI()))
-			{  
-				if (!pLysanderAI->TestAtSeaEvent)
-					pLysanderAI->StartTestAtSea(pApothecaryRavien);
-				return true;
-			}
-		}
-	}
-	return true;
+    return new mob_scalawag_frogAI(pCreature);
 }
 
-CreatureAI* GetAI_npc_apothecary_lysander(Creature* pCreature)
+enum Crowleg_Dan
 {
-    return new npc_apothecary_lysanderAI(pCreature);
+    QUEST_CROWLEG_DAN       = 11479,
+    SPELL_TRASH_KICK        = 50306
+};
+
+#define GOSSIP_ITEM_CROWLEG_DAN "Umm... the frog says you're a traitor."
+
+struct MANGOS_DLL_DECL npc_crowleg_danAI : public ScriptedAI
+{
+    npc_crowleg_danAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+
+    bool bTalked;
+    uint32 m_uiDelayTimer;
+    uint32 m_uiTrashKickTimer;
+    uint64 PlayerGUID;
+
+    void Reset() 
+    {
+        m_creature->setFaction(m_creature->GetCreatureInfo()->faction_A);
+        bTalked = false;
+        m_uiDelayTimer = 5000;
+        m_uiTrashKickTimer = urand(1000,4000);
+        PlayerGUID = 0;
+    }
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        if (bTalked)
+        {
+            if (m_uiDelayTimer <= uiDiff)
+            {
+                // dunno exact text and emote
+                // DoSciptText();
+                if (Unit* pTarget = Unit::GetUnit((*m_creature),PlayerGUID))
+                {
+                    m_creature->setFaction(16);
+                    m_creature->AI()->AttackStart(pTarget);
+                    bTalked = false;
+                }else Reset();
+            }else m_uiDelayTimer -= uiDiff;
+        }
+
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        if (m_uiTrashKickTimer <= uiDiff)
+        {
+            DoCast(m_creature->getVictim(),SPELL_TRASH_KICK,false);
+            m_uiTrashKickTimer = urand(3000,6000);
+        }else m_uiTrashKickTimer -= uiDiff;
+        
+        DoMeleeAttackIfReady();
+    }
+};
+
+bool GossipHello_npc_crowleg_dan(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(QUEST_CROWLEG_DAN) == QUEST_STATUS_INCOMPLETE)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_CROWLEG_DAN, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
 }
 
+bool GossipSelect_npc_crowleg_dan(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF+1)
+    {
+        // dunno exact text
+        // DoScriptText();
+        ((npc_crowleg_danAI*)pCreature->AI())->bTalked = true;
+        ((npc_crowleg_danAI*)pCreature->AI())->PlayerGUID = pPlayer->GetGUID();
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+    return true;
+}
+
+CreatureAI* GetAI_npc_crowleg_dan(Creature* pCreature)
+{
+    return new npc_crowleg_danAI(pCreature);
+}
+
+enum Sivermoon_Harry
+{
+    QUEST_GAMBLING_DEBT             = 11464,
+    SPELL_BLASTWAVE                 = 15091,
+    SPELL_SCORCH                    = 50183,
+    ITEM_SILVERMOON_HARRYS_DEBT     = 34115,
+    SAY_SILVERMOON_HARRY_AGGRO      = -1999820,
+    SAY_SILVERMOON_HARRY_SURRENDER  = -1999819
+};
+
+#define GOSSIP_ITEM_SILVERMOON_HARRY_1 "Taruk send me to collect what you owe."
+#define GOSSIP_ITEM_SILVERMOON_HARRY_2 "Alright, here's your cut."
+
+struct MANGOS_DLL_DECL npc_silvermoon_harryAI : public ScriptedAI
+{
+    npc_silvermoon_harryAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+
+    bool bTriggeredByEvent;
+    bool bEventDone;
+
+    uint32 m_uiEventTimer;
+    uint64 PlayerGUID;
+    std::list<uint64> lPlayersEventDone;
+
+    void Reset() 
+    {
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->setFaction(m_creature->GetCreatureInfo()->faction_A);
+        bTriggeredByEvent = false;
+        bEventDone = false;
+        m_uiEventTimer = urand(3000,6000);
+        PlayerGUID = 0;
+    }
+
+    void AttackStart(Unit* pWho)
+    {
+        if (!pWho)
+            return;
+
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        ScriptedAI::AttackStart(pWho);
+    }
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        // Silvermoon Harry is aggresive for players that not have complered prequests
+        // or are not at quest, so in that case lets switch this part off
+        if (bTriggeredByEvent)
+        {
+            if (m_creature->GetHealth() * 100 / m_creature->GetMaxHealth() <= 33)
+            {
+                ThreatList const& tList = m_creature->getThreatManager().getThreatList();
+                for (ThreatList::const_iterator itr = tList.begin();itr != tList.end(); ++itr)
+                {
+                    if ((*itr))
+                    {
+                        if (Unit* pUnit = Unit::GetUnit((*m_creature), (*itr)->getUnitGuid()))
+                        {
+                            if (pUnit->GetTypeId() == TYPEID_PLAYER)
+                                lPlayersEventDone.push_back((*itr)->getUnitGuid());
+                        }
+                    }
+                }
+                m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                m_creature->setFaction(m_creature->GetCreatureInfo()->faction_A);
+                m_creature->CombatStop();
+                m_creature->DeleteThreatList();
+                DoScriptText(SAY_SILVERMOON_HARRY_SURRENDER,m_creature);
+                m_uiEventTimer = 30000;
+                bEventDone = true;
+            }
+        }
+
+        // reset creature after amount of time
+        if (bEventDone)
+        {
+            if (m_uiEventTimer <= uiDiff)
+            {
+                lPlayersEventDone.clear();
+                m_creature->AI()->EnterEvadeMode();
+            }else m_uiEventTimer -= uiDiff;
+        }
+
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        if (m_uiEventTimer <= uiDiff)
+        {
+            DoCast(m_creature->getVictim(),(urand(0,1) == 0 ? SPELL_BLASTWAVE : SPELL_SCORCH),false);
+            m_uiEventTimer = urand(3000,6000);
+        }else m_uiEventTimer -= uiDiff;
+        
+        DoMeleeAttackIfReady();
+    }
+
+    // two functions managing players that have joined encounter and are supposed to 
+    // get quest item at the end
+    bool CheckoutPlayerEventDone(uint64 PlayerGUID)
+    {
+        if (lPlayersEventDone.empty())
+            return false;
+
+        for(std::list<uint64>::iterator itr = lPlayersEventDone.begin(); itr != lPlayersEventDone.end(); ++itr)
+        {
+            if ((*itr) && (*itr) == PlayerGUID)
+                return true;
+        }
+
+        return false;
+    }
+};
+
+bool GossipHello_npc_silvermoon_harry(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->isQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pCreature->isVendor())
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+
+    if (pPlayer->GetQuestStatus(QUEST_GAMBLING_DEBT) == QUEST_STATUS_INCOMPLETE)
+    {
+        if (((npc_silvermoon_harryAI*)pCreature->AI())->CheckoutPlayerEventDone(pPlayer->GetGUID()))
+        {
+            if (pPlayer->GetItemCount(ITEM_SILVERMOON_HARRYS_DEBT,false) < 1)
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_SILVERMOON_HARRY_2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
+        }
+        else pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_SILVERMOON_HARRY_1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_silvermoon_harry(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    switch (uiAction)
+    {
+        case GOSSIP_ACTION_TRADE:
+            pPlayer->SEND_VENDORLIST(pCreature->GetGUID());
+            break;
+
+        case GOSSIP_ACTION_INFO_DEF+1: 
+            ((npc_silvermoon_harryAI*)pCreature->AI())->AttackStart(pPlayer);
+            ((npc_silvermoon_harryAI*)pCreature->AI())->bTriggeredByEvent = true;
+            pCreature->setFaction(16);
+            DoScriptText(SAY_SILVERMOON_HARRY_AGGRO,pCreature);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            break;
+
+        case GOSSIP_ACTION_INFO_DEF+2:
+            ItemPosCountVec dest;
+            uint8 msg = pPlayer->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, ITEM_SILVERMOON_HARRYS_DEBT, 1, false);
+            if (msg == EQUIP_ERR_OK)
+                pPlayer->StoreNewItem(dest, ITEM_SILVERMOON_HARRYS_DEBT, 1, true);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            break;            
+    }
+
+    return true;
+}
+
+CreatureAI* GetAI_npc_silvermoon_harry(Creature* pCreature)
+{
+    return new npc_silvermoon_harryAI(pCreature);
+}
+
+// Quest: Jack Likes His Drink
+enum
+{
+    SAY_OLGA_0                  = -1999818, // whisper
+    SAY_OLGA_1                  = -1999817,
+    SAY_JACK_ADAMS_2            = -1999816,
+    SAY_OLGA_3                  = -1999815,
+    SAY_JACK_ADAMS_4            = -1999814,
+    SAY_JACK_ADAMS_5            = -1999813, // faint
+    SAY_JACK_ADAMS_6            = -1999812, // wakeup
+
+    NPC_TEXT_OLGA_1             = 12180,
+    NPC_JACK_ADAMS              = 24788,
+
+    SPELL_VOMIT                 = 41995,
+    ITEM_JACK_ADAMS_DEBT        = 34116,
+    QUEST_JACK_LIKES_HIS_DRINK  = 11466,
+};
+
+float OlgaWaypoints[2][4] = 
+{
+    {0.0f, -91.81f, -3532.70f, 7.71f},  
+    {1.0f, -87.23f, -3544.23f, 7.71f}
+};
+
+#define GOSSIP_ITEM_OLGA_1 "I'd like to buy Jack a drink. Perhaps something... extra strong."
+#define GOSSIP_ITEM_OLGA_2 "Here's a gold, buy yourself something nice." 
+#define GOSSIP_ITEM_OLGA_3 "Do you really want to bribe Olga?"
+#define GOSSIP_ITEM_JACK_ADAMS_1 "<Discreetly search the pirate's pockets for Taruk's payment.>"
+
+struct MANGOS_DLL_DECL npc_olgaAI : public ScriptedAI
+{
+    npc_olgaAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+
+    bool bEventInProgress;
+    bool bInRightPoint;
+
+    uint8 subevent;
+    uint32 m_uiEventTimer;
+    uint32 m_uiResetJackTimer;
+    uint64 JackAdamsGUID;
+
+    void Reset()
+    {
+        bEventInProgress = false;
+        bInRightPoint = true;
+        subevent = 0;
+        m_uiEventTimer = 5000;
+        m_uiResetJackTimer = 30000;
+        // restore DB flags (GOSSIP)
+        m_creature->SetUInt32Value(UNIT_NPC_FLAGS, m_creature->GetCreatureInfo()->npcflag);
+    }
+
+    void MovementInform(uint32 uiType, uint32 uiPointId)
+    {
+        if (uiType != POINT_MOTION_TYPE)
+            return;
+
+        if (uiPointId == OlgaWaypoints[1][0] || uiPointId == OlgaWaypoints[0][0])
+            bInRightPoint = true;
+    }
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        // if not event in progress and Jack is unconscous lets awake him after certain amount of time
+        if (!bEventInProgress)
+        {
+            if (m_uiResetJackTimer <= uiDiff)
+            {
+                Creature* pJack = (Creature*)Unit::GetUnit((*m_creature),JackAdamsGUID);
+                if (pJack && pJack->isAlive() && pJack->GetByteValue(UNIT_FIELD_BYTES_1,0) == UNIT_STAND_STATE_DEAD)
+                    pJack->SetByteValue(UNIT_FIELD_BYTES_1,0,UNIT_STAND_STATE_STAND);
+                m_uiResetJackTimer = 30000;
+            }else m_uiResetJackTimer -= uiDiff;
+        }
+
+        if(bEventInProgress && bInRightPoint)
+        {
+            if (m_uiEventTimer <= uiDiff)
+            {
+                // if there is no Jack around or he is dead there is no point to continue
+                Creature* pJack = (Creature*)Unit::GetUnit((*m_creature),JackAdamsGUID);
+                if (!pJack || !pJack->isAlive())
+                {
+                    m_creature->AI()->EnterEvadeMode();
+                    return;
+                }
+
+                switch(subevent)
+                {
+                    case 0:
+                        DoScriptText(SAY_OLGA_1,m_creature);
+                        m_creature->GetMotionMaster()->MovePoint(OlgaWaypoints[1][0],OlgaWaypoints[1][1],OlgaWaypoints[1][2],OlgaWaypoints[1][3]);
+                        m_uiEventTimer = 3000;
+                        break;
+                    case 1:
+                        DoScriptText(SAY_JACK_ADAMS_2,pJack,m_creature);
+                        m_uiEventTimer = 1000;
+                        bInRightPoint = false;
+                        break;
+                    case 2:
+                        m_creature->SetFacingToObject(pJack);
+                        m_uiEventTimer = 2000;
+                        break;
+                    case 3:
+                        DoScriptText(SAY_OLGA_3,m_creature,pJack);
+                        m_uiEventTimer = 7000;
+                        break;
+                    case 4:
+                        pJack->SetByteValue(UNIT_FIELD_BYTES_1,0,UNIT_STAND_STATE_KNEEL);
+                        DoScriptText(SAY_JACK_ADAMS_4,pJack,m_creature);
+                        m_uiEventTimer = 5000;
+                        break;
+                    case 5:
+                        pJack->SetByteValue(UNIT_FIELD_BYTES_1,0,UNIT_STAND_STATE_STAND);
+                        m_uiEventTimer = 3000;
+                        break;
+                    case 6:
+                        pJack->CastSpell(pJack,SPELL_VOMIT,false);
+                        m_uiEventTimer = 3000;
+                        break;
+                    case 7:
+                        DoScriptText(SAY_JACK_ADAMS_5,pJack,m_creature);
+                        pJack->SetByteValue(UNIT_FIELD_BYTES_1,0,UNIT_STAND_STATE_DEAD);
+                        pJack->SetUInt32Value(UNIT_NPC_FLAGS, m_creature->GetCreatureInfo()->npcflag);
+                        m_uiEventTimer = 3000;
+                    case 8:
+                        m_creature->GetMotionMaster()->MovePoint(OlgaWaypoints[0][0],OlgaWaypoints[0][1],OlgaWaypoints[0][2],OlgaWaypoints[0][3]);
+                        bInRightPoint = false;
+                        break;
+                    case 9:
+                        m_creature->SetFacingToObject(pJack);
+                        Reset();
+                        return;
+                    default: break;
+                }
+                ++ subevent;
+            }else m_uiEventTimer -= uiDiff;
+        }
+    }
+};
+
+
+bool GossipHello_npc_olga(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(QUEST_JACK_LIKES_HIS_DRINK) == QUEST_STATUS_INCOMPLETE && pPlayer->GetMoney() >= 10000)
+    {
+        Creature* pJack = GetClosestCreatureWithEntry(pCreature,NPC_JACK_ADAMS,20.0f);
+        if (pJack && pJack->isAlive() && pJack->GetByteValue(UNIT_FIELD_BYTES_1,0) == UNIT_STAND_STATE_STAND)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_OLGA_1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+            ((npc_olgaAI*)pCreature->AI())->JackAdamsGUID = pJack->GetGUID();
+        }
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_olga(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    switch (uiAction)
+    {
+        case GOSSIP_ACTION_INFO_DEF+1:
+            pPlayer->ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_CHAT, GOSSIP_ITEM_OLGA_2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2,GOSSIP_ITEM_OLGA_3, 10000,false);
+            pPlayer->SEND_GOSSIP_MENU(NPC_TEXT_OLGA_1, pCreature->GetGUID());
+            break;
+
+        case GOSSIP_ACTION_INFO_DEF+2:
+            pPlayer->CLOSE_GOSSIP_MENU();
+            DoScriptText(SAY_OLGA_0,pCreature,pPlayer);
+            pCreature->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
+            pPlayer->ModifyMoney(-10000);
+            ((npc_olgaAI*)pCreature->AI())->bEventInProgress = true;
+            break;
+    }
+    return true;
+}
+
+bool GossipHello_npc_jack_adams(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(QUEST_JACK_LIKES_HIS_DRINK) == QUEST_STATUS_INCOMPLETE && pPlayer->GetItemCount(ITEM_JACK_ADAMS_DEBT,false) < 1)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_JACK_ADAMS_1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_jack_adams(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF+1)
+    {
+        pPlayer->CLOSE_GOSSIP_MENU();
+        ItemPosCountVec dest;
+        uint8 msg = pPlayer->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, ITEM_JACK_ADAMS_DEBT, 1, false);
+        if (msg == EQUIP_ERR_OK)
+            pPlayer->StoreNewItem(dest, ITEM_JACK_ADAMS_DEBT, 1, true);
+        pCreature->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
+        // 50% chance that jack standup immediately
+        if (urand(0, 1) == 0)
+        {
+            pCreature->SetByteValue(UNIT_FIELD_BYTES_1,0,UNIT_STAND_STATE_STAND);
+            DoScriptText(SAY_JACK_ADAMS_6,pCreature,pPlayer);
+        }
+    }
+    return true;
+}
+
+CreatureAI* GetAI_npc_olga(Creature* pCreature)
+{
+    return new npc_olgaAI(pCreature);
+}
+
+/*######
+## npc_apothecary_hanes
+######*/
+
+enum Hanes
+{
+    QUEST_TRIAL_OF_FIRE     = 11241,
+    SPELL_HEALING_POTION    = 17534,
+    SPELL_FLAME_PATCH_VIS   = 46836,
+    NPC_FIRE_TRIGGER        = 23968,
+
+    SAY_ESCORT_STARTED      = -1999760,
+    SAY_1ST_WAYPOINT        = -1999759,
+    SAY_2ND_WAYPOINT        = -1999758,
+    SAY_1ST_SET_BURNED      = -1999757,
+    SAY_2ND_SET_BURNED      = -1999756,
+    SAY_3RD_SET_BURNED      = -1999755,
+    YELL_ALL_SETS_BURNED    = -1999754,
+    SAY_ESCORT_COMPLETED    = -1999753
+};
+
+struct MANGOS_DLL_DECL npc_apothecary_hanesAI : public npc_escortAI
+{
+    npc_apothecary_hanesAI(Creature* pCreature) : npc_escortAI(pCreature) { Reset(); }
+
+    uint32 m_uiPotionTimer;
+
+    void Reset() 
+    {
+        m_uiPotionTimer = 0;
+    }
+
+    void BurnSupplies()
+    {
+        std::list<Creature*> lFrireTriggers;
+        GetCreatureListWithEntryInGrid(lFrireTriggers, m_creature, NPC_FIRE_TRIGGER, 20.0f);
+        if (lFrireTriggers.empty())
+            return;
+
+        for (std::list<Creature*>::iterator itr = lFrireTriggers.begin(); itr != lFrireTriggers.end(); ++itr)
+        {
+            if ((*itr)->isAlive())
+                (*itr)->CastSpell(*itr, SPELL_FLAME_PATCH_VIS, true);
+        }
+    }
+        
+
+    void WaypointReached(uint32 uiPointId)
+    {
+        switch (uiPointId)
+        {
+            case 0: DoScriptText(SAY_1ST_WAYPOINT, m_creature); break;
+            case 1: DoScriptText(SAY_2ND_WAYPOINT, m_creature); break;
+            case 7:
+            case 11:
+            case 17:
+                m_creature->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_USESTANDING_NOSHEATHE);
+                break;
+            case 18:
+                DoScriptText(YELL_ALL_SETS_BURNED, m_creature);
+                m_creature->HandleEmoteCommand(EMOTE_ONESHOT_LAUGH_NOSHEATHE);
+                break;
+            case 32:
+                if (Player* pPlayer = GetPlayerForEscort())
+                {
+                    m_creature->SetFacingToObject(pPlayer);
+                    DoScriptText(SAY_ESCORT_COMPLETED, m_creature, pPlayer);
+                    pPlayer->AreaExploredOrEventHappens(QUEST_TRIAL_OF_FIRE);
+                }
+        }
+    }
+
+    void WaypointStart(uint32 uiPointId)
+    {
+        switch (uiPointId)
+        {
+            case 8:
+                BurnSupplies();
+                m_creature->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_NONE);
+                DoScriptText(SAY_1ST_SET_BURNED, m_creature);
+                break;
+            case 12:
+                BurnSupplies();
+                m_creature->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_NONE);
+                DoScriptText(SAY_2ND_SET_BURNED, m_creature);
+                break;
+            case 18:
+                BurnSupplies();
+                m_creature->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_NONE);
+                DoScriptText(SAY_3RD_SET_BURNED, m_creature);
+                break;
+        }
+    }
+
+    void UpdateEscortAI(const uint32 uiDiff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        if (m_creature->GetHealthPercent() < 75.0f)
+        {
+            if (m_uiPotionTimer < uiDiff)
+            {
+                DoCastSpellIfCan(m_creature, SPELL_HEALING_POTION);
+                m_uiPotionTimer = 30000;
+            }
+            else
+                m_uiPotionTimer -= uiDiff;
+        }
+        DoMeleeAttackIfReady();
+    }
+
+};
+
+CreatureAI* GetAI_npc_apothecary_hanes(Creature* pCreature)
+{
+    return new npc_apothecary_hanesAI(pCreature);
+}
+
+bool QuestAccept_npc_apothecary_hanes(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
+{
+    if (pQuest->GetQuestId() == QUEST_TRIAL_OF_FIRE)
+    {
+
+        if (npc_apothecary_hanesAI* pEscortAI = dynamic_cast<npc_apothecary_hanesAI*>(pCreature->AI()))
+        {
+            pEscortAI->Start(true, true, pPlayer->GetGUID(), pQuest);
+            pCreature->setFaction(FACTION_ESCORT_H_NEUTRAL_ACTIVE);
+            DoScriptText(SAY_ESCORT_STARTED, pCreature);
+        }
+    }
+    return true;
+}
 
 void AddSC_howling_fjord()
 {
@@ -353,9 +828,41 @@ void AddSC_howling_fjord()
     newscript->pGossipSelect = &GossipSelect_npc_mcgoyver;
     newscript->RegisterSelf();
 
-	newscript = new Script;
-    newscript->Name = "npc_apothecary_lysander";
-    newscript->GetAI = &GetAI_npc_apothecary_lysander;
-	newscript->pChooseReward  = &QuestComplete_npc_apothecary_lysander;
+    newscript = new Script;
+    newscript->Name = "mob_scalawag_frog";
+    newscript->GetAI = &GetAI_mob_scalawag_frog;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_crowleg_dan";
+    newscript->GetAI = &GetAI_npc_crowleg_dan;
+    newscript->pGossipHello = &GossipHello_npc_crowleg_dan;
+    newscript->pGossipSelect = &GossipSelect_npc_crowleg_dan;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_silvermoon_harry";
+    newscript->GetAI = &GetAI_npc_silvermoon_harry;
+    newscript->pGossipHello = &GossipHello_npc_silvermoon_harry;
+    newscript->pGossipSelect = &GossipSelect_npc_silvermoon_harry;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_olga";
+    newscript->GetAI = &GetAI_npc_olga;
+    newscript->pGossipHello = &GossipHello_npc_olga;
+    newscript->pGossipSelect = &GossipSelect_npc_olga;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_jack_adams";
+    newscript->pGossipHello = &GossipHello_npc_jack_adams;
+    newscript->pGossipSelect = &GossipSelect_npc_jack_adams;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_apothecary_hanes";
+    newscript->GetAI = &GetAI_npc_apothecary_hanes;
+    newscript->pQuestAccept = &QuestAccept_npc_apothecary_hanes;
     newscript->RegisterSelf();
 }

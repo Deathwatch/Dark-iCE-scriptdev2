@@ -2269,7 +2269,7 @@ struct MANGOS_DLL_DECL mob_mirror_imageAI : public ScriptedAI
         }
 
         Player* pOwner = (Player*)Unit::GetUnit(*m_creature, m_uiCreatorGUID);
-        if (!pOwner || !pOwner->IsInWorld())
+        if (!pOwner || !pOwner->IsInWorld() || !pOwner->isAlive())
         {
             m_creature->ForcedDespawn();
             return;

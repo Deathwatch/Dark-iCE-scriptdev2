@@ -561,6 +561,9 @@
     <ClCompile Include="..\scripts\northrend\violet_hold\boss_moragg.cpp" />
     <ClCompile Include="..\scripts\northrend\violet_hold\boss_xevozz.cpp" />
     <ClCompile Include="..\scripts\northrend\violet_hold\boss_zuramat.cpp" />
+    <ClCompile Include="..\scripts\northrend\violet_hold\instance_violet_hold.cpp" />
+    <ClCompile Include="..\scripts\northrend\violet_hold\violet_hold.cpp" />
+    <ClCompile Include="..\scripts\northrend\violet_hold\violet_hold_invaderAI.cpp" />
     <ClCompile Include="..\scripts\northrend\zuldrak.cpp" />
     <ClCompile Include="..\scripts\northrend\azjol-nerub\ahnkahet\boss_jedoga.cpp" />
     <ClCompile Include="..\scripts\northrend\azjol-nerub\ahnkahet\boss_nadox.cpp" />
@@ -629,8 +632,6 @@
     <ClCompile Include="..\scripts\northrend\utgarde_keep\utgarde_pinnacle\boss_svala.cpp" />
     <ClCompile Include="..\scripts\northrend\utgarde_keep\utgarde_pinnacle\boss_ymiron.cpp" />
     <ClCompile Include="..\scripts\northrend\utgarde_keep\utgarde_pinnacle\instance_utgarde_pinnacle.cpp" />
-    <ClCompile Include="..\scripts\northrend\violet_hold\instance_violet_hold.cpp" />
-    <ClCompile Include="..\scripts\northrend\violet_hold\violet_hold.cpp" />
     <ClCompile Include="..\scripts\northrend\icecrown_citadel\icecrown_citadel\blood_prince_council.cpp" />
     <ClCompile Include="..\scripts\northrend\icecrown_citadel\icecrown_citadel\boss_blood_queen_lanathel.cpp" />
     <ClCompile Include="..\scripts\northrend\icecrown_citadel\icecrown_citadel\boss_deathbringer_saurfang.cpp" />
@@ -814,8 +815,8 @@
     <ClInclude Include="..\scripts\northrend\utgarde_keep\utgarde_keep\utgarde_keep.h" />
     <ClInclude Include="..\scripts\northrend\utgarde_keep\utgarde_pinnacle\utgarde_pinnacle.h" />
     <ClInclude Include="..\scripts\northrend\vault_of_archavon\vault_of_archavon.h" />
-    <ClInclude Include="..\scripts\northrend\violet_hold\def_violet_hold.h" />
     <ClInclude Include="..\scripts\northrend\violet_hold\violet_hold.h" />
+    <ClInclude Include="..\scripts\northrend\violet_hold\violet_hold_invaderAI.h" />
     <ClInclude Include="..\scripts\outland\auchindoun\sethekk_halls\sethekk_halls.h" />
     <ClInclude Include="..\scripts\outland\auchindoun\shadow_labyrinth\shadow_labyrinth.h" />
     <ClInclude Include="..\scripts\outland\black_temple\black_temple.h" />

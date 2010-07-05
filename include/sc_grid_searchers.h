@@ -42,9 +42,8 @@ Creature* GetClosestCreatureWithEntry(WorldObject* pSource, uint32 uiEntry, floa
 
 void GetGameObjectListWithEntryInGrid(std::list<GameObject*>& lList , WorldObject* pSource, uint32 uiEntry, float fMaxSearchRange);
 void GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, WorldObject* pSource, uint32 uiEntry, float fMaxSearchRange);
+void GetCreatureListWithFactionInGrid(std::list<Creature*>& lList, WorldObject* pSource, uint32 factionId, float fMaxSearchRange);
 
-//Used in:
-//hyjalAI.cpp
 class AllFriendlyCreaturesInGrid
 {
     public:
@@ -131,5 +130,22 @@ class PlayerAtMinimumRangeAway
     private:
         Unit const* pUnit;
         float fRange;
+};
+
+class AllCreaturesOfFactionInRange
+{
+    public:
+        AllCreaturesOfFactionInRange(const WorldObject* pObject, uint32 factionId, float fMaxRange) : m_pObject(pObject), m_uiFaction(factionId), m_fRange(fMaxRange) {}
+        bool operator() (Unit* pUnit)
+        {
+            if (pUnit->getFaction() == m_uiFaction && m_pObject->IsWithinDist(pUnit,m_fRange, false))
+                return true;
+
+            return false;
+        }
+    private:
+        const WorldObject* m_pObject;
+        uint32 m_uiFaction;
+        float m_fRange;
 };
 #endif

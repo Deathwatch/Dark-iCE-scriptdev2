@@ -1,4 +1,4 @@
-/* Copyright (C) 2006 - 2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -16,14 +16,14 @@
 
 /* ScriptData
 SDName: boss_cyanigosa
-SDAuthor: ckegg
-SD%Complete: 0
+SDAuthor: Tasssadar
+SD%Complete: 
 SDComment: 
 SDCategory: The Violet Hold
 EndScriptData */
 
 #include "precompiled.h"
-#include "def_violet_hold.h"
+#include "violet_hold.h"
 
 enum
 {
@@ -53,9 +53,9 @@ struct MANGOS_DLL_DECL boss_cyanigosaAI : public ScriptedAI
 {
     boss_cyanigosaAI(Creature *pCreature) : ScriptedAI(pCreature)
     {
-        m_pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
-        m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
-        Reset();
+    	m_pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
+    	m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
+    	Reset();
     }
     ScriptedInstance *m_pInstance;
 
@@ -66,7 +66,8 @@ struct MANGOS_DLL_DECL boss_cyanigosaAI : public ScriptedAI
     uint32 m_uiBlizzard_Timer;
     uint32 m_uiUncontrollableEnergy_Timer;
     uint32 m_uiArcaneVacuum_Timer;
-    bool MovementStarted;
+    uint8 RPPhase;
+    uint16 RPTimer;
 
     void Reset()
     {
@@ -75,25 +76,64 @@ struct MANGOS_DLL_DECL boss_cyanigosaAI : public ScriptedAI
         m_uiBlizzard_Timer = urand(20000, 25000);
         m_uiTailSweep_Timer = urand(10000, 11000);
         m_uiArcaneVacuum_Timer = urand(28000, 33000);
-        MovementStarted = false;
-        m_creature->SetInCombatWithZone();
+        RPPhase=0;
+        RPTimer=0;
     }
 
     void Aggro(Unit* pWho)
     {
         DoScriptText(SAY_AGGRO, m_creature);
-        DoCastSpellIfCan(m_creature, SPELL_CYANIGOSA_TRANSFORM);
+    }
+
+    void DoAction(uint32 action)
+    {
+        if (action==BOSS_PULL)
+        {
+            RPPhase=0;
+            RPTimer=11000;
+            DoScriptText(SAY_SPAWN,m_creature);
+        }
     }
 
     void UpdateAI(const uint32 uiDiff)
     {
+        if (RPTimer)
+        {
+            if (RPTimer<=uiDiff)
+            {
+                switch (RPPhase)
+                {
+                case 0: 
+                    //she should jump here, no spell aviable for that, it doesn't work
+                    RPPhase++;
+                    RPTimer=5000;//10000;
+                    break;
+                case 1:
+                    DoCast(m_creature,58668);
+                    RPPhase++;
+                    RPTimer=5000;
+                    break;
+                case 2:
+                    if (m_creature->HasFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE))
+                        m_creature->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE);
+                    if (m_creature->HasFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NOT_SELECTABLE))
+                        m_creature->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NOT_SELECTABLE);
+                    if (m_creature->HasFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_PASSIVE))
+                        m_creature->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_PASSIVE);
+                    if (m_creature->HasFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_OOC_NOT_ATTACKABLE))
+                        m_creature->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_OOC_NOT_ATTACKABLE);
+                    m_creature->setFaction(FACTION_VIOLET_HOLD_INVADER);
+                }
+            }
+            else RPTimer-=uiDiff;
+        }
         //Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
         if (m_uiUncontrollableEnergy_Timer < uiDiff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), m_bIsRegularMode ? SPELL_UNCONTROLLABLE_ENERGY_H : SPELL_UNCONTROLLABLE_ENERGY);
+            DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_UNCONTROLLABLE_ENERGY_H : SPELL_UNCONTROLLABLE_ENERGY);
             m_uiUncontrollableEnergy_Timer = urand(15000, 16000);
         }
         else
@@ -102,7 +142,7 @@ struct MANGOS_DLL_DECL boss_cyanigosaAI : public ScriptedAI
         if (m_uiManaDestruction_Timer < uiDiff)
         {
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                DoCastSpellIfCan(pTarget, SPELL_MANA_DESTRUCTION);
+                DoCast(pTarget, SPELL_MANA_DESTRUCTION);
             m_uiManaDestruction_Timer = urand(8000, 13000);
         }
         else
@@ -111,7 +151,7 @@ struct MANGOS_DLL_DECL boss_cyanigosaAI : public ScriptedAI
         if (m_uiBlizzard_Timer < uiDiff)
         {
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                DoCastSpellIfCan(pTarget, m_bIsRegularMode ? SPELL_BLIZZARD_H : SPELL_BLIZZARD);
+                DoCast(pTarget, m_bIsRegularMode ? SPELL_BLIZZARD_H : SPELL_BLIZZARD);
             m_uiBlizzard_Timer = urand(20000, 25000);
         }
         else
@@ -119,7 +159,7 @@ struct MANGOS_DLL_DECL boss_cyanigosaAI : public ScriptedAI
 
         if (m_uiArcaneVacuum_Timer < uiDiff)
         {
-            DoCastSpellIfCan(m_creature, SPELL_ARCANE_VACUM);
+            DoCast(m_creature, SPELL_ARCANE_VACUM);
             DoResetThreat();
             m_uiArcaneVacuum_Timer = urand(28000, 33000);
         }
@@ -128,7 +168,7 @@ struct MANGOS_DLL_DECL boss_cyanigosaAI : public ScriptedAI
 
         if (m_uiTailSweep_Timer < uiDiff)
         {
-            DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_TAIL_SWEEP_H : SPELL_TAIL_SWEEP);
+            DoCast(m_creature, m_bIsRegularMode ? SPELL_TAIL_SWEEP_H : SPELL_TAIL_SWEEP);
             m_uiTailSweep_Timer = urand(10000, 11000);
         }
         else
@@ -140,12 +180,11 @@ struct MANGOS_DLL_DECL boss_cyanigosaAI : public ScriptedAI
     void JustDied(Unit* pKiller)
     {
         DoScriptText(SAY_DEATH, m_creature);
-
         if (m_pInstance)
-        {
-            m_pInstance->SetData(TYPE_RIFT, DONE);
-            m_pInstance->SetData(TYPE_EVENT, DONE);
-        }
+            m_pInstance->SetData(DATA_COMPLETED,DONE);
+        Creature* Door = m_creature->GetMap()->GetCreature(m_pInstance->GetData64(DOOR_GUID));
+        if (Door)
+            Door->AI()->DoAction(CYANIGOSA);
     }
 
     void KilledUnit(Unit* pVictim)

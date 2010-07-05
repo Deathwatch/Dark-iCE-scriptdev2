@@ -1,4 +1,4 @@
-/* Copyright (C) 2006 - 2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -16,15 +16,31 @@
 
 /* ScriptData
 SDName: boss_ichoron
-SDAuthor: ckegg
-SD%Complete: 0
+SDAuthor: Tasssadar
+SD%Complete: 
 SDComment: 
 SDCategory: The Violet Hold
 EndScriptData */
 
 #include "precompiled.h"
-#include "def_violet_hold.h"
+#include "escort_ai.h"
+#include "violet_hold.h"
 
+struct Locations
+{
+    float x, y, z;
+    uint32 id;
+};
+
+static Locations PortalLoc[]=
+{
+    {1857.125f, 763.295f, 38.654f},
+    {1925.480f, 849.981f, 47.174f},
+    {1892.737f, 744.589f, 47.666f},
+    {1878.198f, 850.005f, 43.333f},
+    {1909.381f, 806.796f, 38.645f},
+    {1936.101f, 802.950f, 52.417f},
+};
 
 enum
 {
@@ -51,74 +67,48 @@ enum
     SPELL_SPLASH                              = 59516,
 };
 
-struct MANGOS_DLL_DECL boss_ichoronAI : public ScriptedAI
+const float IchoronOutWP[2][3]=
 {
-    boss_ichoronAI(Creature *pCreature) : ScriptedAI(pCreature)
+    {1908.77f, 785.644f, 37.4466f},
+    {1908.80f, 785.644f, 37.4466f}
+};
+
+struct MANGOS_DLL_DECL boss_ichoronAI : public npc_escortAI
+{
+    boss_ichoronAI(Creature *pCreature) : npc_escortAI(pCreature)
     {
-        m_pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
-        m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
-        Reset();
+    	m_instance = ((ScriptedInstance*)pCreature->GetInstanceData());
+    	m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
+    	Reset();
     }
-    ScriptedInstance *m_pInstance;
+    ScriptedInstance *m_instance;
     std::list<uint64> m_lWaterElementsGUIDList;
 
     bool m_bIsRegularMode;
     bool m_bIsExploded;
     bool m_bIsFrenzy;
-    bool MovementStarted;
 
     uint32 m_uiBuubleChecker_Timer;
     uint32 m_uiWaterBoltVolley_Timer;
     uint32 m_uiShowup_Counter;
+    uint16 BossStartTimer;
 
     void Reset()
     {
-        if (!m_pInstance) return;
         m_bIsExploded = false;
         m_bIsFrenzy = false;
-        MovementStarted = false;
         m_uiBuubleChecker_Timer = 1000;
         m_uiWaterBoltVolley_Timer = urand(10000, 15000);
         m_uiShowup_Counter = 0;
+        BossStartTimer=0;
 
         m_creature->SetVisibility(VISIBILITY_ON);
         DespawnWaterElements();
-
-        m_pInstance->SetData(TYPE_ICHORON, NOT_STARTED);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
     }
 
     void Aggro(Unit* pWho)
     {
-        if (m_pInstance) return;
-
         DoScriptText(SAY_AGGRO, m_creature);
-        m_pInstance->SetData(TYPE_ICHORON, IN_PROGRESS);
-        SetCombatMovement(true);
-    }
-
-    void AttackStart(Unit* pWho)
-    {
-        if (!m_pInstance)
-            return;
-
-        if (m_pInstance->GetData(TYPE_ICHORON) != SPECIAL && m_pInstance->GetData(TYPE_ICHORON) != IN_PROGRESS)
-            return;
-
-
-        if (!pWho || pWho == m_creature)
-            return;
-
-
-        if (m_creature->Attack(pWho, true))
-        {
-//            DoCastSpellIfCan(m_creature, SPELL_PROTECTIVE_BUBBLE);
-            m_creature->AddThreat(pWho);
-            m_creature->SetInCombatWith(pWho);
-            pWho->SetInCombatWith(m_creature);
-            DoStartMovement(pWho);
-        }
     }
 
     void WaterElementHit()
@@ -126,7 +116,7 @@ struct MANGOS_DLL_DECL boss_ichoronAI : public ScriptedAI
         m_creature->SetHealth(m_creature->GetHealth() + m_creature->GetMaxHealth() * 0.01);
         if (m_bIsExploded)
         {
-            DoCastSpellIfCan(m_creature, SPELL_PROTECTIVE_BUBBLE);
+            DoCast(m_creature, SPELL_PROTECTIVE_BUBBLE);
             m_bIsExploded = false;
             m_creature->SetVisibility(VISIBILITY_ON);
             m_creature->GetMotionMaster()->MoveChase(m_creature->getVictim());
@@ -158,32 +148,55 @@ struct MANGOS_DLL_DECL boss_ichoronAI : public ScriptedAI
         m_lWaterElementsGUIDList.clear();
     }
 
-    void StartMovement(uint32 id)
+    void DoAction(uint32 action)
     {
-        m_creature->GetMotionMaster()->MovePoint(id, PortalLoc[id].x, PortalLoc[id].y, PortalLoc[id].z);
-        m_creature->AddSplineFlag(SPLINEFLAG_WALKMODE);
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-        MovementStarted = true;
-        m_creature->SetInCombatWithZone();
-    }
-
-    void MovementInform(uint32 type, uint32 id)
-    {
-        if (type != POINT_MOTION_TYPE || !MovementStarted) return;
-        if (id == 0)
+        switch (action)
         {
-            MovementStarted = false;
-            m_creature->GetMotionMaster()->MovementExpired();
-            SetCombatMovement(true);
-            m_creature->SetInCombatWithZone();
+        case BOSS_PULL:
+            //m_creature->MonsterSay("Prej me pullnuli",0,m_creature->GetGUID());
+            for (uint8 i=0;i<2;i++)
+            {
+                if (!i)
+                    AddWaypoint(i,IchoronOutWP[i][0],IchoronOutWP[i][1],IchoronOutWP[i][2],3000);
+                else
+                    AddWaypoint(i,IchoronOutWP[i][0],IchoronOutWP[i][1],IchoronOutWP[i][2]);
+            }
+            SetDespawnAtEnd(false);
+            BossStartTimer=5000;
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void WaypointReached(uint32 point)
     {
-        if (m_pInstance->GetData(TYPE_ICHORON) == SPECIAL && !MovementStarted)
-           StartMovement(0);
+
+        switch(point)
+        {
+        case 1:
+            if (m_creature->HasFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE))
+                m_creature->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE);
+            if (m_creature->HasFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NOT_SELECTABLE))
+                m_creature->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NOT_SELECTABLE);
+            if (m_creature->HasFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_PASSIVE))
+                m_creature->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_PASSIVE);
+            if (m_creature->HasFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_OOC_NOT_ATTACKABLE))
+                m_creature->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_OOC_NOT_ATTACKABLE);
+            m_creature->setFaction(FACTION_VIOLET_HOLD_INVADER);
+
+        }
+    }
+
+    void UpdateEscortAI(const uint32 uiDiff)
+    {
+        if (BossStartTimer)
+        {
+            if (BossStartTimer<=uiDiff)
+            {
+                Start();
+                BossStartTimer=0;
+            }
+            else
+                BossStartTimer-=uiDiff;
+        }
 
         //Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
@@ -195,18 +208,19 @@ struct MANGOS_DLL_DECL boss_ichoronAI : public ScriptedAI
             {
                 if (!m_bIsExploded)
                 {
-                    if (!m_creature->HasAura(SPELL_PROTECTIVE_BUBBLE, EFFECT_INDEX_0))
+                    if (!m_creature->HasAura(SPELL_PROTECTIVE_BUBBLE))
                     {
-                        DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_WATER_BLAST_H : SPELL_WATER_BLAST);
-                        //DoCastSpellIfCan(m_creature, SPELL_DRAINED);
+                        DoCast(m_creature, m_bIsRegularMode ? SPELL_WATER_BLAST_H : SPELL_WATER_BLAST);
+                        //DoCast(m_creature, SPELL_DRAINED);
                         m_bIsExploded = true;
                         m_uiShowup_Counter = 0;
-                        DoCastSpellIfCan(m_creature, SPELL_PROTECTIVE_BUBBLE);
                         m_creature->AttackStop();
+                        m_creature->SetVisibility(VISIBILITY_OFF);
                         for(uint8 i = 0; i < 10; i++)
                         {
-                            int tmp = urand(0, 5);
-                            m_creature->SummonCreature(NPC_ICHOR_GLOBULE, PortalLoc[tmp].x, PortalLoc[tmp].y, PortalLoc[tmp].z, 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                            //int tmp = urand(0, 5);
+                            //m_creature->SummonCreature(NPC_ICHOR_GLOBULE, PortalLoc[tmp].x, PortalLoc[tmp].y, PortalLoc[tmp].z, 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                            m_creature->SummonCreature(NPC_ICHOR_GLOBULE, m_creature->GetPositionX()-10+rand()%20, m_creature->GetPositionY()-10+rand()%20, m_creature->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
                         }
                     }
                     m_uiBuubleChecker_Timer = 3000;
@@ -224,9 +238,10 @@ struct MANGOS_DLL_DECL boss_ichoronAI : public ScriptedAI
                     }
                     if (!bIsWaterElementsAlive || m_uiShowup_Counter > 20)
                     {
+                        DoCast(m_creature, SPELL_PROTECTIVE_BUBBLE);
                         m_bIsExploded = false;
                         m_uiShowup_Counter = 0;
-                        m_creature->SetInCombatWithZone();
+                        m_creature->SetVisibility(VISIBILITY_ON);
                         m_creature->GetMotionMaster()->MoveChase(m_creature->getVictim());
                     }
                     m_uiBuubleChecker_Timer = 1000;
@@ -239,18 +254,19 @@ struct MANGOS_DLL_DECL boss_ichoronAI : public ScriptedAI
         {
             if (m_uiWaterBoltVolley_Timer < uiDiff)
             {
-                DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_WATER_BOLT_VOLLEY_H : SPELL_WATER_BOLT_VOLLEY);
+                DoCast(m_creature, m_bIsRegularMode ? SPELL_WATER_BOLT_VOLLEY_H : SPELL_WATER_BOLT_VOLLEY);
                 m_uiWaterBoltVolley_Timer = urand(10000, 15000);
             }
             else m_uiWaterBoltVolley_Timer -= uiDiff;
 
             if (!m_bIsFrenzy && (m_creature->GetHealth()*100 / m_creature->GetMaxHealth()) < 25)
             {
-                DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_FRENZY_H : SPELL_FRENZY);
+                DoCast(m_creature, m_bIsRegularMode ? SPELL_FRENZY_H : SPELL_FRENZY);
                 m_bIsFrenzy = true;
             }
+
+            DoMeleeAttackIfReady();
         }
-        DoMeleeAttackIfReady();
     }
 
     void JustDied(Unit* pKiller)
@@ -258,8 +274,15 @@ struct MANGOS_DLL_DECL boss_ichoronAI : public ScriptedAI
         DoScriptText(SAY_DEATH, m_creature);
         DespawnWaterElements();
 
-        if (m_pInstance)
-            m_pInstance->SetData(TYPE_ICHORON, DONE);
+        if (m_instance)
+        {
+            if (!m_bIsRegularMode)
+                m_instance->SetData(DATA_EREKEM,SPECIAL);
+            else
+                m_instance->SetData(DATA_EREKEM,DONE);
+            if (Creature* pCreature = m_creature->GetMap()->GetCreature(m_instance->GetData64(DOOR_GUID)))
+                pCreature->AI()->DoAction(BOSS_DEAD);
+        }
     }
 
     void KilledUnit(Unit* pVictim)
@@ -278,8 +301,8 @@ struct MANGOS_DLL_DECL mob_ichor_globuleAI : public ScriptedAI
 {
     mob_ichor_globuleAI(Creature *pCreature) : ScriptedAI(pCreature)
     {
-        m_pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
-        Reset();
+    	m_pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
+    	Reset();
     }
     ScriptedInstance *m_pInstance;
 
@@ -318,7 +341,7 @@ struct MANGOS_DLL_DECL mob_ichor_globuleAI : public ScriptedAI
 
     void JustDied(Unit* pKiller)
     {
-        DoCastSpellIfCan(m_creature, SPELL_SPLASH);
+        DoCast(m_creature, SPELL_SPLASH);
     }
 };
 

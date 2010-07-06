@@ -3294,6 +3294,7 @@ bool GossipSelect_minecar(Player *player, Creature *_Creature, uint32 sender, ui
               case 1: player->TeleportTo(609, 2104.57f, -6194.57f, 13.0764f, 1.15398f); break;
           }
 return true;
+}
 
 /*######
 ## npc_eye_of_acherus
@@ -3501,6 +3502,12 @@ void AddSC_ebon_hold()
     newscript->Name = "npc_the_lich_king_tirion_dawn";
     newscript->GetAI = &GetAI_npc_the_lich_king_tirion_dawn;
     newscript->RegisterSelf();
+	
+	newscript = new Script;
+    newscript->Name = "minecar";
+    newscript->pGossipHello = &GossipHello_minecar;
+    newscript->pGossipSelect = &GossipSelect_minecar;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_eye_of_acherus";
@@ -3512,9 +3519,4 @@ void AddSC_ebon_hold()
     newscript->pGOHello = &GOHello_go_eye_of_acherus;
     newscript->RegisterSelf();
 	
-	newscript = new Script;
-    newscript->Name = "minecar";
-    newscript->pGossipHello = &GossipHello_minecar;
-    newscript->pGossipSelect = &GossipSelect_minecar;
-    newscript->RegisterSelf();
 }

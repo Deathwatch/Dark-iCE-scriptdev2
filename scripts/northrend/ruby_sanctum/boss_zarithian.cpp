@@ -13,13 +13,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 /* ScriptData
 SDName: boss_zarithian
-SD%Complete: 0%
+SD%Complete: 50%
 SDComment: by /dev/rsa
 SDCategory: ruby_sanctum
 EndScriptData */
+
+//TODO: Add spawn Locs, sql spells, sql npcs, TEST
 
 #include "precompiled.h"
 #include "def_ruby_sanctum.h"
@@ -35,10 +36,10 @@ enum
 	NPC_FLAMECALLER					 = 39814,
 };
 
-static float add[2][2]=
+static float add[2][4]=
 {
-	{0.0f,	0.0f,},
-	{0.0f,	0.0f,},
+	{0.0f,	0.0f,	0.0f,	0.0f}, //x y z o
+	{0.0f,	0.0f,	0.0f,	0.0f},
 };
 
 struct MANGOS_DLL_DECL boss_zarithianAI : public ScriptedAI
@@ -123,8 +124,8 @@ struct MANGOS_DLL_DECL boss_zarithianAI : public ScriptedAI
 		if (uiTimer < diff)
 		{
 			DoScriptText(-1666204,m_creature);
-			m_creature->SummonCreature(NPC_FLAMECALLER, add[0][0], add[0][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 20000);
-			m_creature->SummonCreature(NPC_FLAMECALLER, add[1][0], add[1][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 20000);
+			m_creature->SummonCreature(NPC_FLAMECALLER, add[0][0], add[0][1], add[0][2], add[0][3], TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 20000);
+			m_creature->SummonCreature(NPC_FLAMECALLER, add[1][0], add[1][1], add[1][2], add[1][3], TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 20000);
 			uiTimer = 45000;
 		}
 			

@@ -21,6 +21,8 @@ SDComment: by /dev/rsa & notagain
 SDCategory: ruby_sanctum
 EndScriptData */
 
+//TODO: Add meteor/portal mechanics, twilight cutter (2 orbs), sql spells, sql npcs, TEST
+
 #include "precompiled.h"
 #include "def_ruby_sanctum.h"
 

@@ -21,6 +21,8 @@ SDComment: by /dev/rsa
 SDCategory: ruby_sanctum
 EndScriptData */
 
+//TODO: sql spells, sql npcs, TEST
+
 #include "precompiled.h"
 #include "def_ruby_sanctum.h"
 
@@ -230,7 +232,6 @@ struct MANGOS_DLL_DECL boss_cloneAI : public ScriptedAI
         if (!pInstance) 
 			return;
 
-        DoScriptText(-1666303,m_creature);
         if (Creature* pClone = (Creature*)Unit::GetUnit((*m_creature),pInstance->GetData64(NPC_BALTHARUS)))
 			if (!pClone->isAlive())
 				pInstance->SetData(TYPE_BALTHARUS, DONE);

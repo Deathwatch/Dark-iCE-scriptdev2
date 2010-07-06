@@ -16,10 +16,12 @@
 
 /* ScriptData
 SDName: boss_ragefire
-SD%Complete: 0%
+SD%Complete: 50%
 SDComment: by /dev/rsa
 SDCategory: ruby_sanctum
 EndScriptData */
+
+//TODO: work on air phase movement/cast/co-ords, sql spells, sql npcs, TEST
 
 #include "precompiled.h"
 #include "def_ruby_sanctum.h"

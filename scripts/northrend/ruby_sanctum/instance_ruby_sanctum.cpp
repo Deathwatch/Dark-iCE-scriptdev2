@@ -14,6 +14,8 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+//TODO:  Trash mobs, spawn and removal of fire ring/walls, spawn of halion
+
 #include "precompiled.h"
 #include "def_ruby_sanctum.h"
 

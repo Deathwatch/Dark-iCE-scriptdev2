@@ -945,7 +945,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
                 m_creature->StopMoving();
                 DoScriptText(SAY_ARCANE_PULSE, m_creature);
                 DoScriptText(SAY_ARCANE_PULSE_WARN, m_creature);
-                SendDeepBreathCast();
+//                SendDeepBreathCast();
                 if(pTrigger)
                     DoCast(pTrigger, SPELL_SURGE_OF_POWER_BREATH);
 

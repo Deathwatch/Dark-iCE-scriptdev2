@@ -142,19 +142,19 @@ struct MANGOS_DLL_DECL boss_halion_pAI : public ScriptedAI
 {
     boss_halion_pAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         bsw = new BossSpellWorker(this);
         Reset();
     }
 
-    ScriptedInstance* m_pInstance;
+    ScriptedInstance* pInstance;
     uint8 p_phase;
     bool intro;
     BossSpellWorker* bsw;
 
     void Reset()
     {
-        if(!m_pInstance)
+        if(!pInstance)
             return;
 
         p_phase = 0;
@@ -173,26 +173,26 @@ struct MANGOS_DLL_DECL boss_halion_pAI : public ScriptedAI
 
     void JustReachedHome()
     {
-        if (!m_pInstance)
+        if (!pInstance)
             return;
             
-        m_pInstance->SetData(TYPE_HALION, FAIL);
-        m_pInstance->SetData(DATA_HEALTH_HALION_P, m_creature->GetMaxHealth());
+        pInstance->SetData(TYPE_HALION, FAIL);
+        pInstance->SetData(DATA_HEALTH_HALION_P, m_creature->GetMaxHealth());
     }
 
     void JustDied(Unit* pKiller)
     {
-        if (!m_pInstance)
+        if (!pInstance)
             return;
 
         DoScriptText(-1666104,m_creature);
-        if (Creature* pclone = (Creature*)Unit::GetUnit((*m_creature),m_pInstance->GetData64(NPC_HALION_T)))
+        if (Creature* pclone = (Creature*)Unit::GetUnit((*m_creature),pInstance->GetData64(NPC_HALION_T)))
             if (!pclone->isAlive())
-                m_pInstance->SetData(TYPE_HALION, DONE);
-        else
-            m_pInstance->SetData(TYPE_HALION, SPECIAL);
+                pInstance->SetData(TYPE_HALION, DONE);
+			else
+				pInstance->SetData(TYPE_HALION, SPECIAL);
 		
-		m_pInstance->SetData(DATA_HEALTH_HALION_P, 0);
+		pInstance->SetData(DATA_HEALTH_HALION_P, 0);
     }
 
     void KilledUnit(Unit* pVictim)
@@ -210,40 +210,40 @@ struct MANGOS_DLL_DECL boss_halion_pAI : public ScriptedAI
 
     void Aggro(Unit* pWho)
     {
-        if (!m_pInstance)
+        if (!pInstance)
             return;
 
         m_creature->SetInCombatWithZone();
-        m_pInstance->SetData(TYPE_HALION, IN_PROGRESS);     
+        pInstance->SetData(TYPE_HALION, IN_PROGRESS);     
         DoScriptText(-1666101,m_creature);
-        m_pInstance->SetData(DATA_HEALTH_HALION_P, m_creature->GetMaxHealth());
+        pInstance->SetData(DATA_HEALTH_HALION_P, m_creature->GetMaxHealth());
     }
 
     void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
     {
-        if (!m_pInstance)
+        if (!pInstance)
             return;
         if (!m_creature || !m_creature->isAlive())
             return;
         if (pDoneBy->GetGUID() == m_creature->GetGUID())
             return;
 
-        m_pInstance->SetData(DATA_HEALTH_HALION_P, m_creature->GetHealth() >= uiDamage ? m_creature->GetHealth() - uiDamage : 0);
+        pInstance->SetData(DATA_HEALTH_HALION_P, m_creature->GetHealth() >= uiDamage ? m_creature->GetHealth() - uiDamage : 0);
     }
 
     void UpdateAI(const uint32 uiDiff)
     {
-        if (!m_pInstance)
+        if (!pInstance)
             return;
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        if (m_creature->GetHealth() > m_pInstance->GetData(DATA_HEALTH_HALION_T) && m_pInstance->GetData(DATA_HEALTH_HALION_T) != 0)
-            m_creature->SetHealth(m_pInstance->GetData(DATA_HEALTH_HALION_T));
+        if (m_creature->GetHealth() > pInstance->GetData(DATA_HEALTH_HALION_T) && pInstance->GetData(DATA_HEALTH_HALION_T) != 0)
+            m_creature->SetHealth(pInstance->GetData(DATA_HEALTH_HALION_T));
 
         if (m_creature->GetHealthPercent() < 100.0f && p_phase == 0)
         {
-            m_pInstance->SetData(TYPE_HALION_LOCK, DONE);
+            pInstance->SetData(TYPE_HALION_LOCK, DONE);
             p_phase = 1;
         }
         
@@ -311,37 +311,37 @@ struct MANGOS_DLL_DECL boss_halion_tAI : public ScriptedAI
 {
     boss_halion_tAI(Creature* pCreature) : ScriptedAI(pCreature) 
     {
-        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         bsw = new BossSpellWorker(this);
         Reset();
     }
 
-    ScriptedInstance* m_pInstance;
+    ScriptedInstance* pInstance;
     uint8 t_phase;
     BossSpellWorker* bsw;
 
     void Reset() 
     {
-        if(!m_pInstance) return;
+        if(!pInstance) return;
         t_phase = 0;
     }
 
     void JustReachedHome()
     {
-        if (!m_pInstance)
+        if (!pInstance)
             return;
 
-        m_pInstance->SetData(TYPE_HALION, FAIL);
-        m_pInstance->SetData(DATA_HEALTH_HALION_T, m_creature->GetMaxHealth());
+        pInstance->SetData(TYPE_HALION, FAIL);
+        pInstance->SetData(DATA_HEALTH_HALION_T, m_creature->GetMaxHealth());
     }
 
     void JustDied(Unit* pKiller)
     {
-        if (!m_pInstance)
+        if (!pInstance)
             return;
 
         DoScriptText(-1666104,m_creature);
-        m_pInstance->SetData(DATA_HEALTH_HALION_T, 0);
+        pInstance->SetData(DATA_HEALTH_HALION_T, 0);
     }
 
     void KilledUnit(Unit* pVictim)
@@ -359,11 +359,11 @@ struct MANGOS_DLL_DECL boss_halion_tAI : public ScriptedAI
 
     void Aggro(Unit* pWho)
     {
-        if (!m_pInstance)
+        if (!pInstance)
             return;
 
         m_creature->SetInCombatWithZone();
-        m_pInstance->SetData(DATA_HEALTH_HALION_T, m_creature->GetMaxHealth());
+        pInstance->SetData(DATA_HEALTH_HALION_T, m_creature->GetMaxHealth());
 
         if (t_phase == 0)
             t_phase = 2;
@@ -371,14 +371,14 @@ struct MANGOS_DLL_DECL boss_halion_tAI : public ScriptedAI
 
     void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
     {
-        if (!m_pInstance)
+        if (!pInstance)
             return;
         if (!m_creature || !m_creature->isAlive())
             return;
         if(pDoneBy->GetGUID() == m_creature->GetGUID())
             return;
 
-        m_pInstance->SetData(DATA_HEALTH_HALION_T, m_creature->GetHealth() >= uiDamage ? m_creature->GetHealth() - uiDamage : 0);
+        pInstance->SetData(DATA_HEALTH_HALION_T, m_creature->GetHealth() >= uiDamage ? m_creature->GetHealth() - uiDamage : 0);
     }
 
     void UpdateAI(const uint32 uiDiff)
@@ -386,8 +386,8 @@ struct MANGOS_DLL_DECL boss_halion_tAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        if (m_creature->GetHealth() > m_pInstance->GetData(DATA_HEALTH_HALION_P) && m_pInstance->GetData(DATA_HEALTH_HALION_P) != 0)
-            m_creature->SetHealth(m_pInstance->GetData(DATA_HEALTH_HALION_P));
+        if (m_creature->GetHealth() > pInstance->GetData(DATA_HEALTH_HALION_P) && pInstance->GetData(DATA_HEALTH_HALION_P) != 0)
+            m_creature->SetHealth(pInstance->GetData(DATA_HEALTH_HALION_P));
 
         if (m_creature->GetHealthPercent() < 50.0f && t_phase == 2)
         {
@@ -431,12 +431,12 @@ struct MANGOS_DLL_DECL mob_meteorAI : public ScriptedAI
 {
     mob_meteorAI(Creature *pCreature) : ScriptedAI(pCreature)
     {
-        m_pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
+        pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
         bsw = new BossSpellWorker(this);
         Reset();
     }
 
-    ScriptedInstance *m_pInstance;
+    ScriptedInstance *pInstance;
     BossSpellWorker* bsw;
     uint32 m_uiTimer;
 
@@ -453,18 +453,18 @@ struct MANGOS_DLL_DECL mob_meteorAI : public ScriptedAI
         return;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 diff)
     {
-        if (!m_pInstance)
+        if (!pInstance)
             return;
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
 		bsw->doCast(SPELL_METEOR);
-        bsw->timedCast(SPELL_METEOR_IMPACT_ZONE, uiDiff);
-		bsw->timedCast(SPELL_METEOR_LAND, uiDiff);
+        bsw->timedCast(SPELL_METEOR_IMPACT_ZONE, diff);
+		bsw->timedCast(SPELL_METEOR_LAND, diff);
 
-		if (m_uiTimer < uiDiff)
+		if (m_uiTimer < diff)
             {               
 				switch (urand(0,3)) 
 				{
@@ -530,7 +530,7 @@ struct MANGOS_DLL_DECL mob_meteorAI : public ScriptedAI
 			m_uiTimer = 998000;
             }
 			else
-                    m_uiTimer -= uiDiff;
+                    m_uiTimer -= diff;
 	}
 };
 CreatureAI* GetAI_mob_meteor(Creature* pCreature)
@@ -541,12 +541,12 @@ struct MANGOS_DLL_DECL mob_flameAI : public ScriptedAI
 {
     mob_flameAI(Creature *pCreature) : ScriptedAI(pCreature)
     {
-        m_pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
+        pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
         bsw = new BossSpellWorker(this);
         Reset();
     }
 
-    ScriptedInstance *m_pInstance;
+    ScriptedInstance *pInstance;
     BossSpellWorker* bsw;
 
     void Reset()

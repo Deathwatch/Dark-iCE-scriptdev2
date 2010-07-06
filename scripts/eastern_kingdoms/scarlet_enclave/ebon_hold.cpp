@@ -3277,6 +3277,24 @@ CreatureAI* GetAI_npc_the_lich_king_tirion_dawn(Creature* pCreature)
     return new npc_the_lich_king_tirion_dawnAI (pCreature);
 }
 
+bool GossipHello_minecar(Player *player, Creature *_Creature)
+{
+
+    player->ADD_GOSSIP_ITEM( 5, "Dummy"                    , GOSSIP_SENDER_MAIN, 6000);
+
+    player->PlayerTalkClass->SendGossipMenu(6000,_Creature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_minecar(Player *player, Creature *_Creature, uint32 sender, uint32 action)
+{
+  switch(rand()% 2)
+          {
+              case 0: player->TeleportTo(609, 2265.45f, -6203.52f, 13.0776f, 1.929f); break;
+              case 1: player->TeleportTo(609, 2104.57f, -6194.57f, 13.0764f, 1.15398f); break;
+          }
+return true;
+
 /*######
 ## npc_eye_of_acherus
 ######*/
@@ -3492,5 +3510,11 @@ void AddSC_ebon_hold()
     newscript = new Script;
     newscript->Name = "go_eye_of_acherus";
     newscript->pGOHello = &GOHello_go_eye_of_acherus;
+    newscript->RegisterSelf();
+	
+	newscript = new Script;
+    newscript->Name = "minecar";
+    newscript->pGossipHello = &GossipHello_minecar;
+    newscript->pGossipSelect = &GossipSelect_minecar;
     newscript->RegisterSelf();
 }

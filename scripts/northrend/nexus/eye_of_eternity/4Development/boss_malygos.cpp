@@ -258,16 +258,16 @@ static LocationsXY VortexLoc[]=
 };
 static Locations OtherLoc[]=
 {
-    {808.0f, 1301.0f, 268.0f, 0.0f},          // Phase 3 position 
+    {808.0f, 1301.0f, 268.0f, 0},          // Phase 3 position 
     {749.0f, 1244.0f, 332.0f, 1.544f},      // Vortex FarSight loc
-    {754.29f, 1301.18f, 266.17f, 0.0f}, // Center of the platform, ground.
-    {823.0f, 1241.0f, 299.0f, 0.0f},          // Alexstrasza's  position
+    {754.29f, 1301.18f, 266.17f, 0}, // Center of the platform, ground.
+    {823.0f, 1241.0f, 299.0f, 0},          // Alexstrasza's  position
 };
 #define MAX_VORTEX              21
 #define VORTEX_Z                268.0f
 
 #define FLOOR_Z                 268.17f
-#define AIR_Z                   297.24f 
+#define AIR_Z                   297.24f
 /*######
 ## boss_malygos
 ######*/
@@ -383,7 +383,8 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
             m_creature->AddThreat(pWho);
             m_creature->SetInCombatWith(pWho);
             pWho->SetInCombatWith(m_creature);
-            if(m_uiPhase != PHASE_DRAGONS && !m_creature->HasAura(SPELL_BERSERK))
+            if(m_uiPhase == PHASE_FLOOR || m_creature->HasAura(SPELL_BERSERK))
+            if(!(m_uiPhase == PHASE_FLOOR && !m_creature->HasAura(SPELL_BERSERK)))
                 m_creature->GetMotionMaster()->MoveChase(pWho);
         }
     }
@@ -493,7 +494,6 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
             ((Creature*)pDisc)->SetSpeedRate(MOVE_FLIGHT, 3.5f, true);
             ((Creature*)pDisc)->SetSpeedRate(MOVE_RUN, 3.5f, true);
             ((Creature*)pDisc)->SetSpeedRate(MOVE_WALK, 3.5f, true);
-            ((Creature*)pDisc)->SetHealth(m_creature->GetMaxHealth());
             m_lDiscGUIDList.push_back(((Creature*)pDisc)->GetGUID());
         }
     }
@@ -583,8 +583,8 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
             Map::PlayerList const &lPlayers = pMap->GetPlayers();
             for(Map::PlayerList::const_iterator itr = lPlayers.begin(); itr != lPlayers.end(); ++itr)
             {
-                itr->getSource()->GetCamera().ResetView();
-                itr->getSource()->NearTeleportTo(VortexLoc[0].x, VortexLoc[0].y, VORTEX_Z+10, 0);
+                itr->getSource()->GetCamera().SetView(itr->getSource());
+                //itr->getSource()->NearTeleportTo(VortexLoc[0].x, VortexLoc[0].y, VORTEX_Z+10, 0);
             }
             
             m_creature->GetMotionMaster()->Clear(false);
@@ -728,7 +728,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
             m_lDiscGUIDList.clear();
             return;
         }
-		
+
         std::list<Creature*> m_pCreatures;
         GetCreatureListWithEntryInGrid(m_pCreatures, m_creature, entry, distance);
 
@@ -739,7 +739,33 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
             (*iter)->ForcedDespawn();
 
     }
-    //Spell not in DBC, but on retail client recieve its opcode, so..
+	/* This doesn't compile because of
+
+	boss_malygos.obj : error LNK2019: unresolved external symbol
+	"class ByteBuffer & __cdecl operator<<(class ByteBuffer &,class PackedGuid const &)" (??6@YAAAVByteBuffer@@AAV0@ABVPackedGuid@@@Z
+	referenced in function "public: void __thiscall boss_malygosAI::SendDeepBreathCast(void)" (?SendDeepBreathCast@boss_malygosAI@@QAEXXZ)
+
+    Perhaps someone else can shine a light on this? (tested on Tass' core, same problem)
+	Likely only compiles under Linux as that's what Tass uses
+
+	//Spell not in DBC, but on retail client recieve its opcode, so..
+    void SendDeepBreathCast()
+    {
+        WorldPacket data(SMSG_SPELL_GO, 50);
+        data << m_creature->GetPackGUID();
+
+        data << m_creature->GetPackGUID();
+        data << uint8(1);
+        data << uint32(SPELL_DEEP_BREATH);
+        data << uint32(256);
+        data << uint32(getMSTime());
+
+        data << uint8(0);
+        data << uint8(0);
+        data << uint8(0);
+
+        m_creature->SendMessageToSet(&data, false);
+    }*/
 
     void UpdateAI(const uint32 uiDiff)
     {
@@ -795,12 +821,12 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
         {
             //m_creature->StopMoving();
             SetCombatMovement(true);
-            DoCastSpellIfCan(m_creature, SPELL_BERSERK, true);
+            DoCast(m_creature, SPELL_BERSERK, true);
             m_uiEnrageTimer = 600000;
             m_creature->SetSpeedRate(MOVE_FLIGHT, 3.5f, true);
             m_creature->SetSpeedRate(MOVE_RUN, 3.5f, true);
             m_creature->SetSpeedRate(MOVE_WALK, 3.5f, true);
-            m_creature->GetMotionMaster()->Clear(false);
+            m_creature->GetMotionMaster()->Clear(false, true);
             m_creature->GetMotionMaster()->MoveChase(m_creature->getVictim());
             //m_creature->AI()->AttackStart(m_creature->getVictim());
         }else m_uiEnrageTimer -= uiDiff;
@@ -815,7 +841,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
                     
                     if(m_uiVortexPhase == 1 || m_uiVortexPhase == 11){
                         if(m_uiVortexPhase == 1)
-                            DoCastSpellIfCan(m_creature, SPELL_VORTEX_DUMMY);
+                            DoCast(m_creature, SPELL_VORTEX_DUMMY);
                         m_uiTimer = 300;
                     }else
                         m_uiTimer = 500;
@@ -851,7 +877,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
             //Arcane Breath
             if(m_uiArcaneBreathTimer <= uiDiff)
             {
-                DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_ARCANE_BREATH : SPELL_ARCANE_BREATH_H);
+                DoCast(m_creature, m_bIsRegularMode ? SPELL_ARCANE_BREATH : SPELL_ARCANE_BREATH_H);
                 m_uiArcaneBreathTimer = 15000 + urand(3000, 8000);
             }else m_uiArcaneBreathTimer -= uiDiff;
 
@@ -919,8 +945,9 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
                 m_creature->StopMoving();
                 DoScriptText(SAY_ARCANE_PULSE, m_creature);
                 DoScriptText(SAY_ARCANE_PULSE_WARN, m_creature);
+                SendDeepBreathCast();
                 if(pTrigger)
-                    DoCastSpellIfCan(pTrigger, SPELL_SURGE_OF_POWER_BREATH);
+                    DoCast(pTrigger, SPELL_SURGE_OF_POWER_BREATH);
 
                 m_uiDeepBreathTimer = 60000;
             }else m_uiDeepBreathTimer -= uiDiff;
@@ -991,7 +1018,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
                     m_uiSubPhase = 0;
                     m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     SetCombatMovement(false);
-                    m_creature->GetMotionMaster()->Clear(false);        // No moving!
+                    m_creature->GetMotionMaster()->Clear(false, true);        // No moving!
                     m_creature->GetMotionMaster()->MoveIdle();
                     if(Unit *pVehicle = ((Unit*)Unit::GetUnit(*m_creature, m_creature->getVictim()->GetVehicleGUID())))
                     {
@@ -1037,7 +1064,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
                 float victim_threat = m_creature->getThreatManager().getThreat(m_creature->getVictim());
                 DoResetThreat();
                 m_creature->AddThreat(pTarget, victim_threat);
-                DoCastSpellIfCan(pTarget, m_bIsRegularMode ? SPELL_SURGE_OF_POWER : SPELL_SURGE_OF_POWER_H);
+                DoCast(pTarget, m_bIsRegularMode ? SPELL_SURGE_OF_POWER : SPELL_SURGE_OF_POWER_H);
                 DoScriptText(SAY_SURGE_OF_POWER, m_creature);
                 m_uiSurgeOfPowerTimer = 16000+rand()%15000;
             }else m_uiSurgeOfPowerTimer -= uiDiff;	
@@ -1175,7 +1202,7 @@ struct MANGOS_DLL_DECL mob_power_sparkAI : public ScriptedAI
             m_creature->AttackStop();
             SetCombatMovement(false);
 
-            m_creature->GetMotionMaster()->MovementExpired();
+            m_creature->GetMotionMaster()->MovementExpired(false);
 
             m_creature->GetMotionMaster()->Clear(false);
             m_creature->StopMoving();
@@ -1315,7 +1342,9 @@ struct MANGOS_DLL_DECL mob_scion_of_eternityAI : public ScriptedAI
 
         MaNGOS::NormalizeMapCoord(destX);
         MaNGOS::NormalizeMapCoord(destY);
-        m_creature->MonsterMoveWithSpeed(destX, destY, m_creature->GetPositionZ(), 900);
+        m_creature->AddSplineFlag(SPLINEFLAG_UNKNOWN7);
+        m_creature->GetMap()->CreatureRelocation(m_creature, destX, destY, m_creature->GetPositionZ(), m_fAngle);
+        m_creature->SendMonsterMove(destX, destY, m_creature->GetPositionZ(), SPLINETYPE_NORMAL , m_creature->GetSplineFlags(), 900);
     }
     void AttackStart(Unit *pWho)
     {
@@ -1341,7 +1370,7 @@ struct MANGOS_DLL_DECL mob_scion_of_eternityAI : public ScriptedAI
             {
                 int32 bpoints0 = m_bIsRegularMode ? int32(BP_BARRAGE0) : int32(BP_BARRAGE0_H);
                 m_creature->CastCustomSpell(pTarget, SPELL_ARCANE_BARRAGE, &bpoints0, 0, 0, false);  
-                //DoCastSpellIfCan(pTarget, SPELL_ARCANE_BARRAGE);  // this spell is not right :/
+                //DoCast(pTarget, SPELL_ARCANE_BARRAGE);  // this spell is not right :/
             }
             m_uiArcaneBarrageTimer = 3000 + rand()%19000;
         }else m_uiArcaneBarrageTimer -= uiDiff;

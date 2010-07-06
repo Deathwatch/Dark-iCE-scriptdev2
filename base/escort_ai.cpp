@@ -29,7 +29,8 @@ npc_escortAI::npc_escortAI(Creature* pCreature) : ScriptedAI(pCreature),
     m_bIsRunning(false),
     m_pQuestForEscort(NULL),
     m_bCanInstantRespawn(false),
-    m_bCanReturnToStart(false)
+    m_bCanReturnToStart(false),
+    m_despawnAtEnd(true)
 {}
 
 bool npc_escortAI::IsVisible(Unit* pWho) const
@@ -308,8 +309,10 @@ void npc_escortAI::UpdateAI(const uint32 uiDiff)
                     m_creature->setDeathState(JUST_DIED);
                     m_creature->Respawn();
                 }
-                else
+                else if (m_despawnAtEnd)
                     m_creature->ForcedDespawn();
+                else
+                    RemoveEscortState(STATE_ESCORT_ESCORTING);
 
                 return;
             }
@@ -379,12 +382,12 @@ void npc_escortAI::MovementInform(uint32 uiMoveType, uint32 uiPointId)
     }
 }
 
-/*void npc_escortAI::AddWaypoint(uint32 id, float x, float y, float z, uint32 WaitTimeMs)
+void npc_escortAI::AddWaypoint(uint32 id, float x, float y, float z, uint32 WaitTimeMs)
 {
     Escort_Waypoint t(id, x, y, z, WaitTimeMs);
 
     WaypointList.push_back(t);
-}*/
+}
 
 void npc_escortAI::FillPointMovementListForCreature()
 {
@@ -436,8 +439,8 @@ void npc_escortAI::Start(bool bIsActiveAttacker, bool bRun, uint64 uiPlayerGUID,
         return;
     }
 
-    if (!WaypointList.empty())
-        WaypointList.clear();
+    /*if (!WaypointList.empty())
+        WaypointList.clear();*/
 
     FillPointMovementListForCreature();
 

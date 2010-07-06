@@ -64,7 +64,7 @@ struct MANGOS_DLL_DECL npc_escortAI : public ScriptedAI
         void MovementInform(uint32, uint32);
 
         // EscortAI functions
-        //void AddWaypoint(uint32 id, float x, float y, float z, uint32 WaitTimeMs = 0);
+        void AddWaypoint(uint32 id, float x, float y, float z, uint32 WaitTimeMs = 0);
 
         virtual void WaypointReached(uint32 uiPointId) = 0;
         virtual void WaypointStart(uint32 uiPointId) {}
@@ -76,6 +76,7 @@ struct MANGOS_DLL_DECL npc_escortAI : public ScriptedAI
 
         bool HasEscortState(uint32 uiEscortState) { return (m_uiEscortState & uiEscortState); }
 
+        void SetDespawnAtEnd(bool despawn) { m_despawnAtEnd      = despawn; }
     protected:
         Player* GetPlayerForEscort() { return (Player*)Unit::GetUnit(*m_creature, m_uiPlayerGUID); }
         virtual void JustStartedEscort() {}
@@ -92,6 +93,7 @@ struct MANGOS_DLL_DECL npc_escortAI : public ScriptedAI
         uint32 m_uiWPWaitTimer;
         uint32 m_uiPlayerCheckTimer;
         uint32 m_uiEscortState;
+        bool m_despawnAtEnd;
 
         const Quest* m_pQuestForEscort;                     //generally passed in Start() when regular escort script.
 

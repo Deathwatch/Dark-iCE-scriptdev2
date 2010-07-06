@@ -529,6 +529,8 @@ scripts/northrend/violet_hold/boss_xevozz.cpp \
 scripts/northrend/violet_hold/boss_zuramat.cpp \
 scripts/northrend/violet_hold/def_violet_hold.h \
 scripts/northrend/violet_hold/instance_violet_hold.cpp \
+scripts/northrend/violet_hold/violet_hold_invaderAI.cpp \
+scripts/northrend/violet_hold/violet_hold_invaderAI.h \
 scripts/northrend/violet_hold/violet_hold.cpp \
 scripts/northrend/violet_hold/violet_hold.h \
 scripts/outland/blades_edge_mountains.cpp \

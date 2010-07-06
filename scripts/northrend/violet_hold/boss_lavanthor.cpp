@@ -1,4 +1,4 @@
-/* Copyright (C) 2006 - 2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2006 - 2010 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -16,163 +16,167 @@
 
 /* ScriptData
 SDName: boss_lavanthor
-SDAuthor: ckegg
-SD%Complete: 0
+SDAuthor: Tasssadar
+SD%Complete:
 SDComment: 
 SDCategory: The Violet Hold
 EndScriptData */
 
 #include "precompiled.h"
-#include "def_violet_hold.h"
+#include "violet_hold.h"
+#include "escort_ai.h"
 
-enum
+#define S_FIREBOLT              54235
+#define S_FLAME_BREATH          54282
+#define S_LAVA_BURN             54249
+#define S_FIREBOLT_H            59468
+#define S_FLAME_BREATH_H        59469
+#define S_LAVA_BURN_H           54249
+#define S_CAUTERIZING_FLAMES    59466
+
+const float LavanthorOutWP[2][3]=
 {
-    SPELL_CAUTERIZING_FLAMES                  = 59466,
-    SPELL_FIREBOLT                            = 54235,
-    SPELL_FIREBOLT_H                          = 59468,
-    SPELL_FLAME_BREATH                        = 54282,
-    SPELL_FLAME_BREATH_H                      = 59469,
-    SPELL_LAVA_BURN                           = 54249,
-    SPELL_LAVA_BURN_H                         = 59594,
+    {1856.563f, 766.154f, 38.653f},
+    {1856.563f, 766.154f, 38.653f},
 };
 
-struct MANGOS_DLL_DECL boss_lavanthorAI : public ScriptedAI
+struct MANGOS_DLL_DECL boss_lavanthorAI : public npc_escortAI
 {
-    boss_lavanthorAI(Creature *pCreature) : ScriptedAI(pCreature)
+    ScriptedInstance* m_instance;
+
+    boss_lavanthorAI(Creature* pCreature) : npc_escortAI(pCreature)
     {
-        m_pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
-        m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
+        m_instance = (ScriptedInstance*)pCreature->GetInstanceData();
+		HeroicMode = !pCreature->GetMap()->IsRegularDifficulty();
         Reset();
     }
-    ScriptedInstance *m_pInstance;
 
-    bool m_bIsRegularMode;
-    bool MovementStarted;
+    bool HeroicMode;
 
-    uint32 m_uiCauterizingFlames_Timer;
-    uint32 m_uiFlameBreath_Timer;
-    uint32 m_uiFirebolt_Timer;
+	uint16 BossStartTimer;
+    uint16 FireboltTimer;
+    uint16 FlameBreathTimer;
+    uint16 LavaBurnTimer;
+    uint16 CauterizingFlamesTimer;
 
     void Reset()
     {
-        if (!m_pInstance) return;
-        m_uiCauterizingFlames_Timer = urand(40000, 41000);
-        m_uiFlameBreath_Timer = urand(15000, 16000);
-        m_uiFirebolt_Timer = urand(10000, 11000);
-        MovementStarted = false;
-
-        m_pInstance->SetData(TYPE_LAVANTHOR, NOT_STARTED);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        BossStartTimer=0;
+        FireboltTimer = urand(4000,7000);
+        FlameBreathTimer = urand(7000,11000);
+        LavaBurnTimer = urand(11000,15000);
     }
 
-    void Aggro(Unit* pWho)
+    void WaypointReached(uint32 point)
     {
-        if (!m_pInstance) return;
-        m_pInstance->SetData(TYPE_LAVANTHOR, IN_PROGRESS);
-        m_creature->GetMotionMaster()->MovementExpired();
-        SetCombatMovement(true);
-    }
 
-    void AttackStart(Unit* pWho)
-    {
-        if (!m_pInstance)
-            return;
-
-        if (m_pInstance->GetData(TYPE_LAVANTHOR) != SPECIAL && m_pInstance->GetData(TYPE_LAVANTHOR) != IN_PROGRESS)
-            return;
-
-        if (!pWho || pWho == m_creature)
-            return;
-
-        if (m_creature->Attack(pWho, true))
+        switch(point)
         {
-            m_creature->AddThreat(pWho);
-            m_creature->SetInCombatWith(pWho);
-            pWho->SetInCombatWith(m_creature);
-            DoStartMovement(pWho);
+        case 1:
+            if (m_creature->HasFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE))
+                m_creature->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NON_ATTACKABLE);
+            if (m_creature->HasFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NOT_SELECTABLE))
+                m_creature->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NOT_SELECTABLE);
+            if (m_creature->HasFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_PASSIVE))
+                m_creature->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_PASSIVE);
+            if (m_creature->HasFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_OOC_NOT_ATTACKABLE))
+                m_creature->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_OOC_NOT_ATTACKABLE);
+            m_creature->setFaction(FACTION_VIOLET_HOLD_INVADER);
         }
     }
 
-    void StartMovement(uint32 id)
+    void JustDied(Unit* killer)
     {
-        m_creature->GetMotionMaster()->MovePoint(id, PortalLoc[id].x, PortalLoc[id].y, PortalLoc[id].z);
-        m_creature->AddSplineFlag(SPLINEFLAG_WALKMODE);
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-        MovementStarted = true;
-        m_creature->SetInCombatWithZone();
+        if (m_instance)
+        {
+            if (HeroicMode)
+                m_instance->SetData(DATA_LAVANTHOR,SPECIAL);
+            else
+                m_instance->SetData(DATA_LAVANTHOR,DONE);
+            if (Creature* pCreature = m_creature->GetMap()->GetCreature(m_instance->GetData64(DOOR_GUID)))
+                pCreature->AI()->DoAction(BOSS_DEAD);
+        }   
     }
 
-    void MovementInform(uint32 type, uint32 id)
+    void DoAction(uint32 action)
     {
-        if (type != POINT_MOTION_TYPE || !MovementStarted) return;
-        if (id == 0 )
+        switch (action)
         {
-            MovementStarted = false;
-            m_creature->GetMotionMaster()->MovementExpired();
-            SetCombatMovement(true);
-            m_creature->SetInCombatWithZone();
+        case BOSS_PULL:
+            for (uint8 i=0;i<2;i++)
+            {
+                if (!i)
+                    AddWaypoint(i,LavanthorOutWP[i][0],LavanthorOutWP[i][1],LavanthorOutWP[i][2],3000);
+                else
+                    AddWaypoint(i,LavanthorOutWP[i][0],LavanthorOutWP[i][1],LavanthorOutWP[i][2]);
+            }
+            SetDespawnAtEnd(false);
+            BossStartTimer=5000;
+            break;
         }
     }
+        
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 diff)
     {
-        if (m_pInstance->GetData(TYPE_LAVANTHOR) == SPECIAL && !MovementStarted)
-            StartMovement(0);
+        if (BossStartTimer)
+        {
+            if (BossStartTimer<=diff)
+            {
+                Start();
+                BossStartTimer=0;
+            }
+            else
+                BossStartTimer-=diff;
+        }
 
-        //Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        if (m_uiCauterizingFlames_Timer < uiDiff)
+        if (FireboltTimer<diff)
         {
-            DoCast(m_creature, SPELL_CAUTERIZING_FLAMES);
-            m_uiCauterizingFlames_Timer = urand(40000, 41000);
+            DoCast(m_creature->getVictim(),HeroicMode ? S_FIREBOLT_H : S_FIREBOLT);
+            FireboltTimer=urand(10000,14000);
         }
-        else m_uiCauterizingFlames_Timer -= uiDiff;
+        else FireboltTimer-=diff;
 
-        if (m_uiFirebolt_Timer < uiDiff)
+        if (FlameBreathTimer<diff)
         {
-            DoCast(m_creature->getVictim(), m_bIsRegularMode ? SPELL_FIREBOLT_H : SPELL_FIREBOLT);
-            m_uiFirebolt_Timer = urand(10000, 11000);
+            DoCast(m_creature,HeroicMode ? S_FLAME_BREATH_H : S_FLAME_BREATH);
+            FlameBreathTimer=urand(16000,22000);
         }
-        else m_uiFirebolt_Timer -= uiDiff;
+        else FlameBreathTimer-=diff;
 
-        if (m_uiFlameBreath_Timer < uiDiff)
+        if (LavaBurnTimer<diff)
         {
-            switch (urand(0, 1))
+            DoCast(m_creature->getVictim(),HeroicMode ? S_LAVA_BURN_H : S_LAVA_BURN);
+            LavaBurnTimer=urand(30000,40000);
+        }
+        else LavaBurnTimer-=diff;
+
+        if (HeroicMode)
+        {
+            if (CauterizingFlamesTimer<diff)
             {
-                case 0:
-                    DoCast(m_creature, m_bIsRegularMode ? SPELL_FLAME_BREATH_H : SPELL_FLAME_BREATH);
-                    break;
-                case 1:
-                    DoCast(m_creature, m_bIsRegularMode ? SPELL_LAVA_BURN_H : SPELL_LAVA_BURN);
-                    break;
+                DoCast(m_creature,S_CAUTERIZING_FLAMES);
+                CauterizingFlamesTimer=urand(30000,45000);
             }
-            m_uiFlameBreath_Timer = urand(15000, 16000);
+            else CauterizingFlamesTimer-=diff;
         }
-        else m_uiFlameBreath_Timer -= uiDiff;
 
         DoMeleeAttackIfReady();
-    }
-
-    void JustDied(Unit* pKiller)
-    {
-        if (m_pInstance)
-            m_pInstance->SetData(TYPE_LAVANTHOR, DONE);
+       
     }
 };
 
 CreatureAI* GetAI_boss_lavanthor(Creature* pCreature)
 {
-    return new boss_lavanthorAI (pCreature);
+    return new boss_lavanthorAI(pCreature);
 }
 
 void AddSC_boss_lavanthor()
 {
     Script *newscript;
-
     newscript = new Script;
     newscript->Name = "boss_lavanthor";
     newscript->GetAI = &GetAI_boss_lavanthor;

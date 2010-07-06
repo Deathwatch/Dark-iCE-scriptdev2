@@ -21,6 +21,7 @@ enum
 	NPC_HALION_T					= 40142,	// Halion Twilight Realm NPC
 
     NPC_BALTHARUS                  = 39751,
+	NPC_CLONE					   = 39899,
     NPC_ZARITHIAN                  = 39746,
     NPC_RAGEFIRE                   = 39747,
 
@@ -32,8 +33,10 @@ enum
 
 	TYPE_DIFFICULTY				   = 101,
 
-	DATA_HEALTH_HALION_P           = 201,
-    DATA_HEALTH_HALION_T           = 202,
+	DATA_HEALTH_BALTHARUS          = 201,
+    DATA_HEALTH_CLONE			   = 202,
+	DATA_HEALTH_HALION_P           = 203,
+    DATA_HEALTH_HALION_T           = 204,
 };
 
 enum uiWorldStates

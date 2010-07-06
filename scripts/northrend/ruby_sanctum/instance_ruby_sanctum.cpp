@@ -36,6 +36,7 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
     uint64 m_uiRagefireGUID;
     uint64 m_uiZarithianGUID;
     uint64 m_uiBaltharusGUID;
+	uint64 m_uiCloneGUID;
 
     //object GUID
     uint64 m_uiHalionFireRingGUID;
@@ -76,6 +77,7 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
         m_uiRagefireGUID = 0;
         m_uiZarithianGUID = 0;
         m_uiBaltharusGUID = 0;
+		m_uiCloneGUID = 0;
         m_uiHalionFireRingGUID = 0;
         m_uiHalionPortal0GUID = 0;
         m_uiHalionPortal1GUID = 0;
@@ -111,6 +113,9 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
             case NPC_BALTHARUS:
                 m_uiBaltharusGUID = pCreature->GetGUID();
                 break;
+			case NPC_CLONE:
+                m_uiCloneGUID = pCreature->GetGUID();
+                break;
         }
     }
 
@@ -140,8 +145,14 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
     {
         switch(uiType)
         {
-            case TYPE_BALTHARUS: m_auiEncounter[0] = uiData; break;
-            case TYPE_ZARITHIAN: m_auiEncounter[1] = uiData; break;
+            case TYPE_BALTHARUS: 
+				m_auiEncounter[0] = uiData; 
+				//FREE XERESTRASZA
+				break;
+            case TYPE_ZARITHIAN: 
+				m_auiEncounter[1] = uiData; 
+				//SPAWN HALION
+				break;
             case TYPE_RAGEFIRE:  m_auiEncounter[2] = uiData; break;
             case TYPE_HALION:
                 m_auiEncounter[3] = uiData;
@@ -194,6 +205,7 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
         switch(uiData)
         {
             case NPC_BALTHARUS:	 return m_uiBaltharusGUID;
+			case NPC_CLONE:		 return m_uiCloneGUID;
             case NPC_ZARITHIAN:	 return m_uiZarithianGUID;
             case NPC_RAGEFIRE:   return m_uiRagefireGUID;
             case NPC_HALION_P:   return m_uiHalion_pGUID;

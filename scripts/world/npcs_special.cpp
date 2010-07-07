@@ -2202,124 +2202,176 @@ CreatureAI* GetAI_npc_rune_blade(Creature* pCreature)
     return new npc_rune_blade(pCreature);
 }
 
-/*########
-# mob_mirror_image AI
-#########*/
+/*######
+## mob_mirror_image
+######*/
 
-enum MirrorImage
+enum MirrorImageSpells
 {
+    SPELL_CLONE_CASTER = 45204,
+    SPELL_CLONE_CASTER_1 = 69837,
+// SPELL_CLONE_CASTER_1 = 58836,
+    SPELL_CLONE_THREAT = 58838,
+    SPELL_FIREBLAST = 59637,
     SPELL_FROSTBOLT = 59638,
-    SPELL_FIREBLAST = 59637
+    SPELL_FROSTSHIELD = 43008,
+    SPELL_FIRESHIELD = 43046,
+    SPELL_ICEBLOCK = 65802,
+    SPELL_ICERING = 42917,
 };
 
 struct MANGOS_DLL_DECL mob_mirror_imageAI : public ScriptedAI
 {
-    mob_mirror_imageAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        bLocked = false;
-        Reset();
-    }
-    uint64 m_uiCreatorGUID;
+    mob_mirror_imageAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
+
     uint32 m_uiFrostboltTimer;
-    uint32 m_uiFireBlastTimer;
-    float fDist;
-    float fAngle;
-    bool bLocked;
+    uint32 m_uiFrostringTimer;
+    uint32 m_uiFireblastTimer;
+    bool inCombat;
+    Unit *owner;
+    float angle;
+    bool blocked;
+    bool movement;
 
     void Reset()
     {
-        m_creature->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
-        m_creature->SetUInt32Value(UNIT_FIELD_BYTES_0, 2048);
-        m_creature->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
-        m_creature->SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);
+     owner = m_creature->GetOwner();
+     if (!owner) return;
 
-        m_uiFrostboltTimer = 1000;
-        m_uiFireBlastTimer = urand(4500, 6000);
-    }
-    void AttackStart(Unit *pWho)
-    {
-        if (m_creature->Attack(pWho, true))
+     m_creature->SetLevel(owner->getLevel());
+     m_creature->setFaction(owner->getFaction());
+
+     m_creature->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
+     m_creature->SetUInt32Value(UNIT_FIELD_BYTES_0, 2048);
+     m_creature->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
+     m_creature->SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);
+
+     m_uiFrostboltTimer = urand(4000,9000);
+     m_uiFrostboltTimer = urand(5000,12000);
+     m_uiFireblastTimer = urand(4000,9000);
+     inCombat = false;
+     blocked = false;
+     movement = false;
+
+
+     if (owner && !m_creature->hasUnitState(UNIT_STAT_FOLLOW))
         {
-            m_creature->AddThreat(pWho);
+            angle = m_creature->GetAngle(owner);
+            m_creature->GetMotionMaster()->Clear(false);
+            m_creature->GetMotionMaster()->MoveFollow(owner, PET_FOLLOW_DIST + 3.0f, angle);
+        }
+
+      if(owner->IsPvP())
+                 m_creature->SetPvP(true);
+      if(owner->IsFFAPvP())
+                 m_creature->SetFFAPvP(true);
+    }
+
+    void AttackStart(Unit* pWho)
+    {
+      if (!pWho) return;
+
+      if (m_creature->Attack(pWho, true))
+        {
+            m_creature->clearUnitState(UNIT_STAT_FOLLOW);
             m_creature->SetInCombatWith(pWho);
             pWho->SetInCombatWith(m_creature);
-            m_creature->GetMotionMaster()->MoveChase(pWho, 35.0f);
+            m_creature->AddThreat(pWho, 100.0f);
+            DoStartMovement(pWho, 30.0f);
+            SetCombatMovement(true);
+            inCombat = true;
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void EnterEvadeMode()
     {
-        if (!bLocked)
+     if (m_creature->IsInEvadeMode() || !m_creature->isAlive())
+          return;
+
+        inCombat = false;
+
+        m_creature->AttackStop();
+        m_creature->CombatStop(true);
+        if (owner && !m_creature->hasUnitState(UNIT_STAT_FOLLOW))
         {
-            m_uiCreatorGUID = m_creature->GetCreatorGUID();
-            if (Player* pOwner = (Player*)Unit::GetUnit(*m_creature, m_uiCreatorGUID))
+            m_creature->GetMotionMaster()->Clear(false);
+            m_creature->GetMotionMaster()->MoveFollow(owner, PET_FOLLOW_DIST + 3.0f,angle);
+        }
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (!owner || !owner->isAlive()) m_creature->ForcedDespawn();
+
+        if (owner && !m_creature->HasAura(SPELL_CLONE_CASTER))
+            m_creature->CastSpell(m_creature, SPELL_CLONE_CASTER, true, NULL, NULL, owner->GetGUID());
+
+        if (owner && !m_creature->HasAura(SPELL_CLONE_CASTER_1))
+                 m_creature->CastSpell(m_creature, SPELL_CLONE_CASTER_1, true, NULL, NULL, owner->GetGUID());
+
+        if (owner && !m_creature->HasAura(SPELL_CLONE_THREAT))
+                 m_creature->CastSpell(m_creature, SPELL_CLONE_THREAT, true, NULL, NULL, owner->GetGUID());
+
+        if (owner && owner->HasAura(SPELL_FROSTSHIELD) && !m_creature->HasAura(SPELL_FROSTSHIELD))
+                 m_creature->CastSpell(m_creature, SPELL_FROSTSHIELD, false);
+
+        if (owner && owner->HasAura(SPELL_FIRESHIELD) && !m_creature->HasAura(SPELL_FIRESHIELD))
+                 m_creature->CastSpell(m_creature, SPELL_FIRESHIELD, false);
+
+        if (!m_creature->getVictim())
+            if (owner && owner->getVictim())
+                AttackStart(owner->getVictim());
+
+        if (m_creature->getVictim() && m_creature->getVictim() != owner->getVictim())
+                AttackStart(owner->getVictim());
+
+        if (inCombat && !m_creature->getVictim())
+        {
+            EnterEvadeMode();
+            return;
+        }
+
+        if (!inCombat) return;
+
+        if (m_creature->IsWithinDistInMap(m_creature->getVictim(),30.0f))
+        {
+            movement = false;
+            if (m_uiFrostboltTimer <= diff)
             {
-                fDist = m_creature->GetDistance(pOwner);
-                fAngle = m_creature->GetAngle(pOwner);
+                DoCastSpellIfCan(m_creature->getVictim(),SPELL_FROSTBOLT);
+                m_uiFrostboltTimer = urand(4000,8000);
+            } else m_uiFrostboltTimer -= diff;
 
-                if(pOwner->IsPvP())
-                    m_creature->SetPvP(true);
-                if(pOwner->IsFFAPvP())
-                    m_creature->SetFFAPvP(true);
-
-                pOwner->CastSpell(m_creature, 57507, true); // Not right spell, but it has both auras we need
-                m_creature->SetOwnerGUID(pOwner->GetGUID());
-            }
-            bLocked = true;
-        }
-
-        Player* pOwner = (Player*)Unit::GetUnit(*m_creature, m_uiCreatorGUID);
-        if (!pOwner || !pOwner->IsInWorld() || !pOwner->isAlive())
-        {
-            m_creature->ForcedDespawn();
-            return;
-        }
-        
-        uint64 targetGUID = 0;
-
-        if (Spell* pSpell = pOwner->GetCurrentSpell(CURRENT_GENERIC_SPELL))
-            targetGUID = pSpell->m_targets.getUnitTargetGUID();
-        else if (pOwner->getVictim())
-            targetGUID = pOwner->getVictim()->GetGUID();
-
-        Unit* pTarget = Unit::GetUnit(*m_creature, targetGUID);
-
-        if (!pTarget || !m_creature->CanInitiateAttack() || !pTarget->isTargetableForAttack() ||
-        !m_creature->IsHostileTo(pTarget) || !pTarget->isInAccessablePlaceFor(m_creature))
-        {
-            if (m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() != FOLLOW_MOTION_TYPE)
+            if (m_uiFireblastTimer <= diff)
             {
-                m_creature->InterruptNonMeleeSpells(false);
-                m_creature->GetMotionMaster()->Clear();
-                m_creature->GetMotionMaster()->MoveFollow(pOwner, fDist, fAngle);
-            }
-            return;
-        }
-        //It cant cast spell if target is polymorphed or controled
-        if(pTarget->isCharmed() || pTarget->isFeared() || pTarget->IsPolymorphed())
-        {
-            if(m_creature->IsNonMeleeSpellCasted(false))
-                m_creature->InterruptNonMeleeSpells(false);
-            return;
-        }
-        if (m_uiFrostboltTimer <= uiDiff)
-        {
-            m_creature->CastSpell(pTarget, SPELL_FROSTBOLT, false, NULL, NULL, pOwner->GetGUID());
-            m_uiFrostboltTimer = 3500;
-        } else m_uiFrostboltTimer -= uiDiff;
+                DoCastSpellIfCan(m_creature->getVictim(),SPELL_FIREBLAST);
+                m_uiFireblastTimer = urand(4000,8000);
+            } else m_uiFireblastTimer -= diff;
 
-        if (m_uiFireBlastTimer <= uiDiff)
-        {
-            m_creature->CastSpell(pTarget, SPELL_FIREBLAST, false, NULL, NULL, pOwner->GetGUID());
-            m_uiFireBlastTimer = urand(9000, 12000);
-        } else m_uiFireBlastTimer -= uiDiff;
+            if (m_uiFrostringTimer <= diff && m_creature->IsWithinDistInMap(m_creature->getVictim(),5.0f))
+            {
+                DoCastSpellIfCan(m_creature->getVictim(),SPELL_ICERING);
+                m_uiFrostringTimer = urand(4000,8000);
+            } else m_uiFrostboltTimer -= diff;
+
+            if (!blocked && m_creature->GetHealthPercent() < 10.0f)
+            {
+                DoCastSpellIfCan(m_creature,SPELL_ICEBLOCK);
+                blocked = true;
+            }
+        } else if (!movement) {
+                                  DoStartMovement(m_creature->getVictim(), 30.0f);
+                                  movement = true;
+                               }
+
+        DoMeleeAttackIfReady();
     }
 };
 
 CreatureAI* GetAI_mob_mirror_image(Creature* pCreature)
 {
     return new mob_mirror_imageAI(pCreature);
-}
+};
 
 void AddSC_npcs_special()
 {

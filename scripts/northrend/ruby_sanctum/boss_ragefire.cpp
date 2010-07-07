@@ -44,12 +44,7 @@ struct MANGOS_DLL_DECL boss_ragefireAI : public BSWScriptedAI
     }
 
     ScriptedInstance *pInstance;
-<<<<<<< HEAD:scripts/northrend/ruby_sanctum/boss_ragefire.cpp
-    BossSpellWorker* bsw;
     uint8 phase;
-=======
-    uint8 stage;
->>>>>>> 7ee5536... Drop use of BSW separate object. Shift to use BSWScriptedAI (parent to ScriptedAI):scripts/northrend/ruby_sanctum/boss_ragefire.cpp
 
     void Reset()
     {
@@ -57,12 +52,8 @@ struct MANGOS_DLL_DECL boss_ragefireAI : public BSWScriptedAI
             return;
 
         pInstance->SetData(TYPE_RAGEFIRE, NOT_STARTED);
-<<<<<<< HEAD:scripts/northrend/ruby_sanctum/boss_ragefire.cpp
-        bsw->resetTimers();
-		phase = 0;
-=======
         resetTimers();
->>>>>>> 7ee5536... Drop use of BSW separate object. Shift to use BSWScriptedAI (parent to ScriptedAI):scripts/northrend/ruby_sanctum/boss_ragefire.cpp
+		phase = 0;
     }
 
     void MoveInLineOfSight(Unit* pWho) 
@@ -142,28 +133,28 @@ struct MANGOS_DLL_DECL boss_ragefireAI : public BSWScriptedAI
 		switch (phase)
         {
             case 0: //GROUND
-                bsw->doCast(SPELL_FLAME_BREATH);
-                bsw->doCast(SPELL_ENRAGE);
+                doCast(SPELL_FLAME_BREATH);
+                doCast(SPELL_ENRAGE);
 				break;
             case 1: //AIR
 				//NEED SCRIPT AIR MOVEMENT
 				DoScriptText(-1666404,m_creature);
-				bsw->doCast(SPELL_BEACON);
-                bsw->doCast(SPELL_CONFLAG);
+				doCast(SPELL_BEACON);
+                doCast(SPELL_CONFLAG);
 				break;
 			case 2: //GROUND
-                bsw->doCast(SPELL_FLAME_BREATH);
-                bsw->doCast(SPELL_ENRAGE);
+                doCast(SPELL_FLAME_BREATH);
+                doCast(SPELL_ENRAGE);
 				break;
             case 3: //AIR
 				//NEED SCRIPT AIR MOVEMENT
 				DoScriptText(-1666404,m_creature);
-				bsw->doCast(SPELL_BEACON);
-                bsw->doCast(SPELL_CONFLAG);
+				doCast(SPELL_BEACON);
+                doCast(SPELL_CONFLAG);
 				break;
 			case 4: //GROUND
-                bsw->doCast(SPELL_FLAME_BREATH);
-                bsw->doCast(SPELL_ENRAGE);
+                doCast(SPELL_FLAME_BREATH);
+                doCast(SPELL_ENRAGE);
 				break;
             default:
                 break;

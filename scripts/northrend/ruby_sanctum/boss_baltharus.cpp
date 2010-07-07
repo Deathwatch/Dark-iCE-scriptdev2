@@ -35,35 +35,20 @@ enum BossSpells
 	SPELL_SUMMON_CLONE				 = 74511, //summons npc 39899 (Clone)
 };
 
-<<<<<<< HEAD:scripts/northrend/ruby_sanctum/boss_baltharus.cpp
 /*######
 ## boss_baltharus
 ######*/
 
-struct MANGOS_DLL_DECL boss_baltharusAI : public ScriptedAI
-=======
 struct MANGOS_DLL_DECL boss_baltharusAI : public BSWScriptedAI
->>>>>>> 7ee5536... Drop use of BSW separate object. Shift to use BSWScriptedAI (parent to ScriptedAI):scripts/northrend/ruby_sanctum/boss_baltharus.cpp
 {
     boss_baltharusAI(Creature* pCreature) : BSWScriptedAI(pCreature)
     {
-<<<<<<< HEAD:scripts/northrend/ruby_sanctum/boss_baltharus.cpp
-    pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-    bsw = new BossSpellWorker(this);
-    Reset();
-    }
-
-    ScriptedInstance *pInstance;
-    BossSpellWorker* bsw;
-	uint8 clone;
-=======
         pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         Reset();
     }
 
     ScriptedInstance *pInstance;
-    uint8 stage;
->>>>>>> 7ee5536... Drop use of BSW separate object. Shift to use BSWScriptedAI (parent to ScriptedAI):scripts/northrend/ruby_sanctum/boss_baltharus.cpp
+	uint8 clone;
 
     void Reset()
     {
@@ -71,12 +56,8 @@ struct MANGOS_DLL_DECL boss_baltharusAI : public BSWScriptedAI
             return;
 
         pInstance->SetData(TYPE_BALTHARUS, NOT_STARTED);
-<<<<<<< HEAD:scripts/northrend/ruby_sanctum/boss_baltharus.cpp
-        bsw->resetTimers();
-		clone = 0;
-=======
         resetTimers();
->>>>>>> 7ee5536... Drop use of BSW separate object. Shift to use BSWScriptedAI (parent to ScriptedAI):scripts/northrend/ruby_sanctum/boss_baltharus.cpp
+		clone = 0;
     }
 
     void MoveInLineOfSight(Unit* pWho) 
@@ -158,28 +139,24 @@ struct MANGOS_DLL_DECL boss_baltharusAI : public BSWScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-<<<<<<< HEAD:scripts/northrend/ruby_sanctum/boss_baltharus.cpp
         if (m_creature->GetHealth() > pInstance->GetData(DATA_HEALTH_CLONE) && pInstance->GetData(DATA_HEALTH_CLONE) != 0)
 			m_creature->SetHealth(pInstance->GetData(DATA_HEALTH_CLONE));
-=======
-        timedCast(SPELL_TWILIGHT_PRECISION, diff);
->>>>>>> 7ee5536... Drop use of BSW separate object. Shift to use BSWScriptedAI (parent to ScriptedAI):scripts/northrend/ruby_sanctum/boss_baltharus.cpp
 
-        bsw->timedCast(SPELL_TWILIGHT_PRECISION, uiDiff);
-		bsw->timedCast(SPELL_BLADE_TEMPEST, uiDiff);
-		bsw->timedCast(SPELL_ENERVATING_BRAND, uiDiff);
+        timedCast(SPELL_TWILIGHT_PRECISION, uiDiff);
+		timedCast(SPELL_BLADE_TEMPEST, uiDiff);
+		timedCast(SPELL_ENERVATING_BRAND, uiDiff);
 		
 		
 		//CLONE
 		//10 man = 50%
 		//25 man = 66% & 33%
 		if ( m_creature->GetHealthPercent() <= 50.0f && clone == 0)
-           {
+        {
            DoScriptText(-1666303,m_creature);
-		   bsw->timedCast(SPELL_REPELLING_WAVE, uiDiff);
-		   bsw->timedCast(SPELL_SUMMON_CLONE, uiDiff);
+		   timedCast(SPELL_REPELLING_WAVE, uiDiff);
+		   timedCast(SPELL_SUMMON_CLONE, uiDiff);
 		   clone = 1;
-           }
+        }
 		
         DoMeleeAttackIfReady();
     }
@@ -194,17 +171,15 @@ CreatureAI* GetAI_boss_baltharus(Creature* pCreature)
 ## boss_clone
 ######*/
 
-struct MANGOS_DLL_DECL boss_cloneAI : public ScriptedAI
+struct MANGOS_DLL_DECL boss_cloneAI : public BSWScriptedAI
 {
-    boss_cloneAI(Creature* pCreature) : ScriptedAI(pCreature) 
+    boss_cloneAI(Creature* pCreature) : BSWScriptedAI(pCreature) 
     {
-    pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-    bsw = new BossSpellWorker(this);
-    Reset();
+        pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        Reset();
     }
 
     ScriptedInstance *pInstance;
-    BossSpellWorker* bsw;
 
     void Reset()
     {
@@ -212,7 +187,7 @@ struct MANGOS_DLL_DECL boss_cloneAI : public ScriptedAI
             return;
 
         pInstance->SetData(TYPE_BALTHARUS, NOT_STARTED);
-        bsw->resetTimers();
+        resetTimers();
 		m_creature->ForcedDespawn();
     }
 
@@ -294,8 +269,8 @@ struct MANGOS_DLL_DECL boss_cloneAI : public ScriptedAI
         if (m_creature->GetHealth() > pInstance->GetData(DATA_HEALTH_BALTHARUS) && pInstance->GetData(DATA_HEALTH_BALTHARUS) != 0)
 			m_creature->SetHealth(pInstance->GetData(DATA_HEALTH_BALTHARUS));
 
-		bsw->timedCast(SPELL_BLADE_TEMPEST, uiDiff);
-		bsw->timedCast(SPELL_ENERVATING_BRAND, uiDiff);
+		timedCast(SPELL_BLADE_TEMPEST, uiDiff);
+		timedCast(SPELL_ENERVATING_BRAND, uiDiff);
 	}
 };
 

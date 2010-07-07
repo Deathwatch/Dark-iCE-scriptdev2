@@ -117,7 +117,6 @@ struct MANGOS_DLL_DECL boss_zarithianAI : public BSWScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-<<<<<<< HEAD:scripts/northrend/ruby_sanctum/boss_zarithian.cpp
 		//TODO every 45 secs summon adds
 
 		if (uiTimer < diff)
@@ -128,12 +127,9 @@ struct MANGOS_DLL_DECL boss_zarithianAI : public BSWScriptedAI
 			uiTimer = 45000;
 		}
 			
-		bsw->timedCast(SPELL_TWILIGHT_PRECISION, diff);
-		bsw->timedCast(SPELL_SUNDER_ARMOR, diff);
-		bsw->timedCast(SPELL_IMTIMIDATING_ROAR, diff);
-=======
-        timedCast(SPELL_TWILIGHT_PRECISION, diff);
->>>>>>> 7ee5536... Drop use of BSW separate object. Shift to use BSWScriptedAI (parent to ScriptedAI):scripts/northrend/ruby_sanctum/boss_zarithian.cpp
+		timedCast(SPELL_TWILIGHT_PRECISION, diff);
+		timedCast(SPELL_SUNDER_ARMOR, diff);
+		timedCast(SPELL_IMTIMIDATING_ROAR, diff);
 
         DoMeleeAttackIfReady();
     }
@@ -144,17 +140,15 @@ CreatureAI* GetAI_boss_zarithian(Creature* pCreature)
     return new boss_zarithianAI(pCreature);
 }
 
-struct MANGOS_DLL_DECL mob_flamecallerAI : public ScriptedAI
+struct MANGOS_DLL_DECL mob_flamecallerAI : public BSWScriptedAI
 {
-    mob_flamecallerAI(Creature *pCreature) : ScriptedAI(pCreature)
+    mob_flamecallerAI(Creature *pCreature) : BSWScriptedAI(pCreature)
     {
         pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
-        bsw = new BossSpellWorker(this);
         Reset();
     }
 
     ScriptedInstance *pInstance;
-    BossSpellWorker* bsw;
 
     void Reset()
     {
@@ -169,8 +163,8 @@ struct MANGOS_DLL_DECL mob_flamecallerAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-		bsw->timedCast(SPELL_LAVA_GOUT, diff);
-		bsw->timedCast(SPELL_BLAST_NOVA, diff);
+		timedCast(SPELL_LAVA_GOUT, diff);
+		timedCast(SPELL_BLAST_NOVA, diff);
     }
 };
 CreatureAI* GetAI_mob_flamecaller(Creature* pCreature)

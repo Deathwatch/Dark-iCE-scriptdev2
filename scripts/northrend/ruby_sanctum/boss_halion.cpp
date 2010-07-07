@@ -117,7 +117,6 @@ static float m_xflame[12][8]=
     {0.0f,	-7.5f,	-3.5f,	-6.5f,	4.5f,	-4.5f, 	3.5f, 	-6.5f},		//NPC3 SPAWN3
 };
 
-<<<<<<< HEAD:scripts/northrend/ruby_sanctum/boss_halion.cpp
 static float m_pulsar[16][2]=
 {
     {0.0f, 0.0f}, //S
@@ -141,24 +140,17 @@ static float m_pulsar[16][2]=
 /*######
 ## boss_halion_p (Physical version)
 ######*/
-struct MANGOS_DLL_DECL boss_halion_pAI : public ScriptedAI
+struct MANGOS_DLL_DECL boss_halion_pAI : public BSWScriptedAI
 {
-    boss_halion_pAI(Creature* pCreature) : ScriptedAI(pCreature)
-=======
-struct MANGOS_DLL_DECL boss_halionAI : public BSWScriptedAI
-{
-    boss_halionAI(Creature* pCreature) : BSWScriptedAI(pCreature)
->>>>>>> 7ee5536... Drop use of BSW separate object. Shift to use BSWScriptedAI (parent to ScriptedAI):scripts/northrend/ruby_sanctum/boss_halion.cpp
+    boss_halion_pAI(Creature* pCreature) : BSWScriptedAI(pCreature)
     {
         pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         Reset();
     }
 
-<<<<<<< HEAD:scripts/northrend/ruby_sanctum/boss_halion.cpp
     ScriptedInstance* pInstance;
     uint8 p_phase;
     bool intro;
-    BossSpellWorker* bsw;
 
     void Reset()
     {
@@ -166,16 +158,8 @@ struct MANGOS_DLL_DECL boss_halionAI : public BSWScriptedAI
             return;
 
         p_phase = 0;
-=======
-    ScriptedInstance *pInstance;
-    uint8 stage;
-
-    void Reset()
-    {
-        if(!pInstance) return;
         pInstance->SetData(TYPE_HALION, NOT_STARTED);
         resetTimers();
->>>>>>> 7ee5536... Drop use of BSW separate object. Shift to use BSWScriptedAI (parent to ScriptedAI):scripts/northrend/ruby_sanctum/boss_halion.cpp
     }
 
     void MoveInLineOfSight(Unit* pWho) 
@@ -282,31 +266,32 @@ struct MANGOS_DLL_DECL boss_halionAI : public BSWScriptedAI
             case 0: //SPAWNED
                 break;
             case 1: //PHASE 1 PHYSICAL REALM
-                bsw->timedCast(SPELL_FLAME_BREATH_0, uiDiff);
-                bsw->timedCast(SPELL_FIERY_COMBUSTION, uiDiff);
+                timedCast(SPELL_FLAME_BREATH_0, uiDiff);
+                timedCast(SPELL_FIERY_COMBUSTION, uiDiff);
                 /* Meteor Needs Test */
                 if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1))
-                            if (bsw->doCast(SPELL_METEOR, pTarget) == CAST_OK)
-                              {
-								DoScriptText(-1666106,m_creature,pTarget);
+                {
+                    if (doCast(SPELL_METEOR, pTarget) == CAST_OK)
+                    {
+						DoScriptText(-1666106,m_creature,pTarget);
                                   
-								float fPosX, fPosY, fPosZ;
-								m_creature->GetPosition(fPosX, fPosY, fPosZ);
-								if (Unit* pMeteor = bsw->doSummon(NPC_METEOR_STRIKE, fPosX, fPosY, fPosZ))
-									pMeteor->AddThreat(pTarget, 100.0f);
-                              }; 
-                
+						float fPosX, fPosY, fPosZ;
+						m_creature->GetPosition(fPosX, fPosY, fPosZ);
+						if (Unit* pMeteor = doSummon(NPC_METEOR_STRIKE, fPosX, fPosY, fPosZ))
+							pMeteor->AddThreat(pTarget, 100.0f);
+                    };
+                }                
                 break;
             case 2: //DEPHASE HALION FORCE TO TWILIGHT REALM
                 //setflag unattackable, unselectable, remove combat
                 break;
             case 3: //PHASE 3 BOTH REALMS
-                bsw->timedCast(SPELL_FLAME_BREATH_0, uiDiff);
-                bsw->timedCast(SPELL_FIERY_COMBUSTION, uiDiff);
-                bsw->doCast(SPELL_TWILIGHT_DIVISION);
+                timedCast(SPELL_FLAME_BREATH_0, uiDiff);
+                timedCast(SPELL_FIERY_COMBUSTION, uiDiff);
+                doCast(SPELL_TWILIGHT_DIVISION);
                 /* Needs Script
-                bsw->timedCast(SPELL_METEOR_STRIKE, uiDiff); 
-                bsw->timedCast(SPELL_CORPREALITY_EVEN, uiDiff); 
+                timedCast(SPELL_METEOR_STRIKE, uiDiff); 
+                timedCast(SPELL_CORPREALITY_EVEN, uiDiff); 
                 */
                 break;
             default:
@@ -325,23 +310,25 @@ CreatureAI* GetAI_boss_halion_p(Creature* pCreature)
 ## boss_halion_t (Twilight version)
 ######*/
 
-struct MANGOS_DLL_DECL boss_halion_tAI : public ScriptedAI
+struct MANGOS_DLL_DECL boss_halion_tAI : public BSWScriptedAI
 {
-    boss_halion_tAI(Creature* pCreature) : ScriptedAI(pCreature) 
+    boss_halion_tAI(Creature* pCreature) : BSWScriptedAI(pCreature) 
     {
         pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-        bsw = new BossSpellWorker(this);
         Reset();
     }
 
     ScriptedInstance* pInstance;
     uint8 t_phase;
-    BossSpellWorker* bsw;
 
     void Reset() 
     {
-        if(!pInstance) return;
+        if(!pInstance)
+            return;
+
         t_phase = 0;
+        pInstance->SetData(TYPE_HALION, NOT_STARTED);
+        resetTimers();
     }
 
     void JustReachedHome()
@@ -404,12 +391,8 @@ struct MANGOS_DLL_DECL boss_halion_tAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-<<<<<<< HEAD:scripts/northrend/ruby_sanctum/boss_halion.cpp
         if (m_creature->GetHealth() > pInstance->GetData(DATA_HEALTH_HALION_P) && pInstance->GetData(DATA_HEALTH_HALION_P) != 0)
             m_creature->SetHealth(pInstance->GetData(DATA_HEALTH_HALION_P));
-=======
-        timedCast(SPELL_TWILIGHT_PRECISION, diff);
->>>>>>> 7ee5536... Drop use of BSW separate object. Shift to use BSWScriptedAI (parent to ScriptedAI):scripts/northrend/ruby_sanctum/boss_halion.cpp
 
         if (m_creature->GetHealthPercent() < 50.0f && t_phase == 2)
         {
@@ -425,21 +408,23 @@ struct MANGOS_DLL_DECL boss_halion_tAI : public ScriptedAI
                 //HOW DID U GET HERE
                 break;
             case 2: //PHASE 2 TWILIGHT REALM
-                bsw->doCast(SPELL_TWILIGHT_DIVISION);
-                bsw->doCast(SPELL_DUSK_SHROUD_0);
-                bsw->timedCast(SPELL_DARK_BREATH_0, uiDiff);
-                bsw->timedCast(SPELL_SOUL_CONSUMPTION, uiDiff);
+                doCast(SPELL_TWILIGHT_DIVISION);
+                doCast(SPELL_DUSK_SHROUD_0);
+                timedCast(SPELL_DARK_BREATH_0, uiDiff);
+                timedCast(SPELL_SOUL_CONSUMPTION, uiDiff);
                 break;
             case 3: //PHASE 3 BOTH REALMS
-                bsw->doCast(SPELL_TWILIGHT_DIVISION);
-                bsw->doCast(SPELL_DUSK_SHROUD_0);
-                bsw->timedCast(SPELL_DARK_BREATH_0, uiDiff);
-                bsw->timedCast(SPELL_SOUL_CONSUMPTION, uiDiff);
+                doCast(SPELL_TWILIGHT_DIVISION);
+                doCast(SPELL_DUSK_SHROUD_0);
+                timedCast(SPELL_DARK_BREATH_0, uiDiff);
+                timedCast(SPELL_SOUL_CONSUMPTION, uiDiff);
                 break;
             default:
                 break;
         }
-        bsw->timedCast(SPELL_BERSERK, uiDiff);
+        // timedCast(SPELL_BERSERK, uiDiff);
+        // should be SPELL_TWILIGHT_PRECISION according to RSA's script, Notagain should have a look at this
+        timedCast(SPELL_TWILIGHT_PRECISION, uiDiff);
         DoMeleeAttackIfReady();
     }
 };
@@ -449,17 +434,15 @@ CreatureAI* GetAI_boss_halion_t(Creature* pCreature)
     return new boss_halion_tAI(pCreature);
 }
 
-struct MANGOS_DLL_DECL mob_meteorAI : public ScriptedAI
+struct MANGOS_DLL_DECL mob_meteorAI : public BSWScriptedAI
 {
-    mob_meteorAI(Creature *pCreature) : ScriptedAI(pCreature)
+    mob_meteorAI(Creature *pCreature) : BSWScriptedAI(pCreature)
     {
         pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
-        bsw = new BossSpellWorker(this);
         Reset();
     }
 
     ScriptedInstance *pInstance;
-    BossSpellWorker* bsw;
     uint32 m_uiTimer;
 
     void Reset()
@@ -482,9 +465,9 @@ struct MANGOS_DLL_DECL mob_meteorAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-		bsw->doCast(SPELL_METEOR);
-        bsw->timedCast(SPELL_METEOR_IMPACT_ZONE, diff);
-		bsw->timedCast(SPELL_METEOR_LAND, diff);
+		doCast(SPELL_METEOR);
+        timedCast(SPELL_METEOR_IMPACT_ZONE, diff);
+		timedCast(SPELL_METEOR_LAND, diff);
 
 		if (m_uiTimer < diff)
             {               
@@ -559,17 +542,15 @@ CreatureAI* GetAI_mob_meteor(Creature* pCreature)
 {
     return new mob_meteorAI(pCreature);
 }
-struct MANGOS_DLL_DECL mob_flameAI : public ScriptedAI
+struct MANGOS_DLL_DECL mob_flameAI : public BSWScriptedAI
 {
-    mob_flameAI(Creature *pCreature) : ScriptedAI(pCreature)
+    mob_flameAI(Creature *pCreature) : BSWScriptedAI(pCreature)
     {
         pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
-        bsw = new BossSpellWorker(this);
         Reset();
     }
 
     ScriptedInstance *pInstance;
-    BossSpellWorker* bsw;
 
     void Reset()
     {
@@ -588,7 +569,7 @@ struct MANGOS_DLL_DECL mob_flameAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-		bsw->doCast(SPELL_METEOR_FLAME);
+		doCast(SPELL_METEOR_FLAME);
     }
 };
 CreatureAI* GetAI_mob_flame(Creature* pCreature)

@@ -117,6 +117,7 @@ static float m_xflame[12][8]=
     {0.0f,	-7.5f,	-3.5f,	-6.5f,	4.5f,	-4.5f, 	3.5f, 	-6.5f},		//NPC3 SPAWN3
 };
 
+<<<<<<< HEAD:scripts/northrend/ruby_sanctum/boss_halion.cpp
 static float m_pulsar[16][2]=
 {
     {0.0f, 0.0f}, //S
@@ -143,12 +144,17 @@ static float m_pulsar[16][2]=
 struct MANGOS_DLL_DECL boss_halion_pAI : public ScriptedAI
 {
     boss_halion_pAI(Creature* pCreature) : ScriptedAI(pCreature)
+=======
+struct MANGOS_DLL_DECL boss_halionAI : public BSWScriptedAI
+{
+    boss_halionAI(Creature* pCreature) : BSWScriptedAI(pCreature)
+>>>>>>> 7ee5536... Drop use of BSW separate object. Shift to use BSWScriptedAI (parent to ScriptedAI):scripts/northrend/ruby_sanctum/boss_halion.cpp
     {
         pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-        bsw = new BossSpellWorker(this);
         Reset();
     }
 
+<<<<<<< HEAD:scripts/northrend/ruby_sanctum/boss_halion.cpp
     ScriptedInstance* pInstance;
     uint8 p_phase;
     bool intro;
@@ -160,6 +166,16 @@ struct MANGOS_DLL_DECL boss_halion_pAI : public ScriptedAI
             return;
 
         p_phase = 0;
+=======
+    ScriptedInstance *pInstance;
+    uint8 stage;
+
+    void Reset()
+    {
+        if(!pInstance) return;
+        pInstance->SetData(TYPE_HALION, NOT_STARTED);
+        resetTimers();
+>>>>>>> 7ee5536... Drop use of BSW separate object. Shift to use BSWScriptedAI (parent to ScriptedAI):scripts/northrend/ruby_sanctum/boss_halion.cpp
     }
 
     void MoveInLineOfSight(Unit* pWho) 
@@ -388,8 +404,12 @@ struct MANGOS_DLL_DECL boss_halion_tAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
+<<<<<<< HEAD:scripts/northrend/ruby_sanctum/boss_halion.cpp
         if (m_creature->GetHealth() > pInstance->GetData(DATA_HEALTH_HALION_P) && pInstance->GetData(DATA_HEALTH_HALION_P) != 0)
             m_creature->SetHealth(pInstance->GetData(DATA_HEALTH_HALION_P));
+=======
+        timedCast(SPELL_TWILIGHT_PRECISION, diff);
+>>>>>>> 7ee5536... Drop use of BSW separate object. Shift to use BSWScriptedAI (parent to ScriptedAI):scripts/northrend/ruby_sanctum/boss_halion.cpp
 
         if (m_creature->GetHealthPercent() < 50.0f && t_phase == 2)
         {

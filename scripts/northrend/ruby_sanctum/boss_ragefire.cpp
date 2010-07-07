@@ -35,18 +35,21 @@ enum BossSpells
 	SPELL_CONFLAG			         = 74452,
 };
 
-struct MANGOS_DLL_DECL boss_ragefireAI : public ScriptedAI
+struct MANGOS_DLL_DECL boss_ragefireAI : public BSWScriptedAI
 {
-    boss_ragefireAI(Creature* pCreature) : ScriptedAI(pCreature)
+    boss_ragefireAI(Creature* pCreature) : BSWScriptedAI(pCreature)
     {
         pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-        bsw = new BossSpellWorker(this);
         Reset();
     }
 
     ScriptedInstance *pInstance;
+<<<<<<< HEAD:scripts/northrend/ruby_sanctum/boss_ragefire.cpp
     BossSpellWorker* bsw;
     uint8 phase;
+=======
+    uint8 stage;
+>>>>>>> 7ee5536... Drop use of BSW separate object. Shift to use BSWScriptedAI (parent to ScriptedAI):scripts/northrend/ruby_sanctum/boss_ragefire.cpp
 
     void Reset()
     {
@@ -54,8 +57,12 @@ struct MANGOS_DLL_DECL boss_ragefireAI : public ScriptedAI
             return;
 
         pInstance->SetData(TYPE_RAGEFIRE, NOT_STARTED);
+<<<<<<< HEAD:scripts/northrend/ruby_sanctum/boss_ragefire.cpp
         bsw->resetTimers();
 		phase = 0;
+=======
+        resetTimers();
+>>>>>>> 7ee5536... Drop use of BSW separate object. Shift to use BSWScriptedAI (parent to ScriptedAI):scripts/northrend/ruby_sanctum/boss_ragefire.cpp
     }
 
     void MoveInLineOfSight(Unit* pWho) 
@@ -114,7 +121,7 @@ struct MANGOS_DLL_DECL boss_ragefireAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        bsw->timedCast(SPELL_TWILIGHT_PRECISION, diff);
+        timedCast(SPELL_TWILIGHT_PRECISION, diff);
 
         if ( m_creature->GetHealthPercent() <= 80.0f && phase == 0)
         {

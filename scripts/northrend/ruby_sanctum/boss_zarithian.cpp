@@ -42,17 +42,15 @@ static float add[2][4]=
 	{0.0f,	0.0f,	0.0f,	0.0f},
 };
 
-struct MANGOS_DLL_DECL boss_zarithianAI : public ScriptedAI
+struct MANGOS_DLL_DECL boss_zarithianAI : public BSWScriptedAI
 {
-    boss_zarithianAI(Creature* pCreature) : ScriptedAI(pCreature)
+    boss_zarithianAI(Creature* pCreature) : BSWScriptedAI(pCreature)
     {
         pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-        bsw = new BossSpellWorker(this);
         Reset();
     }
 
     ScriptedInstance *pInstance;
-    BossSpellWorker* bsw;
     uint8 stage;
 	uint32 uiTimer;
 
@@ -62,7 +60,7 @@ struct MANGOS_DLL_DECL boss_zarithianAI : public ScriptedAI
             return;
 
         pInstance->SetData(TYPE_ZARITHIAN, NOT_STARTED);
-        bsw->resetTimers();
+        resetTimers();
     }
 
     void MoveInLineOfSight(Unit* pWho) 
@@ -119,6 +117,7 @@ struct MANGOS_DLL_DECL boss_zarithianAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
+<<<<<<< HEAD:scripts/northrend/ruby_sanctum/boss_zarithian.cpp
 		//TODO every 45 secs summon adds
 
 		if (uiTimer < diff)
@@ -132,6 +131,9 @@ struct MANGOS_DLL_DECL boss_zarithianAI : public ScriptedAI
 		bsw->timedCast(SPELL_TWILIGHT_PRECISION, diff);
 		bsw->timedCast(SPELL_SUNDER_ARMOR, diff);
 		bsw->timedCast(SPELL_IMTIMIDATING_ROAR, diff);
+=======
+        timedCast(SPELL_TWILIGHT_PRECISION, diff);
+>>>>>>> 7ee5536... Drop use of BSW separate object. Shift to use BSWScriptedAI (parent to ScriptedAI):scripts/northrend/ruby_sanctum/boss_zarithian.cpp
 
         DoMeleeAttackIfReady();
     }

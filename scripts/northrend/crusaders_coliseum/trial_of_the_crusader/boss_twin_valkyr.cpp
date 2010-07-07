@@ -72,22 +72,16 @@ enum BossSpells
     SPELL_UNLEASHED_LIGHT  = 65795,
 };
 
-/*######
-## boss_fjola
-######*/
-
-struct MANGOS_DLL_DECL boss_fjolaAI : public ScriptedAI
+struct MANGOS_DLL_DECL boss_fjolaAI : public BSWScriptedAI
 {
-    boss_fjolaAI(Creature* pCreature) : ScriptedAI(pCreature)
+    boss_fjolaAI(Creature* pCreature) : BSWScriptedAI(pCreature)
     {
     m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-    bsw = new BossSpellWorker(this);
     Reset();
     }
 
     ScriptedInstance* m_pInstance;
     uint8 stage;
-    BossSpellWorker* bsw;
     bool TwinPactCasted;
 
     void Reset() {
@@ -132,7 +126,7 @@ struct MANGOS_DLL_DECL boss_fjolaAI : public ScriptedAI
         if (m_creature->isAlive()) m_creature->SummonCreature(NPC_LIGHT_ESSENCE, SpawnLoc[25].x, SpawnLoc[25].y, SpawnLoc[25].z, 0, TEMPSUMMON_MANUAL_DESPAWN, 5000);
         DoScriptText(-1713541,m_creature);
         m_pInstance->SetData(DATA_HEALTH_FJOLA, m_creature->GetMaxHealth());
-        bsw->doCast(SPELL_LIGHT_SURGE);
+        doCast(SPELL_LIGHT_SURGE);
     }
 
     void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
@@ -167,28 +161,28 @@ struct MANGOS_DLL_DECL boss_fjolaAI : public ScriptedAI
     switch (stage)
         {
          case 0:
-                bsw->timedCast(SPELL_TWIN_SPIKE_L, uiDiff);
+                timedCast(SPELL_TWIN_SPIKE_L, uiDiff);
 
-                if (bsw->timedQuery(SPELL_LIGHT_TOUCH, uiDiff))
+                if (timedQuery(SPELL_LIGHT_TOUCH, uiDiff))
                    {
-                   if (Unit* pTarget = bsw->SelectRandomPlayer(SPELL_LIGHT_ESSENCE, false, 50.0f))
-                             bsw->doCast(SPELL_LIGHT_TOUCH, pTarget);
-                   bsw->doCast(NPC_UNLEASHED_LIGHT);
+                   if (Unit* pTarget = doSelectRandomPlayer(SPELL_LIGHT_ESSENCE, false, 50.0f))
+                             doCast(SPELL_LIGHT_TOUCH, pTarget);
+                   doCast(NPC_UNLEASHED_LIGHT);
                    };
                 if (m_pInstance->GetData(DATA_CASTING_VALKYRS) == SPELL_NONE )
                    {
-                   if (bsw->timedQuery(SPELL_LIGHT_VORTEX, uiDiff))
+                   if (timedQuery(SPELL_LIGHT_VORTEX, uiDiff))
                       {
                             m_pInstance->SetData(DATA_CASTING_VALKYRS, SPELL_LIGHT_VORTEX);
                             DoScriptText(-1713538,m_creature);
                             stage = 1;
                             break;
                       };
-                   if (bsw->timedQuery(SPELL_TWIN_PACT_L, uiDiff)
+                   if (timedQuery(SPELL_TWIN_PACT_L, uiDiff)
                        && m_creature->GetHealthPercent() <= 50.0f)
                       {
                             m_creature->InterruptNonMeleeSpells(true);
-                            bsw->doCast(SPELL_SHIELD_LIGHT);
+                            doCast(SPELL_SHIELD_LIGHT);
                             m_pInstance->SetData(DATA_CASTING_VALKYRS, SPELL_TWIN_PACT_L);
                             DoScriptText(-1713539,m_creature);
                             stage = 3;
@@ -196,58 +190,36 @@ struct MANGOS_DLL_DECL boss_fjolaAI : public ScriptedAI
                    };
                 if (m_pInstance->GetData(DATA_CASTING_VALKYRS) == SPELL_TWIN_PACT_H) 
                             if (!m_creature->HasAura(SPELL_TWIN_POWER)) 
-                                   bsw->doCast(SPELL_TWIN_POWER);
+                                   doCast(SPELL_TWIN_POWER);
                 break;
          case 1:
-                if (bsw->timedQuery(SPELL_LIGHT_VORTEX, uiDiff)) {
-                    m_pInstance->SetData(DATA_CASTING_FJOLA, SPELL_LIGHT_VORTEX);
-                    DoScriptText(-1713538,m_creature);
-                    bsw->doCast(SPELL_LIGHT_VORTEX);
-                    stage = 0;
+                    doCast(SPELL_LIGHT_VORTEX);
+                    stage = 2;
+                break;
+         case 2:
+                if (!m_creature->HasAura(SPELL_LIGHT_VORTEX) 
+                    && timedQuery(SPELL_SHIELD_LIGHT, uiDiff)) 
+                    {
+                         m_pInstance->SetData(DATA_CASTING_VALKYRS, SPELL_NONE);
+                         stage = 0;
                     };
+                break;
+         case 3:
+                    doCast(SPELL_TWIN_PACT_L);
+                    stage = 4;
                  break;
-          case 2:
-                 if (bsw->timedQuery(SPELL_TWIN_PACT_L, uiDiff)) 
-                     {
-                            m_creature->InterruptNonMeleeSpells(true);
-                            bsw->doCast(SPELL_SHIELD_LIGHT);
-                            m_pInstance->SetData(DATA_CASTING_FJOLA, SPELL_TWIN_PACT_L);
-                            DoScriptText(-1713539,m_creature);
-                            bsw->doCast(SPELL_TWIN_PACT_L);
-                            stage = 0;
-                            TwinPactCasted = true;
-                      }
-                 break;
-          default:
+         case 4:
+                if (!m_creature->HasAura(SPELL_SHIELD_LIGHT)
+                    && timedQuery(SPELL_SHIELD_LIGHT, uiDiff))
+                    {
+                         m_pInstance->SetData(DATA_CASTING_VALKYRS, SPELL_NONE);
+                         stage = 0;
+                    };
+         default:
                  break;
          }
 
-    if (m_pInstance->GetData(DATA_CASTING_EYDIS) == SPELL_DARK_VORTEX && stage==0 )
-    {
-     m_pInstance->SetData(DATA_CASTING_EYDIS, SPELL_NONE);
-        stage = 1;
-    }
-
-    if ( m_creature->GetHealthPercent() <= 50.0f 
-    && stage == 0
-    && !TwinPactCasted)
-    {
-        stage = 2;
-    }
-
-    if (m_pInstance->GetData(DATA_CASTING_EYDIS) == SPELL_TWIN_PACT_H)
-    {
-     bsw->doCast(SPELL_TWIN_POWER);
-     m_pInstance->SetData(DATA_CASTING_EYDIS, SPELL_NONE);
-    }
-
-        if (bsw->timedQuery(SPELL_LIGHT_TOUCH, uiDiff))
-           {
-           bsw->doCast(SPELL_LIGHT_TOUCH);
-           bsw->doCast(NPC_UNLEASHED_LIGHT);
-           }
-
-        bsw->timedCast(SPELL_BERSERK, uiDiff);
+        timedCast(SPELL_BERSERK, uiDiff);
 
         DoMeleeAttackIfReady();
     }
@@ -258,23 +230,18 @@ CreatureAI* GetAI_boss_fjola(Creature* pCreature)
     return new boss_fjolaAI(pCreature);
 }
 
-/*######
-## boss_eydis
-######*/
-
-struct MANGOS_DLL_DECL boss_eydisAI : public ScriptedAI
+struct MANGOS_DLL_DECL boss_eydisAI : public BSWScriptedAI
 {
-    boss_eydisAI(Creature* pCreature) : ScriptedAI(pCreature) 
+    boss_eydisAI(Creature* pCreature) : BSWScriptedAI(pCreature) 
     {
     m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
-    bsw = new BossSpellWorker(this);
     Reset();
     }
 
     ScriptedInstance* m_pInstance;
     uint8 stage;
-    BossSpellWorker* bsw;
     bool TwinPactCasted;
+
 
     void Reset() 
     {
@@ -318,7 +285,7 @@ struct MANGOS_DLL_DECL boss_eydisAI : public ScriptedAI
         if (m_creature->isAlive()) m_creature->SummonCreature(NPC_DARK_ESSENCE, SpawnLoc[22].x, SpawnLoc[22].y, SpawnLoc[22].z, 0, TEMPSUMMON_MANUAL_DESPAWN, 5000);
         if (m_creature->isAlive()) m_creature->SummonCreature(NPC_DARK_ESSENCE, SpawnLoc[23].x, SpawnLoc[23].y, SpawnLoc[23].z, 0, TEMPSUMMON_MANUAL_DESPAWN, 5000);
         m_pInstance->SetData(DATA_HEALTH_EYDIS, m_creature->GetMaxHealth());
-        bsw->doCast(SPELL_DARK_SURGE);
+        doCast(SPELL_DARK_SURGE);
     }
 
     void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
@@ -352,28 +319,28 @@ struct MANGOS_DLL_DECL boss_eydisAI : public ScriptedAI
     switch (stage)
         {
          case 0:
-                bsw->timedCast(SPELL_TWIN_SPIKE_H, uiDiff);
+                timedCast(SPELL_TWIN_SPIKE_H, uiDiff);
 
-                if (bsw->timedQuery(SPELL_DARK_TOUCH, uiDiff))
+                if (timedQuery(SPELL_DARK_TOUCH, uiDiff))
                    {
-                   if (Unit* pTarget = bsw->SelectRandomPlayer(SPELL_DARK_ESSENCE, false, 50.0f))
-                             bsw->doCast(SPELL_DARK_TOUCH, pTarget);
-                   bsw->doCast(NPC_UNLEASHED_DARK);
+                   if (Unit* pTarget = doSelectRandomPlayer(SPELL_DARK_ESSENCE, false, 50.0f))
+                             doCast(SPELL_DARK_TOUCH, pTarget);
+                   doCast(NPC_UNLEASHED_DARK);
                    };
                 if (m_pInstance->GetData(DATA_CASTING_VALKYRS) == SPELL_NONE )
                    {
-                   if (bsw->timedQuery(SPELL_DARK_VORTEX, uiDiff))
+                   if (timedQuery(SPELL_DARK_VORTEX, uiDiff))
                       {
                             m_pInstance->SetData(DATA_CASTING_VALKYRS, SPELL_DARK_VORTEX);
                             DoScriptText(-1713540,m_creature);
                             stage = 1;
                             break;
                       };
-                   if (bsw->timedQuery(SPELL_TWIN_PACT_H, uiDiff)
+                   if (timedQuery(SPELL_TWIN_PACT_H, uiDiff)
                        && m_creature->GetHealthPercent() <= 50.0f)
                       {
                             m_creature->InterruptNonMeleeSpells(true);
-                            bsw->doCast(SPELL_SHIELD_DARK);
+                            doCast(SPELL_SHIELD_DARK);
                             m_pInstance->SetData(DATA_CASTING_VALKYRS, SPELL_TWIN_PACT_H);
                             DoScriptText(-1713539,m_creature);
                             stage = 3;
@@ -382,55 +349,36 @@ struct MANGOS_DLL_DECL boss_eydisAI : public ScriptedAI
                    };
                 if (m_pInstance->GetData(DATA_CASTING_VALKYRS) == SPELL_TWIN_PACT_L)
                             if (!m_creature->HasAura(SPELL_TWIN_POWER)) 
-                                   bsw->doCast(SPELL_TWIN_POWER);
+                                   doCast(SPELL_TWIN_POWER);
                 break;
          case 1:
-                if (bsw->timedQuery(SPELL_DARK_VORTEX, uiDiff)) {
-                    m_pInstance->SetData(DATA_CASTING_EYDIS, SPELL_DARK_VORTEX);
-                    DoScriptText(-1713540,m_creature);
-                    bsw->doCast(SPELL_DARK_VORTEX);
-                    stage = 0;
+                    doCast(SPELL_DARK_VORTEX);
+                    stage = 2;
+                break;
+         case 2:
+                if (!m_creature->HasAura(SPELL_DARK_VORTEX)
+                    && timedQuery(SPELL_SHIELD_DARK, uiDiff)) 
+                    {
+                        m_pInstance->SetData(DATA_CASTING_VALKYRS, SPELL_NONE);
+                        stage = 0;
                     };
+                break;
+         case 3:
+                    doCast(SPELL_TWIN_PACT_H);
+                    stage = 4;
                  break;
-          case 2:
-                 if (bsw->timedQuery(SPELL_TWIN_PACT_H, uiDiff))
-                     {
-                            m_creature->InterruptNonMeleeSpells(true);
-                            bsw->doCast(SPELL_SHIELD_DARK);
-                            m_pInstance->SetData(DATA_CASTING_EYDIS, SPELL_TWIN_PACT_H);
-                            DoScriptText(-1713539,m_creature);
-                            bsw->doCast(SPELL_TWIN_PACT_H);
-                            stage = 0;
-                            TwinPactCasted = true;
-                      }
-                 break;
-          default:
+         case 4:
+                if (!m_creature->HasAura(SPELL_SHIELD_DARK)
+                    && timedQuery(SPELL_SHIELD_DARK, uiDiff)) 
+                    {
+                        m_pInstance->SetData(DATA_CASTING_VALKYRS, SPELL_NONE);
+                        stage = 0;
+                    };
+         default:
                  break;
          }
 
-    if (m_pInstance->GetData(DATA_CASTING_FJOLA) == SPELL_LIGHT_VORTEX && stage==0 )
-    {
-     m_pInstance->SetData(DATA_CASTING_FJOLA, SPELL_NONE);
-        stage = 1;
-    }
-
-    if ( m_creature->GetHealthPercent() <= 50.0f 
-    && m_pInstance->GetData(DATA_CASTING_FJOLA) == SPELL_TWIN_PACT_L
-    && !TwinPactCasted
-    && stage == 0)
-    {
-     bsw->doCast(SPELL_TWIN_POWER);
-     m_pInstance->SetData(DATA_CASTING_FJOLA, SPELL_NONE);
-     stage = 2;
-    }
-
-        if (bsw->timedQuery(SPELL_DARK_TOUCH, uiDiff))
-           {
-           bsw->doCast(SPELL_DARK_TOUCH);
-           bsw->doCast(NPC_UNLEASHED_DARK);
-           }
-
-        bsw->timedCast(SPELL_BERSERK, uiDiff);
+        timedCast(SPELL_BERSERK, uiDiff);
 
         DoMeleeAttackIfReady();
     }

@@ -743,6 +743,9 @@ struct MANGOS_DLL_DECL npc_koltira_deathweaverAI : public npc_escortAI
     {
         if (HasEscortState(STATE_ESCORT_PAUSED))
         {
+		    if(m_uiWave < 4 && !m_creature->HasAura(SPELL_ANTI_MAGIC_ZONE))
+			    DoCastSpellIfCan(m_creature, SPELL_ANTI_MAGIC_ZONE);
+				
             if (m_uiWave_Timer < uiDiff)
             {
                 switch(m_uiWave)
@@ -764,7 +767,7 @@ struct MANGOS_DLL_DECL npc_koltira_deathweaverAI : public npc_escortAI
                         break;
                     case 3:
                         DoScriptText(SAY_BREAKOUT6, m_creature);
-                        m_creature->SummonCreature(NPC_HIGH_INQUISITOR_VALROTH, 1642.329f, -6045.818f, 127.583f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000);
+                        m_creature->SummonCreature(NPC_HIGH_INQUISITOR_VALROTH, 1642.329f, -6045.818f, 127.583f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000000);
                         m_uiWave_Timer = 1000;
                         break;
                     case 4:
@@ -1588,7 +1591,6 @@ struct MANGOS_DLL_DECL mob_high_inquisitor_valrothAI : public ScriptedAI
     void JustDied(Unit* killer)
     {
         DoScriptText(SAY_VALROTH6, m_creature);
-        killer->CastSpell(m_creature, SPELL_SUMMON_VALROTH_REMAINS, true);
     }
 };
 

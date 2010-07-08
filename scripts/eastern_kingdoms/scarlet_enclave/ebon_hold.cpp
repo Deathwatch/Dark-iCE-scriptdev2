@@ -666,7 +666,7 @@ enum eKoltira
     NPC_KOLTIRA_ALT                 = 28447,
 
     //not sure about this id
-    //NPC_DEATH_KNIGHT_MOUNT          = 29201,
+    NPC_DEATH_KNIGHT_MOUNT          = 29201,
     MODEL_DEATH_KNIGHT_MOUNT        = 25278
 };
 
@@ -700,14 +700,14 @@ struct MANGOS_DLL_DECL npc_koltira_deathweaverAI : public npc_escortAI
                 break;
             case 2:
                 m_creature->SetStandState(UNIT_STAND_STATE_STAND);
-                //m_creature->UpdateEntry(NPC_KOLTIRA_ALT); //unclear if we must update or not
+                m_creature->UpdateEntry(NPC_KOLTIRA_ALT); //unclear if we must update or not
                 DoCastSpellIfCan(m_creature, SPELL_KOLTIRA_TRANSFORM);
                 break;
             case 3:
                 SetEscortPaused(true);
                 m_creature->SetStandState(UNIT_STAND_STATE_KNEEL);
                 DoScriptText(SAY_BREAKOUT2, m_creature);
-                DoCastSpellIfCan(m_creature, SPELL_ANTI_MAGIC_ZONE);  // cast again that makes bubble up
+                DoCastSpellIfCan(m_creature, SPELL_ANTI_MAGIC_ZONE, true);  // cast again that makes bubble up
                 break;
             case 4:
                 SetRun(true);
@@ -762,7 +762,7 @@ struct MANGOS_DLL_DECL npc_koltira_deathweaverAI : public npc_escortAI
                         break;
                     case 2:
                         DoScriptText(SAY_BREAKOUT5, m_creature);
-                        SummonAcolyte(4);
+                        SummonAcolyte(3);
                         m_uiWave_Timer = 20000;
                         break;
                     case 3:
@@ -1522,10 +1522,8 @@ enum valroth
     SAY_VALROTH4                      = -1609125,
     SAY_VALROTH5                      = -1609126,
     SAY_VALROTH6                      = -1609127,
-    SPELL_RENEW                       = 38210,
     SPELL_INQUISITOR_PENANCE          = 52922,
-    SPELL_VALROTH_SMITE               = 52926,
-    SPELL_SUMMON_VALROTH_REMAINS      = 52929
+    SPELL_VALROTH_SMITE               = 52926
 };
 
 struct MANGOS_DLL_DECL mob_high_inquisitor_valrothAI : public ScriptedAI
@@ -1535,15 +1533,13 @@ struct MANGOS_DLL_DECL mob_high_inquisitor_valrothAI : public ScriptedAI
         Reset();
     }
 
-    uint32 uiRenew_timer;
     uint32 uiInquisitor_Penance_timer;
     uint32 uiValroth_Smite_timer;
 
     void Reset()
     {
-        uiRenew_timer = 1000;
-        uiInquisitor_Penance_timer = 2000;
-        uiValroth_Smite_timer = 1000;
+        uiInquisitor_Penance_timer = 3000;
+        uiValroth_Smite_timer = 2000;
     }
 
     void Aggro(Unit* who)
@@ -1554,25 +1550,19 @@ struct MANGOS_DLL_DECL mob_high_inquisitor_valrothAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff)
     {
-        if (uiRenew_timer < diff)
-        {
-            Shout();
-            DoCastSpellIfCan(m_creature, SPELL_RENEW);
-            uiRenew_timer = 1000 + rand()%5000;
-        }else uiRenew_timer -= diff;
 
         if (uiInquisitor_Penance_timer < diff)
         {
             Shout();
             DoCastSpellIfCan(m_creature->getVictim(), SPELL_INQUISITOR_PENANCE);
-            uiInquisitor_Penance_timer = 2000 + rand()%5000;
+            uiInquisitor_Penance_timer = 3000 + rand()%5000;
         }else uiInquisitor_Penance_timer -= diff;
 
         if (uiValroth_Smite_timer < diff)
         {
             Shout();
             DoCastSpellIfCan(m_creature->getVictim(), SPELL_VALROTH_SMITE);
-            uiValroth_Smite_timer = 1000 + rand()%5000;
+            uiValroth_Smite_timer = 2000 + rand()%5000;
         }else uiValroth_Smite_timer -= diff;
 
         DoMeleeAttackIfReady();

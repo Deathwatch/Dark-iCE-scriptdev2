@@ -16,8 +16,8 @@
 
 /* ScriptData
 SDName: boss_halion
-SD%Complete: 0%
-SDComment: by /dev/rsa & notagain
+SD%Complete: 20%
+SDComment: by notagain, corrected by /dev/rsa
 SDCategory: ruby_sanctum
 EndScriptData */
 
@@ -30,59 +30,59 @@ enum
 {
     //SPELLS
     //All
-    SPELL_TWILIGHT_PRECISION        = 78243,	// Increases Halion's chance to hit by 5% and decreases all players' chance to dodge by 20%
-	SPELL_BERSERK			        = 26663,	// Increases the caster's attack and movement speeds by 150% and all damage it deals by 500% for 5 min.  Also grants immunity to Taunt effects.
-	SPELL_START_PHASE2				= 74808,	// Phases the caster into the Twilight realm, leaving behind a large rift.
-	SPELL_TWILIGHT_ENTER			= 74807,	// Phases the caster into the Twilight realm
+    SPELL_TWILIGHT_PRECISION                    = 78243, // Increases Halion's chance to hit by 5% and decreases all players' chance to dodge by 20%
+    SPELL_BERSERK                               = 26663, // Increases the caster's attack and movement speeds by 150% and all damage it deals by 500% for 5 min.  Also grants immunity to Taunt effects.
+    SPELL_START_PHASE2                          = 74808, // Phases the caster into the Twilight realm, leaving behind a large rift.
+    SPELL_TWILIGHT_ENTER                        = 74807, // Phases the caster into the Twilight realm
 
-	//NEED SCRIPT
-	SPELL_TAIL_LASH					= 74531,	// A sweeping tail strike hits all enemies behind the caster, inflicting 3063 to 3937 damage and stunning them for 2 sec.
-	SPELL_TWILIGHT_DIVISION         = 75063,	// Phases the caster, allowing him to exist and act simultaneously in both the material and Twilight realms.
-    SPELL_FIERY_COMBUSTION			= 74562,	// Inflicts 4,000 Fire damage every 2 seconds for 30 seconds to a random raider. Every time Fiery Combustion does damage, it applies a stackable Mark of Combustion.
-    SPELL_SOUL_CONSUMPTION			= 74792,	// Inflicts 4,000 Shadow damage every 2 seconds for 30 seconds to a random raider. Every time Soul Consumption does damage, it applies a stackable Mark of Consumption.
-    SPELL_TWILIGHT_CUTTER			= 77844,	// Inflicts 13,875 to 16,125 Shadow damage every second to players touched by the shadow beam
-	//CORPOREALITY
-	SPELL_CORPOREALITY_EVEN			= 74826,	// Deals & receives normal damage
-    SPELL_CORPOREALITY_20I			= 74827,	// Damage dealt increased by 10% & Damage taken increased by 15%
-    SPELL_CORPOREALITY_40I			= 74828,	// Damage dealt increased by 30% & Damage taken increased by 50%
-    SPELL_CORPOREALITY_60I			= 74829,	// Damage dealt increased by 60% & Damage taken increased by 100%
-    SPELL_CORPOREALITY_80I			= 74830,	// Damage dealt increased by 100% & Damage taken increased by 200%
-    SPELL_CORPOREALITY_100I			= 74831,	// Damage dealt increased by 200% & Damage taken increased by 400%
-    SPELL_CORPOREALITY_20D			= 74832,	// Damage dealt reduced by 10% & Damage taken reduced by 15%
-    SPELL_CORPOREALITY_40D			= 74833,	// Damage dealt reduced by 30% & Damage taken reduced by 50%
-    SPELL_CORPOREALITY_60D			= 74834,	// Damage dealt reduced by 60% & Damage taken reduced by 100%
-    SPELL_CORPOREALITY_80D			= 74835,	// Damage dealt reduced by 100% & Damage taken reduced by 200%
-    SPELL_CORPOREALITY_100D			= 74836,	// Damage dealt reduced by 200% & Damage taken reduced by 400% 
-	//METEOR STRIKE
-	SPELL_METEOR_STRIKE				= 75877,	// Script Start
-	SPELL_METEOR					= 74637,	// Inflicts 18,750 to 21,250 Fire damage to enemies within 12 yards of the targeted area. Takes about 5 seconds to land.
-	SPELL_METEOR_IMPACT_ZONE		= 74641,	// IMPACT ZONE FOR METEOR
-	SPELL_METEOR_LAND				= 74648,	// LANDING EFFECT
-	SPELL_METEOR_FLAME				= 74718,	// FLAME FROM METEOR
+    //NEED SCRIPT
+    SPELL_TAIL_LASH                             = 74531, // A sweeping tail strike hits all enemies behind the caster, inflicting 3063 to 3937 damage and stunning them for 2 sec.
+    SPELL_TWILIGHT_DIVISION                     = 75063, // Phases the caster, allowing him to exist and act simultaneously in both the material and Twilight realms.
+    SPELL_FIERY_COMBUSTION                      = 74562, // Inflicts 4,000 Fire damage every 2 seconds for 30 seconds to a random raider. Every time Fiery Combustion does damage, it applies a stackable Mark of Combustion.
+    SPELL_SOUL_CONSUMPTION                      = 74792, // Inflicts 4,000 Shadow damage every 2 seconds for 30 seconds to a random raider. Every time Soul Consumption does damage, it applies a stackable Mark of Consumption.
+    SPELL_TWILIGHT_CUTTER                       = 77844, // Inflicts 13,875 to 16,125 Shadow damage every second to players touched by the shadow beam
+    //CORPOREALITY
+    SPELL_CORPOREALITY_EVEN                     = 74826, // Deals & receives normal damage
+    SPELL_CORPOREALITY_20I                      = 74827, // Damage dealt increased by 10% & Damage taken increased by 15%
+    SPELL_CORPOREALITY_40I                      = 74828, // Damage dealt increased by 30% & Damage taken increased by 50%
+    SPELL_CORPOREALITY_60I                      = 74829, // Damage dealt increased by 60% & Damage taken increased by 100%
+    SPELL_CORPOREALITY_80I                      = 74830, // Damage dealt increased by 100% & Damage taken increased by 200%
+    SPELL_CORPOREALITY_100I                     = 74831, // Damage dealt increased by 200% & Damage taken increased by 400%
+    SPELL_CORPOREALITY_20D                      = 74832, // Damage dealt reduced by 10% & Damage taken reduced by 15%
+    SPELL_CORPOREALITY_40D                      = 74833, // Damage dealt reduced by 30% & Damage taken reduced by 50%
+    SPELL_CORPOREALITY_60D                      = 74834, // Damage dealt reduced by 60% & Damage taken reduced by 100%
+    SPELL_CORPOREALITY_80D                      = 74835, // Damage dealt reduced by 100% & Damage taken reduced by 200%
+    SPELL_CORPOREALITY_100D                     = 74836, // Damage dealt reduced by 200% & Damage taken reduced by 400% 
+    //METEOR STRIKE
+    SPELL_METEOR_STRIKE                         = 75877, // Script Start
+    SPELL_METEOR                                = 74637, // Inflicts 18,750 to 21,250 Fire damage to enemies within 12 yards of the targeted area. Takes about 5 seconds to land.
+    SPELL_METEOR_IMPACT_ZONE                    = 74641, // IMPACT ZONE FOR METEOR
+    SPELL_METEOR_LAND                           = 74648, // LANDING EFFECT
+    SPELL_METEOR_FLAME                          = 74718, // FLAME FROM METEOR
     //N10
-    SPELL_FLAME_BREATH_0			= 74525,	// Inflicts 17,500 to 22,500 Fire damage to players in front of Halion
-    SPELL_DARK_BREATH_0				= 74806,	// Inflicts 17,500 to 22,500 Shadow damage to players in front of Halion
-    SPELL_DUSK_SHROUD_0				= 75484,	// Inflicts 3,000 Shadow damage every 2 seconds to everyone in the Twilight Realm
+    SPELL_FLAME_BREATH_0                        = 74525, // Inflicts 17,500 to 22,500 Fire damage to players in front of Halion
+    SPELL_DARK_BREATH_0                         = 74806, // Inflicts 17,500 to 22,500 Shadow damage to players in front of Halion
+    SPELL_DUSK_SHROUD_0                         = 75484, // Inflicts 3,000 Shadow damage every 2 seconds to everyone in the Twilight Realm
     //H10 & N25
-    SPELL_FLAME_BREATH_1			= 74527,	// Inflicts 26,250 to 33,750 Fire damage to players in front of Halion
-    SPELL_DARK_BREATH_1				= 74806,	// Inflicts 26,250 to 33,750 Shadow damage to players in front of Halion
-    SPELL_DUSK_SHROUD_1				= 75485,	// Inflicts 4,500 Shadow damage every 2 seconds to everyone in the Twilight Realm
+    SPELL_FLAME_BREATH_1                        = 74527, // Inflicts 26,250 to 33,750 Fire damage to players in front of Halion
+    SPELL_DARK_BREATH_1                         = 74806, // Inflicts 26,250 to 33,750 Shadow damage to players in front of Halion
+    SPELL_DUSK_SHROUD_1                         = 75485, // Inflicts 4,500 Shadow damage every 2 seconds to everyone in the Twilight Realm
     //H25
-    SPELL_FLAME_BREATH_2			= 74404,	// Inflicts 17,500 to 22,500 Fire damage to players in front of Halion
-    SPELL_DARK_BREATH_2				= 75956,	// Inflicts 33,688 to 43,312 Shadow damage to players in front of Halion
-    SPELL_DUSK_SHROUD_2				= 75486,	// Inflicts 6,000 Shadow damage every 2 seconds to everyone in the Twilight Realm
+    SPELL_FLAME_BREATH_2                        = 74404, // Inflicts 17,500 to 22,500 Fire damage to players in front of Halion
+    SPELL_DARK_BREATH_2                         = 75956, // Inflicts 33,688 to 43,312 Shadow damage to players in front of Halion
+    SPELL_DUSK_SHROUD_2                         = 75486, // Inflicts 6,000 Shadow damage every 2 seconds to everyone in the Twilight Realm
     //NPC
-    NPC_LIVING_EMBER				= 40683,
-    NPC_LIVING_INFERNO				= 40681,
-	//Summons
-    NPC_METEOR_STRIKE				= 40029,	//casts "impact zone" then meteor
-    NPC_METEORFLAME_0				= 36673,	//meteor flame 0
-	NPC_METEORFLAME_1				= 36674,	//meteor flame 1
-	NPC_METEORFLAME_2				= 36675,	//meteor flame 2
-	NPC_METEORFLAME_3				= 36676,	//meteor flame 3
-	NPC_SHADOW_PULSAR_N				= 40083,	//spinning orb N spawn
-    NPC_SHADOW_PULSAR_S				= 40100,	//spinning orb S spawn
-        
+    NPC_LIVING_EMBER                            = 40683,
+    NPC_LIVING_INFERNO                          = 40681,
+    //Summons
+    NPC_METEOR_STRIKE                           = 40029, //casts "impact zone" then meteor
+    NPC_METEORFLAME_0                           = 36673, //meteor flame 0
+    NPC_METEORFLAME_1                           = 36674, //meteor flame 1
+    NPC_METEORFLAME_2                           = 36675, //meteor flame 2
+    NPC_METEORFLAME_3                           = 36676, //meteor flame 3
+    NPC_SHADOW_PULSAR_N                         = 40083, //spinning orb N spawn
+    NPC_SHADOW_PULSAR_S                         = 40100, //spinning orb S spawn
+
     //SAYS
     SAY_HALION_SPAWN                = -1666100, //17499 Meddlesome insects, you're too late! The Ruby Sanctum is lost.
     SAY_HALION_AGGRO                = -1666101, //17500 Your world teeters on the brink of annihilation. You will all bear witness to the coming of a new age of destruction!
@@ -90,31 +90,28 @@ enum
     SAY_HALION_SLAY_2               = -1666103, //17502 Ha Ha Ha!
     SAY_HALION_DEATH                = -1666104, //17503 Relish this victory mortals, for it will be your last. This world will burn with the Master's return!
     SAY_HALION_BERSERK              = -1666105, //17504 Not good enough!
-    SAY_HALION_SPECIAL_1	        = -1666106, //17505 The heavens burn!
-    SAY_HALION_SPECIAL_2	        = -1666107, //17506 Beware the shadow!
-    SAY_HALION_PHASE_2		        = -1666108, //17507 You will find only suffering within the realm of Twilight. Enter if you dare.
-    SAY_HALION_PHASE_3	            = -1666109, //17508 I am the light AND the darkness! Cower mortals before the Herald of Deathwing!
+    SAY_HALION_SPECIAL_1            = -1666106, //17505 The heavens burn!
+    SAY_HALION_SPECIAL_2            = -1666107, //17506 Beware the shadow!
+    SAY_HALION_PHASE_2              = -1666108, //17507 You will find only suffering within the realm of Twilight. Enter if you dare.
+    SAY_HALION_PHASE_3              = -1666109, //17508 I am the light AND the darkness! Cower mortals before the Herald of Deathwing!
 };
 
 static float m_xflame[12][8]=
 {
-    //RND0			RND1		    RND2			RND3
-	//x		y		x		y		x		y		x		y
-	{2.0f,	0.0f,	2.0f,	1.0f,	1.5f,	1.5f,	1.0f, 	2.0f},		//NPC0 SPAWN1
-    {4.5f,	0.0f,	4.0f,	2.0f,	3.0f,	3.0f,	2.0f, 	4.0f},		//NPC0 SPAWN2 
-    {7.5f,	0.0f,	6.5f,	3.5f,	4.5f,	4.5f,	3.5f, 	6.5f},		//NPC0 SPAWN3
-	//x		y		x		y		x		y		x		y
-    {0.0f,	2.0f,	-2.0f,	-1.0f,	-1.5f,	1.5f,	-1.0f, 	2.0f},		//NPC1 SPAWN1
-    {0.0f,	4.5f,	-4.0f,	-2.0f,	-3.0f,	3.0f, 	-2.0f, 	4.0f},		//NPC1 SPAWN2
-    {0.0f,	7.5f,	-6.5f,	-3.5f,	-4.5f,	4.5f, 	-3.5f, 	6.5f},		//NPC1 SPAWN3
-	//x		y		x		y		x		y		x		y
-    {-2.0f, 0.0f,	1.0f,	2.0f,	-1.5f,	-1.5f,	-1.0f, 	-2.0f},		//NPC2 SPAWN1
-    {-4.5f, 0.0f,	2.0f,	4.0f,	-3.0f,	-3.0f,	-2.0f, 	-4.0f},		//NPC2 SPAWN2
-    {-7.5f,	0.0f,	3.5f,	6.5f,	-4.5f,	-4.5f,	-3.5f, 	-6.5f},		//NPC2 SPAWN3
-	//x		y		x		y		x		y		x		y
-    {0.0f,	-2.0f,	-1.0f,	-2.0f,	1.5f,	-1.5f, 	1.0f, 	-2.0f},		//NPC3 SPAWN1
-    {0.0f,	-4.5f,	-2.0f,	-4.0f,	3.0f,	-3.0f, 	2.5f, 	-4.0f},		//NPC3 SPAWN2
-    {0.0f,	-7.5f,	-3.5f,	-6.5f,	4.5f,	-4.5f, 	3.5f, 	-6.5f},		//NPC3 SPAWN3
+    //RND0 RND1 RND2 RND3
+    //x y x y x y x y
+    {2.0f,0.0f,2.0f,1.0f,1.5f,1.5f,1.0f,2.0f}, //NPC0 SPAWN1
+    {4.5f,0.0f,4.0f,2.0f,3.0f,3.0f,2.0f,4.0f}, //NPC0 SPAWN2
+    {7.5f,0.0f,6.5f,3.5f,4.5f,4.5f,3.5f,6.5f}, //NPC0 SPAWN3
+    {0.0f,2.0f,-2.0f,-1.0f,-1.5f,1.5f,-1.0f,2.0f}, //NPC1 SPAWN1
+    {0.0f,4.5f,-4.0f,-2.0f,-3.0f,3.0f,-2.0f,4.0f}, //NPC1 SPAWN2
+    {0.0f,7.5f,-6.5f,-3.5f,-4.5f,4.5f,-3.5f,6.5f}, //NPC1 SPAWN3
+    {-2.0f, 0.0f,1.0f,2.0f,-1.5f,-1.5f,-1.0f,-2.0f}, //NPC2 SPAWN1
+    {-4.5f, 0.0f,2.0f,4.0f,-3.0f,-3.0f,-2.0f,-4.0f}, //NPC2 SPAWN2
+    {-7.5f,0.0f,3.5f,6.5f,-4.5f,-4.5f,-3.5f,-6.5f}, //NPC2 SPAWN3
+    {0.0f,-2.0f,-1.0f,-2.0f,1.5f,-1.5f,1.0f,-2.0f}, //NPC3 SPAWN1
+    {0.0f,-4.5f,-2.0f,-4.0f,3.0f,-3.0f,2.5f,-4.0f}, //NPC3 SPAWN2
+    {0.0f,-7.5f,-3.5f,-6.5f,4.5f,-4.5f,3.5f,-6.5f}, //NPC3 SPAWN3
 };
 
 static float m_pulsar[16][2]=
@@ -138,11 +135,11 @@ static float m_pulsar[16][2]=
 };
 
 /*######
-## boss_halion_p (Physical version)
+## boss_halion_real (Physical version)
 ######*/
-struct MANGOS_DLL_DECL boss_halion_pAI : public BSWScriptedAI
+struct MANGOS_DLL_DECL boss_halion_realAI : public BSWScriptedAI
 {
-    boss_halion_pAI(Creature* pCreature) : BSWScriptedAI(pCreature)
+    boss_halion_realAI(Creature* pCreature) : BSWScriptedAI(pCreature)
     {
         pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         Reset();
@@ -164,20 +161,19 @@ struct MANGOS_DLL_DECL boss_halion_pAI : public BSWScriptedAI
 
     void MoveInLineOfSight(Unit* pWho) 
     {
-        if (intro)
-            return;
-		else
-		{
+        if (intro) return;
+        else
+        {
         DoScriptText(-1666100,m_creature);
         intro = true;
-		}
+        }
     }
 
     void JustReachedHome()
     {
         if (!pInstance)
             return;
-            
+
         pInstance->SetData(TYPE_HALION, FAIL);
         pInstance->SetData(DATA_HEALTH_HALION_P, m_creature->GetMaxHealth());
     }
@@ -191,10 +187,9 @@ struct MANGOS_DLL_DECL boss_halion_pAI : public BSWScriptedAI
         if (Creature* pclone = (Creature*)Unit::GetUnit((*m_creature),pInstance->GetData64(NPC_HALION_T)))
             if (!pclone->isAlive())
                 pInstance->SetData(TYPE_HALION, DONE);
-			else
-				pInstance->SetData(TYPE_HALION, SPECIAL);
-		
-		pInstance->SetData(DATA_HEALTH_HALION_P, 0);
+        else
+            pInstance->SetData(TYPE_HALION, SPECIAL);
+        pInstance->SetData(DATA_HEALTH_HALION_P, 0);
     }
 
     void KilledUnit(Unit* pVictim)
@@ -248,7 +243,7 @@ struct MANGOS_DLL_DECL boss_halion_pAI : public BSWScriptedAI
             pInstance->SetData(TYPE_HALION_LOCK, DONE);
             p_phase = 1;
         }
-        
+
         if (m_creature->GetHealthPercent() < 75.0f && p_phase == 1)
         {
             DoScriptText(-1666108,m_creature);
@@ -273,14 +268,13 @@ struct MANGOS_DLL_DECL boss_halion_pAI : public BSWScriptedAI
                 {
                     if (doCast(SPELL_METEOR, pTarget) == CAST_OK)
                     {
-						DoScriptText(-1666106,m_creature,pTarget);
-                                  
-						float fPosX, fPosY, fPosZ;
-						m_creature->GetPosition(fPosX, fPosY, fPosZ);
-						if (Unit* pMeteor = doSummon(NPC_METEOR_STRIKE, fPosX, fPosY, fPosZ))
-							pMeteor->AddThreat(pTarget, 100.0f);
+                        DoScriptText(-1666106,m_creature,pTarget);
+                        float fPosX, fPosY, fPosZ;
+                        m_creature->GetPosition(fPosX, fPosY, fPosZ);
+                        if (Unit* pMeteor = doSummon(NPC_METEOR_STRIKE, fPosX, fPosY, fPosZ))
+                            pMeteor->AddThreat(pTarget, 100.0f);
                     };
-                }                
+                }
                 break;
             case 2: //DEPHASE HALION FORCE TO TWILIGHT REALM
                 //setflag unattackable, unselectable, remove combat
@@ -301,18 +295,18 @@ struct MANGOS_DLL_DECL boss_halion_pAI : public BSWScriptedAI
     }
 };
 
-CreatureAI* GetAI_boss_halion_p(Creature* pCreature)
+CreatureAI* GetAI_boss_halion_real(Creature* pCreature)
 {
-    return new boss_halion_pAI(pCreature);
+    return new boss_halion_realAI(pCreature);
 }
 
 /*######
-## boss_halion_t (Twilight version)
+## boss_halion_twilight (Twilight version)
 ######*/
 
-struct MANGOS_DLL_DECL boss_halion_tAI : public BSWScriptedAI
+struct MANGOS_DLL_DECL boss_halion_twilightAI : public BSWScriptedAI
 {
-    boss_halion_tAI(Creature* pCreature) : BSWScriptedAI(pCreature) 
+    boss_halion_twilightAI(Creature* pCreature) : BSWScriptedAI(pCreature) 
     {
         pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         Reset();
@@ -399,7 +393,7 @@ struct MANGOS_DLL_DECL boss_halion_tAI : public BSWScriptedAI
             DoScriptText(-1666109,m_creature);
             t_phase = 3;
         }
-        
+
         switch (t_phase)
         {
             case 0: //SPAWNED
@@ -429,14 +423,14 @@ struct MANGOS_DLL_DECL boss_halion_tAI : public BSWScriptedAI
     }
 };
 
-CreatureAI* GetAI_boss_halion_t(Creature* pCreature)
+CreatureAI* GetAI_boss_halion_twilight(Creature* pCreature)
 {
-    return new boss_halion_tAI(pCreature);
+    return new boss_halion_twilightAI(pCreature);
 }
 
-struct MANGOS_DLL_DECL mob_meteorAI : public BSWScriptedAI
+struct MANGOS_DLL_DECL mob_halion_meteorAI : public BSWScriptedAI
 {
-    mob_meteorAI(Creature *pCreature) : BSWScriptedAI(pCreature)
+    mob_halion_meteorAI(Creature *pCreature) : BSWScriptedAI(pCreature)
     {
         pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
         Reset();
@@ -449,8 +443,8 @@ struct MANGOS_DLL_DECL mob_meteorAI : public BSWScriptedAI
     {
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-		m_uiTimer = 5000;
-	}
+        m_uiTimer = 5000;
+    }
 
     void AttackStart(Unit *who)
     {
@@ -465,86 +459,84 @@ struct MANGOS_DLL_DECL mob_meteorAI : public BSWScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-		doCast(SPELL_METEOR);
+//        doCast(SPELL_METEOR);
         timedCast(SPELL_METEOR_IMPACT_ZONE, diff);
-		timedCast(SPELL_METEOR_LAND, diff);
+        timedCast(SPELL_METEOR_LAND, diff);
 
-		if (m_uiTimer < diff)
-            {               
-				switch (urand(0,3)) 
-				{
-					case 0:
-						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[0][0], m_xflame[0][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[1][0], m_xflame[1][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[2][0], m_xflame[2][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-                        m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[3][0], m_xflame[3][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[4][0], m_xflame[4][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[5][0], m_xflame[5][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[6][0], m_xflame[6][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[7][0], m_xflame[7][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[8][0], m_xflame[8][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-                        m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[9][0], m_xflame[9][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[10][0], m_xflame[10][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[11][0], m_xflame[11][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						break;
-                    case 1:
-						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[0][2], m_xflame[0][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[1][2], m_xflame[1][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[2][2], m_xflame[2][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-                        m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[3][2], m_xflame[3][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[4][2], m_xflame[4][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[5][2], m_xflame[5][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[6][2], m_xflame[6][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[7][2], m_xflame[7][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[8][2], m_xflame[8][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-                        m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[9][2], m_xflame[9][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[10][2], m_xflame[10][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[11][2], m_xflame[11][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-                        break;
-                    case 2:
-						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[0][4], m_xflame[0][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[1][4], m_xflame[1][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[2][4], m_xflame[2][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-                        m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[3][4], m_xflame[3][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[4][4], m_xflame[4][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[5][4], m_xflame[5][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[6][4], m_xflame[6][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[7][4], m_xflame[7][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[8][4], m_xflame[8][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-                        m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[9][4], m_xflame[9][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[10][4], m_xflame[10][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[11][4], m_xflame[11][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-                        break;
-					case 3:
-						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[0][6], m_xflame[0][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[1][6], m_xflame[1][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[2][6], m_xflame[2][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-                        m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[3][6], m_xflame[3][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[4][6], m_xflame[4][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[5][6], m_xflame[5][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[6][6], m_xflame[6][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[7][6], m_xflame[7][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[8][6], m_xflame[8][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-                        m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[9][6], m_xflame[9][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[10][6], m_xflame[10][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-						m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[11][6], m_xflame[11][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
-                        break;
-                                                   
-				};
-				
-			m_uiTimer = 998000;
-            }
-			else
-                    m_uiTimer -= diff;
-	}
+        if (m_uiTimer < diff)
+            {
+            switch (urand(0,3)) 
+            {
+            case 0:
+                  m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[0][0], m_xflame[0][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[1][0], m_xflame[1][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[2][0], m_xflame[2][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[3][0], m_xflame[3][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[4][0], m_xflame[4][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[5][0], m_xflame[5][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[6][0], m_xflame[6][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[7][0], m_xflame[7][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[8][0], m_xflame[8][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[9][0], m_xflame[9][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[10][0], m_xflame[10][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[11][0], m_xflame[11][1], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  break;
+             case 1:
+                  m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[0][2], m_xflame[0][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[1][2], m_xflame[1][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[2][2], m_xflame[2][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[3][2], m_xflame[3][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[4][2], m_xflame[4][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[5][2], m_xflame[5][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[6][2], m_xflame[6][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[7][2], m_xflame[7][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[8][2], m_xflame[8][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[9][2], m_xflame[9][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[10][2], m_xflame[10][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[11][2], m_xflame[11][3], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  break;
+             case 2:
+                  m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[0][4], m_xflame[0][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[1][4], m_xflame[1][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[2][4], m_xflame[2][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[3][4], m_xflame[3][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[4][4], m_xflame[4][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[5][4], m_xflame[5][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[6][4], m_xflame[6][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[7][4], m_xflame[7][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[8][4], m_xflame[8][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[9][4], m_xflame[9][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[10][4], m_xflame[10][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[11][4], m_xflame[11][5], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  break;
+             case 3:
+                  m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[0][6], m_xflame[0][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[1][6], m_xflame[1][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_0, m_xflame[2][6], m_xflame[2][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[3][6], m_xflame[3][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[4][6], m_xflame[4][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_1, m_xflame[5][6], m_xflame[5][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[6][6], m_xflame[6][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[7][6], m_xflame[7][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_2, m_xflame[8][6], m_xflame[8][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[9][6], m_xflame[9][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[10][6], m_xflame[10][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  m_creature->SummonCreature(NPC_METEORFLAME_3, m_xflame[11][6], m_xflame[11][7], 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 8000);
+                  break;
+             };
+            m_uiTimer = 998000;
+          } else  m_uiTimer -= diff;
+     }
 };
-CreatureAI* GetAI_mob_meteor(Creature* pCreature)
+
+CreatureAI* GetAI_mob_halion_meteor(Creature* pCreature)
 {
-    return new mob_meteorAI(pCreature);
+    return new mob_halion_meteorAI(pCreature);
 }
-struct MANGOS_DLL_DECL mob_flameAI : public BSWScriptedAI
+
+struct MANGOS_DLL_DECL mob_halion_flameAI : public BSWScriptedAI
 {
-    mob_flameAI(Creature *pCreature) : BSWScriptedAI(pCreature)
+    mob_halion_flameAI(Creature *pCreature) : BSWScriptedAI(pCreature)
     {
         pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
         Reset();
@@ -569,12 +561,12 @@ struct MANGOS_DLL_DECL mob_flameAI : public BSWScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-		doCast(SPELL_METEOR_FLAME);
+        doCast(SPELL_METEOR_FLAME);
     }
 };
-CreatureAI* GetAI_mob_flame(Creature* pCreature)
+CreatureAI* GetAI_mob_halion_flame(Creature* pCreature)
 {
-    return new mob_flameAI(pCreature);
+    return new mob_halion_flameAI(pCreature);
 }
 
 void AddSC_boss_halion()
@@ -582,22 +574,22 @@ void AddSC_boss_halion()
     Script *newscript;
 
     newscript = new Script;
-    newscript->Name = "boss_halion_p";
-    newscript->GetAI = &GetAI_boss_halion_p;
+    newscript->Name = "boss_halion_real";
+    newscript->GetAI = &GetAI_boss_halion_real;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "boss_halion_t";
-    newscript->GetAI = &GetAI_boss_halion_t;
+    newscript->Name = "boss_halion_twilight";
+    newscript->GetAI = &GetAI_boss_halion_twilight;
     newscript->RegisterSelf();
 
-	newscript = new Script;
-    newscript->Name = "mob_flame";
-    newscript->GetAI = &GetAI_mob_flame;
+    newscript = new Script;
+    newscript->Name = "mob_halion_flame";
+    newscript->GetAI = &GetAI_mob_halion_flame;
     newscript->RegisterSelf();
 
-	newscript = new Script;
-    newscript->Name = "mob_meteor";
-    newscript->GetAI = &GetAI_mob_meteor;
+    newscript = new Script;
+    newscript->Name = "mob_halion_meteor";
+    newscript->GetAI = &GetAI_mob_halion_meteor;
     newscript->RegisterSelf();
 }

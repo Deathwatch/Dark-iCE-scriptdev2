@@ -13,6 +13,12 @@
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+/* ScriptData
+SDName: instance_ruby_sanctum
+SD%Complete: 50%
+SDComment: by notagain, corrected by /dev/rsa
+SDCategory: ruby_sanctum
+EndScriptData */
 
 //TODO:  Trash mobs, spawn and removal of fire ring/walls, spawn of halion
 
@@ -23,11 +29,9 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
 {
     instance_ruby_sanctum(Map* pMap) : ScriptedInstance(pMap) 
     {
-        Difficulty = pMap->GetDifficulty();
         Initialize();
     }
 
-    uint8 Difficulty;
     bool needSave;
     std::string strSaveData;
 
@@ -38,7 +42,7 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
     uint64 m_uiRagefireGUID;
     uint64 m_uiZarithianGUID;
     uint64 m_uiBaltharusGUID;
-	uint64 m_uiCloneGUID;
+    uint64 m_uiCloneGUID;
 
     //object GUID
     uint64 m_uiHalionFireRingGUID;
@@ -79,7 +83,7 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
         m_uiRagefireGUID = 0;
         m_uiZarithianGUID = 0;
         m_uiBaltharusGUID = 0;
-		m_uiCloneGUID = 0;
+        m_uiCloneGUID = 0;
         m_uiHalionFireRingGUID = 0;
         m_uiHalionPortal0GUID = 0;
         m_uiHalionPortal1GUID = 0;
@@ -115,7 +119,7 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
             case NPC_BALTHARUS:
                 m_uiBaltharusGUID = pCreature->GetGUID();
                 break;
-			case NPC_CLONE:
+            case NPC_CLONE:
                 m_uiCloneGUID = pCreature->GetGUID();
                 break;
         }
@@ -148,13 +152,13 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
         switch(uiType)
         {
             case TYPE_BALTHARUS: 
-				m_auiEncounter[0] = uiData; 
-				//FREE XERESTRASZA
-				break;
+                 m_auiEncounter[0] = uiData;
+                 //FREE XERESTRASZA
+                 break;
             case TYPE_ZARITHIAN: 
-				m_auiEncounter[1] = uiData; 
-				//SPAWN HALION
-				break;
+                 m_auiEncounter[1] = uiData; 
+                //SPAWN HALION
+                break;
             case TYPE_RAGEFIRE:  m_auiEncounter[2] = uiData; break;
             case TYPE_HALION:
                 m_auiEncounter[3] = uiData;
@@ -193,11 +197,10 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
     {
         switch(uiType)
         {
-            case TYPE_DIFFICULTY:    return Difficulty;
-            case TYPE_BALTHARUS:	 return m_auiEncounter[0];
-            case TYPE_ZARITHIAN:	 return m_auiEncounter[1];
-            case TYPE_RAGEFIRE:		 return m_auiEncounter[2];
-            case TYPE_HALION:		 return m_auiEncounter[3];
+            case TYPE_BALTHARUS:     return m_auiEncounter[0];
+            case TYPE_ZARITHIAN:     return m_auiEncounter[1];
+            case TYPE_RAGEFIRE:      return m_auiEncounter[2];
+            case TYPE_HALION:        return m_auiEncounter[3];
         }
         return 0;
     }
@@ -206,13 +209,12 @@ struct MANGOS_DLL_DECL instance_ruby_sanctum : public ScriptedInstance
     {
         switch(uiData)
         {
-            case NPC_BALTHARUS:	 return m_uiBaltharusGUID;
-			case NPC_CLONE:		 return m_uiCloneGUID;
-            case NPC_ZARITHIAN:	 return m_uiZarithianGUID;
+            case NPC_BALTHARUS:  return m_uiBaltharusGUID;
+            case NPC_CLONE:      return m_uiCloneGUID;
+            case NPC_ZARITHIAN:  return m_uiZarithianGUID;
             case NPC_RAGEFIRE:   return m_uiRagefireGUID;
             case NPC_HALION_P:   return m_uiHalion_pGUID;
             case NPC_HALION_T:   return m_uiHalion_tGUID;
-            
         }
         return 0;
     }

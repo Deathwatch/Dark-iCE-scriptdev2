@@ -16,7 +16,7 @@
 /* ScriptData
 SDName: boss_zarithian
 SD%Complete: 50%
-SDComment: by /dev/rsa
+SDComment: by notagain, corrected by /dev/rsa
 SDCategory: ruby_sanctum
 EndScriptData */
 
@@ -28,18 +28,18 @@ EndScriptData */
 enum
 {
     SPELL_TWILIGHT_PRECISION         = 78243,
-	SPELL_SUNDER_ARMOR				 = 74367,
-	SPELL_IMTIMIDATING_ROAR			 = 74384,
-	SPELL_LAVA_GOUT					 = 74395,
-	SPELL_BLAST_NOVA				 = 74393,
-	
-	NPC_FLAMECALLER					 = 39814,
+    SPELL_SUNDER_ARMOR               = 74367,
+    SPELL_IMTIMIDATING_ROAR          = 74384,
+    SPELL_LAVA_GOUT                  = 74395,
+    SPELL_BLAST_NOVA                 = 74393,
+
+    NPC_FLAMECALLER                  = 39814,
 };
 
 static float add[2][4]=
 {
-	{0.0f,	0.0f,	0.0f,	0.0f}, //x y z o
-	{0.0f,	0.0f,	0.0f,	0.0f},
+        {0.0f,0.0f,0.0f,0.0f}, //x y z o
+        {0.0f,0.0f,0.0f,0.0f},
 };
 
 struct MANGOS_DLL_DECL boss_zarithianAI : public BSWScriptedAI
@@ -52,7 +52,7 @@ struct MANGOS_DLL_DECL boss_zarithianAI : public BSWScriptedAI
 
     ScriptedInstance *pInstance;
     uint8 stage;
-	uint32 uiTimer;
+    uint32 uiTimer;
 
     void Reset()
     {
@@ -100,8 +100,8 @@ struct MANGOS_DLL_DECL boss_zarithianAI : public BSWScriptedAI
         if(pInstance)
             pInstance->SetData(TYPE_ZARITHIAN, IN_PROGRESS);
 
-		DoScriptText(-1666200,m_creature);
-		uiTimer = 45000;
+        DoScriptText(-1666200,m_creature);
+        uiTimer = 45000;
     }
 
     void JustDied(Unit *killer)
@@ -109,7 +109,7 @@ struct MANGOS_DLL_DECL boss_zarithianAI : public BSWScriptedAI
         if(pInstance)
             pInstance->SetData(TYPE_ZARITHIAN, DONE);
 
-		DoScriptText(-1666203,m_creature);
+        DoScriptText(-1666203,m_creature);
     }
 
     void UpdateAI(const uint32 diff)
@@ -117,19 +117,18 @@ struct MANGOS_DLL_DECL boss_zarithianAI : public BSWScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-		//TODO every 45 secs summon adds
+        //TODO every 45 secs summon adds
 
-		if (uiTimer < diff)
-		{
-			DoScriptText(-1666204,m_creature);
-			m_creature->SummonCreature(NPC_FLAMECALLER, add[0][0], add[0][1], add[0][2], add[0][3], TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 20000);
-			m_creature->SummonCreature(NPC_FLAMECALLER, add[1][0], add[1][1], add[1][2], add[1][3], TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 20000);
-			uiTimer = 45000;
-		}
-			
-		timedCast(SPELL_TWILIGHT_PRECISION, diff);
-		timedCast(SPELL_SUNDER_ARMOR, diff);
-		timedCast(SPELL_IMTIMIDATING_ROAR, diff);
+        if (uiTimer < diff)
+        {
+            DoScriptText(-1666204,m_creature);
+            m_creature->SummonCreature(NPC_FLAMECALLER, add[0][0], add[0][1], add[0][2], add[0][3], TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 20000);
+            m_creature->SummonCreature(NPC_FLAMECALLER, add[1][0], add[1][1], add[1][2], add[1][3], TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 20000);
+            uiTimer = 45000;
+        }
+        timedCast(SPELL_TWILIGHT_PRECISION, diff);
+        timedCast(SPELL_SUNDER_ARMOR, diff);
+        timedCast(SPELL_IMTIMIDATING_ROAR, diff);
 
         DoMeleeAttackIfReady();
     }
@@ -140,9 +139,9 @@ CreatureAI* GetAI_boss_zarithian(Creature* pCreature)
     return new boss_zarithianAI(pCreature);
 }
 
-struct MANGOS_DLL_DECL mob_flamecallerAI : public BSWScriptedAI
+struct MANGOS_DLL_DECL mob_flamecaller_rubyAI : public BSWScriptedAI
 {
-    mob_flamecallerAI(Creature *pCreature) : BSWScriptedAI(pCreature)
+    mob_flamecaller_rubyAI(Creature *pCreature) : BSWScriptedAI(pCreature)
     {
         pInstance = ((ScriptedInstance*)pCreature->GetInstanceData());
         Reset();
@@ -163,14 +162,16 @@ struct MANGOS_DLL_DECL mob_flamecallerAI : public BSWScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-		timedCast(SPELL_LAVA_GOUT, diff);
-		timedCast(SPELL_BLAST_NOVA, diff);
+        timedCast(SPELL_LAVA_GOUT, diff);
+        timedCast(SPELL_BLAST_NOVA, diff);
     }
 };
-CreatureAI* GetAI_mob_flamecaller(Creature* pCreature)
+
+CreatureAI* GetAI_mob_flamecaller_ruby(Creature* pCreature)
 {
-    return new mob_flamecallerAI(pCreature);
+    return new mob_flamecaller_rubyAI(pCreature);
 }
+
 void AddSC_boss_zarithian()
 {
     Script *newscript;
@@ -179,8 +180,8 @@ void AddSC_boss_zarithian()
     newscript->GetAI = &GetAI_boss_zarithian;
     newscript->RegisterSelf();
 
-	newscript = new Script;
-    newscript->Name = "mob_flamecaller";
-    newscript->GetAI = &GetAI_mob_flamecaller;
+    newscript = new Script;
+    newscript->Name = "mob_flamecaller_ruby";
+    newscript->GetAI = &GetAI_mob_flamecaller_ruby;
     newscript->RegisterSelf();
 }

@@ -197,6 +197,6 @@ void AddSC_item_scripts()
 	
 	newscript = new Script;
 	newscript->Name = "item_jungle_punch_sample";
-	newscript->pItemUse = &ItemUse_item_horn_of_the_frostbrood;
+	newscript->pItemUse = &ItemUse_item_jungle_punch_sample;
 	newscript->RegisterSelf();
 }

@@ -141,42 +141,7 @@ bool ItemUse_item_petrov_cluster_bombs(Player* pPlayer, Item* pItem, const Spell
 
     return false;
 }
-
-/*#####
-# item_horn_of_the_frostbrood
-#####*/
-
-enum
-{
-    QUEST_AN_END_TO_ALL_THINGS  = 12779,
-	NPC_FROSTBROOD_VANQUISHER   = 28670,
-	SPELL_FROST_MIST            = 29292,
-};
-
-#define POS_X                1625.0f
-#define POS_Y                -5835.0f
-#define POS_Z                180.0f
-
-bool ItemUse_item_horn_of_the_frostbrood(Player* pPlayer, Item* pItem, const SpellCastTargets &pTargets)
-{
-    if (pPlayer->GetQuestStatus(QUEST_AN_END_TO_ALL_THINGS) != QUEST_STATUS_INCOMPLETE)
-	    return false;
 	
-	if (Creature* pTemp = pPlayer->SummonCreature(NPC_FROSTBROOD_VANQUISHER, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ() + 15.0f, pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 20000)) 
-    {
-	    pTemp->CastSpell(pTemp, SPELL_FROST_MIST, true);
-		pTemp->CastSpell(pPlayer, SPELL_FROST_MIST, true);
-		pTemp->SetSpeedRate(MOVE_FLIGHT, 6.0f, true);
-		pTemp->GetMotionMaster()->MovePoint(0, POS_X, POS_Y, POS_Z);
-		pPlayer->SetQuestStatus(QUEST_AN_END_TO_ALL_THINGS, QUEST_STATUS_COMPLETE);
-		pPlayer->CompleteQuest(QUEST_AN_END_TO_ALL_THINGS);
-		
-		return true;
-	}
-	else
-		return false;
-}	
-
 /*#####
 # item_jungle_punch_sample
 #####*/
@@ -232,11 +197,6 @@ void AddSC_item_scripts()
 	
 	newscript = new Script;
 	newscript->Name = "item_jungle_punch_sample";
-	newscript->pItemUse = &ItemUse_item_horn_of_the_frostbrood;
-	newscript->RegisterSelf();
-	
-	newscript = new Script;
-	newscript->Name = "item_horn_of_the_frostbrood";
 	newscript->pItemUse = &ItemUse_item_horn_of_the_frostbrood;
 	newscript->RegisterSelf();
 }

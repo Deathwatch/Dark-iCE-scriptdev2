@@ -403,7 +403,7 @@ struct MANGOS_DLL_DECL mob_iron_constructAI : public ScriptedAI
         {
 			if (Creature* pIgnis = m_pInstance->instance->GetCreature(m_pInstance->GetData64(NPC_IGNIS)))
 			{
-				pIgnis->RemoveSingleAuraFromStack(BUFF_STRENGHT_OF_CREATOR, EFFECT_INDEX_0);
+				pIgnis->RemoveSingleAuraHolderFromStack(BUFF_STRENGHT_OF_CREATOR, EFFECT_INDEX_0);
 				CAST_AI(boss_ignisAI, pIgnis->AI())->AchievShattered();
 			}
 			m_creature->CastSpell(m_creature, SPELL_SHATTER, true);

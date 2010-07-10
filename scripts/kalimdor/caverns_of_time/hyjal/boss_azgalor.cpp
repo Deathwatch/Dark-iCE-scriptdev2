@@ -51,8 +51,8 @@ enum
 class MANGOS_DLL_DECL AzgalorDoom : public Aura
 {
     public:
-        AzgalorDoom(const SpellEntry *spell, SpellEffectIndex eff, int32 *bp, Unit *target, Unit *caster) : Aura(spell, eff, bp, target, caster, NULL)
-            {}
+//        AzgalorDoom(const SpellEntry *spell, SpellEffectIndex eff, int32 *bp, Unit *target, Unit *caster) : Aura(spell, eff, bp, target, caster, NULL)
+//            {}
 };
 
 struct MANGOS_DLL_DECL boss_azgalorAI : public ScriptedAI
@@ -132,8 +132,8 @@ struct MANGOS_DLL_DECL boss_azgalorAI : public ScriptedAI
                     int bp;
 					sp = (SpellEntry *)GetSpellStore()->LookupEntry(SP_AzgalorDoom);
                     bp = 8;
-					if(!target->HasAura(SP_AzgalorDoom, EFFECT_INDEX_0))
-					    target->AddAura(new AzgalorDoom(sp, EFFECT_INDEX_0, &bp, target, target));
+//					if(!target->HasAura(SP_AzgalorDoom, EFFECT_INDEX_0))
+//					    target->AddAura(new AzgalorDoom(sp, EFFECT_INDEX_0, &bp, target, target));
 				}
     }
 

@@ -264,7 +264,7 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
             uiDamage = 0;
             m_creature->CastStop();
             m_creature->setFaction(1925);
-            if (supercharge1)
+/*            if (supercharge1)
             {
                 if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
                     if (pTemp->isAlive() && pTemp->HasAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0))
@@ -272,7 +272,7 @@ struct MANGOS_DLL_DECL boss_brundirAI : public ScriptedAI
                 if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
                     if (pTemp->isAlive() && pTemp->HasAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0))
                         pTemp->GetAura(SPELL_SUPERCHARGE,EFFECT_INDEX_0)->modStackAmount(+1);
-            }else
+            }else*/
                 DoCastSpellIfCan(m_creature, SPELL_SUPERCHARGE);
             die_delay = 500;
             die = true;
@@ -546,7 +546,7 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
             uiDamage = 0;
             m_creature->CastStop();
             m_creature->setFaction(1925);
-            if (supercharge1)
+            /*if (supercharge1)
             {
                 if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
                     if (pTemp->isAlive() && pTemp->HasAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0))
@@ -554,7 +554,7 @@ struct MANGOS_DLL_DECL boss_molgeimAI : public ScriptedAI
                 if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_STEELBREAKER))))
                     if (pTemp->isAlive() && pTemp->HasAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0))
                         pTemp->GetAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0)->modStackAmount(+1);
-            }else
+            }else*/
                 DoCastSpellIfCan(m_creature, SPELL_SUPERCHARGE);
             die_delay = 500;
             die = true;
@@ -810,7 +810,7 @@ struct MANGOS_DLL_DECL boss_steelbreakerAI : public ScriptedAI
             uiDamage = 0;
             m_creature->CastStop();
             m_creature->setFaction(1925);
-            if (supercharge1)
+            /*if (supercharge1)
             {
                 if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_MOLGEIM))))
                     if (pTemp->isAlive() && pTemp->HasAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0))
@@ -818,7 +818,7 @@ struct MANGOS_DLL_DECL boss_steelbreakerAI : public ScriptedAI
                 if (Creature* pTemp = ((Creature*)Unit::GetUnit((*m_creature), m_pInstance->GetData64(NPC_BRUNDIR))))
                     if (pTemp->isAlive() && pTemp->HasAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0))
                         pTemp->GetAura(SPELL_SUPERCHARGE, EFFECT_INDEX_0)->modStackAmount(+1);
-            }else
+            }else*/
                 DoCastSpellIfCan(m_creature, SPELL_SUPERCHARGE);
             die_delay = 500;
             die = true;

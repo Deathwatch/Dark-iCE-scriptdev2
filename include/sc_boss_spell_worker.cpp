@@ -179,7 +179,7 @@ CanCastResult BSWScriptedAI::_BSWSpellSelector(uint8 m_uiSpellIdx, Unit* pTarget
             case APPLY_AURA_SELF:
                    spell = (SpellEntry *)GetSpellStore()->LookupEntry(pSpell->m_uiSpellEntry[currentDifficulty]);
                    if (spell)
-                       if (m_creature->AddAura(new BossAura(spell, EFFECT_INDEX_0, &pSpell->varData, m_creature, m_creature)))
+//                       if (m_creature->AddAura(new BossAura(spell, EFFECT_INDEX_0, &pSpell->varData, m_creature, m_creature)))
                               return CAST_OK;
                    return CAST_FAIL_OTHER;
                    break;
@@ -513,9 +513,10 @@ bool BSWScriptedAI::_doRemove(uint8 m_uiSpellIdx, Unit* pTarget, uint8 index)
 
         if (_auraCount(m_uiSpellIdx,pTarget,(SpellEffectIndex)index) > 1)
         {
-            if (pTarget->GetAura(pSpell->m_uiSpellEntry[currentDifficulty],(SpellEffectIndex)index)->modStackAmount(-1))
-                return true;
-            else return false;
+//			if (pTarget->GetAura(,(SpellEffectIndex)index)->ModStackAmount(-1))
+//                return true;
+//            else return false;
+			return false;
         }
         else pTarget->RemoveAurasDueToSpell(pSpell->m_uiSpellEntry[currentDifficulty]);
     return true;
@@ -541,7 +542,7 @@ bool BSWScriptedAI::_doAura(uint8 m_uiSpellIdx, Unit* pTarget, SpellEffectIndex 
     if (spell)
         {
             int32 basepoint = pSpell->varData ?  pSpell->varData - 1 : spell->EffectBasePoints[index] + 1;
-            if (pTarget->AddAura(new BossAura(spell, index, &basepoint, pTarget, pTarget)))
+//            if (pTarget->AddAura(new BossAura(spell, index, &basepoint, pTarget, pTarget)))
                 return true;
         };
 

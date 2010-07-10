@@ -49,8 +49,8 @@ enum
 class MANGOS_DLL_DECL KazrogalMark : public Aura
 {
     public:
-        KazrogalMark(const SpellEntry *spell, SpellEffectIndex eff, int32 *bp, Unit *target, Unit *caster) : Aura(spell, eff, bp, target, caster, NULL)
-            {}
+//        KazrogalMark(const SpellEntry *spell, SpellEffectIndex eff, int32 *bp, Unit *target, Unit *caster) : Aura(spell, eff, bp, target, caster, NULL)
+//            {}
 };
 
 struct MANGOS_DLL_DECL boss_kazrogalAI : public ScriptedAI
@@ -134,8 +134,8 @@ struct MANGOS_DLL_DECL boss_kazrogalAI : public ScriptedAI
                         int bp;
                         sp = (SpellEntry *)GetSpellStore()->LookupEntry(SP_KazrogalMark);
                         bp = 8;
-                        if(!target->HasAura(SP_KazrogalMark, EFFECT_INDEX_0))
-                            target->AddAura(new KazrogalMark(sp, EFFECT_INDEX_0, &bp, target, target));
+//                        if(!target->HasAura(SP_KazrogalMark, EFFECT_INDEX_0))
+//                            target->AddAura(new KazrogalMark(sp, EFFECT_INDEX_0, &bp, target, target));
 					}	
                 }
             }

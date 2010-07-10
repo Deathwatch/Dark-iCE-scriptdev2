@@ -66,8 +66,8 @@ enum
 class MANGOS_DLL_DECL AnetheronSleep : public Aura
 {
     public:
-        AnetheronSleep(const SpellEntry *spell, SpellEffectIndex eff, int32 *bp, Unit *target, Unit *caster) : Aura(spell, eff, bp, target, caster, NULL)
-            {}
+//        AnetheronSleep(const SpellEntry *spell, SpellEffectIndex eff, int32 *bp, Unit *target, Unit *caster) : Aura(spell, eff, bp, target, caster, NULL)
+//            {}
 };
 
 struct MANGOS_DLL_DECL boss_anetheronAI : public ScriptedAI
@@ -153,8 +153,8 @@ struct MANGOS_DLL_DECL boss_anetheronAI : public ScriptedAI
                         int bp;
 						sp = (SpellEntry *)GetSpellStore()->LookupEntry(SP_AnetheronSleep);
                         bp = 8;
-					    if(!target->HasAura(SP_AnetheronSleep, EFFECT_INDEX_0))
-						    target->AddAura(new AnetheronSleep(sp, EFFECT_INDEX_0, &bp, target, target));
+//					    if(!target->HasAura(SP_AnetheronSleep, EFFECT_INDEX_0))
+//						    target->AddAura(new AnetheronSleep(sp, EFFECT_INDEX_0, &bp, target, target));
 					}
 				}
 			}
